@@ -32,6 +32,36 @@ class Request
     /**
      * @return string
      */
+    public function getRequestUrl()
+    {
+        $url = $this->getUrl();
+        $query = '';
+
+        if ($this->getParams()) {
+            $query = '?';
+            $count = 0;
+            $totalParams = count($this->getParams());
+            foreach ($this->getParams() as $key => $value) {
+                $count++;
+                if (is_array($value)) {
+                    // If value is array it should be separated by commas in this API
+                    $query .= $key . '=' . implode(",", $value);
+                } else {
+                    $query .= $key . '=' . $value;
+                }
+
+                if ($count < $totalParams) {
+                    $query .= '&';
+                }
+            }
+        }
+
+        return $url . $query;
+    }
+
+    /**
+     * @return string
+     */
     public function getUrl()
     {
         return $this->url;

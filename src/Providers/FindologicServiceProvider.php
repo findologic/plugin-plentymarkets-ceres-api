@@ -3,6 +3,8 @@
 namespace Findologic\PluginPlentymarketsApi\Providers;
 
 use Findologic\PluginPlentymarketsApi\Services\SearchService;
+use Ceres\Helper\ExternalSearchOptions;
+use Ceres\Helper\ExternalSearch;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Plugin\Events\Dispatcher;
@@ -30,15 +32,15 @@ class FindologicServiceProvider extends ServiceProvider
         }
 
         $eventDispatcher->listen(
-            'IO.Search.Options',
-            function(\IO\Helper\SearchOptions $searchOptions) use ($searchService, $request) {
+            'Ceres.Search.Options',
+            function(ExternalSearchOptions $searchOptions) use ($searchService, $request) {
                 $searchService->handleSearchOptions($searchOptions, $request);
             }
         );
 
         $eventDispatcher->listen(
-            'IO.Search.Query',
-            function(\IO\Helper\SearchQuery $searchQuery) use ($searchService, $request) {
+            'Ceres.Search.Query',
+            function(ExternalSearch $searchQuery) use ($searchService, $request) {
                 $searchService->handleSearchQuery($searchQuery, $request);
             }
         );

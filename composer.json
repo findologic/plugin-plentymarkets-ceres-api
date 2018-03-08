@@ -6,7 +6,9 @@
   {
     "php": "^7.0",
     "plentymarkets/plugin-interface": "dev-beta7",
-    "plentymarkets-local/plugin-io": "1.0.0"
+    "plentymarkets-local/plugin-io": "1.0.1",
+    "plentymarkets-ceres/plugin-ceres": "1.0.0"
+
   },
   "require-dev": {
     "phpunit/phpunit": "~5.6"
@@ -16,11 +18,23 @@
       "type": "package",
       "package": {
         "name": "plentymarkets-local/plugin-io",
-        "version": "1.0.0",
+        "version": "1.0.1",
         "source": {
           "url": "https://github.com/plentymarkets/plugin-io",
           "type": "git",
-          "reference": "origin/stable"
+          "reference": "origin/development"
+        }
+      }
+    },
+    "plentymarkets-ceres": {
+      "type": "package",
+      "package": {
+        "name": "plentymarkets-ceres/plugin-ceres",
+        "version": "1.0.0",
+        "source": {
+          "url": "https://github.com/plentymarkets/plugin-ceres",
+          "type": "git",
+          "reference": "origin/development"
         }
       }
     }

@@ -6,6 +6,8 @@ use Findologic\PluginPlentymarketsApi\Constants\Plugin;
 use Findologic\PluginPlentymarketsApi\Api\Request\RequestBuilder;
 use Findologic\PluginPlentymarketsApi\Api\Response\ResponseParser;
 use Findologic\PluginPlentymarketsApi\Api\Client;
+use Ceres\Helper\ExternalSearch;
+use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Log\LoggerFactory;
 
 /**
@@ -46,6 +48,10 @@ class SearchService implements SearchServiceInterface
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
+    /**
+     * @param ExternalSearch $searchQuery
+     * @param Request $request
+     */
     public function handleSearchQuery($searchQuery, $request)
     {
         try {
@@ -53,8 +59,7 @@ class SearchService implements SearchServiceInterface
             $results = $this->responseParser->parse($this->client->call($apiRequest));
             $productsIds = $results->getProductsIds();
 
-            //TODO: check the results count and redirect to empty search results page ?
-            $searchQuery->setSearchResults($productsIds);
+            $searchQuery->setResults($productsIds);
         } catch (\Exception $e) {
             $this->logger->warning('Exception while handling search query.');
             $this->logger->logException($e);
