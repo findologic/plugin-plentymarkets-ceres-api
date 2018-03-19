@@ -13,6 +13,7 @@
 
     <testsuite name="Tests">
         <directory>./tests</directory>
+        <exclude>./src/Mocks</exclude>
     </testsuite>
     <logging>
         <log type="coverage-html" target="build/coverage" title="Findologic Plugin Plentymarkets Api"

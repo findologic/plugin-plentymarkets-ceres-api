@@ -2,6 +2,8 @@
 
 namespace Findologic\PluginPlentymarketsApi\Api\Request;
 
+use Findologic\PluginPlentymarketsApi\Constants\Plugin;
+
 /**
  * Class Request
  * @package Findologic\Api\Request
@@ -37,23 +39,8 @@ class Request
         $url = $this->getUrl();
         $query = '';
 
-        if ($this->getParams()) {
-            $query = '?';
-            $count = 0;
-            $totalParams = count($this->getParams());
-            foreach ($this->getParams() as $key => $value) {
-                $count++;
-                if (is_array($value)) {
-                    // If value is array it should be separated by commas in this API
-                    $query .= $key . '=' . implode(",", $value);
-                } else {
-                    $query .= $key . '=' . $value;
-                }
-
-                if ($count < $totalParams) {
-                    $query .= '&';
-                }
-            }
+        if (count($this->getParams()) >= 1) {
+            $query = '?' . http_build_query($this->getParams());
         }
 
         return $url . $query;
@@ -136,6 +123,22 @@ class Request
     public function setParam($key, $value)
     {
         $this->params[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
+    public function setAttributeParam($key, $value)
+    {
+        if (!isset($this->params[Plugin::API_PARAMETER_ATTRIBUTES])) {
+            $this->params[Plugin::API_PARAMETER_ATTRIBUTES] = [];
+        }
+
+        $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = $value;
 
         return $this;
     }
