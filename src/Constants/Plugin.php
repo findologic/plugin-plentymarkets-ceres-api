@@ -17,6 +17,11 @@ class Plugin
     const API_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'count';
     const API_PARAMETER_PAGINATION_START = 'first';
 
+    const API_CONFIGURATION_KEY_CONNECTION_TIME_OUT = 'connection_time_out';
+    const API_CONFIGURATION_KEY_TIME_OUT = 'time_out';
+
+    const API_ALIVE_RESPONSE_BODY = 'alive';
+
     const API_SORT_ORDER_AVAILABLE_OPTIONS = ['price ASC', 'price DESC', 'label ASC', 'label DESC', 'salesfrequency ASC', 'salesfrequency DESC', 'dateadded ASC', 'dateadded DESC'];
 
     const CONFIG_ENABLED = 'findologic.enabled';

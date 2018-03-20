@@ -1,6 +1,6 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Tests;
+namespace Findologic\PluginPlentymarketsApi\Tests\Providers;
 
 use Findologic\PluginPlentymarketsApi\Providers\FindologicServiceProvider;
 use Findologic\PluginPlentymarketsApi\Services\SearchService;

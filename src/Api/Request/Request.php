@@ -32,6 +32,11 @@ class Request
     protected $params = [];
 
     /**
+     * @var array
+     */
+    protected $configuration = [];
+
+    /**
      * @return string
      */
     public function getRequestUrl()
@@ -139,6 +144,30 @@ class Request
         }
 
         $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|mixed
+     */
+    public function getConfiguration($key)
+    {
+        if (isset($this->configuration[$key])) {
+            return $this->configuration[$key];
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
+    public function setConfiguration($key, $value)
+    {
+        $this->configuration[$key] = $value;
 
         return $this;
     }

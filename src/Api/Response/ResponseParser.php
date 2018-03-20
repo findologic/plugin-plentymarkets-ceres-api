@@ -2,6 +2,7 @@
 
 namespace Findologic\PluginPlentymarketsApi\Api\Response;
 
+use Findologic\PluginPlentymarketsApi\Api\Response\Parser\FiltersParser;
 use Findologic\PluginPlentymarketsApi\Constants\Plugin;
 use Plenty\Plugin\Log\LoggerFactory;
 
@@ -12,12 +13,18 @@ use Plenty\Plugin\Log\LoggerFactory;
 class ResponseParser
 {
     /**
+     * @var FiltersParser
+     */
+    protected $filtersParser;
+
+    /**
      * @var \Plenty\Log\Contracts\LoggerContract
      */
     protected $logger;
 
-    public function __construct(LoggerFactory $loggerFactory)
+    public function __construct(FiltersParser $filtersParser, LoggerFactory $loggerFactory)
     {
+        $this->filtersParser = $filtersParser;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
@@ -40,7 +47,7 @@ class ResponseParser
             $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data));
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
-            $response->setData(Response::DATA_FILTERS, $this->parseFilters($data));
+            $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data));
         } catch (\Exception $e) {
             $this->logger->warning('Could not parse response from server.');
             $this->logger->logException($e);
@@ -159,21 +166,5 @@ class ResponseParser
         }
 
         return $products;
-    }
-
-    /**
-     * @param \SimpleXMLElement $data
-     * @return array
-     */
-    protected function parseFilters(\SimpleXMLElement $data)
-    {
-        //TODO: maybe use different class for parsing filters as it could need lots of code to cover all logic
-        $filters = [];
-
-        if (!empty($data->filters) ) {
-            $filters[] = $data->filters;
-        }
-
-        return $filters;
     }
 }

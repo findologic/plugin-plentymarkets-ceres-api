@@ -4,10 +4,11 @@ namespace Findologic\PluginPlentymarketsApi\Api\Request;
 
 use Ceres\Helper\ExternalSearch;
 use Findologic\PluginPlentymarketsApi\Constants\Plugin;
+use Findologic\PluginPlentymarketsApi\Api\Client;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
-
+use Plenty\Log\Contracts\LoggerContract;
 /**
  * Class RequestBuilder
  * @package Findologic\Api\Request
@@ -20,7 +21,7 @@ class RequestBuilder
     protected $configRepository;
 
     /**
-     * @var \Plenty\Log\Contracts\LoggerContract
+     * @var LoggerContract
      */
     protected $logger;
 
@@ -36,18 +37,15 @@ class RequestBuilder
     }
 
     /**
-     * @param HttpRequest $request
-     * @param null $searchQuery
+     * @param HttpRequest $httpRequest
+     * @param ExternalSearch|null $searchQuery
      * @return bool|Request
      */
-    public function build($request, $searchQuery = null)
+    public function build($httpRequest, $searchQuery = null)
     {
-        $this->createRequestObject();
-        $this->setDefaultValues();
-        $this->setSearchParams($request, $searchQuery);
-
-        $request = $this->request;
-        $this->request = false;
+        $request = $this->createRequestObject();
+        $request = $this->setDefaultValues($request);
+        $request = $this->setSearchParams($request, $httpRequest, $searchQuery);
 
         return $request;
     }
@@ -57,13 +55,20 @@ class RequestBuilder
      */
     public function buildAliveRequest()
     {
-        $this->createRequestObject();
+        $request = $this->createRequestObject();
 
-        $request = $this->request;
         $request->setUrl($this->getCleanShopUrl('alive'))->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
-        $this->request = false;
+        $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT, 1);
 
         return $request;
+    }
+
+    /**
+     * @return Request
+     */
+    public function createRequestObject()
+    {
+        return pluginApp(Request::class);
     }
 
     /**
@@ -83,56 +88,69 @@ class RequestBuilder
         return $url;
     }
 
-    protected function createRequestObject()
+    /**
+     * @param Request $request
+     * @return Request
+     */
+    public function setDefaultValues($request)
     {
-        if (!$this->request) {
-            $this->request = pluginApp(Request::class);
-        }
+        $request->setUrl($this->getCleanShopUrl());
+        $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
+        $request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
+        $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT, Client::DEFAULT_CONNECTION_TIME_OUT);
+
+        return $request;
     }
 
     /**
      * @param Request $request
-     */
-    protected function setDefaultValues()
-    {
-        $this->request->setUrl($this->getCleanShopUrl());
-        $this->request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
-        $this->request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
-    }
-
-    /**
-     * @param HttpRequest $request
+     * @param HttpRequest $httpRequest
      * @param ExternalSearch $searchQuery
+     * @return Request
      */
-    protected function setSearchParams($request, $searchQuery)
+    public function setSearchParams($request, $httpRequest, $searchQuery)
     {
         if ($searchQuery->searchString) {
-            $this->request->setParam('query', $searchQuery->searchString);
+            $request->setParam('query', $searchQuery->searchString);
         }
 
-        parse_str($request->getUri(), $parameters);
+        parse_str($httpRequest->getUri(), $parameters);
 
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
             foreach ($attributes as $key => $value) {
-                $this->request->setAttributeParam($key, $value);
+                $request->setAttributeParam($key, $value);
             }
         }
 
         if (isset($parameters[Plugin::API_PARAMETER_SORT_ORDER]) && in_array($parameters[Plugin::API_PARAMETER_SORT_ORDER], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-            $this->request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::API_PARAMETER_SORT_ORDER]);
+            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::API_PARAMETER_SORT_ORDER]);
         }
 
+        $request = $this->setPagination($request, $parameters);
+
+        return $request;
+    }
+
+    /**
+     * @param Request $request
+     * @param array $parameters
+     * @return Request
+     */
+    protected function setPagination($request, $parameters)
+    {
         $pageSize = $parameters[Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE] ?? 0;
 
         if (intval($pageSize) > 0) {
-            $this->request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
+            $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
         }
 
         $paginationStart = $parameters[Plugin::API_PARAMETER_PAGINATION_START] ?? 0;
 
         if (intval($paginationStart) > 0) {
-            $this->request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
+            $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
         }
+
+        return $request;
     }
 }

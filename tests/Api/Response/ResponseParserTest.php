@@ -1,6 +1,6 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Tests;
+namespace Findologic\PluginPlentymarketsApi\Tests\Api\Response;
 
 use Findologic\PluginPlentymarketsApi\Api\Response\ResponseParser;
 
@@ -54,6 +54,20 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
                             <name>Unteruntergruppe</name>
                             <weight>0.985228</weight>
                             <frequency>4</frequency>
+                            <items>
+                                <item>
+                                    <name>Unteruntergruppe 1</name>
+                                    <weight>0.985228</weight>
+                                    <frequency>4</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Unteruntergruppe 2</name>
+                                            <weight>0.985228</weight>
+                                            <frequency>4</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
                         </item>
                     </items>
                 </item>
@@ -64,34 +78,95 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
             <select>multiple</select>
             <items>
                 <item>
-                    <name>Firma Müller</name>
-                    <weight>0.863121</weight>
-                    <frequency>2</frequency>
-                    <image>http://www.example.com/vendor/firma_muller.jpg</image>
+                    <name>Exclusive Leather</name>
+                    <weight>0.68965518474579</weight>
+                    <frequency>10</frequency>
+                </item>
+                <item>
+                    <name>HUNDE design</name>
+                    <weight>0.68965518474579</weight>
+                    <frequency>19</frequency>
                 </item>
             </items>
         </filter>
         <filter>
-            <select>single</select>
             <name>price</name>
+            <display>Preis</display>
+            <select>single</select>
+            <type>range-slider</type>
+            <attributes>
+                <selectedRange>
+                    <min>59</min>
+                    <max>2300</max>
+                </selectedRange>
+                <totalRange>
+                    <min>59</min>
+                    <max>2300</max>
+                </totalRange>
+                <stepSize>0.1</stepSize>
+                <unit>€</unit>
+            </attributes>
             <items>
                 <item>
-                    <name>1.23 - 6.66</name>
-                    <weight>0.863121</weight>
-                    <frequency>2</frequency>
+                    <name>59 - 139</name>
+                    <weight>0.5517241358757</weight>
                     <parameters>
-                        <min>1.23</min>
-                        <max>6.66</max>
+                        <min>59</min>
+                        <max>139</max>
                     </parameters>
                 </item>
                 <item>
-                    <name>6.66 - 8</name>
-                    <weight>0.591673</weight>
-                    <frequency>1</frequency>
+                    <name>146.37 - 250</name>
+                    <weight>0.5517241358757</weight>
                     <parameters>
-                        <min>6.66</min>
-                        <max>8</max>
+                        <min>146.37</min>
+                        <max>250</max>
                     </parameters>
+                </item>
+                <item>
+                    <name>269 - 730</name>
+                    <weight>0.5517241358757</weight>
+                    <parameters>
+                        <min>269</min>
+                        <max>730</max>
+                    </parameters>
+                </item>
+                <item>
+                    <name>740 - 2300</name>
+                    <weight>0.34482759237289</weight>
+                    <parameters>
+                        <min>740</min>
+                        <max>2300</max>
+                    </parameters>
+                </item>
+            </items>
+        </filter>
+        <filter>
+            <name>Farbe</name>
+            <display>Farbe</display>
+            <select>multiselect</select>
+            <selectedItems>0</selectedItems>
+            <type>color</type>
+            <items>
+                <item>
+                    <name>lila</name>
+                    <weight>0.068965516984463</weight>
+                    <color>#BA55D3</color>
+                </item>
+                <item>
+                    <name>rot</name>
+                    <weight>0.068965516984463</weight>
+                    <color>#FF0000</color>
+                </item>
+                <item>
+                    <name>schwarz</name>
+                    <weight>0.068965516984463</weight>
+                    <color>#000000</color>
+                </item>
+                <item>
+                    <name>weiß</name>
+                    <weight>0.068965516984463</weight>
+                    <color>#FFFFFF</color>
                 </item>
             </items>
         </filter>

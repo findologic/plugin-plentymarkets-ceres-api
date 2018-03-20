@@ -1,12 +1,13 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Tests;
+namespace Findologic\PluginPlentymarketsApi\Tests\Services;
 
 use Findologic\PluginPlentymarketsApi\Api\Client;
 use Findologic\PluginPlentymarketsApi\Api\Request\Request;
 use Findologic\PluginPlentymarketsApi\Api\Request\RequestBuilder;
 use Findologic\PluginPlentymarketsApi\Api\Response\Response;
 use Findologic\PluginPlentymarketsApi\Api\Response\ResponseParser;
+use Findologic\PluginPlentymarketsApi\Constants\Plugin;
 use Findologic\PluginPlentymarketsApi\Exception\AliveException;
 use Findologic\PluginPlentymarketsApi\Services\SearchService;
 use Ceres\Helper\ExternalSearch;
@@ -87,10 +88,10 @@ class SearchServiceTest extends \PHPUnit_Framework_TestCase
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->requestBuilder->expects($this->once())->method('buildAliveRequest')->willReturn($requestMock);
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
-        $this->client->expects($this->any())->method('call')->willReturn('Test');
+        $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $responseMock->expects($this->once())->method('getProductsIds');
+        $responseMock->expects($this->once())->method('getProductsIds')->willReturn([1, 2, 3]);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $searchServiceMock = $this->getSearchServiceMock();
@@ -103,7 +104,6 @@ class SearchServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array|null $methods
-     * @param array $mocks
      * @return SearchService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getSearchServiceMock($methods = null)

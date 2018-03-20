@@ -12,9 +12,9 @@ use Plenty\Plugin\Log\LoggerFactory;
  */
 class Client
 {
-    const DEFAULT_CONNECTION_TIMEOUT = 100;
+    const DEFAULT_CONNECTION_TIME_OUT = 5;
 
-    const DEFAULT_TIMEOUT = 50;
+    const DEFAULT_TIME_OUT = 10;
 
     /**
      * @var LoggerFactory
@@ -34,14 +34,17 @@ class Client
     {
         $response = false;
 
+        $connectionTimeOut = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
+        $timeOut = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
+
         try {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($ch, CURLOPT_URL, $request->getRequestUrl());
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::DEFAULT_CONNECTION_TIMEOUT);
-            curl_setopt($ch, CURLOPT_TIMEOUT, self::DEFAULT_TIMEOUT);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $connectionTimeOut);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeOut);
             curl_setopt($ch, CURLOPT_POST, true);
             $response = curl_exec($ch);
             curl_close($ch);
