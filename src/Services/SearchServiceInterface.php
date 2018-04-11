@@ -1,6 +1,6 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Services;
+namespace Findologic\Services;
 
 use Plenty\Plugin\Http\Request;
 

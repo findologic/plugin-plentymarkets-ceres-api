@@ -4,6 +4,9 @@
   "namespace":"Findologic",
   "author":"AdeoWeb",
   "type":"template",
-  "version": "0.0.004",
-  "serviceProvider":"Findologic\\Providers\\FindologicServiceProvider"
+  "version": "0.0.043",
+  "serviceProvider":"Findologic\\Providers\\FindologicServiceProvider",
+  "dependencies": {
+    "findologic/http_request2": "2.3.1"
+  }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Api\Request;
+namespace Findologic\Api\Request;
 
-use Findologic\PluginPlentymarketsApi\Constants\Plugin;
+use Findologic\Constants\Plugin;
 
 /**
  * Class Request

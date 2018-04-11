@@ -1,20 +1,23 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Api\Request;
+namespace Findologic\Api\Request;
 
 use Ceres\Helper\ExternalSearch;
-use Findologic\PluginPlentymarketsApi\Constants\Plugin;
-use Findologic\PluginPlentymarketsApi\Api\Client;
+use Findologic\Constants\Plugin;
+use Findologic\Api\Client;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Log\LoggerFactory;
+use Plenty\Plugin\Log\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
+
 /**
  * Class RequestBuilder
  * @package Findologic\Api\Request
  */
 class RequestBuilder
 {
+    use Loggable;
+
     /**
      * @var ConfigRepository
      */
@@ -30,22 +33,21 @@ class RequestBuilder
      */
     protected $request;
 
-    public function __construct(ConfigRepository $configRepository, LoggerFactory $loggerFactory)
+    public function __construct(ConfigRepository $configRepository)
     {
         $this->configRepository = $configRepository;
-        $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+        $this->logger = $this->getLogger(Plugin::PLUGIN_IDENTIFIER);
     }
 
     /**
      * @param HttpRequest $httpRequest
-     * @param ExternalSearch|null $searchQuery
      * @return bool|Request
      */
-    public function build($httpRequest, $searchQuery = null)
+    public function build($httpRequest)
     {
         $request = $this->createRequestObject();
         $request = $this->setDefaultValues($request);
-        $request = $this->setSearchParams($request, $httpRequest, $searchQuery);
+        $request = $this->setSearchParams($request, $httpRequest);
 
         return $request;
     }
@@ -105,16 +107,16 @@ class RequestBuilder
     /**
      * @param Request $request
      * @param HttpRequest $httpRequest
-     * @param ExternalSearch $searchQuery
      * @return Request
      */
-    public function setSearchParams($request, $httpRequest, $searchQuery)
+    public function setSearchParams($request, $httpRequest)
     {
-        if ($searchQuery->searchString) {
-            $request->setParam('query', $searchQuery->searchString);
-        }
+        $parameters = $httpRequest->all();
 
-        parse_str($httpRequest->getUri(), $parameters);
+        //TODO: remove after testing
+        $this->logger->error('Parameters ', $parameters);
+
+        $request->setParam('query', $parameters['query'] ?? '');
 
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];

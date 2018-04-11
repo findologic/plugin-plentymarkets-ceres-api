@@ -1,10 +1,11 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Api\Response;
+namespace Findologic\Api\Response;
 
-use Findologic\PluginPlentymarketsApi\Api\Response\Parser\FiltersParser;
-use Findologic\PluginPlentymarketsApi\Constants\Plugin;
-use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Api\Response\Parser\FiltersParser;
+use Findologic\Constants\Plugin;
+use Plenty\Plugin\Log\Loggable;
+use Plenty\Log\Contracts\LoggerContract;
 
 /**
  * Class ResponseParser
@@ -12,24 +13,26 @@ use Plenty\Plugin\Log\LoggerFactory;
  */
 class ResponseParser
 {
+    use Loggable;
+
     /**
      * @var FiltersParser
      */
     protected $filtersParser;
 
     /**
-     * @var \Plenty\Log\Contracts\LoggerContract
+     * @var LoggerContract
      */
     protected $logger;
 
-    public function __construct(FiltersParser $filtersParser, LoggerFactory $loggerFactory)
+    public function __construct(FiltersParser $filtersParser)
     {
         $this->filtersParser = $filtersParser;
-        $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+        $this->logger = $this->getLogger(Plugin::PLUGIN_IDENTIFIER);
     }
 
     /**
-     * @param $responseData
+     * @param string $responseData
      * @return Response
      */
     public function parse($responseData)
@@ -40,6 +43,9 @@ class ResponseParser
         $response = pluginApp(Response::class);
 
         try {
+            //TODO: remove after testing
+            $this->logger->error('Findologic response', $responseData);
+
             $data = $this->loadXml($responseData);
             $response->setData(Response::DATA_SERVERS, $this->parseServers($data));
             $response->setData(Response::DATA_QUERY, $this->parseQuery($data));
@@ -57,10 +63,10 @@ class ResponseParser
     }
 
     /**
-     * @param string $xmlString
+     * @param $xmlString
      * @return \SimpleXMLElement
      */
-    public function loadXml($xmlString)
+    public function loadXml($xmlString = '')
     {
         return simplexml_load_string($xmlString);
     }
@@ -94,8 +100,8 @@ class ResponseParser
             $query['searchedWordCount'] = $data->query->searchWordCount->__toString();
             $query['foundWordCount'] = $data->query->foundWordCount->__toString();
 
-            //TODO: check limit structure in valid response as it is missing data in example response
-            $limit = $data->query->limit;
+            $query['first'] = $data->query->limit['first']->__toString();
+            $query['count'] = $data->query->limit['count']->__toString();
         }
 
         return $query;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Exception;
+namespace Findologic\Exception;
 
 /**
  * Class AliveException
- * @package Findologic\PluginPlentymarketsApi\Exception
+ * @package Findologic\Exception
  */
 class AliveException extends \Exception
 {

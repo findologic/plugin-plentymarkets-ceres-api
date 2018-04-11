@@ -1,10 +1,10 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Api\Response\Parser;
+namespace Findologic\Api\Response\Parser;
 
 /**
  * Class FiltersParser
- * @package Findologic\PluginPlentymarketsApi\Api\Response\Parser
+ * @package Findologic\Api\Response\Parser
  */
 class FiltersParser
 {

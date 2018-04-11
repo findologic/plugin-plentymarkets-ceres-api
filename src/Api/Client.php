@@ -1,11 +1,12 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Api;
+namespace Findologic\Api;
 
-use Findologic\PluginPlentymarketsApi\Constants\Plugin;
-use Findologic\PluginPlentymarketsApi\Api\Request\Request;
-use Plenty\Plugin\Log\LoggerFactory;
-use HTTP_Request2;
+use Findologic\Constants\Plugin;
+use Findologic\Api\Request\Request;
+use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
+use Plenty\Plugin\Log\Loggable;
+use Plenty\Log\Contracts\LoggerContract;
 
 /**
  * Class Client
@@ -13,34 +14,43 @@ use HTTP_Request2;
  */
 class Client
 {
+    use Loggable;
+
     const DEFAULT_CONNECTION_TIME_OUT = 5;
 
     const DEFAULT_TIME_OUT = 10;
 
     /**
-     * @var LoggerFactory
+     * @var LoggerContract
      */
     protected $logger;
 
-    public function __construct(LoggerFactory $loggerFactory)
+    /**
+     * @var LibraryCallContract
+     */
+    protected $libraryCallContract;
+
+    public function __construct(LibraryCallContract $libraryCallContract)
     {
-        $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+        $this->logger = $this->getLogger(Plugin::PLUGIN_IDENTIFIER);
+        $this->libraryCallContract = $libraryCallContract;
     }
 
     /**
      * @param Request $request
-     * @return bool|mixed
+     * @return mixed
      */
     public function call(Request $request)
     {
         $response = false;
 
         try {
-            $httpRequest = $this->createHttpRequest($request);
-            $response = $httpRequest->send();
-            $response = $response->getBody();
+            $response = $this->libraryCallContract->call(
+                'Findologic::http_library',
+                ['request' => $this->requestToArray($request)]
+            );
         } catch (\Exception $e) {
-            $this->logger->warning('Exception while handling search query.');
+            $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);
             return $response;
         }
@@ -48,14 +58,18 @@ class Client
         return $response;
     }
 
-    public function createHttpRequest(Request $request)
+    /**
+     * @param Request $request
+     * @return array
+     */
+    protected function requestToArray($request)
     {
-        $httpRequest =  new HTTP_Request2($request->getRequestUrl());
-        $httpRequest->setAdapter('curl');
+        $requestArray = [];
 
-        $httpRequest->setConfig('connect_timeout', $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT);
-        $httpRequest->setConfig('timeout',$request->getConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT);
+        $requestArray['url'] = $request->getRequestUrl();
+        $requestArray['connect_timeout'] = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
+        $requestArray['timeout'] = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
 
-        return $httpRequest;
+        return $requestArray;
     }
 }

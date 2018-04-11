@@ -1,7 +1,7 @@
 [
   {
     "tab": "Findologic Search",
-    "key": "findologic.enabled",
+    "key": "enabled",
     "label": "Plugin enabled",
     "type": "dropdown",
     "possibleValues": {
@@ -12,14 +12,14 @@
   },
   {
     "tab": "Findologic Search",
-    "key": "findologic.url",
+    "key": "url",
     "label": "Search server url",
     "type": "text",
     "default": "http://service.findologic.com/ps/xml_2.0/"
   },
   {
     "tab": "Findologic Search",
-    "key": "findologic.shopkey",
+    "key": "shopkey",
     "label": "Shop key",
     "type": "text"
   }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Api\Response;
+namespace Findologic\Api\Response;
 
 /**
  * Class Response
