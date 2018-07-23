@@ -163,11 +163,17 @@ class ResponseParser
 
         if (!empty($data->products) ) {
             foreach ($data->products->product as $product) {
-                $products[] = [
+                $productData = [
                     'id' => $product['id']->__toString(),
                     'relevance' => $product['relevance']->__toString(),
-                    'direct' => $product['direct']->__toString()
+                    'direct' => $product['direct']->__toString(),
                 ];
+
+                foreach ($product->properties->property as $property) {
+                    $productData['properties'][$property['name']->__toString()] = $property->__toString();
+                }
+
+                $products[] = $productData;
             }
         }
 

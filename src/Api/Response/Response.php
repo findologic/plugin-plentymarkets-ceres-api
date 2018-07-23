@@ -2,6 +2,8 @@
 
 namespace Findologic\Api\Response;
 
+use Findologic\Constants\Plugin;
+
 /**
  * Class Response
  * @package Findologic\Api\Response
@@ -50,6 +52,24 @@ class Response
 
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
             $ids = array_column($products, 'id');
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductMainVariationsIds()
+    {
+        $ids = [];
+
+        if ($products = $this->getData(self::DATA_PRODUCTS)) {
+            foreach ($products as $product) {
+                if (isset($product['properties'][Plugin::API_PROPERTY_MAIN_VARIATION_ID])) {
+                    $ids[] = $product['properties'][Plugin::API_PROPERTY_MAIN_VARIATION_ID];
+                }
+            }
         }
 
         return $ids;

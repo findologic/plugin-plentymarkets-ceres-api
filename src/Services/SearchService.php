@@ -61,7 +61,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $results = $this->search($request);
-            $productsIds = $results->getProductsIds();
+            $productsIds = $results->getProductMainVariationsIds();
 
             //TODO: remove, used for testing during development
             if ($request->get('productIds', false)) {
@@ -69,6 +69,9 @@ class SearchService implements SearchServiceInterface
             }
 
             if (!empty($productsIds) && is_array($productsIds)) {
+                //TODO: remove after testing
+                $this->logger->error('Set results', $productsIds);
+
                 $searchQuery->setResults($productsIds);
             }
 

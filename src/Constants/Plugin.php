@@ -13,9 +13,12 @@ class Plugin
 
     const API_OUTPUT_ADAPTER = 'XML_2.0';
     const API_PARAMETER_ATTRIBUTES = 'attrib';
+    const API_PARAMETER_PROPERTIES = 'properties';
     const API_PARAMETER_SORT_ORDER = 'order';
     const API_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'count';
     const API_PARAMETER_PAGINATION_START = 'first';
+
+    const API_PROPERTY_MAIN_VARIATION_ID = 'main_variation_id';
 
     const API_CONFIGURATION_KEY_CONNECTION_TIME_OUT = 'connection_time_out';
     const API_CONFIGURATION_KEY_TIME_OUT = 'time_out';

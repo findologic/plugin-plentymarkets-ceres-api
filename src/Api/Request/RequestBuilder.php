@@ -117,6 +117,7 @@ class RequestBuilder
         $this->logger->error('Parameters ', $parameters);
 
         $request->setParam('query', $parameters['query'] ?? '');
+        $request->setPropertyParam(Plugin::API_PROPERTY_MAIN_VARIATION_ID);
 
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];

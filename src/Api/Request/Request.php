@@ -149,6 +149,23 @@ class Request
     }
 
     /**
+     * @param string $param
+     * @return $this
+     */
+    public function setPropertyParam($param)
+    {
+        if (!isset($this->params[Plugin::API_PARAMETER_PROPERTIES])) {
+            $this->params[Plugin::API_PARAMETER_PROPERTIES] = [];
+        }
+
+        if (!in_array($param, $this->params[Plugin::API_PARAMETER_PROPERTIES])) {
+            $this->params[Plugin::API_PARAMETER_PROPERTIES][] = $param;
+        }
+
+        return $this;
+    }
+
+    /**
      * @return bool|mixed
      */
     public function getConfiguration($key)
