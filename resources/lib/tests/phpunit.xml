@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <phpunit
-        bootstrap="./tests/autoload.php"
+        bootstrap="./autoload.php"
         colors="true"
         convertErrorsToExceptions="true"
         convertNoticesToExceptions="true"
@@ -12,7 +12,7 @@
         syntaxCheck="true">
 
     <testsuite name="Tests">
-        <directory>./tests</directory>
+        <directory>./</directory>
         <exclude>./Mocks</exclude>
     </testsuite>
     <logging>
@@ -25,7 +25,7 @@
     </logging>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">../../../src</directory>
         </whitelist>
     </filter>
 </phpunit>

@@ -1,11 +1,11 @@
 {
-  "name":"Findologic",
-  "description":"Findologic search plugin",
-  "namespace":"Findologic",
-  "author":"AdeoWeb",
-  "type":"template",
-  "version": "0.0.046",
-  "serviceProvider":"Findologic\\Providers\\FindologicServiceProvider",
+  "name": "Findologic",
+  "description": "Findologic search plugin",
+  "namespace": "Findologic",
+  "author": "AdeoWeb",
+  "type": "template",
+  "version": "0.0.058",
+  "serviceProvider": "Findologic\\Providers\\FindologicServiceProvider",
   "dependencies": {
     "findologic/http_request2": "2.3.1"
   }

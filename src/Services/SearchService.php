@@ -103,6 +103,7 @@ class SearchService implements SearchServiceInterface
             $results = $this->search($request);
 
             $searchOptions = $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $results, $request);
+
             //TODO: set filters
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search options.');
