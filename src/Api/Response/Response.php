@@ -74,4 +74,16 @@ class Response
 
         return $ids;
     }
+
+    /**
+     * @return int
+     */
+    public function getResultsCount()
+    {
+        if (!isset($this->data[self::DATA_RESULTS]['count'])) {
+            return 0;
+        }
+
+        return $this->data[self::DATA_RESULTS]['count'];
+    }
 }

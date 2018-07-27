@@ -7,8 +7,8 @@ use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Log\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
+use Plenty\Plugin\Log\LoggerFactory;
 
 /**
  * Class RequestBuilder
@@ -16,8 +16,6 @@ use Plenty\Log\Contracts\LoggerContract;
  */
 class RequestBuilder
 {
-    use Loggable;
-
     /**
      * @var ConfigRepository
      */
@@ -33,10 +31,10 @@ class RequestBuilder
      */
     protected $request;
 
-    public function __construct(ConfigRepository $configRepository)
+    public function __construct(ConfigRepository $configRepository, LoggerFactory $loggerFactory)
     {
         $this->configRepository = $configRepository;
-        $this->logger = $this->getLogger(Plugin::PLUGIN_IDENTIFIER);
+        $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
     /**

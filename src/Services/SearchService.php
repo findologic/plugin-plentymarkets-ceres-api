@@ -8,9 +8,12 @@ use Findologic\Api\Response\ResponseParser;
 use Findologic\Api\Client;
 use Findologic\Constants\Plugin;
 use Findologic\Exception\AliveException;
+use Findologic\Services\Search\ParametersHandler;
 use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Log\Loggable;
+use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
+use Ceres\Helper\ExternalSearch;
+use Ceres\Helper\ExternalSearchOptions;
 
 /**
  * Class SearchService
@@ -18,7 +21,7 @@ use Plenty\Log\Contracts\LoggerContract;
  */
 class SearchService implements SearchServiceInterface
 {
-    use Loggable;
+    CONST DEFAULT_ITEMS_PER_PAGE = 25;
 
     /**
      * @var Client
@@ -36,6 +39,11 @@ class SearchService implements SearchServiceInterface
     protected $responseParser;
 
     /**
+     * @var ParametersHandler
+     */
+    protected $searchParametersHandler;
+
+    /**
      * @var LoggerContract
      */
     protected $logger;
@@ -45,16 +53,19 @@ class SearchService implements SearchServiceInterface
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
-        ResponseParser $responseParser
+        ResponseParser $responseParser,
+        ParametersHandler $searchParametersHandler,
+        LoggerFactory $loggerFactory
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
         $this->responseParser = $responseParser;
-        $this->logger = $this->getLogger(Plugin::PLUGIN_IDENTIFIER);
+        $this->searchParametersHandler = $searchParametersHandler;
+        $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
     /**
-     * @param $searchQuery
+     * @param ExternalSearch $searchQuery
      * @param HttpRequest $request
      */
     public function handleSearchQuery($searchQuery, $request)
@@ -83,7 +94,7 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param $searchOptions
+     * @param ExternalSearchOptions $searchOptions
      * @param HttpRequest $request
      */
     public function handleSearchOptions($searchOptions, $request)
@@ -91,6 +102,7 @@ class SearchService implements SearchServiceInterface
         try {
             $results = $this->search($request);
 
+            $searchOptions = $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $results, $request);
             //TODO: set filters
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search options.');

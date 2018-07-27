@@ -1,18 +1,69 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Tests\Api\Response;
+namespace Findologic\Tests\Api\Response;
 
-use Findologic\PluginPlentymarketsApi\Api\Response\ResponseParser;
+use Findologic\Api\Response\Parser\FiltersParser;
+use Findologic\Api\Response\Response;
+use Findologic\Api\Response\ResponseParser;
+use Plenty\Plugin\Log\LoggerFactory;
+use Plenty\Log\Contracts\LoggerContract;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ResponseParserTest
- * @package Findologic\PluginPlentymarketsApi\Tests
+ * @package Findologic\Tests
  */
-class ResponseParserTest extends \PHPUnit_Framework_TestCase
+class ResponseParserTest extends TestCase
 {
+    /**
+     * @var FiltersParser|MockObject
+     */
+    protected $filterParser;
+
+    /**
+     * @var LoggerFactory|MockObject
+     */
+    protected $loggerFactory;
+
+    /**
+     * @var LoggerContract|MockObject
+     */
+    protected $logger;
+
+    public function setUp()
+    {
+        $this->filterParser = $this->getMockBuilder(FiltersParser::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
+    }
+
     public function testParse()
     {
-        $responseParserMock = $this->getMockBuilder(ResponseParser::class)->disableOriginalConstructor()->getMock();
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods(null)->getMock();
+        /** @var ResponseParser|MockObject $responseParserMock */
+        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
+        $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
+
+        $results = $responseParserMock->parse($this->getResponse());
+        $this->assertEquals(3, $results->getResultsCount());
+    }
+
+    /**
+     * @param array|null $methods
+     * @return ResponseParser|MockObject
+     */
+    protected function getResponseParserMock($methods = null)
+    {
+        $responseParserMock = $this->getMockBuilder(ResponseParser::class)
+            ->setConstructorArgs([
+                'filterParser' => $this->filterParser,
+                'loggerFactory' => $this->loggerFactory
+            ])
+            ->setMethods($methods);
+
+        return $responseParserMock->getMock();
     }
 
     protected function getResponse()
@@ -32,7 +83,7 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
     <landingPage link="http://www.example.com/imprint"/>
     <promotion image="http://www.example.com/special-offer.jpg" link="http://www.example.com/special-offer"/>
     <results>
-        <count>2</count>
+        <count>3</count>
     </results>
     <products>
         <product id="17" relevance="5.5451774597168" direct="0"/>

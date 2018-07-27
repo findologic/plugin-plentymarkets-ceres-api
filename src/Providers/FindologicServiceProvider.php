@@ -12,6 +12,7 @@ use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Plugin\Log\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
+use IO\Extensions\Functions\Partial;
 
 /**
  * Class FindologicServiceProvider
@@ -48,14 +49,14 @@ class FindologicServiceProvider extends ServiceProvider
 
         $eventDispatcher->listen(
             'Ceres.Search.Options',
-            function(ExternalSearchOptions $searchOptions) use ($searchService, $request) {
+            function (ExternalSearchOptions $searchOptions) use ($searchService, $request) {
                 $searchService->handleSearchOptions($searchOptions, $request);
             }
         );
 
         $eventDispatcher->listen(
             'Ceres.Search.Query',
-            function(ExternalSearch $searchQuery) use ($searchService, $request) {
+            function (ExternalSearch $searchQuery) use ($searchService, $request) {
                 $searchService->handleSearchQuery($searchQuery, $request);
             }
         );

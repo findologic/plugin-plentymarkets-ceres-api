@@ -1,14 +1,16 @@
 <?php
 
-namespace Findologic\PluginPlentymarketsApi\Tests\Api\Request;
+namespace Findologic\Tests\Api\Request;
 
-use Findologic\PluginPlentymarketsApi\Api\Request\Request;
+use Findologic\Api\Request\Request;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class RequestTest
- * @package Findologic\PluginPlentymarketsApi\Tests\Api\Request
+ * @package Findologic\Tests\Api\Request
  */
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     public function providerGetRequestUrl()
     {
@@ -34,7 +36,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param null $methods
-     * @return Request|\PHPUnit_Framework_MockObject_MockObject
+     * @return Request|MockObject
      */
     protected function getRequestMock($methods = null)
     {
