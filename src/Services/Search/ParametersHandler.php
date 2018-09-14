@@ -6,6 +6,7 @@ use Ceres\Config\CeresConfig;
 use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Api\Response\Response;
 use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Plugin\Translation\Translator;
 
 /**
  * Class ParametersHandler
@@ -19,10 +20,18 @@ class ParametersHandler
     protected $config;
 
     /**
+     * @var Translator
+     */
+    protected $translator;
+
+    /**
      * @var bool|array
      */
     protected $itemsPerPage = [];
 
+    /**
+     * @return CeresConfig
+     */
     public function getConfig()
     {
         if (!$this->config) {
@@ -30,6 +39,18 @@ class ParametersHandler
         }
 
         return $this->config;
+    }
+
+    /**
+     * @return Translator
+     */
+    public function getTranslator()
+    {
+        if (!$this->translator) {
+            $this->translator = pluginApp(Translator::class);
+        }
+
+        return $this->translator;
     }
 
     /**
@@ -51,14 +72,13 @@ class ParametersHandler
      */
     public function getSortingOptions()
     {
-        //TODO: translations and maybe sort options labels should be configurable ?
         return [
-            '' => 'Revelance',
-            'price ASC' => 'Price ⬆',
-            'price DESC' => 'Price ⬇',
-            'label ASC' => 'A-Z',
-            'salesfrequency DESC' => 'Top sellers',
-            'dateadded DESC' => 'Newest'
+            '' => $this->getTranslator()->trans("Findologic::search.sortRevelance"),
+            'price ASC' => $this->getTranslator()->trans("Findologic::search.sortPriceAsc"),
+            'price DESC' => $this->getTranslator()->trans("Findologic::search.sortPriceDesc"),
+            'label ASC' => $this->getTranslator()->trans("Findologic::search.sortLabelAsc"),
+            'salesfrequency DESC' => $this->getTranslator()->trans("Findologic::search.sortSalesFrequency"),
+            'dateadded DESC' => $this->getTranslator()->trans("Findologic::search.sortDateAdded"),
         ];
     }
 
