@@ -5,9 +5,9 @@ use Findologic\Constants\Plugin;
 /** @var \Findologic\Api\Request\Request $request */
 $request = SdkRestApi::getParam('request');
 
-$httpRequest = new \HTTP_Request2();
+$method = $request['method'] ?? 'GET';
+$httpRequest = new \HTTP_Request2($request['url'], $method);
 
-$httpRequest->setUrl($request['url']);
 $httpRequest->setAdapter('curl');
 
 $httpRequest->setConfig('connect_timeout', $request['connect_timeout']);
