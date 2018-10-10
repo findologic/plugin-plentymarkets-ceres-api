@@ -15,7 +15,7 @@
     "key": "url",
     "label": "Search server url",
     "type": "text",
-    "default": "http://service.findologic.com/ps/xml_2.0/"
+    "default": "https://service.findologic.com/ps/xml_2.0/"
   },
   {
     "tab": "Findologic Search",
