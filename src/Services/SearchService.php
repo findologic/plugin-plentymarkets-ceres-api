@@ -83,7 +83,7 @@ class SearchService implements SearchServiceInterface
                 //TODO: remove after testing
                 $this->logger->error('Set results', $productsIds);
 
-                $searchQuery->setResults($productsIds);
+                $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
             //TODO: how to handle no results ?
