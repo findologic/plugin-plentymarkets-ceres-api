@@ -117,10 +117,6 @@ class SearchService implements SearchServiceInterface
      */
     protected function search($request)
     {
-        if ($this->results instanceof  Response) {
-            return $this->results;
-        }
-
         try {
             $this->aliveTest();
 
