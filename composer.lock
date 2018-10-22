@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "532cfb1c1a62bf881f2c092facf40270",
+    "content-hash": "3bb165d45a0b2ce535c61a16690b996a",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -975,7 +975,7 @@
         },
         {
             "name": "plentymarkets-ceres/plugin-ceres",
-            "version": "1.0.4",
+            "version": "2.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-ceres",
@@ -985,7 +985,7 @@
         },
         {
             "name": "plentymarkets-local/plugin-io",
-            "version": "1.0.1",
+            "version": "2.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-io",
