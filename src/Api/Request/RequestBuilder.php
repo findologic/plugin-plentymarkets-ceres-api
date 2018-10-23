@@ -125,7 +125,7 @@ class RequestBuilder
         }
 
         if (isset($parameters['sorting']) && in_array($parameters['sorting'], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::API_PARAMETER_SORT_ORDER]);
+            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters['sorting']);
         }
 
         $request = $this->setPagination($request, $parameters);
