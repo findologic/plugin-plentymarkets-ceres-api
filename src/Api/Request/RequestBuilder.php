@@ -140,15 +140,15 @@ class RequestBuilder
      */
     protected function setPagination($request, $parameters)
     {
-        $pageSize = $parameters['items'] ?? 0;
+        $pageSize = intval($parameters['items'] ?? 0);
 
-        if (intval($pageSize) > 0) {
+        if ($pageSize > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
         }
 
-        $paginationStart = $parameters[Plugin::API_PARAMETER_PAGINATION_START] ?? 0;
+        $paginationStart = intval($parameters['page'] ?? 0) * $pageSize;
 
-        if (intval($paginationStart) > 0) {
+        if ($paginationStart > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
         }
 
