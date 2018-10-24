@@ -7,8 +7,8 @@
     "php": "^7.0",
     "plentymarkets/plugin-interface": "dev-beta7",
     "findologic/http_request2": "2.3.1",
-    "plentymarkets-local/plugin-io": "1.0.1",
-    "plentymarkets-ceres/plugin-ceres": "1.0.4"
+    "plentymarkets-local/plugin-io": "2.15.0",
+    "plentymarkets-ceres/plugin-ceres": "2.15.0"
 
   },
   "require-dev": {
@@ -19,7 +19,7 @@
       "type": "package",
       "package": {
         "name": "plentymarkets-local/plugin-io",
-        "version": "1.0.1",
+        "version": "2.15.0",
         "source": {
           "url": "https://github.com/plentymarkets/plugin-io",
           "type": "git",
@@ -31,7 +31,7 @@
       "type": "package",
       "package": {
         "name": "plentymarkets-ceres/plugin-ceres",
-        "version": "1.0.4",
+        "version": "2.15.0",
         "source": {
           "url": "https://github.com/plentymarkets/plugin-ceres",
           "type": "git",
