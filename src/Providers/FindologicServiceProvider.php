@@ -12,7 +12,7 @@ use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Plugin\Log\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
-use IO\Extensions\Functions\Partial;
+use IO\Helper\ResourceContainer;
 
 /**
  * Class FindologicServiceProvider
@@ -46,6 +46,20 @@ class FindologicServiceProvider extends ServiceProvider
         if (!$configRepository->get(Plugin::CONFIG_ENABLED, false)) {
             return;
         }
+
+        $logger = $this->getLoggerObject();
+
+        $eventDispatcher->listen(
+            'IO.Resources.Import',
+            function (ResourceContainer $container) use ($configRepository) {
+                $container->addScriptTemplate(
+                    'Findologic::content.script',
+                    [
+                        'shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, '')))
+                    ]
+                );
+            }, 0
+        );
 
         $eventDispatcher->listen(
             'Ceres.Search.Options',
