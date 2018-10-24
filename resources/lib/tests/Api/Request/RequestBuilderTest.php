@@ -42,10 +42,66 @@ class RequestBuilderTest extends TestCase
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
 
+    public function providerBuildAliveRequest()
+    {
+        return [
+            'Build alive request' => [
+                'http://test.com/alivetest.php',
+                [
+                    'shopkey' => 'TESTSHOPKEY'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider providerBuildAliveRequest
+     */
+    public function testBuildAliveRequest($expectedUrl, $expectedParams)
+    {
+        $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject']);
+        $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
+
+        $this->configRepository->expects($this->any())->method('get')->willReturnOnConsecutiveCalls('http://test.com', 'TESTSHOPKEY');
+
+        /** @var Request|MockObject $result */
+        $result = $requestBuilderMock->buildAliveRequest();
+        $this->assertEquals($expectedUrl, $result->getUrl());
+        $this->assertEquals($expectedParams, $result->getParams());
+    }
+
     public function providerBuild()
     {
         return [
-            [
+            'Build - No user ip provided' => [
+                [
+                    'query' => 'Query',
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'size' => ['xl'],
+                    ],
+                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
+                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '30',
+                    Plugin::API_PARAMETER_PAGINATION_START => '60',
+                    'properties' => []
+                ],
+                false,
+                'http://test.com/index.php',
+                [
+                    'query' => 'Query',
+                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
+                    'shopkey' => 'TESTSHOPKEY',
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'size' => ['xl']
+                    ],
+                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
+                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '30',
+                    Plugin::API_PARAMETER_PAGINATION_START => '60',
+                    'properties' => [
+                        0 => 'main_variation_id'
+                    ]
+                ]
+            ],
+            'Build' => [
                 [
                     'query' => 'Test',
                     Plugin::API_PARAMETER_ATTRIBUTES => [
@@ -56,11 +112,13 @@ class RequestBuilderTest extends TestCase
                     Plugin::API_PARAMETER_PAGINATION_START => '10',
                     'properties' => []
                 ],
+                '127.0.0.1',
                 'http://test.com/index.php',
                 [
                     'query' => 'Test',
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
+                    'userip' => '127.0.0.1',
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'color' => ['red', 'blue']
                     ],
@@ -78,7 +136,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @dataProvider providerBuild
      */
-    public function testBuild($parameters, $expectedUrl, $expectedParams)
+    public function testBuild($parameters, $userIp, $expectedUrl, $expectedParams)
     {
         /** @var HttpRequest|MockObject $httpRequestMock */
         $httpRequestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -90,8 +148,9 @@ class RequestBuilderTest extends TestCase
 
         $this->configRepository->expects($this->any())->method('get')->willReturnOnConsecutiveCalls('http://test.com', 'TESTSHOPKEY');
 
-        $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject']);
+        $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject', 'getUserIp']);
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
+        $requestBuilderMock->expects($this->any())->method('getUserIp')->willReturn($userIp);
 
         /** @var Request|MockObject $result */
         $result = $requestBuilderMock->build($httpRequestMock, $searchQueryMock);
