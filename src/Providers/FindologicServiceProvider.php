@@ -47,7 +47,9 @@ class FindologicServiceProvider extends ServiceProvider
             return;
         }
 
-        $logger = $this->getLoggerObject();
+        if (!$configRepository->get(Plugin::CONFIG_SHOPKEY, false)) {
+            return;
+        }
 
         $eventDispatcher->listen(
             'IO.Resources.Import',
