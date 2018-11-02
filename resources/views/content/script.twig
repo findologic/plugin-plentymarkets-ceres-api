@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    (function() {
+        var mainUrl = "https://cdn.findologic.com/static/{{ shopkey }}/main.js";
+        var loader = document.createElement('script');
+        loader.type = 'text/javascript';
+        loader.async = true;
+        loader.src = "https://cdn.findologic.com/static/loader.min.js";
+        var s = document.getElementsByTagName('script')[0];
+        loader.setAttribute('data-fl-main', mainUrl);
+        s.parentNode.insertBefore(loader, s);
+    })();
+</script>

@@ -19,7 +19,7 @@ class FindologicServiceProviderTest extends TestCase
     public function testBootPluginDisabled()
     {
         $configRepositoryMock = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $configRepositoryMock->expects($this->atLeastOnce())->method('get')->with('Findologic.enabled', false)->willReturn(false);
+        $configRepositoryMock->expects($this->at(0))->method('get')->with('Findologic.enabled', false)->willReturn(false);
         $eventDispatcherMock = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $eventDispatcherMock->expects($this->never())->method('listen');
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
@@ -33,9 +33,10 @@ class FindologicServiceProviderTest extends TestCase
     public function testBootPluginEnabled()
     {
         $configRepositoryMock = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $configRepositoryMock->expects($this->atLeastOnce())->method('get')->with('Findologic.enabled', false)->willReturn(true);
+        $configRepositoryMock->expects($this->at(0))->method('get')->with('Findologic.enabled', false)->willReturn(true);
+        $configRepositoryMock->expects($this->at(1))->method('get')->with('Findologic.shopkey', false)->willReturn('SHOPKEY');
         $eventDispatcherMock = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $eventDispatcherMock->expects($this->exactly(2))->method('listen');
+        $eventDispatcherMock->expects($this->exactly(3))->method('listen');
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
         $searchServiceMock = $this->getMockBuilder(SearchService::class)->disableOriginalConstructor()->getMock();
 
