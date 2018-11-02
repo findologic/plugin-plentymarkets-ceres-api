@@ -89,6 +89,30 @@ class RequestBuilder
     }
 
     /**
+     * @return string|bool
+     */
+    public function getUserIp()
+    {
+        if ($_SERVER['HTTP_CLIENT_IP']) {
+            $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif ($_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif ($_SERVER['HTTP_X_FORWARDED']) {
+            $ipAddress = $_SERVER['HTTP_X_FORWARDED'];
+        } elseif ($_SERVER['HTTP_FORWARDED_FOR']) {
+            $ipAddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif ($_SERVER['HTTP_FORWARDED']) {
+            $ipAddress = $_SERVER['HTTP_FORWARDED'];
+        } elseif ($_SERVER['REMOTE_ADDR']) {
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ipAddress = false;
+        }
+
+        return $ipAddress;
+    }
+
+    /**
      * @param Request $request
      * @return Request
      */
@@ -98,6 +122,10 @@ class RequestBuilder
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
         $request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT, Client::DEFAULT_CONNECTION_TIME_OUT);
+
+        if ($this->getUserIp()) {
+            $request->setParam('userip', $this->getUserIp());
+        }
 
         return $request;
     }
@@ -124,8 +152,8 @@ class RequestBuilder
             }
         }
 
-        if (isset($parameters[Plugin::API_PARAMETER_SORT_ORDER]) && in_array($parameters[Plugin::API_PARAMETER_SORT_ORDER], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::API_PARAMETER_SORT_ORDER]);
+        if (isset($parameters['sorting']) && in_array($parameters['sorting'], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
+            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters['sorting']);
         }
 
         $request = $this->setPagination($request, $parameters);
@@ -140,15 +168,15 @@ class RequestBuilder
      */
     protected function setPagination($request, $parameters)
     {
-        $pageSize = $parameters[Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE] ?? 0;
+        $pageSize = intval($parameters['items'] ?? 0);
 
-        if (intval($pageSize) > 0) {
+        if ($pageSize > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
         }
 
-        $paginationStart = $parameters[Plugin::API_PARAMETER_PAGINATION_START] ?? 0;
+        $paginationStart = intval($parameters['page'] ?? 0) * $pageSize;
 
-        if (intval($paginationStart) > 0) {
+        if ($paginationStart > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
         }
 
