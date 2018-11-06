@@ -14,6 +14,7 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Services\CategoryService;
 
 /**
  * Class SearchService
@@ -48,6 +49,11 @@ class SearchService implements SearchServiceInterface
      */
     protected $logger;
 
+    /**
+     * @var CategoryService
+     */
+    protected $categoryService;
+
     protected $results;
 
     public function __construct(
@@ -62,6 +68,18 @@ class SearchService implements SearchServiceInterface
         $this->responseParser = $responseParser;
         $this->searchParametersHandler = $searchParametersHandler;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+    }
+
+    /**
+     * @return CategoryService|null
+     */
+    public function getCategoryService()
+    {
+        if (!$this->categoryService) {
+            $this->categoryService = pluginApp(CategoryService::class);
+        }
+
+        return $this->categoryService;
     }
 
     /**
@@ -120,7 +138,9 @@ class SearchService implements SearchServiceInterface
         try {
             $this->aliveTest();
 
-            $apiRequest = $this->requestBuilder->build($request);
+            $category = $this->getCategoryService() ?? null;
+
+            $apiRequest = $this->requestBuilder->build($request, $category ? $category->getCurrentCategory() : null);
             $this->results = $this->responseParser->parse($this->client->call($apiRequest));
         } catch (AliveException $e) {
             $this->logger->error('Findologic server did not responded to alive request. ' . $e->getMessage());

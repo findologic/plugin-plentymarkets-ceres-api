@@ -43,6 +43,8 @@ class Client
         $response = false;
 
         try {
+            $this->logger->error('Request: ', $this->requestToArray($request));
+
             $response = $this->libraryCallContract->call(
                 'Findologic::http_library',
                 ['request' => $this->requestToArray($request)]
