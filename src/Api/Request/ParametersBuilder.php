@@ -124,7 +124,6 @@ class ParametersBuilder
                 return $this->getCategoryName($parentCategory, $categoryName);
             }
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             $this->logger->error('Could not get category name. ' . $e->getMessage(), $e->getTrace());
         }
 
