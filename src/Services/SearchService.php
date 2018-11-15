@@ -101,7 +101,7 @@ class SearchService implements SearchServiceInterface
                 //TODO: remove after testing
                 $this->logger->error('Set results', $productsIds);
 
-                $searchQuery->setResults($productsIds);
+                $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
             //TODO: how to handle no results ?
@@ -135,10 +135,6 @@ class SearchService implements SearchServiceInterface
      */
     protected function search($request)
     {
-        if ($this->results instanceof  Response) {
-            return $this->results;
-        }
-
         try {
             $this->aliveTest();
 

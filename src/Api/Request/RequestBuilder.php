@@ -104,6 +104,30 @@ class RequestBuilder
     }
 
     /**
+     * @return string|bool
+     */
+    public function getUserIp()
+    {
+        if ($_SERVER['HTTP_CLIENT_IP']) {
+            $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif ($_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif ($_SERVER['HTTP_X_FORWARDED']) {
+            $ipAddress = $_SERVER['HTTP_X_FORWARDED'];
+        } elseif ($_SERVER['HTTP_FORWARDED_FOR']) {
+            $ipAddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif ($_SERVER['HTTP_FORWARDED']) {
+            $ipAddress = $_SERVER['HTTP_FORWARDED'];
+        } elseif ($_SERVER['REMOTE_ADDR']) {
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ipAddress = false;
+        }
+
+        return $ipAddress;
+    }
+
+    /**
      * @param Request $request
      * @param string $requestType
      * @return Request
@@ -114,6 +138,10 @@ class RequestBuilder
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
         $request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT, Client::DEFAULT_CONNECTION_TIME_OUT);
+
+        if ($this->getUserIp()) {
+            $request->setParam('userip', $this->getUserIp());
+        }
 
         return $request;
     }
