@@ -101,33 +101,41 @@ class ParametersBuilder
 
     /**
      * @param Category $category
-     * @param string $categoryName
      * @return string
      */
-    public function getCategoryName($category, $categoryName = '')
+    public function getCategoryName($category)
     {
+        $categoryName = '';
+
         try {
-            if (!$category->details || !isset($category->details[0]) || !($details = $category->details[0])) {
-                return $categoryName;
-            }
-
-            $prefix = '';
-
-            if ($categoryName !== '') {
-                $prefix = '_';
-            }
-
-            $categoryName .= $prefix . $details->name;
-
-            if ($category->parentCategoryId) {
-                $parentCategory = $this->getCategoryService()->get($category->parentCategoryId);
-                return $this->getCategoryName($parentCategory, $categoryName);
-            }
+            $categoryTree = $this->getCategoryTree($category);
+            array_reverse($categoryTree);
+            $categoryName = implode('_', $categoryTree);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             $this->logger->error('Could not get category name. ' . $e->getMessage(), $e->getTrace());
         }
 
         return $categoryName;
+    }
+
+    /**
+     * @param Category $category
+     * @param array $categoryTree
+     * @return array
+     */
+    protected function getCategoryTree($category, $categoryTree = [])
+    {
+        if (!$category->details || !isset($category->details[0]) || !($details = $category->details[0])) {
+            return $categoryTree;
+        }
+
+        $categoryTree[] = $details->name;
+
+        if ($category->parentCategoryId) {
+            $parentCategory = $this->getCategoryService()->get($category->parentCategoryId);
+            return $this->getCategoryTree($parentCategory, $categoryTree);
+        }
+
+        return $categoryTree;
     }
 }
