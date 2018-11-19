@@ -109,6 +109,7 @@ class ParametersBuilder
 
         try {
             $categoryTree = $this->getCategoryTree($category);
+            array_reverse($categoryTree);
             $categoryName = implode('_', $categoryTree);
         } catch (\Exception $e) {
             $this->logger->error('Could not get category name. ' . $e->getMessage(), $e->getTrace());
