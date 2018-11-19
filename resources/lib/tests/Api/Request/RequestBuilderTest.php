@@ -94,22 +94,33 @@ class RequestBuilderTest extends TestCase
                 ],
                 false,
                 'http://test.com/index.php',
+                false,
                 [
-                    'query' => 'Query',
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
-                    Plugin::API_PARAMETER_ATTRIBUTES => [
-                        'size' => ['xl']
-                    ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '30',
-                    Plugin::API_PARAMETER_PAGINATION_START => '60',
-                    'properties' => [
-                        0 => 'main_variation_id'
-                    ]
                 ]
             ],
-            'Build' => [
+            'Category page request' => [
+                [
+                    'query' => 'Test',
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'size' => ['l', 'xl']
+                    ],
+                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
+                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '10',
+                    Plugin::API_PARAMETER_PAGINATION_START => '0',
+                    'properties' => []
+                ],
+                '127.0.0.1',
+                'http://test.com/selector.php',
+                true,
+                [
+                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
+                    'shopkey' => 'TESTSHOPKEY',
+                    'userip' => '127.0.0.1',
+                ]
+            ],
+            'Search page request' => [
                 [
                     'query' => 'Test',
                     Plugin::API_PARAMETER_ATTRIBUTES => [
@@ -120,22 +131,12 @@ class RequestBuilderTest extends TestCase
                     Plugin::API_PARAMETER_PAGINATION_START => '10',
                     'properties' => []
                 ],
-                '127.0.0.1',
+                false,
                 'http://test.com/index.php',
+                false,
                 [
-                    'query' => 'Test',
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY',
-                    'userip' => '127.0.0.1',
-                    Plugin::API_PARAMETER_ATTRIBUTES => [
-                        'color' => ['red', 'blue']
-                    ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price ASC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '20',
-                    Plugin::API_PARAMETER_PAGINATION_START => '10',
-                    'properties' => [
-                        0 => 'main_variation_id'
-                    ]
+                    'shopkey' => 'TESTSHOPKEY'
                 ]
             ],
             'Category page request' => [

@@ -36,7 +36,7 @@ class ParametersBuilderTest extends TestCase
 
     public function setUp()
     {
-        $this->categoryService = $this->getMockBuilder(CategoryService::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->categoryService = $this->getMockBuilder(CategoryService::class)->disableOriginalConstructor()->setMethods(['get'])->getMock();
         $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
@@ -128,6 +128,44 @@ class ParametersBuilderTest extends TestCase
         $result = $parametersBuilderMock->setSearchParams($requestMock, $httpRequestMock, $categoryMock);
 
         $this->assertEquals($expectedParameters, $result->getParams());
+    }
+
+    public function providerGetCategoryName()
+    {
+        return [
+            [
+                [
+                    2 => ['parentCategoryId' => 1, 'name' => 'Test1'],
+                    1 => ['parentCategoryId' => 0, 'name' => 'Test0']
+                ],
+                'Test1_Test0'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider providerGetCategoryName
+     */
+    public function testGetCategoryName($categories, $expectedCategoryName)
+    {
+        $mockedCategories = [];
+
+        foreach ($categories as $id => $category) {
+            $categoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+            $categoryMock->parentCategoryId = $category['parentCategoryId'];
+
+            $details = new \stdClass();
+            $details->name = $category['name'];
+            $categoryMock->details = [$details];
+
+            $mockedCategories[] =[$id, $categoryMock];
+        }
+
+        $this->categoryService->expects($this->any())->method('get')->willReturnMap($mockedCategories);
+
+        $parametersBuilderMock = $this->getParametersBuilderMock();
+
+        $this->assertEquals($expectedCategoryName, $parametersBuilderMock->getCategoryName($mockedCategories[0][1]));
     }
 
     /**
