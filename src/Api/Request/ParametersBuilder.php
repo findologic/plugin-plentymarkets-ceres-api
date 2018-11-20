@@ -64,12 +64,10 @@ class ParametersBuilder
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
             $request->setParam('selected', ['cat' => [$categoryFullName]]);
-            //TODO: remove after testing
-            $this->logger->error('Category full name: ' . $categoryFullName);
         }
 
-        if (isset($parameters[Plugin::API_PARAMETER_SORT_ORDER]) && in_array($parameters[Plugin::API_PARAMETER_SORT_ORDER], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::API_PARAMETER_SORT_ORDER]);
+        if (isset($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER]) && in_array($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
+            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER]);
         }
 
         $request = $this->setPagination($request, $parameters);
@@ -84,13 +82,13 @@ class ParametersBuilder
      */
     public function setPagination($request, $parameters)
     {
-        $pageSize = $parameters[Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE] ?? 0;
+        $pageSize = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE] ?? 0;
 
         if (intval($pageSize) > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
         }
 
-        $paginationStart = $parameters[Plugin::API_PARAMETER_PAGINATION_START] ?? 0;
+        $paginationStart = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_START] ?? 0;
 
         if (intval($paginationStart) > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
@@ -109,7 +107,6 @@ class ParametersBuilder
 
         try {
             $categoryTree = $this->getCategoryTree($category);
-            array_reverse($categoryTree);
             $categoryName = implode('_', $categoryTree);
         } catch (\Exception $e) {
             $this->logger->error('Could not get category name. ' . $e->getMessage(), $e->getTrace());
@@ -129,7 +126,7 @@ class ParametersBuilder
             return $categoryTree;
         }
 
-        $categoryTree[] = $details->name;
+        array_unshift($categoryTree, $details->name);
 
         if ($category->parentCategoryId) {
             $parentCategory = $this->getCategoryService()->get($category->parentCategoryId);

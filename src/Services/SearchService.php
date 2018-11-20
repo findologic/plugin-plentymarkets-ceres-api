@@ -54,6 +54,9 @@ class SearchService implements SearchServiceInterface
      */
     protected $categoryService;
 
+    /**
+     * @var Response
+     */
     protected $results;
 
     public function __construct(
@@ -92,15 +95,7 @@ class SearchService implements SearchServiceInterface
             $results = $this->search($request);
             $productsIds = $results->getProductMainVariationsIds();
 
-            //TODO: remove, used for testing during development
-            if ($request->get('productIds', false)) {
-                $productsIds = explode('-', $request->get('productIds'));
-            }
-
             if (!empty($productsIds) && is_array($productsIds)) {
-                //TODO: remove after testing
-                $this->logger->error('Set results', $productsIds);
-
                 $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
@@ -118,11 +113,8 @@ class SearchService implements SearchServiceInterface
     public function handleSearchOptions($searchOptions, $request)
     {
         try {
-            $results = $this->search($request);
-
-            $searchOptions = $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $results, $request);
-
-            //TODO: set filters
+            //$results = $this->search($request);
+            //$searchOptions = $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $results, $request);
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search options.');
             $this->logger->logException($e);
@@ -135,10 +127,6 @@ class SearchService implements SearchServiceInterface
      */
     protected function search($request)
     {
-        if ($this->results) {
-            return $this->results;
-        }
-
         try {
             $this->aliveTest();
 
