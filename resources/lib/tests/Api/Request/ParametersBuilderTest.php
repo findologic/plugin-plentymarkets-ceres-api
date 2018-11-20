@@ -133,20 +133,23 @@ class ParametersBuilderTest extends TestCase
     public function providerGetCategoryName()
     {
         return [
-            [
+            'Get category name' => [
                 [
                     2 => ['parentCategoryId' => 1, 'name' => 'Test1'],
                     1 => ['parentCategoryId' => 0, 'name' => 'Test0']
                 ],
-                'Test1_Test0'
+                'Test0_Test1'
             ]
         ];
     }
 
     /**
+     * @param array $categories
+     * @param string $expectedCategoryName
+     *
      * @dataProvider providerGetCategoryName
      */
-    public function testGetCategoryName($categories, $expectedCategoryName)
+    public function testGetCategoryName(array $categories, $expectedCategoryName)
     {
         $mockedCategories = [];
 
@@ -158,7 +161,7 @@ class ParametersBuilderTest extends TestCase
             $details->name = $category['name'];
             $categoryMock->details = [$details];
 
-            $mockedCategories[] =[$id, $categoryMock];
+            $mockedCategories[] = [$id, $categoryMock];
         }
 
         $this->categoryService->expects($this->any())->method('get')->willReturnMap($mockedCategories);
