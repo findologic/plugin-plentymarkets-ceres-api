@@ -63,7 +63,7 @@ class ParametersBuilder
         }
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
-            $request->setParam('selected', ['cat' => [$categoryFullName]]);
+            $request->setParam('selected', ['cat' => [urlencode($categoryFullName)]]);
         }
 
         if (isset($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER]) && in_array($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
