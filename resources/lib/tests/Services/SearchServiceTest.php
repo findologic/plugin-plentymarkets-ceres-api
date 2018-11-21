@@ -14,6 +14,7 @@ use Ceres\Helper\ExternalSearch;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
+use IO\Services\CategoryService;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -102,9 +103,8 @@ class SearchServiceTest extends TestCase
         $responseMock->expects($this->once())->method('getProductMainVariationsIds')->willReturn([1, 2, 3]);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $searchServiceMock = $this->getSearchServiceMock();
+        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService']);
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $searchQueryMock->expects($this->once())->method('setResults');
         $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
         $searchServiceMock->handleSearchQuery($searchQueryMock, $requestMock);
