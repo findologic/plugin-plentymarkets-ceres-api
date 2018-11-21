@@ -123,6 +123,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @return \Findologic\Api\Response\Response
+     * @throws AliveException
      */
     protected function search($request)
     {
