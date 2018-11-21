@@ -113,8 +113,7 @@ class SearchService implements SearchServiceInterface
     public function handleSearchOptions($searchOptions, $request)
     {
         try {
-            //$results = $this->search($request);
-            //$searchOptions = $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $results, $request);
+            $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search options.');
             $this->logger->logException($e);

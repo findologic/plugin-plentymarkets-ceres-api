@@ -55,11 +55,10 @@ class ParametersHandler
 
     /**
      * @param ExternalSearchOptions $search
-     * @param Response $searchResults
      * @param HttpRequest $request
      * @return ExternalSearchOptions
      */
-    public function handlePaginationAndSorting($search, $searchResults, $request)
+    public function handlePaginationAndSorting($search, $request)
     {
         $search->setSortingOptions($this->getSortingOptions(), $this->getCurrentSorting($request));
         $search->setItemsPerPage($this->getItemsPerPage($search), $this->getCurrentItemsPerPage($request, $search));
