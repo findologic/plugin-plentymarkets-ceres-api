@@ -2,9 +2,9 @@
 
 namespace Findologic\Api\Request;
 
-use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
+use Findologic\Services\PluginInformation;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Log\Contracts\LoggerContract;
@@ -16,6 +16,12 @@ use Plenty\Plugin\Log\LoggerFactory;
  */
 class RequestBuilder
 {
+
+    /**
+     * @var PluginInformation
+     */
+    protected $pluginInformation;
+
     /**
      * @var ConfigRepository
      */
@@ -31,8 +37,12 @@ class RequestBuilder
      */
     protected $request;
 
-    public function __construct(ConfigRepository $configRepository, LoggerFactory $loggerFactory)
-    {
+    public function __construct(
+        PluginInformation $pluginInformation,
+        ConfigRepository $configRepository,
+        LoggerFactory $loggerFactory
+    ) {
+        $this->pluginInformation = $pluginInformation;
         $this->configRepository = $configRepository;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
@@ -118,7 +128,10 @@ class RequestBuilder
      */
     public function setDefaultValues($request)
     {
+        $pluginVersion = $this->pluginInformation->getPluginVersion();
+
         $request->setUrl($this->getCleanShopUrl());
+        $request->setParam('revision', $pluginVersion);
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
         $request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT, Client::DEFAULT_CONNECTION_TIME_OUT);
