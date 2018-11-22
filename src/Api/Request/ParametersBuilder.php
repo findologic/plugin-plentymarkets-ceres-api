@@ -80,17 +80,17 @@ class ParametersBuilder
      * @param array $parameters
      * @return Request
      */
-    public function setPagination($request, $parameters)
+    protected function setPagination(Request $request, array $parameters)
     {
         $pageSize = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE] ?? 0;
 
-        if (intval($pageSize) > 0) {
+        if ($pageSize > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
         }
 
         $paginationStart = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_START] ?? 0;
 
-        if (intval($paginationStart) > 0) {
+        if ($paginationStart > 0) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
         }
 

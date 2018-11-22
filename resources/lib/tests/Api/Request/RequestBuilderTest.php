@@ -131,12 +131,13 @@ class RequestBuilderTest extends TestCase
                     Plugin::API_PARAMETER_PAGINATION_START => '10',
                     'properties' => []
                 ],
-                false,
+                '127.0.0.1',
                 'http://test.com/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY'
+                    'shopkey' => 'TESTSHOPKEY',
+                    'userip' => '127.0.0.1'
                 ]
             ]
         ];
