@@ -52,9 +52,9 @@ class ParametersBuilderTest extends TestCase
                         'color' => ['red', 'blue'],
                         'cat' => ['Category 2'],
                     ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price ASC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => 20,
-                    Plugin::API_PARAMETER_PAGINATION_START => 10,
+                    Plugin::PLENTY_PARAMETER_SORT_ORDER => 'price ASC',
+                    Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE => 20,
+                    Plugin::PLENTY_PARAMETER_PAGINATION_START => 10,
                 ],
                 [
                     'parentCategoryId' => null,
@@ -81,9 +81,9 @@ class ParametersBuilderTest extends TestCase
                         'size' => ['l', 'xl'],
                         'cat' => 'Category'
                     ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => 10,
-                    Plugin::API_PARAMETER_PAGINATION_START => 0,
+                    Plugin::PLENTY_PARAMETER_SORT_ORDER => 'price DESC',
+                    Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE => 10,
+                    Plugin::PLENTY_PARAMETER_PAGINATION_START => 0,
                 ],
                 false,
                 [

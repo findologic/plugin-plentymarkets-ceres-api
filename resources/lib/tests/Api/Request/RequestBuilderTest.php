@@ -131,50 +131,13 @@ class RequestBuilderTest extends TestCase
                     Plugin::API_PARAMETER_PAGINATION_START => '10',
                     'properties' => []
                 ],
-                false,
-                'http://test.com/index.php',
-                false,
-                [
-                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY'
-                ]
-            ],
-            'Category page request' => [
-                [
-                    'query' => 'Test',
-                    Plugin::API_PARAMETER_ATTRIBUTES => [
-                        'size' => ['l', 'xl']
-                    ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '10',
-                    Plugin::API_PARAMETER_PAGINATION_START => '0',
-                    'properties' => []
-                ],
-                '127.0.0.1',
-                'http://test.com/selector.php',
-                true,
-                [
-                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY'
-                ]
-            ],
-            'Search page request' => [
-                [
-                    'query' => 'Test',
-                    Plugin::API_PARAMETER_ATTRIBUTES => [
-                        'color' => ['red', 'blue']
-                    ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price ASC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '20',
-                    Plugin::API_PARAMETER_PAGINATION_START => '10',
-                    'properties' => []
-                ],
                 '127.0.0.1',
                 'http://test.com/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY'
+                    'shopkey' => 'TESTSHOPKEY',
+                    'userip' => '127.0.0.1'
                 ]
             ]
         ];
