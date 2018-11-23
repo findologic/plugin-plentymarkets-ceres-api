@@ -4,9 +4,9 @@ namespace Findologic\Services\Search;
 
 use Ceres\Config\CeresConfig;
 use Ceres\Helper\ExternalSearchOptions;
-use Findologic\Api\Response\Response;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Translation\Translator;
+use Findologic\Constants\Plugin;
 
 /**
  * Class ParametersHandler
@@ -55,11 +55,10 @@ class ParametersHandler
 
     /**
      * @param ExternalSearchOptions $search
-     * @param Response $searchResults
      * @param HttpRequest $request
      * @return ExternalSearchOptions
      */
-    public function handlePaginationAndSorting($search, $searchResults, $request)
+    public function handlePaginationAndSorting($search, $request)
     {
         $search->setSortingOptions($this->getSortingOptions(), $this->getCurrentSorting($request));
         $search->setItemsPerPage($this->getItemsPerPage($search), $this->getCurrentItemsPerPage($request, $search));
@@ -88,7 +87,7 @@ class ParametersHandler
      */
     public function getCurrentSorting($request)
     {
-        return $request->get('sorting', '');
+        return $request->get(Plugin::PLENTY_PARAMETER_SORT_ORDER, '');
     }
 
     /**
@@ -117,7 +116,7 @@ class ParametersHandler
      */
     public function getCurrentItemsPerPage($request, $search)
     {
-        $currentItemsPerPage = $request->get('items', $search->getDefaultItemsPerPage());
+        $currentItemsPerPage = $request->get(Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $search->getDefaultItemsPerPage());
 
         if (!$currentItemsPerPage) {
             $itemsPerPageOptions = $this->getItemsPerPage($search);

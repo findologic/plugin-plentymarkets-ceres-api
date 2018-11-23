@@ -14,6 +14,7 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Services\CategoryService;
 
 /**
  * Class SearchService
@@ -48,6 +49,14 @@ class SearchService implements SearchServiceInterface
      */
     protected $logger;
 
+    /**
+     * @var CategoryService
+     */
+    protected $categoryService;
+
+    /**
+     * @var Response
+     */
     protected $results;
 
     public function __construct(
@@ -65,6 +74,18 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
+     * @return CategoryService|null
+     */
+    public function getCategoryService()
+    {
+        if (!$this->categoryService) {
+            $this->categoryService = pluginApp(CategoryService::class);
+        }
+
+        return $this->categoryService;
+    }
+
+    /**
      * @param ExternalSearch $searchQuery
      * @param HttpRequest $request
      */
@@ -74,15 +95,7 @@ class SearchService implements SearchServiceInterface
             $results = $this->search($request);
             $productsIds = $results->getProductMainVariationsIds();
 
-            //TODO: remove, used for testing during development
-            if ($request->get('productIds', false)) {
-                $productsIds = explode('-', $request->get('productIds'));
-            }
-
             if (!empty($productsIds) && is_array($productsIds)) {
-                //TODO: remove after testing
-                $this->logger->error('Set results', $productsIds);
-
                 $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
@@ -100,11 +113,7 @@ class SearchService implements SearchServiceInterface
     public function handleSearchOptions($searchOptions, $request)
     {
         try {
-            $results = $this->search($request);
-
-            $searchOptions = $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $results, $request);
-
-            //TODO: set filters
+            $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search options.');
             $this->logger->logException($e);
@@ -114,13 +123,16 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @return \Findologic\Api\Response\Response
+     * @throws AliveException
      */
     protected function search($request)
     {
         try {
             $this->aliveTest();
 
-            $apiRequest = $this->requestBuilder->build($request);
+            $category = $this->getCategoryService() ?? null;
+
+            $apiRequest = $this->requestBuilder->build($request, $category ? $category->getCurrentCategory() : null);
             $this->results = $this->responseParser->parse($this->client->call($apiRequest));
         } catch (AliveException $e) {
             $this->logger->error('Findologic server did not responded to alive request. ' . $e->getMessage());
