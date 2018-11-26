@@ -6,6 +6,7 @@ use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
 use Findologic\Constants\Plugin;
+use Findologic\Services\PluginInformation;
 use Ceres\Helper\ExternalSearch;
 use IO\Services\CategoryService;
 use Plenty\Plugin\ConfigRepository;
@@ -21,6 +22,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class RequestBuilderTest extends TestCase
 {
+    /**
+     * @var PluginInformation
+     */
+    protected $pluginInformation;
+
     /**
      * @var ParametersBuilder
      */
@@ -43,6 +49,7 @@ class RequestBuilderTest extends TestCase
 
     public function setUp()
     {
+        $this->pluginInformation = $this->getMockBuilder(PluginInformation::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->configRepository = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -98,6 +105,7 @@ class RequestBuilderTest extends TestCase
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
+                    'revision' => null
                 ]
             ],
             'Category page request' => [
@@ -118,6 +126,7 @@ class RequestBuilderTest extends TestCase
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
+                    'revision' => null
                 ]
             ],
             'Search page request' => [
@@ -137,7 +146,8 @@ class RequestBuilderTest extends TestCase
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
-                    'userip' => '127.0.0.1'
+                    'userip' => '127.0.0.1',
+                    'revision' => null
                 ]
             ]
         ];
@@ -185,6 +195,7 @@ class RequestBuilderTest extends TestCase
         return $this->getMockBuilder(RequestBuilder::class)
             ->setConstructorArgs([
                 'parametersBuilder' => $this->parametersBuilder,
+                'pluginInformation' => $this->pluginInformation,
                 'configRepository' => $this->configRepository,
                 'loggerFactory' => $this->loggerFactory
             ])

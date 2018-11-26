@@ -46,11 +46,13 @@ class RequestBuilder
     protected $request;
 
     public function __construct(
+        ParametersBuilder $parametersBuilder,
         PluginInformation $pluginInformation,
         ConfigRepository $configRepository,
         LoggerFactory $loggerFactory
     ) {
         $this->parametersBuilder = $parametersBuilder;
+        $this->pluginInformation = $pluginInformation;
         $this->configRepository = $configRepository;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
@@ -145,7 +147,7 @@ class RequestBuilder
     {
         $pluginVersion = $this->pluginInformation->getPluginVersion();
 
-        $request->setUrl($this->getCleanShopUrl());
+        $request->setUrl($this->getCleanShopUrl($requestType));
         $request->setParam('revision', $pluginVersion);
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
         $request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
