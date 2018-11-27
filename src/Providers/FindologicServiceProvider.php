@@ -29,7 +29,7 @@ class FindologicServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //$this->getApplication()->register(FindologicRouteServiceProvider::class);
+        $this->getApplication()->singleton(SearchService::class);
     }
 
     /**
