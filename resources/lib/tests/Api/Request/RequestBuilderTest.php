@@ -98,6 +98,7 @@ class RequestBuilderTest extends TestCase
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
+                    'revision' => '0.0.1'
                 ]
             ],
             'Category page request' => [
@@ -118,6 +119,7 @@ class RequestBuilderTest extends TestCase
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
+                    'revision' => '0.0.1'
                 ]
             ],
             'Search page request' => [
@@ -137,7 +139,8 @@ class RequestBuilderTest extends TestCase
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
-                    'userip' => '127.0.0.1'
+                    'userip' => '127.0.0.1',
+                    'revision' => '0.0.1'
                 ]
             ]
         ];
@@ -157,9 +160,10 @@ class RequestBuilderTest extends TestCase
 
         $this->configRepository->expects($this->any())->method('get')->willReturnOnConsecutiveCalls('http://test.com', 'TESTSHOPKEY');
 
-        $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject', 'getUserIp']);
+        $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject', 'getUserIp', 'getPluginVersion']);
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
         $requestBuilderMock->expects($this->any())->method('getUserIp')->willReturn($userIp);
+        $requestBuilderMock->expects($this->any())->method('getPluginVersion')->willReturn('0.0.1');
 
         $this->parametersBuilder->expects($this->any())->method('setSearchParams')->willReturnArgument(0);
 
