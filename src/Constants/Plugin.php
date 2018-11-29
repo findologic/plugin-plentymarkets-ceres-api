@@ -8,6 +8,7 @@ namespace Findologic\Constants;
  */
 class Plugin
 {
+    const PLUGIN_VERSION = '0.0.5';
     const PLUGIN_NAMESPACE = 'Findologic';
     const PLUGIN_IDENTIFIER = 'findologic-plugin-api';
 

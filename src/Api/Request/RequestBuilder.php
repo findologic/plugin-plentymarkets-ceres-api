@@ -128,6 +128,14 @@ class RequestBuilder
     }
 
     /**
+     * @return string
+     */
+    public function getPluginVersion()
+    {
+        return Plugin::PLUGIN_VERSION;
+    }
+
+    /**
      * @param Request $request
      * @param string $requestType
      * @return Request
@@ -135,6 +143,7 @@ class RequestBuilder
     protected function setDefaultValues($request, $requestType)
     {
         $request->setUrl($this->getCleanShopUrl($requestType));
+        $request->setParam('revision', $this->getPluginVersion());
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
         $request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT, Client::DEFAULT_CONNECTION_TIME_OUT);
