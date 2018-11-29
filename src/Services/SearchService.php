@@ -12,8 +12,6 @@ use Findologic\Services\Search\ParametersHandler;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
-use Ceres\Helper\ExternalSearch;
-use Ceres\Helper\ExternalSearchOptions;
 use IO\Services\CategoryService;
 
 /**
@@ -57,7 +55,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @var Response
      */
-    protected $results;
+    protected $results = false;
 
     public function __construct(
         Client $client,
@@ -86,10 +84,9 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param ExternalSearch $searchQuery
-     * @param HttpRequest $request
+     * @inheritdoc
      */
-    public function handleSearchQuery($searchQuery, $request)
+    public function handleSearchQuery($request, $searchQuery = null)
     {
         try {
             $results = $this->search($request);
@@ -107,10 +104,9 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param ExternalSearchOptions $searchOptions
-     * @param HttpRequest $request
+     * @inheritdoc
      */
-    public function handleSearchOptions($searchOptions, $request)
+    public function handleSearchOptions($request, $searchOptions = null)
     {
         try {
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
@@ -125,8 +121,16 @@ class SearchService implements SearchServiceInterface
      * @return \Findologic\Api\Response\Response
      * @throws AliveException
      */
-    protected function search($request)
+    public function search($request)
     {
+        if ($this->results) {
+            //TODO: remove after testing
+            $this->logger->error('Results already exists');
+            return $this->results;
+        }
+
+        $this->logger->error('Search page');
+
         try {
             $this->aliveTest();
 

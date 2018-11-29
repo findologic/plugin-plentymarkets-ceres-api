@@ -2,6 +2,8 @@
 
 namespace Findologic\Services;
 
+use Ceres\Helper\ExternalSearch;
+use Ceres\Helper\ExternalSearchOptions;
 use Plenty\Plugin\Http\Request;
 
 /**
@@ -11,14 +13,14 @@ use Plenty\Plugin\Http\Request;
 interface SearchServiceInterface
 {
     /**
-     * @param $searchOptions
-     * @param $request
+     * @param Request $request
+     * @param ExternalSearchOptions|null $searchOptions
      */
-    public function handleSearchOptions($searchOptions, $request);
+    public function handleSearchOptions($request, $searchOptions = null);
 
     /**
-     * @param $searchOptions
-     * @param $request
+     * @param Request $request
+     * @param ExternalSearch|null $searchQuery
      */
-    public function handleSearchQuery($searchQuery, $request);
+    public function handleSearchQuery($request, $searchQuery = null);
 }
