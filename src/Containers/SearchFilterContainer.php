@@ -16,6 +16,6 @@ class SearchFilterContainer
     {
         $searchResults = $searchService->search($request);
 
-        return $twig->render('Findologic::content.filters');
+        return $twig->render('Findologic::content.filters', ['searchResults' => $searchResults]);
     }
 }

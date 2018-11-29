@@ -125,11 +125,11 @@ class SearchService implements SearchServiceInterface
     {
         if ($this->results) {
             //TODO: remove after testing
-            $this->logger->error('Results already exists');
+            $this->logger->error('Search results already exists');
             return $this->results;
         }
 
-        $this->logger->error('Search page');
+        $this->logger->error('Send search request');
 
         try {
             $this->aliveTest();
