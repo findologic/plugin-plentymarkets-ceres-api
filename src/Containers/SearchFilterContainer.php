@@ -12,28 +12,9 @@ use Plenty\Plugin\Http\Request;
  */
 class SearchFilterContainer
 {
-    /**
-     * @var SearchService
-     */
-    protected $searchService;
-
-    /**
-     * @var Request
-     */
-    protected $request;
-
-    public function __construct(
-        SearchService $searchService,
-        Request $request
-    ) {
-        $this->searchService = $searchService;
-        $this->request = $request;
-    }
-
-    public function call(Twig $twig):string
+    public function call(Twig $twig, SearchService $searchService, Request $request):string
     {
-        $searchResults = $this->searchService->search($this->request);
-
+        $searchResults = $searchService->search($request);
 
         return $twig->render('Findologic::content.filters');
     }
