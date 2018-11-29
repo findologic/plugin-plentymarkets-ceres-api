@@ -55,7 +55,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @var Response
      */
-    protected $results = false;
+    protected $results;
 
     public function __construct(
         Client $client,
