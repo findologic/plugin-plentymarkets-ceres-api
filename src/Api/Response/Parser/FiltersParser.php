@@ -19,7 +19,8 @@ class FiltersParser
         if (!empty($data->filters) ) {
             foreach ($data->filters->filter as $filter) {
                 $filterData = [
-                    'name' => $filter->name->__toString(),
+                    'id' => $filter->name->__toString(),
+                    'name' => $filter->display->__toString(),
                     'select' => $filter->select->__toString()
                 ];
 
@@ -50,8 +51,7 @@ class FiltersParser
     public function parseFilterItem(&$filterItem, $data)
     {
         if (!empty($data)) {
-            $filterItem['id'] = $data->name->__toString();
-            $filterItem['name'] = $data->display->__toString();
+            $filterItem['name'] = $data->name->__toString();
             $filterItem['position'] = $data->weight->__toString();
             $filterItem['frequency'] = $data->frequency->__toString();
             $filterItem['image'] = $data->image->__toString();
