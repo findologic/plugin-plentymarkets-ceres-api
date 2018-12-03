@@ -18,28 +18,24 @@ class FiltersParser
 
         if (!empty($data->filters) ) {
             foreach ($data->filters->filter as $filter) {
-
                 $filterName = $filter->name->__toString();
-                //TODO: create separate function for getting filter type
-                $filterType = $filter->select->__toString();
-
-                if ($filterName === 'price') {
-                    $filterType = 'price';
-                }
-
                 $filterData = [
                     'id' => $filterName,
                     'name' => $filter->display->__toString(),
-                    'type' => $filterType
+                    'type' => ''
                 ];
 
                 if ($filter->type) {
                     $filterData['type'] = $filter->type->__toString();
                 }
 
+                if ($filterName === 'price') {
+                    $filterData['type'] = 'price';
+                }
+
                 foreach ($filter->items->item as $item) {
                     $filterItem = [];
-                    $this->parseFilterItem($filterItem, $item);
+                    $this->parseFilterItem($filterData['type'], $filterItem, $item);
                     if (!empty($filterItem)) {
                         $filterData['values'][] = $filterItem;
                     }
@@ -53,11 +49,12 @@ class FiltersParser
     }
 
     /**
+     * @param $filterType
      * @param $filterItem
      * @param \SimpleXMLElement $data
      * @return array
      */
-    public function parseFilterItem(&$filterItem, $data)
+    public function parseFilterItem($filterType, &$filterItem, $data)
     {
         if (!empty($data)) {
             $filterItem['name'] = $data->name->__toString();
@@ -65,10 +62,15 @@ class FiltersParser
             $filterItem['frequency'] = $data->frequency->__toString();
             $filterItem['image'] = $data->image->__toString();
 
+            if ($filterType === 'price') {
+                $filterItem['priceMin'] = $data->parameters->min;
+                $filterItem['priceMax'] = $data->parameters->max;
+            }
+
             if (!empty($data->items)) {
                 foreach ($data->items->item as $item) {
                     $newItem = [];
-                    $this->parseFilterItem($newItem, $item);
+                    $this->parseFilterItem($filterType, $newItem, $item);
                     $filterItem['items'][] = $newItem;
                 }
             }
