@@ -3,6 +3,7 @@
 namespace Findologic\Containers;
 
 use Findologic\Services\SearchService;
+use Findologic\Api\Response\Response;
 use Plenty\Plugin\Templates\Twig;
 use Plenty\Plugin\Http\Request;
 
@@ -16,6 +17,11 @@ class SearchFilterContainer
     {
         $searchResults = $searchService->search($request);
 
-        return $twig->render('Findologic::content.filters', ['searchResults' => $searchResults]);
+        return $twig->render(
+            'Findologic::content.filters',
+            [
+                'facets' => $searchResults[Response::DATA_FILTERS]
+            ]
+        );
     }
 }
