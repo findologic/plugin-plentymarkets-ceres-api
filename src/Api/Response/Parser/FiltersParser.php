@@ -31,7 +31,7 @@ class FiltersParser
                     $filterItem = [];
                     $this->parseFilterItem($filterItem, $item);
                     if (!empty($filterItem)) {
-                        $filterData['items'][] = $filterItem;
+                        $filterData['values'][] = $filterItem;
                     }
                 }
 
@@ -51,7 +51,7 @@ class FiltersParser
     {
         if (!empty($data)) {
             $filterItem['name'] = $data->name->__toString();
-            $filterItem['weight'] = $data->weight->__toString();
+            $filterItem['position'] = $data->weight->__toString();
             $filterItem['frequency'] = $data->frequency->__toString();
             $filterItem['image'] = $data->image->__toString();
 
