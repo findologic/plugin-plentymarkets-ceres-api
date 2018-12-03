@@ -18,10 +18,19 @@ class FiltersParser
 
         if (!empty($data->filters) ) {
             foreach ($data->filters->filter as $filter) {
+
+                $filterName = $filter->name->__toString();
+                //TODO: create separate function for getting filter type
+                $filterType = $filter->select->__toString();
+
+                if ($filterName === 'price') {
+                    $filterType = 'price';
+                }
+
                 $filterData = [
-                    'id' => $filter->name->__toString(),
+                    'id' => $filterName,
                     'name' => $filter->display->__toString(),
-                    'select' => $filter->select->__toString()
+                    'type' => $filterType
                 ];
 
                 if ($filter->type) {
