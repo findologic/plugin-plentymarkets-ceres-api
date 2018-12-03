@@ -2,12 +2,27 @@
 
 namespace Findologic\Api\Response\Parser;
 
+use Findologic\Services\Search\AttributesFinder;
+
 /**
  * Class FiltersParser
  * @package Findologic\Api\Response\Parser
  */
 class FiltersParser
 {
+    /**
+     * @var AttributesFinder
+     */
+    protected $attributesFinder;
+
+    //TODO: remove after testing
+    protected $valueId;
+
+    public function __construct(AttributesFinder $attributesFinder)
+    {
+        $this->attributesFinder = $attributesFinder;
+    }
+
     /**
      * @param \SimpleXMLElement $data
      * @return array
@@ -24,6 +39,8 @@ class FiltersParser
                     'name' => $filter->display->__toString(),
                     'type' => ''
                 ];
+
+                $attributeId = $this->attributesFinder->getAttributeId($filterName);
 
                 if ($filter->type) {
                     $filterData['type'] = $filter->type->__toString();
@@ -59,8 +76,10 @@ class FiltersParser
         if (!empty($data)) {
             $filterItem['name'] = $data->name->__toString();
             $filterItem['position'] = $data->weight->__toString();
-            $filterItem['frequency'] = $data->frequency->__toString();
+            $filterItem['count'] = $data->frequency->__toString();
             $filterItem['image'] = $data->image->__toString();
+            //TODO: should specific id always be mapped to specific value
+            $filterItem['id'] = ++$this->valueId;
 
             if ($filterType === 'price') {
                 $filterItem['priceMin'] = $data->parameters->min;
