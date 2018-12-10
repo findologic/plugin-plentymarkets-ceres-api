@@ -61,7 +61,8 @@ class AttributesFinder
             ->setFilters([
                 'name' => $attributeName
             ])
-            ->applyCriteriaFromFilters();
+            ->applyCriteriaFromFilters()
+            ->listProperties();
 
         foreach($result->getResult() as $attribute) {
             $this->logger->error($attribute);
