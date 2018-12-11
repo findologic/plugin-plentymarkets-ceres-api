@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bb165d45a0b2ce535c61a16690b996a",
+    "content-hash": "d2ee55119273013298ee71b6076f1603",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -974,22 +974,12 @@
             "time": "2015-02-10T20:07:52+00:00"
         },
         {
-            "name": "plentymarkets-ceres/plugin-ceres",
-            "version": "2.15.0",
+            "name": "plentymarkets/plugin-ceres",
+            "version": "2.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-ceres",
-                "reference": "origin/development"
-            },
-            "type": "library"
-        },
-        {
-            "name": "plentymarkets-local/plugin-io",
-            "version": "2.15.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "origin/development"
+                "reference": "origin/stable"
             },
             "type": "library"
         },
@@ -1018,6 +1008,16 @@
             ],
             "description": "Interface for plentymarkets plugin development with PHP 7",
             "time": "2018-07-25T09:20:57+00:00"
+        },
+        {
+            "name": "plentymarkets/plugin-io",
+            "version": "2.17.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-io",
+                "reference": "origin/stable"
+            },
+            "type": "library"
         },
         {
             "name": "psr/log",
