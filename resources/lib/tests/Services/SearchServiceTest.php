@@ -104,7 +104,7 @@ class SearchServiceTest extends TestCase
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $searchServiceMock = $this->getSearchServiceMock(['getCategoryService']);
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
         $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
         $searchServiceMock->handleSearchQuery($searchQueryMock, $requestMock);
