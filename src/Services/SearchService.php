@@ -92,6 +92,8 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery($searchQuery, $request)
     {
         try {
+            $this->logger->info('FINDOLOGIC Pre-Search');
+
             $results = $this->search($request);
             $productsIds = $results->getProductMainVariationsIds();
 
@@ -99,6 +101,7 @@ class SearchService implements SearchServiceInterface
                 $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
+            $this->logger->info('FINDOLOGIC Search');
             $this->logger->info(implode(',', $productsIds));
 
             //TODO: how to handle no results ?
