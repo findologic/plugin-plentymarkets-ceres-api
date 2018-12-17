@@ -98,7 +98,7 @@ class SearchService implements SearchServiceInterface
             $productsIds = $results->getProductMainVariationsIds();
 
             if (!empty($productsIds) && is_array($productsIds)) {
-                $searchQuery->setResults($productsIds, $results->getResultsCount());
+                $searchQuery->setResults([$productsIds[0]], $results->getResultsCount());
             }
 
             $this->logger->info('FINDOLOGIC Search');
