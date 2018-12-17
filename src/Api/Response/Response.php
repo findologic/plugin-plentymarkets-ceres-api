@@ -67,7 +67,7 @@ class Response
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
             foreach ($products as $product) {
                 if (isset($product['properties'][Plugin::API_PROPERTY_MAIN_VARIATION_ID])) {
-                    $ids[] = $product['properties'][Plugin::API_PROPERTY_MAIN_VARIATION_ID];
+                    $ids[] = (int)$product['properties'][Plugin::API_PROPERTY_MAIN_VARIATION_ID];
                 }
             }
         }
