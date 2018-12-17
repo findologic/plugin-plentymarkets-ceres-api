@@ -99,7 +99,7 @@ class SearchService implements SearchServiceInterface
                 $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
-            $this->logger->info(print_r($productsIds, true));
+            $this->logger->info(implode(',', $productsIds));
 
             //TODO: how to handle no results ?
         } catch (\Exception $e) {
