@@ -96,7 +96,7 @@ class SearchService implements SearchServiceInterface
             $productsIds = $results->getProductMainVariationsIds();
 
             if (!empty($productsIds) && is_array($productsIds)) {
-                $searchQuery->setResults([$productsIds[0]], $results->getResultsCount());
+                $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
             //TODO: how to handle no results ?
