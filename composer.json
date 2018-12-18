@@ -16,27 +16,49 @@
   "repositories": [
     {
       "type": "package",
-      "package": {
-        "name": "plentymarkets/plugin-io",
-        "version": "2.17.1",
-        "source": {
-          "type": "git",
-          "url": "https://github.com/plentymarkets/plugin-io",
-          "reference": "origin/stable"
+      "package": [
+        {
+          "name": "plentymarkets/plugin-io",
+          "version": "2.17.1",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-io",
+            "reference": "2.17.1"
+          }
+        },
+        {
+          "name": "plentymarkets/plugin-io",
+          "version": "2.15.0",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-io",
+            "reference": "2.15.0"
+          }
         }
-      }
+      ]
     },
     {
       "type": "package",
-      "package": {
-        "name": "plentymarkets/plugin-ceres",
-        "version": "2.17.1",
-        "source": {
-          "type": "git",
-          "url": "https://github.com/plentymarkets/plugin-ceres",
-          "reference": "origin/stable"
+      "package": [
+        {
+          "name": "plentymarkets/plugin-ceres",
+          "version": "2.17.1",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-ceres",
+            "reference": "2.17.1"
+          }
+        },
+        {
+          "name": "plentymarkets/plugin-ceres",
+          "version": "2.15.0",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-ceres",
+            "reference": "2.15.0"
+          }
         }
-      }
+      ]
     }
   ],
   "autoload": {
