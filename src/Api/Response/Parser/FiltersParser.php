@@ -31,7 +31,7 @@ class FiltersParser
     {
         $filters = [];
 
-        if (!empty($data->filters) ) {
+        if (!empty($data->filters)) {
             foreach ($data->filters->filter as $filter) {
                 $filterName = $filter->name->__toString();
                 $filterData = [

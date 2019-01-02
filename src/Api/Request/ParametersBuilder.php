@@ -27,12 +27,12 @@ class ParametersBuilder
     }
 
     /**
-     * @return CategoryService|null
+     * @return CategoryService
      */
     public function getCategoryService()
     {
         if (!$this->categoryService) {
-            $this->categoryService = pluginApp(CategoryService::class);
+            $this->categoryService = pluginApp('\IO\Services\CategoryService');
         }
 
         return $this->categoryService;

@@ -9,6 +9,7 @@ use Findologic\Api\Client;
 use Findologic\Constants\Plugin;
 use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
+use Ceres\Helper\ExternalSearch;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
@@ -72,12 +73,12 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @return CategoryService|null
+     * @return CategoryService
      */
     public function getCategoryService()
     {
         if (!$this->categoryService) {
-            $this->categoryService = pluginApp(CategoryService::class);
+            $this->categoryService = pluginApp('\IO\Services\CategoryService');
         }
 
         return $this->categoryService;
@@ -93,6 +94,7 @@ class SearchService implements SearchServiceInterface
             $productsIds = $results->getProductMainVariationsIds();
 
             if (!empty($productsIds) && is_array($productsIds)) {
+                /** @var ExternalSearch $searchQuery */
                 $searchQuery->setResults($productsIds, $results->getResultsCount());
             }
 
@@ -134,6 +136,7 @@ class SearchService implements SearchServiceInterface
         try {
             $this->aliveTest();
 
+            /** @var CategoryService $category */
             $category = $this->getCategoryService() ?? null;
 
             $apiRequest = $this->requestBuilder->build($request, $category ? $category->getCurrentCategory() : null);

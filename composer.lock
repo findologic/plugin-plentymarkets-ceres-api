@@ -3486,7 +3486,9 @@
             "time": "2018-01-29T19:49:41+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "plentymarkets/plugin-interface": 20
@@ -3496,5 +3498,7 @@
     "platform": {
         "php": "^7.0"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }
