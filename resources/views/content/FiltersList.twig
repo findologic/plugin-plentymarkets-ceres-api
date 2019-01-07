@@ -1,7 +1,7 @@
 <script type="x/template" id="vue-findologic-filter-list">
     <div class="filter-wrapper" v-show="facets && facets.length > 0">
-        {{ component( "Findologic::content.ItemFilter") }}
-        {{ component( "Findologic::content.ItemFilterPrice") }}
+        {{ component( "Findologic::content.Filters.ItemFilter") }}
+        {{ component( "Findologic::content.Filters.ItemFilterPrice") }}
 
         <a class="btn btn-link filter-toggle" data-toggle="collapse" href="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse" @click="toggleOpeningState()">
             <i class="fa fa-sliders default-float" aria-hidden="true"></i> {{ trans("Ceres::Template.itemFilter") }}

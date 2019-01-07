@@ -15,7 +15,7 @@ const sourcemaps = require("gulp-sourcemaps")
 
 gulp.task("js", () => {
     var builder = browserify({
-        entries: ["filters.js"],
+        entries: ["Filters.js", "ItemFilter.js", "ItemFilterPrice.js"],
         debug: true,
         basedir: JS_SRC,
         paths: ["./resources/js"],

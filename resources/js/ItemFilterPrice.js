@@ -1,5 +1,3 @@
-import UrlService from "services/UrlService";
-
 Vue.component("findologic-item-filter-price", {
 
     delimiters: ["${", "}"],
@@ -27,25 +25,23 @@ Vue.component("findologic-item-filter-price", {
         console.log('findologic item filter price');
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
-        const urlParams = UrlService.getUrlParams(document.location.search);
+        const urlParams = this.getUrlParams(document.location.search);
 
         this.priceMin = urlParams.priceMin || "";
         this.priceMax = urlParams.priceMax || "";
     },
 
     computed:
-        {
+        mapState({
+            isLoading: state => state.itemList.isLoading,
+
             isDisabled()
             {
                 return (this.priceMin === "" && this.priceMax === "") ||
                     (parseInt(this.priceMin) >= parseInt(this.priceMax)) ||
                     this.isLoading;
-            },
-
-            ...Vuex.mapState({
-                isLoading: state => state.itemList.isLoading
-            })
-        },
+            }
+        }),
 
     methods:
         {
@@ -60,6 +56,27 @@ Vue.component("findologic-item-filter-price", {
                 {
                     this.$store.dispatch("selectPriceFacet", {priceMin: this.priceMin, priceMax: this.priceMax});
                 }
+            },
+
+            getUrlParams(urlParams)
+            {
+                if (urlParams)
+                {
+                    var tokens;
+                    var params = {};
+                    var regex = /[?&]?([^=]+)=([^&]*)/g;
+
+                    urlParams = urlParams.split("+").join(" ");
+
+                    while (tokens = regex.exec(urlParams))
+                    {
+                        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+                    }
+
+                    return params;
+                }
+
+                return {};
             }
         }
 });

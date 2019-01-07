@@ -60,6 +60,7 @@ Vue.component("findologic-filter-list", {
                 this.isActive = !this.isActive;
             }, 300);
         },
+
         getUrlParams(urlParams) {
             if (urlParams) {
                 var tokens;
@@ -81,7 +82,116 @@ Vue.component("findologic-filter-list", {
 
 });
 
-},{}]},{},[1])
+},{}],2:[function(require,module,exports){
+Vue.component("findologic-item-filter", {
+
+    delimiters: ["${", "}"],
+
+    props: ["template", "facet"],
+
+    computed: mapState({
+        selectedFacets: state => state.itemList.selectedFacets,
+        isLoading: state => state.itemList.isLoading,
+        facets() {
+            return this.facet.values.sort((facetA, facetB) => {
+                if (facetA.position > facetB.position) {
+                    return 1;
+                }
+                if (facetA.position < facetB.position) {
+                    return -1;
+                }
+
+                return 0;
+            });
+        }
+    }),
+
+    created() {
+        console.log("findologic item filter");
+        this.$options.template = this.template || "#vue-findologic-item-filter";
+    },
+
+    methods: {
+        updateFacet(facetValue) {
+            this.$store.dispatch("selectFacet", facetValue);
+        },
+
+        isSelected(facetValueId) {
+            return this.selectedFacets.findIndex(selectedFacet => selectedFacet.id === facetValueId) > -1;
+        }
+    }
+});
+
+},{}],3:[function(require,module,exports){
+Vue.component("findologic-item-filter-price", {
+
+    delimiters: ["${", "}"],
+
+    props: {
+        template: {
+            type: String,
+            default: "#vue-item-filter-price"
+        }
+    },
+
+    data() {
+        return {
+            priceMin: "",
+            priceMax: "",
+            currency: App.activeCurrency
+        };
+    },
+
+    created() {
+        console.log('findologic item filter price');
+        this.$options.template = this.template || "#vue-findologic-item-filter-price";
+
+        const urlParams = this.getUrlParams(document.location.search);
+
+        this.priceMin = urlParams.priceMin || "";
+        this.priceMax = urlParams.priceMax || "";
+    },
+
+    computed: mapState({
+        isLoading: state => state.itemList.isLoading,
+
+        isDisabled() {
+            return this.priceMin === "" && this.priceMax === "" || parseInt(this.priceMin) >= parseInt(this.priceMax) || this.isLoading;
+        }
+    }),
+
+    methods: {
+        selectAll(event) {
+            event.target.select();
+        },
+
+        triggerFilter() {
+            if (!this.isDisabled) {
+                this.$store.dispatch("selectPriceFacet", { priceMin: this.priceMin, priceMax: this.priceMax });
+            }
+        },
+
+        getUrlParams(urlParams) {
+            if (urlParams) {
+                var tokens;
+                var params = {};
+                var regex = /[?&]?([^=]+)=([^&]*)/g;
+
+                urlParams = urlParams.split("+").join(" ");
+
+                while (tokens = regex.exec(urlParams)) {
+                    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+                }
+
+                return params;
+            }
+
+            return {};
+        }
+    }
+});
+
+},{}]},{},[1,2,3])
 
 
 //# sourceMappingURL=filters-component.js.map

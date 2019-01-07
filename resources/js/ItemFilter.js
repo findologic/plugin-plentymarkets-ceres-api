@@ -8,7 +8,9 @@ Vue.component("findologic-item-filter", {
     ],
 
     computed:
-        {
+        mapState({
+            selectedFacets: state => state.itemList.selectedFacets,
+            isLoading: state => state.itemList.isLoading,
             facets()
             {
                 return this.facet.values.sort((facetA, facetB) =>
@@ -24,13 +26,8 @@ Vue.component("findologic-item-filter", {
 
                     return 0;
                 });
-            },
-
-            ...Vuex.mapState({
-                selectedFacets: state => state.itemList.selectedFacets,
-                isLoading: state => state.itemList.isLoading
-            })
-        },
+            }
+        }),
 
     created()
     {

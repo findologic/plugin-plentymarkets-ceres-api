@@ -63,6 +63,7 @@ Vue.component("findologic-filter-list", {
                     this.isActive = !this.isActive;
                 }, 300);
             },
+
             getUrlParams(urlParams)
             {
                 if (urlParams)
