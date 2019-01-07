@@ -1,6 +1,4 @@
-var UrlService = require("services/UrlService");
-
-Vue.component("findologic-filter-list-backup", {
+Vue.component("findologic-filter-list", {
 
     delimiters: ["${", "}"],
 
@@ -36,7 +34,7 @@ Vue.component("findologic-filter-list-backup", {
 
         this.$options.template = this.template || "#vue-findologic-filter-list";
 
-        const urlParams = UrlService.getUrlParams(document.location.search);
+        const urlParams = this.getUrlParams(document.location.search);
 
         let selectedFacets = [];
 
@@ -64,6 +62,27 @@ Vue.component("findologic-filter-list-backup", {
                 window.setTimeout(() => {
                     this.isActive = !this.isActive;
                 }, 300);
+            },
+            getUrlParams(urlParams)
+            {
+                if (urlParams)
+                {
+                    var tokens;
+                    var params = {};
+                    var regex = /[?&]?([^=]+)=([^&]*)/g;
+
+                    urlParams = urlParams.split("+").join(" ");
+
+                    while (tokens = regex.exec(urlParams))
+                    {
+                        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+                    }
+
+                    return params;
+                }
+
+                return {};
             }
         }
+
 });
