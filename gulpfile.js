@@ -2,26 +2,23 @@ require("babel-polyfill")
 
 const JS_SRC = "./resources/js/"
 const DIST = "./resources/js/dist/"
-const OUTPUT_PREFIX = "maps"
-const SCSS_SRC = "./resources/scss"
+const OUTPUT_PREFIX = "filters"
 
-const autoprefixer = require("gulp-autoprefixer")
 const babelify = require("babelify")
 const browserify = require("browserify")
 const buffer = require("vinyl-buffer")
 const concat = require("gulp-concat")
 const gulp = require("gulp")
 const minify = require("gulp-minify")
-const sass = require("gulp-sass")
 const source = require("vinyl-source-stream")
 const sourcemaps = require("gulp-sourcemaps")
 
 gulp.task("js", () => {
     var builder = browserify({
-        entries: ["FilterList.js"],
+        entries: ["filters.js"],
         debug: true,
         basedir: JS_SRC,
-        paths: ["./resources/js/src/app/components/Findologic"],
+        paths: ["./resources/js"],
         transform: babelify
     })
 
@@ -45,26 +42,4 @@ gulp.task("js", () => {
         .pipe(gulp.dest(DIST))
 })
 
-gulp.task("scss", () => {
-    const config = {
-        scssOptions: {
-            errLogToConsole: true,
-            outputStyle: "compressed",
-            data: ""
-        },
-        prefixOptions: {
-            browsers: ["last 2 versions", "> 5%", "Firefox ESR"]
-        }
-    }
-
-    return gulp
-        .src(SCSS_SRC + "/maps.scss")
-        .pipe(sourcemaps.init())
-        .pipe(sass(config.scssOptions).on("error", sass.logError))
-        // .pipe(rename(outputFile))
-        .pipe(autoprefixer(config.prefixOptions))
-        .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest(DIST))
-})
-
-gulp.task("default", ["js", "scss"])
+gulp.task("default", ["js"])

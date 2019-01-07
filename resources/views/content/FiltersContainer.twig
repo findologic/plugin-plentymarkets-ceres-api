@@ -1,3 +1,5 @@
 {{ component( "Findologic::content.FiltersList") }}
 
+<script src="{{ plugin_path("Findologic") }}/js/dist/filters-component-min.js"></script>
+
 <findologic-filter-list :facet-data="{{ facets | json_encode }}"></findologic-filter-list>
