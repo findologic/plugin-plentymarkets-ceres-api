@@ -2,10 +2,10 @@
 
 namespace Findologic\Api\Request;
 
+use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
 use Plenty\Plugin\ConfigRepository;
-use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
 
@@ -47,11 +47,11 @@ class RequestBuilder
     }
 
     /**
-     * @param HttpRequest $externalSearch
+     * @param ExternalSearch $externalSearch
      * @param int|null $category
      * @return bool|Request
      */
-    public function build($externalSearch, $category = null)
+    public function build(ExternalSearch $externalSearch, $category = null)
     {
         $requestType = $category ? self::CATEGORY_REQUEST_TYPE : self::DEFAULT_REQUEST_TYPE;
 

@@ -88,7 +88,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @param ExternalSearch $externalSearch
      */
-    public function handleSearchQuery($externalSearch)
+    public function handleSearchQuery(ExternalSearch $externalSearch)
     {
         try {
             $results = $this->search($externalSearch);
@@ -120,11 +120,11 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param HttpRequest $externalSearch
+     * @param ExternalSearch $externalSearch
      * @return \Findologic\Api\Response\Response
      * @throws AliveException
      */
-    protected function search($externalSearch)
+    protected function search(ExternalSearch $externalSearch)
     {
         try {
             $this->aliveTest();

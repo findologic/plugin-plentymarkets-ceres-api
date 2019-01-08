@@ -5,9 +5,9 @@ namespace Findologic\Api\Request;
 use Findologic\Constants\Plugin;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
-use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use IO\Services\CategoryService;
+use Ceres\Helper\ExternalSearch;
 
 class ParametersBuilder
 {
@@ -40,25 +40,14 @@ class ParametersBuilder
 
     /**
      * @param Request $request
-     * @param HttpRequest $httpRequest
+     * @param ExternalSearch $externalSearch
      * @param Category|null $category
      * @return Request
      */
-    public function setSearchParams($request, $externalSearch, $category = null)
+    public function setSearchParams(Request $request, ExternalSearch $externalSearch, $category = null)
     {
         $request->setParam('query', $externalSearch->searchString);
         $request->setPropertyParam(Plugin::API_PROPERTY_MAIN_VARIATION_ID);
-
-//        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
-//            $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
-//            foreach ($attributes as $key => $value) {
-//                if ($key === 'cat' && $category) {
-//                    continue;
-//                }
-//
-//                $request->setAttributeParam($key, $value);
-//            }
-//        }
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
             $request->setParam('selected', ['cat' => [$categoryFullName]]);
@@ -75,10 +64,10 @@ class ParametersBuilder
 
     /**
      * @param Request $request
-     * @param array $parameters
+     * @param ExternalSearch $externalSearch
      * @return Request
      */
-    protected function setPagination(Request $request, $externalSearch)
+    protected function setPagination(Request $request, ExternalSearch $externalSearch)
     {
         $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $externalSearch->itemsPerPage);
 
