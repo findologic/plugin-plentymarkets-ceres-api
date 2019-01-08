@@ -32,16 +32,18 @@ Vue.component("findologic-item-filter-price", {
     },
 
     computed:
-        mapState({
-            isLoading: state => state.itemList.isLoading,
-
+        {
             isDisabled()
             {
                 return (this.priceMin === "" && this.priceMax === "") ||
                     (parseInt(this.priceMin) >= parseInt(this.priceMax)) ||
                     this.isLoading;
-            }
-        }),
+            },
+
+            ...Vuex.mapState({
+                isLoading: state => state.itemList.isLoading
+            })
+        },
 
     methods:
         {
