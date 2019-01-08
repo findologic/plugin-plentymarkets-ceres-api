@@ -82,10 +82,10 @@ class ParametersBuilder
     {
         $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $externalSearch->itemsPerPage);
 
-        if ($externalSearch->currentPage > 1) {
+        if ($externalSearch->page > 1) {
             $request->setParam(
                 Plugin::API_PARAMETER_PAGINATION_START,
-                ($externalSearch->currentPage - 1) * $externalSearch->itemsPerPage
+                ($externalSearch->page - 1) * $externalSearch->itemsPerPage
             );
         }
 
