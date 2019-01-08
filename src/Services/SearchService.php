@@ -86,17 +86,16 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param ExternalSearch $searchQuery
-     * @param HttpRequest $request
+     * @param ExternalSearch $externalSearch
      */
-    public function handleSearchQuery($searchQuery, $request)
+    public function handleSearchQuery($externalSearch)
     {
         try {
-            $results = $this->search($request);
+            $results = $this->search($externalSearch);
             $productsIds = $results->getProductMainVariationsIds();
 
             if (!empty($productsIds) && is_array($productsIds)) {
-                $searchQuery->setResults($productsIds, $results->getResultsCount());
+                $externalSearch->setResults($productsIds, $results->getResultsCount());
             }
 
             //TODO: how to handle no results ?
@@ -121,18 +120,18 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param HttpRequest $request
+     * @param HttpRequest $externalSearch
      * @return \Findologic\Api\Response\Response
      * @throws AliveException
      */
-    protected function search($request)
+    protected function search($externalSearch)
     {
         try {
             $this->aliveTest();
 
             $category = $this->getCategoryService() ?? null;
 
-            $apiRequest = $this->requestBuilder->build($request, $category ? $category->getCurrentCategory() : null);
+            $apiRequest = $this->requestBuilder->build($externalSearch, $category ? $category->getCurrentCategory() : null);
             $this->results = $this->responseParser->parse($this->client->call($apiRequest));
         } catch (AliveException $e) {
             $this->logger->error('Findologic server did not responded to alive request. ' . $e->getMessage());

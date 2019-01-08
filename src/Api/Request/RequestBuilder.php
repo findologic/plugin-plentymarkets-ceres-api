@@ -47,17 +47,17 @@ class RequestBuilder
     }
 
     /**
-     * @param HttpRequest $httpRequest
+     * @param HttpRequest $externalSearch
      * @param int|null $category
      * @return bool|Request
      */
-    public function build($httpRequest, $category = null)
+    public function build($externalSearch, $category = null)
     {
         $requestType = $category ? self::CATEGORY_REQUEST_TYPE : self::DEFAULT_REQUEST_TYPE;
 
         $request = $this->createRequestObject();
         $request = $this->setDefaultValues($request, $requestType);
-        $request = $this->parametersBuilder->setSearchParams($request, $httpRequest, $category);
+        $request = $this->parametersBuilder->setSearchParams($request, $externalSearch, $category);
 
         return $request;
     }

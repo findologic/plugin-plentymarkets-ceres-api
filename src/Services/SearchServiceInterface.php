@@ -18,7 +18,6 @@ interface SearchServiceInterface
 
     /**
      * @param $searchOptions
-     * @param $request
      */
-    public function handleSearchQuery($searchQuery, $request);
+    public function handleSearchQuery($externalSearch);
 }

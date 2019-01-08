@@ -72,8 +72,8 @@ class FindologicServiceProvider extends ServiceProvider
 
         $eventDispatcher->listen(
             'Ceres.Search.Query',
-            function (ExternalSearch $searchQuery) use ($searchService, $request) {
-                $searchService->handleSearchQuery($searchQuery, $request);
+            function (ExternalSearch $externalSearch) use ($searchService, $request) {
+                $searchService->handleSearchQuery($externalSearch);
             }
         );
     }

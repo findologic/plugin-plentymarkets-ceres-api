@@ -44,33 +44,31 @@ class ParametersBuilder
      * @param Category|null $category
      * @return Request
      */
-    public function setSearchParams($request, $httpRequest, $category = null)
+    public function setSearchParams($request, $externalSearch, $category = null)
     {
-        $parameters = $httpRequest->all();
-
-        $request->setParam('query', $parameters['query'] ?? '');
+        $request->setParam('query', $externalSearch->searchString);
         $request->setPropertyParam(Plugin::API_PROPERTY_MAIN_VARIATION_ID);
 
-        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
-            $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
-            foreach ($attributes as $key => $value) {
-                if ($key === 'cat' && $category) {
-                    continue;
-                }
-
-                $request->setAttributeParam($key, $value);
-            }
-        }
+//        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
+//            $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
+//            foreach ($attributes as $key => $value) {
+//                if ($key === 'cat' && $category) {
+//                    continue;
+//                }
+//
+//                $request->setAttributeParam($key, $value);
+//            }
+//        }
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
             $request->setParam('selected', ['cat' => [$categoryFullName]]);
         }
 
-        if (isset($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER]) && in_array($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER]);
+        if (in_array($externalSearch->sorting, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
+            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $externalSearch->sorting);
         }
 
-        $request = $this->setPagination($request, $parameters);
+        $request = $this->setPagination($request, $externalSearch);
 
         return $request;
     }
@@ -80,18 +78,15 @@ class ParametersBuilder
      * @param array $parameters
      * @return Request
      */
-    protected function setPagination(Request $request, array $parameters)
+    protected function setPagination(Request $request, $externalSearch)
     {
-        $pageSize = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE] ?? 0;
+        $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $externalSearch->itemsPerPage);
 
-        if ($pageSize > 0) {
-            $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
-        }
-
-        $paginationStart = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_START] ?? 0;
-
-        if ($paginationStart > 0) {
-            $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
+        if ($externalSearch->currentPage > 1) {
+            $request->setParam(
+                Plugin::API_PARAMETER_PAGINATION_START,
+                ($externalSearch->currentPage - 1) * $externalSearch->itemsPerPage
+            );
         }
 
         return $request;
