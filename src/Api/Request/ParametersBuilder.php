@@ -49,7 +49,7 @@ class ParametersBuilder
         $parameters = $httpRequest->all();
 
         $request->setParam('query', $parameters['query'] ?? '');
-        $request->setPropertyParam(Plugin::API_PROPERTY_MAIN_VARIATION_ID);
+        $request->setPropertyParam(Plugin::API_PROPERTY_VARIATION_ID);
 
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];

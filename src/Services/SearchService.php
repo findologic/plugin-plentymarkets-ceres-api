@@ -93,7 +93,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $results = $this->search($request);
-            $productsIds = $results->getProductMainVariationsIds();
+            $productsIds = $results->getVariationIds();
 
             if (!empty($productsIds) && is_array($productsIds)) {
                 $searchQuery->setResults($productsIds, $results->getResultsCount());
