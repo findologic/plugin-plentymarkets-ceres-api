@@ -1,4 +1,7 @@
+import url from './mixins/url'
+
 Vue.component("findologic-item-filter", {
+    mixins: [url],
 
     delimiters: ["${", "}"],
 
@@ -34,7 +37,6 @@ Vue.component("findologic-item-filter", {
 
     created()
     {
-        console.log("findologic item filter");
         this.$options.template = this.template || "#vue-findologic-item-filter";
     },
 
@@ -42,7 +44,8 @@ Vue.component("findologic-item-filter", {
         {
             updateFacet(facetValue)
             {
-                this.$store.dispatch("selectFacet", facetValue);
+                console.log(this.facet);
+                this.updateSelectedFilters(this.facet.id, facetValue);
             },
 
             isSelected(facetValueId)

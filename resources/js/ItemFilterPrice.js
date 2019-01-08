@@ -1,4 +1,7 @@
+import url from './mixins/url'
+
 Vue.component("findologic-item-filter-price", {
+    mixins: [url],
 
     delimiters: ["${", "}"],
 
@@ -22,7 +25,6 @@ Vue.component("findologic-item-filter-price", {
 
     created()
     {
-        console.log('findologic item filter price');
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
         const urlParams = this.getUrlParams(document.location.search);
@@ -56,29 +58,8 @@ Vue.component("findologic-item-filter-price", {
             {
                 if (!this.isDisabled)
                 {
-                    this.$store.dispatch("selectPriceFacet", {priceMin: this.priceMin, priceMax: this.priceMax});
+                    this.updateSelectedFilters(this.facet.id, {priceMin: this.priceMin, priceMax: this.priceMax});
                 }
-            },
-
-            getUrlParams(urlParams)
-            {
-                if (urlParams)
-                {
-                    var tokens;
-                    var params = {};
-                    var regex = /[?&]?([^=]+)=([^&]*)/g;
-
-                    urlParams = urlParams.split("+").join(" ");
-
-                    while (tokens = regex.exec(urlParams))
-                    {
-                        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-                    }
-
-                    return params;
-                }
-
-                return {};
             }
         }
 });

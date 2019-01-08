@@ -1,4 +1,7 @@
+import url from './mixins/url'
+
 Vue.component("findologic-filter-list", {
+    mixins: [url],
 
     delimiters: ["${", "}"],
 
@@ -29,7 +32,6 @@ Vue.component("findologic-filter-list", {
     }),
 
     created() {
-        console.log('create findologic filters list');
         this.$store.commit("setFacets", this.facetData);
 
         this.$options.template = this.template || "#vue-findologic-filter-list";
@@ -62,27 +64,6 @@ Vue.component("findologic-filter-list", {
                 window.setTimeout(() => {
                     this.isActive = !this.isActive;
                 }, 300);
-            },
-
-            getUrlParams(urlParams)
-            {
-                if (urlParams)
-                {
-                    var tokens;
-                    var params = {};
-                    var regex = /[?&]?([^=]+)=([^&]*)/g;
-
-                    urlParams = urlParams.split("+").join(" ");
-
-                    while (tokens = regex.exec(urlParams))
-                    {
-                        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-                    }
-
-                    return params;
-                }
-
-                return {};
             }
         }
 

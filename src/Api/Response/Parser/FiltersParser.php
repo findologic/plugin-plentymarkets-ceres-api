@@ -37,6 +37,7 @@ class FiltersParser
                 $filterData = [
                     'id' => $filterName,
                     'name' => $filter->display->__toString(),
+                    'select' => $filter->select->__toString(),
                     'type' => ''
                 ];
 
