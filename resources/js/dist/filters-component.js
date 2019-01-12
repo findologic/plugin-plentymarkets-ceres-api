@@ -123,7 +123,6 @@ Vue.component("findologic-item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
-            console.log(this.facet);
             this.updateSelectedFilters(this.facet.id, facetValue);
         },
         isSelected: function isSelected(facetValueId) {
@@ -337,25 +336,38 @@ exports.default = {
 
             return requestParameters;
         },
-        updateSelectedFilters: function updateSelectedFilters(facet, facetValue) {
+        updateSelectedFilters: function updateSelectedFilters(facetId, facetValue) {
             var params = this.getUrlParams(document.location.search);
+            var value = facetValue.name;
 
             console.log('url params');
             console.log(params);
 
             if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
-                params[_constants2.default.PARAMETER_ATTRIBUTES] = [];
+                params[_constants2.default.PARAMETER_ATTRIBUTES] = {};
             }
 
             var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
 
             if (this.facet.select === 'single') {
-                attributes[facet] = facetValue;
+                if (facetId in attributes) {
+                    if (attributes[facetId] === value) {
+                        delete attributes[facetId];
+                    } else {
+                        attributes[facetId] = value;
+                    }
+                } else {
+                    attributes[facetId] = value;
+                }
             } else {
-                if (!(facet in attributes)) {
-                    attributes[facet] = [facetValue];
-                } else if ($.inArray(facetValue, attributes[facet]) !== -1) {
-                    attributes[facet].push(facetValue);
+                if (!(facetId in attributes)) {
+                    attributes[facetId] = [value];
+                } else if ($.inArray(value, attributes[facetId]) !== -1) {
+                    attributes[facetId].push(value);
+                } else {
+                    attributes[facetId] = attributes[facetId].filter(function (selectedValue) {
+                        return selectedValue !== value;
+                    });
                 }
             }
 
@@ -364,7 +376,7 @@ exports.default = {
             console.log('updated url params');
             console.log(params);
             console.log($.param(params));
-            windows.location.search = '?' + $.param(params);
+            document.location.search = '?' + $.param(params);
         }
     }
 };

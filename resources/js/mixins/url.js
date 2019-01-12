@@ -100,26 +100,37 @@ export default {
             return requestParameters;
         },
 
-        updateSelectedFilters(facet, facetValue)
+        updateSelectedFilters(facetId, facetValue)
         {
             var params = this.getUrlParams(document.location.search);
+            const value = facetValue.name;
 
             console.log('url params');
             console.log(params);
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
-                params[Constants.PARAMETER_ATTRIBUTES] = [];
+                params[Constants.PARAMETER_ATTRIBUTES] = {};
             }
 
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
             if (this.facet.select === 'single') {
-                attributes[facet] = facetValue;
+                if (facetId in attributes) {
+                    if (attributes[facetId] === value) {
+                        delete attributes[facetId];
+                    } else {
+                        attributes[facetId] = value;
+                    }
+                } else {
+                    attributes[facetId] = value;
+                }
             } else {
-                if (!(facet in attributes)) {
-                    attributes[facet] = [facetValue];
-                } else if ($.inArray(facetValue, attributes[facet]) !== -1) {
-                    attributes[facet].push(facetValue);
+                if (!(facetId in attributes)) {
+                    attributes[facetId] = [value];
+                } else if ($.inArray(value, attributes[facetId]) !== -1) {
+                    attributes[facetId].push(value);
+                } else {
+                    attributes[facetId] = attributes[facetId].filter(function(selectedValue) { return selectedValue !== value });
                 }
             }
 
@@ -128,7 +139,7 @@ export default {
             console.log('updated url params');
             console.log(params);
             console.log($.param(params));
-            windows.location.search = '?' + $.param(params);
+            document.location.search = '?' + $.param(params);
         }
     }
 }
