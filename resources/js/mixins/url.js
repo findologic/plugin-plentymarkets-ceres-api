@@ -1,9 +1,20 @@
 import Constants from '../constants';
 
 export default {
+    data() {
+        return {
+            urlParams: false
+        }
+    },
+
     methods:{
-        getUrlParams(queryString)
+        getUrlParams()
         {
+            if (this.urlParams) {
+                return this.urlParams;
+            }
+
+            var queryString = document.location.search;
             var requestParameters = {};
 
             /*
@@ -97,16 +108,14 @@ export default {
                 }
             }
 
-            return requestParameters;
+            this.urlParams = requestParameters;
+
+            return this.urlParams;
         },
 
         updateSelectedFilters(facetId, facetValue)
         {
-            var params = this.getUrlParams(document.location.search);
-            const value = facetValue.name;
-
-            console.log('url params');
-            console.log(params);
+            let params = this.getUrlParams();
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 params[Constants.PARAMETER_ATTRIBUTES] = {};
@@ -116,30 +125,84 @@ export default {
 
             if (this.facet.select === 'single') {
                 if (facetId in attributes) {
-                    if (attributes[facetId] === value) {
+                    if (attributes[facetId] === facetValue) {
                         delete attributes[facetId];
                     } else {
-                        attributes[facetId] = value;
+                        attributes[facetId] = facetValue;
                     }
                 } else {
-                    attributes[facetId] = value;
+                    attributes[facetId] = facetValue;
                 }
             } else {
                 if (!(facetId in attributes)) {
-                    attributes[facetId] = [value];
-                } else if ($.inArray(value, attributes[facetId]) !== -1) {
-                    attributes[facetId].push(value);
+                    attributes[facetId] = [facetValue];
                 } else {
-                    attributes[facetId] = attributes[facetId].filter(function(selectedValue) { return selectedValue !== value });
+                    let valueId = this.getKeyByValue(attributes[facetId], facetValue);
+
+                    if (valueId === -1) {
+                        let index = Object.keys(attributes[facetId]).length;
+                        attributes[facetId][index] = facetValue;
+                    } else {
+                        delete attributes[facetId][valueId];
+                    }
                 }
             }
 
             params[Constants.PARAMETER_ATTRIBUTES] = attributes;
 
-            console.log('updated url params');
-            console.log(params);
-            console.log($.param(params));
             document.location.search = '?' + $.param(params);
+        },
+
+        isValueSelected(facetId, facetValue)
+        {
+            let params = this.getUrlParams();
+
+            if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
+                return false;
+            }
+
+            let attributes = params[Constants.PARAMETER_ATTRIBUTES];
+
+            if (!(facetId in attributes)) {
+                return false;
+            }
+
+            if (this.facet.select === 'single' && attributes[facetId] === facetValue) {
+                return true;
+            }
+
+            if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
+                return true;
+            }
+
+            return false;
+        },
+
+        getUrlParamValues(facetId) {
+            let params = this.getUrlParams();
+
+            if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
+                return null;
+            }
+
+            let attributes = params[Constants.PARAMETER_ATTRIBUTES];
+
+            if (!(facetId in attributes)) {
+                return null;
+            }
+
+            return attributes[facetId];
+        },
+
+        getKeyByValue(object, value) {
+            for(var prop in object) {
+                if(object.hasOwnProperty(prop)) {
+                    if(object[prop] === value)
+                        return prop;
+                }
+            }
+
+            return -1;
         }
     }
 }

@@ -41,8 +41,6 @@ class FiltersParser
                     'type' => ''
                 ];
 
-                $attributeId = $this->attributesFinder->getAttributeId($filterName);
-
                 if ($filter->type) {
                     $filterData['type'] = $filter->type->__toString();
                 }

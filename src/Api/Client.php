@@ -68,6 +68,8 @@ class Client
         $requestArray['connect_timeout'] = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
         $requestArray['timeout'] = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
 
+        $this->logger->error('Request array', $requestArray);
+
         return $requestArray;
     }
 }

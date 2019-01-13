@@ -54,8 +54,6 @@ class AttributesFinder
             return $this->attributes[$attributeName];
         }
 
-        $this->logger->error('Search for attribute');
-
         $result = $this->getPropertyRepository()
             ->clearFilters()
             ->setFilters([
@@ -63,8 +61,6 @@ class AttributesFinder
             ])
             ->applyCriteriaFromFilters()
             ->listProperties();
-
-        $this->logger->error(count($result));
 
         foreach($result->getResult() as $attribute) {
             $this->logger->error($attribute);

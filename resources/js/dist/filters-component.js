@@ -123,12 +123,10 @@ Vue.component("findologic-item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
-            this.updateSelectedFilters(this.facet.id, facetValue);
+            this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
-        isSelected: function isSelected(facetValueId) {
-            return this.selectedFacets.findIndex(function (selectedFacet) {
-                return selectedFacet.id === facetValueId;
-            }) > -1;
+        isSelected: function isSelected(facetValue) {
+            return this.isValueSelected(this.facet.id, facetValue.name);
         }
     }
 });
@@ -166,10 +164,10 @@ Vue.component("findologic-item-filter-price", {
     created: function created() {
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
-        var urlParams = this.getUrlParams(document.location.search);
+        var values = this.getUrlParamValues('price');
 
-        this.priceMin = urlParams.priceMin || "";
-        this.priceMax = urlParams.priceMax || "";
+        this.priceMin = values.min || "";
+        this.priceMax = values.max || "";
     },
 
 
@@ -189,7 +187,7 @@ Vue.component("findologic-item-filter-price", {
         },
         triggerFilter: function triggerFilter() {
             if (!this.isDisabled) {
-                this.updateSelectedFilters(this.facet.id, { priceMin: this.priceMin, priceMax: this.priceMax });
+                this.updateSelectedFilters(this.facet.id, { min: this.priceMin, max: this.priceMax });
             }
         }
     }
@@ -229,8 +227,20 @@ var _constants2 = _interopRequireDefault(_constants);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
+    data: function data() {
+        return {
+            urlParams: false
+        };
+    },
+
+
     methods: {
-        getUrlParams: function getUrlParams(queryString) {
+        getUrlParams: function getUrlParams() {
+            if (this.urlParams) {
+                return this.urlParams;
+            }
+
+            var queryString = document.location.search;
             var requestParameters = {};
 
             /*
@@ -334,14 +344,12 @@ exports.default = {
                 }
             }
 
-            return requestParameters;
+            this.urlParams = requestParameters;
+
+            return this.urlParams;
         },
         updateSelectedFilters: function updateSelectedFilters(facetId, facetValue) {
-            var params = this.getUrlParams(document.location.search);
-            var value = facetValue.name;
-
-            console.log('url params');
-            console.log(params);
+            var params = this.getUrlParams();
 
             if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
                 params[_constants2.default.PARAMETER_ATTRIBUTES] = {};
@@ -351,32 +359,79 @@ exports.default = {
 
             if (this.facet.select === 'single') {
                 if (facetId in attributes) {
-                    if (attributes[facetId] === value) {
+                    if (attributes[facetId] === facetValue) {
                         delete attributes[facetId];
                     } else {
-                        attributes[facetId] = value;
+                        attributes[facetId] = facetValue;
                     }
                 } else {
-                    attributes[facetId] = value;
+                    attributes[facetId] = facetValue;
                 }
             } else {
                 if (!(facetId in attributes)) {
-                    attributes[facetId] = [value];
-                } else if ($.inArray(value, attributes[facetId]) !== -1) {
-                    attributes[facetId].push(value);
+                    attributes[facetId] = [facetValue];
                 } else {
-                    attributes[facetId] = attributes[facetId].filter(function (selectedValue) {
-                        return selectedValue !== value;
-                    });
+                    var valueId = this.getKeyByValue(attributes[facetId], facetValue);
+
+                    if (valueId === -1) {
+                        var index = Object.keys(attributes[facetId]).length;
+                        attributes[facetId][index] = facetValue;
+                    } else {
+                        delete attributes[facetId][valueId];
+                    }
                 }
             }
 
             params[_constants2.default.PARAMETER_ATTRIBUTES] = attributes;
 
-            console.log('updated url params');
-            console.log(params);
-            console.log($.param(params));
             document.location.search = '?' + $.param(params);
+        },
+        isValueSelected: function isValueSelected(facetId, facetValue) {
+            var params = this.getUrlParams();
+
+            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
+                return false;
+            }
+
+            var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
+
+            if (!(facetId in attributes)) {
+                return false;
+            }
+
+            if (this.facet.select === 'single' && attributes[facetId] === facetValue) {
+                return true;
+            }
+
+            if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
+                return true;
+            }
+
+            return false;
+        },
+        getUrlParamValues: function getUrlParamValues(facetId) {
+            var params = this.getUrlParams();
+
+            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
+                return null;
+            }
+
+            var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
+
+            if (!(facetId in attributes)) {
+                return null;
+            }
+
+            return attributes[facetId];
+        },
+        getKeyByValue: function getKeyByValue(object, value) {
+            for (var prop in object) {
+                if (object.hasOwnProperty(prop)) {
+                    if (object[prop] === value) return prop;
+                }
+            }
+
+            return -1;
         }
     }
 };

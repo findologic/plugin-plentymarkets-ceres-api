@@ -27,10 +27,10 @@ Vue.component("findologic-item-filter-price", {
     {
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
-        const urlParams = this.getUrlParams(document.location.search);
+        const values = this.getUrlParamValues('price');
 
-        this.priceMin = urlParams.priceMin || "";
-        this.priceMax = urlParams.priceMax || "";
+        this.priceMin = values ? values.min : "";
+        this.priceMax = values ? values.max : "";
     },
 
     computed:
@@ -58,7 +58,7 @@ Vue.component("findologic-item-filter-price", {
             {
                 if (!this.isDisabled)
                 {
-                    this.updateSelectedFilters(this.facet.id, {priceMin: this.priceMin, priceMax: this.priceMax});
+                    this.updateSelectedFilters(this.facet.id, {min: this.priceMin, max: this.priceMax});
                 }
             }
         }

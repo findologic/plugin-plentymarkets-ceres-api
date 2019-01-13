@@ -44,12 +44,12 @@ Vue.component("findologic-item-filter", {
         {
             updateFacet(facetValue)
             {
-                this.updateSelectedFilters(this.facet.id, facetValue);
+                this.updateSelectedFilters(this.facet.id, facetValue.name);
             },
 
-            isSelected(facetValueId)
+            isSelected(facetValue)
             {
-                return this.selectedFacets.findIndex(selectedFacet => selectedFacet.id === facetValueId) > -1;
+                return this.isValueSelected(this.facet.id, facetValue.name);
             }
         }
 });
