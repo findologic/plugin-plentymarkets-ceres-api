@@ -15,7 +15,7 @@ Vue.component("findologic-item-filter-tag-list", {
 
     created()
     {
-        this.$options.template = this.template || "#vue-findologic-item-filter-tag-list";
+        this.$options.template = "#vue-findologic-item-filter-tag-list";
     },
 
     methods:

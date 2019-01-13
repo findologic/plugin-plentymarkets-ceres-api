@@ -211,7 +211,7 @@ Vue.component("findologic-item-filter-tag-list", {
     }),
 
     created: function created() {
-        this.$options.template = this.template || "#vue-findologic-item-filter-tag-list";
+        this.$options.template = "#vue-findologic-item-filter-tag-list";
     },
 
 
@@ -300,7 +300,7 @@ Vue.component("findologic-items-per-page", {
         };
     },
     created: function created() {
-        this.$options.template = this.template || "#vue-findologic-items-per-page";
+        this.$options.template = "#vue-findologic-items-per-page";
         console.log(paginationValues);
         this.setSelectedValueByUrl();
     },
