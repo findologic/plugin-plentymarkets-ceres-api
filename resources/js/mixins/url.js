@@ -202,6 +202,25 @@ export default {
             return false;
         },
 
+        getSelectedFilters()
+        {
+            let selectedFilters = [];
+            let params = this.getSearchParams();
+
+            if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
+                return selectedFilters;
+            }
+
+            for(var filter in params[Constants.PARAMETER_ATTRIBUTES]) {
+                if (filter === price) {
+
+                }
+
+            }
+
+            return selectedFilters;
+        },
+
         getSearchParamValue(facetId) {
             let params = this.getSearchParams();
 

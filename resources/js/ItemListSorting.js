@@ -20,7 +20,9 @@ Vue.component("findologic-item-list-sorting", {
 
     created()
     {
-        this.$options.template = this.template;
+        this.$options.template = this.template || "#vue-findologic-item-list-sorting";
+        console.log(sortingList);
+        console.log(defaultSorting);
 
         this.setSelectedValue();
     },

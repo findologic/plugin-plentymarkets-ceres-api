@@ -1,4 +1,7 @@
+import url from "./mixins/url";
+
 Vue.component("findologic-item-filter-tag-list", {
+    mixins: [url],
 
     delimiters: ["${", "}"],
 
@@ -7,7 +10,7 @@ Vue.component("findologic-item-filter-tag-list", {
     ],
 
     computed: Vuex.mapState({
-        tagList: state => state.itemList.selectedFacets
+        tagList: state => this.get
     }),
 
     created()

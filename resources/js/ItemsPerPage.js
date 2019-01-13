@@ -19,8 +19,8 @@ Vue.component("findologic-items-per-page", {
 
     created()
     {
-        this.$options.template = this.template;
-
+        this.$options.template = this.template || "#vue-findologic-items-per-page";
+        console.log(paginationValues);
         this.setSelectedValueByUrl();
     },
 

@@ -191,7 +191,14 @@ Vue.component("findologic-item-filter-price", {
 },{"./mixins/url":8}],4:[function(require,module,exports){
 "use strict";
 
+var _url = require("./mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 Vue.component("findologic-item-filter-tag-list", {
+    mixins: [_url2.default],
 
     delimiters: ["${", "}"],
 
@@ -199,7 +206,7 @@ Vue.component("findologic-item-filter-tag-list", {
 
     computed: Vuex.mapState({
         tagList: function tagList(state) {
-            return state.itemList.selectedFacets;
+            return undefined.get;
         }
     }),
 
@@ -215,7 +222,7 @@ Vue.component("findologic-item-filter-tag-list", {
     }
 });
 
-},{}],5:[function(require,module,exports){
+},{"./mixins/url":8}],5:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -237,7 +244,9 @@ Vue.component("findologic-item-list-sorting", {
         };
     },
     created: function created() {
-        this.$options.template = this.template;
+        this.$options.template = this.template || "#vue-findologic-item-list-sorting";
+        console.log(sortingList);
+        console.log(defaultSorting);
 
         this.setSelectedValue();
     },
@@ -291,8 +300,8 @@ Vue.component("findologic-items-per-page", {
         };
     },
     created: function created() {
-        this.$options.template = this.template;
-
+        this.$options.template = this.template || "#vue-findologic-items-per-page";
+        console.log(paginationValues);
         this.setSelectedValueByUrl();
     },
 
@@ -558,6 +567,20 @@ exports.default = {
             }
 
             return false;
+        },
+        getSelectedFilters: function getSelectedFilters() {
+            var selectedFilters = [];
+            var params = this.getSearchParams();
+
+            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
+                return selectedFilters;
+            }
+
+            for (var filter in params[_constants2.default.PARAMETER_ATTRIBUTES]) {
+                if (filter === price) {}
+            }
+
+            return selectedFilters;
         },
         getSearchParamValue: function getSearchParamValue(facetId) {
             var params = this.getSearchParams();
