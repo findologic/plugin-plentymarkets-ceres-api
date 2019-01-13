@@ -197,7 +197,7 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("findologic-item-filter-tag-list", {
+Vue.component("item-filter-tag-list", {
     mixins: [_url2.default],
 
     delimiters: ["${", "}"],
@@ -211,7 +211,7 @@ Vue.component("findologic-item-filter-tag-list", {
     }),
 
     created: function created() {
-        this.$options.template = "#vue-findologic-item-filter-tag-list";
+        this.$options.template = this.template || "#vue-findologic-item-filter-tag-list";
     },
 
 
@@ -231,7 +231,7 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("findologic-item-list-sorting", {
+Vue.component("item-list-sorting", {
     mixins: [_url2.default],
 
     delimiters: ["${", "}"],
@@ -244,7 +244,7 @@ Vue.component("findologic-item-list-sorting", {
         };
     },
     created: function created() {
-        this.$options.template = this.template || "#vue-findologic-item-list-sorting";
+        this.$options.template = this.template || "#vue-item-list-sorting";
         console.log(sortingList);
         console.log(defaultSorting);
 
@@ -287,7 +287,7 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("findologic-items-per-page", {
+Vue.component("items-per-page", {
     mixins: [_url2.default],
 
     delimiters: ["${", "}"],
@@ -300,7 +300,7 @@ Vue.component("findologic-items-per-page", {
         };
     },
     created: function created() {
-        this.$options.template = "#vue-findologic-items-per-page";
+        this.$options.template = this.template || "#vue-items-per-page";
         console.log(paginationValues);
         this.setSelectedValueByUrl();
     },

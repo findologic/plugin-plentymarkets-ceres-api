@@ -1,6 +1,6 @@
 import url from "./mixins/url";
 
-Vue.component("findologic-item-list-sorting", {
+Vue.component("item-list-sorting", {
     mixins: [url],
 
     delimiters: ["${", "}"],
@@ -20,7 +20,7 @@ Vue.component("findologic-item-list-sorting", {
 
     created()
     {
-        this.$options.template = this.template || "#vue-findologic-item-list-sorting";
+        this.$options.template = this.template || "#vue-item-list-sorting";
         console.log(sortingList);
         console.log(defaultSorting);
 

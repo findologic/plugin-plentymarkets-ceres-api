@@ -55,6 +55,7 @@ class FindologicServiceProvider extends ServiceProvider
         $eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) use ($configRepository) {
+
                 $container->addScriptTemplate(
                     'Findologic::content.script',
                     [

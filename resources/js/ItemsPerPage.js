@@ -1,6 +1,6 @@
 import url from "./mixins/url";
 
-Vue.component("findologic-items-per-page", {
+Vue.component("items-per-page", {
     mixins: [url],
 
     delimiters: ["${", "}"],
@@ -19,7 +19,7 @@ Vue.component("findologic-items-per-page", {
 
     created()
     {
-        this.$options.template = "#vue-findologic-items-per-page";
+        this.$options.template = this.template || "#vue-items-per-page";
         console.log(paginationValues);
         this.setSelectedValueByUrl();
     },

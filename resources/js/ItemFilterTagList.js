@@ -1,6 +1,6 @@
 import url from "./mixins/url";
 
-Vue.component("findologic-item-filter-tag-list", {
+Vue.component("item-filter-tag-list", {
     mixins: [url],
 
     delimiters: ["${", "}"],
@@ -15,7 +15,7 @@ Vue.component("findologic-item-filter-tag-list", {
 
     created()
     {
-        this.$options.template = "#vue-findologic-item-filter-tag-list";
+        this.$options.template = this.template || "#vue-findologic-item-filter-tag-list";
     },
 
     methods:
