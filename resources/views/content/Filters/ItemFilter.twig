@@ -2,7 +2,7 @@
     <div v-if="facet.name" class="card">
         <div class="h3">${facet.name}</div>
         <div v-if="facet.type === 'price'">
-            <findologic-item-filter-price></findologic-item-filter-price>
+            <findologic-item-filter-price :facet="facet"></findologic-item-filter-price>
         </div>
         <div v-else>
             <div class="form-check" v-for="value in facets" :key="value.id">

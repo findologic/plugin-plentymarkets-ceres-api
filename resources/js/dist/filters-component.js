@@ -147,12 +147,7 @@ Vue.component("findologic-item-filter-price", {
 
     delimiters: ["${", "}"],
 
-    props: {
-        template: {
-            type: String,
-            default: "#vue-item-filter-price"
-        }
-    },
+    props: ["template", "facet"],
 
     data: function data() {
         return {
@@ -164,10 +159,10 @@ Vue.component("findologic-item-filter-price", {
     created: function created() {
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
-        var values = this.getUrlParamValues('price');
+        var values = this.getUrlParamValues(this.facet.id);
 
-        this.priceMin = values.min || "";
-        this.priceMax = values.max || "";
+        this.priceMin = values ? values.min : "";
+        this.priceMax = values ? values.max : "";
     },
 
 
@@ -357,7 +352,12 @@ exports.default = {
 
             var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
 
-            if (this.facet.select === 'single') {
+            if (this.facet.id === 'price') {
+                attributes[facetId] = {
+                    min: facetValue.min,
+                    max: facetValue.max
+                };
+            } else if (this.facet.select === 'single') {
                 if (facetId in attributes) {
                     if (attributes[facetId] === facetValue) {
                         delete attributes[facetId];

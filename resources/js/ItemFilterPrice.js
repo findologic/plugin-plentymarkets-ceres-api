@@ -5,14 +5,10 @@ Vue.component("findologic-item-filter-price", {
 
     delimiters: ["${", "}"],
 
-    props:
-        {
-            template:
-                {
-                    type: String,
-                    default: "#vue-item-filter-price"
-                }
-        },
+    props: [
+        "template",
+        "facet"
+    ],
 
     data()
     {
@@ -27,7 +23,7 @@ Vue.component("findologic-item-filter-price", {
     {
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
-        const values = this.getUrlParamValues('price');
+        const values = this.getUrlParamValues(this.facet.id);
 
         this.priceMin = values ? values.min : "";
         this.priceMax = values ? values.max : "";

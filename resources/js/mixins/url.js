@@ -123,7 +123,12 @@ export default {
 
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            if (this.facet.select === 'single') {
+            if (this.facet.id === 'price') {
+                attributes[facetId] = {
+                    min: facetValue.min,
+                    max: facetValue.max
+                };
+            } else if (this.facet.select === 'single') {
                 if (facetId in attributes) {
                     if (attributes[facetId] === facetValue) {
                         delete attributes[facetId];
