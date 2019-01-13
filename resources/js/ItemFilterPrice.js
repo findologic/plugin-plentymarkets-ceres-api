@@ -23,7 +23,7 @@ Vue.component("findologic-item-filter-price", {
     {
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
-        const values = this.getUrlParamValues(this.facet.id);
+        const values = this.getSearchParamValue(this.facet.id);
 
         this.priceMin = values ? values.min : "";
         this.priceMax = values ? values.max : "";

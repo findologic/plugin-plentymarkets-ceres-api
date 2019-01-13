@@ -97,12 +97,8 @@ class SearchService implements SearchServiceInterface
 
             $this->logger->error('Product ids', $productsIds);
 
-            if (!empty($productsIds) && is_array($productsIds)) {
-                /** @var ExternalSearch $searchQuery */
-                $searchQuery->setResults($productsIds, $results->getResultsCount());
-            }
-
-            //TODO: how to handle no results ?
+            /** @var ExternalSearch $searchQuery */
+            $searchQuery->setResults($productsIds, $results->getResultsCount());
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);

@@ -8,7 +8,26 @@ export default {
     },
 
     methods:{
-        getUrlParams()
+        getUrlParams(urlParams) {
+            if (urlParams) {
+                var tokens;
+                var params = {};
+                var regex = /[?&]?([^=]+)=([^&]*)/g;
+
+                urlParams = urlParams.split("+").join(" ");
+
+                // eslint-disable-next-line
+                while (tokens = regex.exec(urlParams)) {
+                    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+                }
+
+                return params;
+            }
+
+            return {};
+        },
+
+        getSearchParams()
         {
             if (this.urlParams) {
                 return this.urlParams;
@@ -115,7 +134,7 @@ export default {
 
         updateSelectedFilters(facetId, facetValue)
         {
-            let params = this.getUrlParams();
+            let params = this.getSearchParams();
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 params[Constants.PARAMETER_ATTRIBUTES] = {};
@@ -160,7 +179,7 @@ export default {
 
         isValueSelected(facetId, facetValue)
         {
-            let params = this.getUrlParams();
+            let params = this.getSearchParams();
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 return false;
@@ -183,8 +202,8 @@ export default {
             return false;
         },
 
-        getUrlParamValues(facetId) {
-            let params = this.getUrlParams();
+        getSearchParamValue(facetId) {
+            let params = this.getSearchParams();
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 return null;

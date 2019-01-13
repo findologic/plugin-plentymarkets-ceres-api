@@ -13,6 +13,7 @@ use Plenty\Plugin\ServiceProvider;
 use Plenty\Plugin\Log\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Helper\ResourceContainer;
+use IO\Helper\ComponentContainer;
 
 /**
  * Class FindologicServiceProvider
@@ -76,6 +77,28 @@ class FindologicServiceProvider extends ServiceProvider
                 $searchService->handleSearchQuery($request, $searchQuery);
             }
         );
+
+        if (substr($request->getRequestUri(), 0, 7) !== "/search") {
+            return;
+        }
+
+        $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container)
+        {
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.ItemListSorting')
+            {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.ItemListSorting');
+            }
+
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.ItemsPerPage')
+            {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.ItemsPerPage');
+            }
+
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilterTagList')
+            {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilterTagList');
+            }
+        }, 0);
     }
 
     /**

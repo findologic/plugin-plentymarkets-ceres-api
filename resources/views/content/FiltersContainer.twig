@@ -2,4 +2,8 @@
 
 <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component.js"></script>
 
-<findologic-filter-list :facet-data="{{ facets | json_encode }}"></findologic-filter-list>
+{% if resultsCount > 0 %}
+    <findologic-filter-list :facet-data="{{ facets | json_encode }}"></findologic-filter-list>
+{% else %}
+    {{ component( "Findologic::content.NoResults") }}
+{% endif %}
