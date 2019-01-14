@@ -298,7 +298,6 @@ Vue.component("items-per-page", {
     },
     created: function created() {
         this.$options.template = this.template || "#vue-items-per-page";
-        console.log(paginationValues);
         this.setSelectedValueByUrl();
     },
 
