@@ -606,6 +606,7 @@ exports.default = {
                 });
             }
 
+            console.log(selectedFilters);
             return selectedFilters;
         },
         getSelectedFilterValue: function getSelectedFilterValue(facetId) {

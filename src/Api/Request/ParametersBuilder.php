@@ -48,8 +48,6 @@ class ParametersBuilder
     {
         $parameters = (array) $httpRequest->all();
 
-        $this->logger->error('Request params:', $parameters);
-
         $request->setParam('query', $parameters['query'] ?? '');
         $request->setPropertyParam(Plugin::API_PROPERTY_MAIN_VARIATION_ID);
 
@@ -63,8 +61,6 @@ class ParametersBuilder
                 $request->setAttributeParam($key, $value);
             }
         }
-
-        $this->logger->error('Params', $request->getParams());
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
             $request->setParam('selected', ['cat' => [$categoryFullName]]);

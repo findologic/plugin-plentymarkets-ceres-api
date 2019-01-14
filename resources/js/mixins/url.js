@@ -249,6 +249,7 @@ export default {
                 });
             }
 
+            console.log(selectedFilters);
             return selectedFilters;
         },
 
