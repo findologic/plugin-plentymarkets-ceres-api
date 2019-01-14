@@ -85,6 +85,16 @@ class FindologicServiceProvider extends ServiceProvider
 
         $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container)
         {
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter')
+            {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
+            }
+
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilterPrice')
+            {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilterPrice');
+            }
+
             if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.ItemListSorting')
             {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.ItemListSorting');

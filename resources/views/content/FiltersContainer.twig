@@ -1,9 +1,9 @@
-{{ component( "Findologic::content.FiltersList") }}
+{{ component( "Ceres::ItemList.Components.Filter.ItemFilterList") }}
 
 <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component.js"></script>
 
 {% if resultsCount > 0 %}
-    <findologic-filter-list :facet-data="{{ facets | json_encode }}"></findologic-filter-list>
+    <item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
 {% else %}
     {% include "Findologic::content.NoResults" %}
 {% endif %}

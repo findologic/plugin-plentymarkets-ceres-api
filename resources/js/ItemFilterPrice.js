@@ -1,6 +1,6 @@
 import url from './mixins/url'
 
-Vue.component("findologic-item-filter-price", {
+Vue.component("item-filter-price", {
     mixins: [url],
 
     delimiters: ["${", "}"],
@@ -21,7 +21,7 @@ Vue.component("findologic-item-filter-price", {
 
     created()
     {
-        this.$options.template = this.template || "#vue-findologic-item-filter-price";
+        this.$options.template = this.template || "#vue-item-filter-price";
 
         const values = this.getSelectedFilterValue(this.facet.id);
 

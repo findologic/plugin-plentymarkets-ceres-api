@@ -1,6 +1,6 @@
 import url from './mixins/url'
 
-Vue.component("findologic-item-filter", {
+Vue.component("item-filter", {
     mixins: [url],
 
     delimiters: ["${", "}"],
@@ -37,7 +37,7 @@ Vue.component("findologic-item-filter", {
 
     created()
     {
-        this.$options.template = this.template || "#vue-findologic-item-filter";
+        this.$options.template = this.template || "#vue-item-filter";
     },
 
     methods:

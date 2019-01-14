@@ -1,84 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-var _url = require("./mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-Vue.component("findologic-filter-list", {
-    mixins: [_url2.default],
-
-    delimiters: ["${", "}"],
-
-    props: ["template", "facetData"],
-
-    data: function data() {
-        return {
-            isActive: false
-        };
-    },
-
-
-    computed: Vuex.mapState({
-        facets: function facets(state) {
-            return state.itemList.facets.sort(function (facetA, facetB) {
-                if (facetA.position > facetB.position) {
-                    return 1;
-                }
-                if (facetA.position < facetB.position) {
-                    return -1;
-                }
-
-                return 0;
-            });
-        }
-    }),
-
-    created: function created() {
-        this.$store.commit("setFacets", this.facetData);
-
-        this.$options.template = this.template || "#vue-findologic-filter-list";
-
-        var urlParams = this.getUrlParams(document.location.search);
-
-        var selectedFacets = [];
-
-        if (urlParams.facets) {
-            selectedFacets = urlParams.facets.split(",");
-        }
-
-        if (urlParams.priceMin || urlParams.priceMax) {
-            var priceMin = urlParams.priceMin || "";
-            var priceMax = urlParams.priceMax || "";
-
-            this.$store.commit("setPriceFacet", { priceMin: priceMin, priceMax: priceMax });
-
-            selectedFacets.push("price");
-        }
-
-        if (selectedFacets.length > 0) {
-            this.$store.commit("setSelectedFacetsByIds", selectedFacets);
-        }
-    },
-
-
-    methods: {
-        toggleOpeningState: function toggleOpeningState() {
-            var _this = this;
-
-            window.setTimeout(function () {
-                _this.isActive = !_this.isActive;
-            }, 300);
-        }
-    }
-
-});
-
-},{"./mixins/url":8}],2:[function(require,module,exports){
-"use strict";
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _url = require("./mixins/url");
@@ -87,7 +9,7 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("findologic-item-filter", {
+Vue.component("item-filter", {
     mixins: [_url2.default],
 
     delimiters: ["${", "}"],
@@ -117,7 +39,7 @@ Vue.component("findologic-item-filter", {
     })),
 
     created: function created() {
-        this.$options.template = this.template || "#vue-findologic-item-filter";
+        this.$options.template = this.template || "#vue-item-filter";
     },
 
 
@@ -131,7 +53,7 @@ Vue.component("findologic-item-filter", {
     }
 });
 
-},{"./mixins/url":8}],3:[function(require,module,exports){
+},{"./mixins/url":7}],2:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -142,7 +64,7 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("findologic-item-filter-price", {
+Vue.component("item-filter-price", {
     mixins: [_url2.default],
 
     delimiters: ["${", "}"],
@@ -157,7 +79,7 @@ Vue.component("findologic-item-filter-price", {
         };
     },
     created: function created() {
-        this.$options.template = this.template || "#vue-findologic-item-filter-price";
+        this.$options.template = this.template || "#vue-item-filter-price";
 
         var values = this.getSelectedFilterValue(this.facet.id);
 
@@ -188,7 +110,7 @@ Vue.component("findologic-item-filter-price", {
     }
 });
 
-},{"./mixins/url":8}],4:[function(require,module,exports){
+},{"./mixins/url":7}],3:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -222,7 +144,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"./mixins/url":8}],5:[function(require,module,exports){
+},{"./mixins/url":7}],4:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -272,7 +194,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"./mixins/url":8}],6:[function(require,module,exports){
+},{"./mixins/url":7}],5:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -322,7 +244,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"./mixins/url":8}],7:[function(require,module,exports){
+},{"./mixins/url":7}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -342,7 +264,7 @@ exports.default = {
     PARAMETER_PAGINATION_START: PARAMETER_PAGINATION_START
 };
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -651,7 +573,7 @@ exports.default = {
     }
 };
 
-},{"../constants":7}]},{},[1,2,3,4,5,6])
+},{"../constants":6}]},{},[1,2,3,4,5])
 
 
 //# sourceMappingURL=filters-component.js.map
