@@ -26,12 +26,9 @@ Vue.component("item-list-sorting", {
 
     methods:
         {
-            /**
-             * Set the selected sorting in the vuex storage and trigger the item search.
-             */
             updateSorting()
             {
-                this.$store.dispatch("selectItemListSorting", this.selectedSorting);
+                this.setUrlParamValue('sorting', this.selectedSorting);
             },
 
             /**

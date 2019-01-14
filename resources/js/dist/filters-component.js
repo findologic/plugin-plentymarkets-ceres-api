@@ -159,7 +159,7 @@ Vue.component("findologic-item-filter-price", {
     created: function created() {
         this.$options.template = this.template || "#vue-findologic-item-filter-price";
 
-        var values = this.getSearchParamValue(this.facet.id);
+        var values = this.getSelectedFilterValue(this.facet.id);
 
         this.priceMin = values ? values.min : "";
         this.priceMax = values ? values.max : "";
@@ -250,11 +250,8 @@ Vue.component("item-list-sorting", {
 
 
     methods: {
-        /**
-         * Set the selected sorting in the vuex storage and trigger the item search.
-         */
         updateSorting: function updateSorting() {
-            this.$store.dispatch("selectItemListSorting", this.selectedSorting);
+            this.setUrlParamValue('sorting', this.selectedSorting);
         },
 
 
@@ -304,7 +301,7 @@ Vue.component("items-per-page", {
 
     methods: {
         itemsPerPageChanged: function itemsPerPageChanged() {
-            this.$store.dispatch("selectItemsPerPage", this.selectedValue);
+            this.setUrlParamValue('items', this.selectedValue);
         },
         setSelectedValueByUrl: function setSelectedValueByUrl() {
             var urlParams = this.getUrlParams(document.location.search);
@@ -611,7 +608,7 @@ exports.default = {
 
             return selectedFilters;
         },
-        getSearchParamValue: function getSearchParamValue(facetId) {
+        getSelectedFilterValue: function getSelectedFilterValue(facetId) {
             var params = this.getSearchParams();
 
             if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
@@ -625,6 +622,22 @@ exports.default = {
             }
 
             return attributes[facetId];
+        },
+        getUrlParamValue: function getUrlParamValue(key) {
+            var params = this.getSearchParams();
+
+            if (!(key in params)) {
+                return null;
+            }
+
+            return params[key];
+        },
+        setUrlParamValue: function setUrlParamValue(key, value) {
+            var params = this.getSearchParams();
+
+            params[key] = value;
+
+            document.location.search = '?' + $.param(params);
         },
         getKeyByValue: function getKeyByValue(object, value) {
             for (var prop in object) {

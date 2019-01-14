@@ -27,7 +27,7 @@ Vue.component("items-per-page", {
         {
             itemsPerPageChanged()
             {
-                this.$store.dispatch("selectItemsPerPage", this.selectedValue);
+                this.setUrlParamValue('items', this.selectedValue);
             },
 
             setSelectedValueByUrl()

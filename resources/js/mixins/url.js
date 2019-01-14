@@ -252,7 +252,7 @@ export default {
             return selectedFilters;
         },
 
-        getSearchParamValue(facetId) {
+        getSelectedFilterValue(facetId) {
             let params = this.getSearchParams();
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
@@ -266,6 +266,26 @@ export default {
             }
 
             return attributes[facetId];
+        },
+
+        getUrlParamValue(key)
+        {
+            let params = this.getSearchParams();
+
+            if (!(key in params)) {
+                return null;
+            }
+
+            return params[key];
+        },
+
+        setUrlParamValue(key, value)
+        {
+            let params = this.getSearchParams();
+
+            params[key] = value;
+
+            document.location.search = '?' + $.param(params);
         },
 
         getKeyByValue(object, value) {
