@@ -130,12 +130,12 @@ export default {
 
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            if (this.facet.id === 'price') {
+            if (facetId === 'price') {
                 attributes[facetId] = {
                     min: facetValue.min,
                     max: facetValue.max
                 };
-            } else if (this.facet.select === 'single') {
+            } else if (this.facet.select === 'single' && facetId !== 'cat') {
                 if (facetId in attributes) {
                     if (attributes[facetId] === facetValue) {
                         delete attributes[facetId];
@@ -200,7 +200,7 @@ export default {
                 return false;
             }
 
-            if (this.facet.select === 'single' && attributes[facetId] === facetValue) {
+            if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
                 return true;
             }
 
