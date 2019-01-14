@@ -211,7 +211,7 @@ Vue.component("item-filter-tag-list", {
     }),
 
     created: function created() {
-        this.$options.template = this.template || "#vue-findologic-item-filter-tag-list";
+        this.$options.template = this.template || "#vue-item-filter-tag-list";
     },
 
 
