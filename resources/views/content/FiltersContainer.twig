@@ -5,5 +5,5 @@
 {% if resultsCount > 0 %}
     <findologic-filter-list :facet-data="{{ facets | json_encode }}"></findologic-filter-list>
 {% else %}
-    {{ component( "Findologic::content.NoResults") }}
+    {% include "Findologic::content.NoResults" %}
 {% endif %}

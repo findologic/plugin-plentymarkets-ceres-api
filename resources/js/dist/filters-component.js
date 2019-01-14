@@ -206,7 +206,7 @@ Vue.component("item-filter-tag-list", {
 
     computed: Vuex.mapState({
         tagList: function tagList(state) {
-            return undefined.get;
+            return undefined.getSelectedFilters();
         }
     }),
 
@@ -245,9 +245,6 @@ Vue.component("item-list-sorting", {
     },
     created: function created() {
         this.$options.template = this.template || "#vue-item-list-sorting";
-        console.log(sortingList);
-        console.log(defaultSorting);
-
         this.setSelectedValue();
     },
 
@@ -356,6 +353,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _constants = require("../constants");
 
 var _constants2 = _interopRequireDefault(_constants);
@@ -363,13 +362,6 @@ var _constants2 = _interopRequireDefault(_constants);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    data: function data() {
-        return {
-            urlParams: false
-        };
-    },
-
-
     methods: {
         getUrlParams: function getUrlParams(urlParams) {
             if (urlParams) {
@@ -390,10 +382,6 @@ exports.default = {
             return {};
         },
         getSearchParams: function getSearchParams() {
-            if (this.urlParams) {
-                return this.urlParams;
-            }
-
             var queryString = document.location.search;
             var requestParameters = {};
 
@@ -498,9 +486,7 @@ exports.default = {
                 }
             }
 
-            this.urlParams = requestParameters;
-
-            return this.urlParams;
+            return requestParameters;
         },
         updateSelectedFilters: function updateSelectedFilters(facetId, facetValue) {
             var params = this.getSearchParams();
@@ -545,6 +531,25 @@ exports.default = {
 
             document.location.search = '?' + $.param(params);
         },
+        removeSelectedFilter: function removeSelectedFilter(facetId, facetValue) {
+            var params = this.getSearchParams();
+            var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
+
+            if (_typeof(attributes[filter]) !== 'object' || facetId === 'price') {
+                delete attributes[facetId];
+            } else {
+                var values = attributes[filter];
+                for (var value in values) {
+                    if (values[value] === facetValue) {
+                        delete attributes[facetId][value];
+                    }
+                }
+            }
+
+            params[_constants2.default.PARAMETER_ATTRIBUTES] = attributes;
+
+            document.location.search = '?' + $.param(params);
+        },
         isValueSelected: function isValueSelected(facetId, facetValue) {
             var params = this.getSearchParams();
 
@@ -576,8 +581,33 @@ exports.default = {
                 return selectedFilters;
             }
 
-            for (var filter in params[_constants2.default.PARAMETER_ATTRIBUTES]) {
-                if (filter === price) {}
+            var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
+
+            for (var filter in attributes) {
+                if (filter === 'price') {
+                    selectedFilters.push({
+                        id: 'price',
+                        name: attributes[filter].min + ' - ' + attributes[filter].max
+                    });
+
+                    continue;
+                }
+
+                if (_typeof(attributes[filter]) === 'object') {
+                    var values = attributes[filter];
+                    for (var value in values) {
+                        selectedFilters.push({
+                            id: filter,
+                            name: values[value]
+                        });
+                    }
+                    continue;
+                }
+
+                selectedFilters.push({
+                    id: filter,
+                    name: attributes[filter]
+                });
             }
 
             return selectedFilters;

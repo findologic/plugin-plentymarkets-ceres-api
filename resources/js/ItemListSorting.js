@@ -21,9 +21,6 @@ Vue.component("item-list-sorting", {
     created()
     {
         this.$options.template = this.template || "#vue-item-list-sorting";
-        console.log(sortingList);
-        console.log(defaultSorting);
-
         this.setSelectedValue();
     },
 

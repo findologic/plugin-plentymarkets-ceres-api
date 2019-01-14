@@ -1,12 +1,6 @@
 import Constants from '../constants';
 
 export default {
-    data() {
-        return {
-            urlParams: false
-        }
-    },
-
     methods:{
         getUrlParams(urlParams) {
             if (urlParams) {
@@ -29,10 +23,6 @@ export default {
 
         getSearchParams()
         {
-            if (this.urlParams) {
-                return this.urlParams;
-            }
-
             var queryString = document.location.search;
             var requestParameters = {};
 
@@ -127,9 +117,7 @@ export default {
                 }
             }
 
-            this.urlParams = requestParameters;
-
-            return this.urlParams;
+            return requestParameters;
         },
 
         updateSelectedFilters(facetId, facetValue)
@@ -177,6 +165,27 @@ export default {
             document.location.search = '?' + $.param(params);
         },
 
+        removeSelectedFilter(facetId, facetValue)
+        {
+            let params = this.getSearchParams();
+            let attributes = params[Constants.PARAMETER_ATTRIBUTES];
+
+            if (typeof attributes[filter] !== 'object' || facetId === 'price') {
+                delete attributes[facetId];
+            } else {
+                var values = attributes[filter];
+                for (var value in values) {
+                    if (values[value] === facetValue) {
+                        delete attributes[facetId][value];
+                    }
+                }
+            }
+
+            params[Constants.PARAMETER_ATTRIBUTES] = attributes;
+
+            document.location.search = '?' + $.param(params);
+        },
+
         isValueSelected(facetId, facetValue)
         {
             let params = this.getSearchParams();
@@ -211,11 +220,33 @@ export default {
                 return selectedFilters;
             }
 
-            for(var filter in params[Constants.PARAMETER_ATTRIBUTES]) {
-                if (filter === price) {
+            let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
+            for(var filter in attributes) {
+                if (filter === 'price') {
+                    selectedFilters.push({
+                        id: 'price',
+                        name: attributes[filter].min + ' - ' + attributes[filter].max
+                    });
+
+                    continue;
                 }
 
+                if (typeof attributes[filter] === 'object') {
+                    let values = attributes[filter];
+                    for (var value in values) {
+                        selectedFilters.push({
+                            id: filter,
+                            name: values[value]
+                        });
+                    }
+                    continue;
+                }
+
+                selectedFilters.push({
+                    id: filter,
+                    name: attributes[filter]
+                });
             }
 
             return selectedFilters;

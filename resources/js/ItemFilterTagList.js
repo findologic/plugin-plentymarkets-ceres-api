@@ -10,7 +10,7 @@ Vue.component("item-filter-tag-list", {
     ],
 
     computed: Vuex.mapState({
-        tagList: state => this.get
+        tagList: state => this.getSelectedFilters()
     }),
 
     created()
