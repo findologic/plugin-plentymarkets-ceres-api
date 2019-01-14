@@ -170,10 +170,10 @@ export default {
             let params = this.getSearchParams();
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            if (typeof attributes[filter] !== 'object' || facetId === 'price') {
+            if (typeof attributes[facetId] !== 'object' || facetId === 'price') {
                 delete attributes[facetId];
             } else {
-                var values = attributes[filter];
+                var values = attributes[facetId];
                 for (var value in values) {
                     if (values[value] === facetValue) {
                         delete attributes[facetId][value];
@@ -249,7 +249,6 @@ export default {
                 });
             }
 
-            console.log(selectedFilters);
             return selectedFilters;
         },
 

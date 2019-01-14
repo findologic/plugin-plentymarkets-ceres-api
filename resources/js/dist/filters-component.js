@@ -204,11 +204,11 @@ Vue.component("item-filter-tag-list", {
 
     props: ["template"],
 
-    computed: Vuex.mapState({
-        tagList: function tagList(state) {
-            return undefined.getSelectedFilters();
+    computed: {
+        tagList: function tagList() {
+            return this.getSelectedFilters();
         }
-    }),
+    },
 
     created: function created() {
         this.$options.template = this.template || "#vue-item-filter-tag-list";
@@ -217,7 +217,7 @@ Vue.component("item-filter-tag-list", {
 
     methods: {
         removeTag: function removeTag(tag) {
-            this.$store.dispatch("selectFacet", tag);
+            this.removeSelectedFilter(tag.id, tag.name);
         }
     }
 });
@@ -531,10 +531,10 @@ exports.default = {
             var params = this.getSearchParams();
             var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
 
-            if (_typeof(attributes[filter]) !== 'object' || facetId === 'price') {
+            if (_typeof(attributes[facetId]) !== 'object' || facetId === 'price') {
                 delete attributes[facetId];
             } else {
-                var values = attributes[filter];
+                var values = attributes[facetId];
                 for (var value in values) {
                     if (values[value] === facetValue) {
                         delete attributes[facetId][value];
@@ -606,7 +606,6 @@ exports.default = {
                 });
             }
 
-            console.log(selectedFilters);
             return selectedFilters;
         },
         getSelectedFilterValue: function getSelectedFilterValue(facetId) {

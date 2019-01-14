@@ -9,9 +9,12 @@ Vue.component("item-filter-tag-list", {
         "template"
     ],
 
-    computed: Vuex.mapState({
-        tagList: state => this.getSelectedFilters()
-    }),
+    computed: {
+        tagList()
+        {
+            return this.getSelectedFilters();
+        }
+    },
 
     created()
     {
@@ -22,7 +25,7 @@ Vue.component("item-filter-tag-list", {
         {
             removeTag(tag)
             {
-                this.$store.dispatch("selectFacet", tag);
+                this.removeSelectedFilter(tag.id, tag.name);
             }
         }
 });
