@@ -89,26 +89,6 @@ class FindologicServiceProvider extends ServiceProvider
             {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
-
-            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilterPrice')
-            {
-                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilterPrice');
-            }
-
-            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.ItemListSorting')
-            {
-                $container->setNewComponentTemplate('Findologic::ItemList.Components.ItemListSorting');
-            }
-
-            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.ItemsPerPage')
-            {
-                $container->setNewComponentTemplate('Findologic::ItemList.Components.ItemsPerPage');
-            }
-
-            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilterTagList')
-            {
-                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilterTagList');
-            }
         }, 0);
     }
 

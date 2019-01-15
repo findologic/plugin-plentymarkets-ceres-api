@@ -45,6 +45,7 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
+            console.log(this.facet);
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
         isSelected: function isSelected(facetValue) {
@@ -53,7 +54,50 @@ Vue.component("item-filter", {
     }
 });
 
-},{"./mixins/url":7}],2:[function(require,module,exports){
+},{"./mixins/url":8}],2:[function(require,module,exports){
+"use strict";
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _url = require("./mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-filter-category", {
+    mixins: [_url2.default],
+
+    delimiters: ["${", "}"],
+
+    props: ["template", "facet"],
+
+    computed: _extends({}, Vuex.mapState({
+        isLoading: function isLoading(state) {
+            return state.itemList.isLoading;
+        }
+    })),
+
+    created: function created() {
+        this.$options.template = this.template || "#vue-item-filter-category";
+    },
+
+
+    methods: {
+        updateFacet: function updateFacet(facetValue) {
+            console.log('ItemFilterCategory');
+            this.updateSelectedFilters(this.facet.id, facetValue.name);
+        },
+        isSelected: function isSelected(facetValue) {
+            return this.isValueSelected(this.facet.id, facetValue);
+        },
+        getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
+            return parentCategory.name + '_' + subCategory.name;
+        }
+    }
+});
+
+},{"./mixins/url":8}],3:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -110,7 +154,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"./mixins/url":7}],3:[function(require,module,exports){
+},{"./mixins/url":8}],4:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -144,7 +188,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"./mixins/url":7}],4:[function(require,module,exports){
+},{"./mixins/url":8}],5:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -194,7 +238,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"./mixins/url":7}],5:[function(require,module,exports){
+},{"./mixins/url":8}],6:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -244,7 +288,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"./mixins/url":7}],6:[function(require,module,exports){
+},{"./mixins/url":8}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -264,7 +308,7 @@ exports.default = {
     PARAMETER_PAGINATION_START: PARAMETER_PAGINATION_START
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -573,7 +617,7 @@ exports.default = {
     }
 };
 
-},{"../constants":6}]},{},[1,2,3,4,5])
+},{"../constants":7}]},{},[1,3,2,4,5,6])
 
 
 //# sourceMappingURL=filters-component.js.map
