@@ -165,27 +165,6 @@ export default {
             document.location.search = '?' + $.param(params);
         },
 
-        removeSelectedFilter(facetId, facetValue)
-        {
-            let params = this.getSearchParams();
-            let attributes = params[Constants.PARAMETER_ATTRIBUTES];
-
-            if (typeof attributes[facetId] !== 'object' || facetId === 'price') {
-                delete attributes[facetId];
-            } else {
-                var values = attributes[facetId];
-                for (var value in values) {
-                    if (values[value] === facetValue) {
-                        delete attributes[facetId][value];
-                    }
-                }
-            }
-
-            params[Constants.PARAMETER_ATTRIBUTES] = attributes;
-
-            document.location.search = '?' + $.param(params);
-        },
-
         isValueSelected(facetId, facetValue)
         {
             let params = this.getSearchParams();
@@ -237,7 +216,7 @@ export default {
                     for (var value in values) {
                         selectedFilters.push({
                             id: filter,
-                            name: values[value]
+                            name: values[value].replace(/_/g, " > ")
                         });
                     }
                     continue;
@@ -250,6 +229,28 @@ export default {
             }
 
             return selectedFilters;
+        },
+
+        removeSelectedFilter(facetId, facetValue)
+        {
+            facetValue = facetValue.replace(' > ', '_');
+            let params = this.getSearchParams();
+            let attributes = params[Constants.PARAMETER_ATTRIBUTES];
+
+            if (typeof attributes[facetId] !== 'object' || facetId === 'price') {
+                delete attributes[facetId];
+            } else {
+                var values = attributes[facetId];
+                for (var value in values) {
+                    if (values[value] === facetValue) {
+                        delete attributes[facetId][value];
+                    }
+                }
+            }
+
+            params[Constants.PARAMETER_ATTRIBUTES] = attributes;
+
+            document.location.search = '?' + $.param(params);
         },
 
         getSelectedFilterValue(facetId) {

@@ -57,11 +57,13 @@ class FindologicServiceProvider extends ServiceProvider
             function (ResourceContainer $container) use ($configRepository) {
 
                 $container->addScriptTemplate(
-                    'Findologic::content.script',
+                    'Findologic::content.scripts',
                     [
                         'shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, '')))
                     ]
                 );
+
+                $container->addStyleTemplate('Findologic::content.styles');
             }, 0
         );
 

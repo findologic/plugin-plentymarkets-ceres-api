@@ -44,13 +44,17 @@ Vue.component("item-filter", {
         {
             updateFacet(facetValue)
             {
-                console.log(this.facet);
-                this.updateSelectedFilters(this.facet.id, facetValue.name);
+                this.updateSelectedFilters(this.facet.id, facetValue);
             },
 
             isSelected(facetValue)
             {
-                return this.isValueSelected(this.facet.id, facetValue.name);
+                return this.isValueSelected(this.facet.id, facetValue);
+            },
+
+            getSubCategoryValue(parentCategory, subCategory)
+            {
+                return parentCategory.name + '_' + subCategory.name;
             }
         }
 });
