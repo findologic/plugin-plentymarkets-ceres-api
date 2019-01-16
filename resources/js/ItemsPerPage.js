@@ -10,48 +10,37 @@ Vue.component("items-per-page", {
         "template"
     ],
 
-    data()
-    {
+    data() {
         return {
             selectedValue: null
         };
     },
 
-    created()
-    {
+    created() {
         this.$options.template = this.template || "#vue-items-per-page";
         this.setSelectedValueByUrl();
     },
 
-    methods:
-        {
-            itemsPerPageChanged()
-            {
-                this.setUrlParamValue('items', this.selectedValue);
-            },
+    methods: {
+        itemsPerPageChanged() {
+            this.setUrlParamValue('items', this.selectedValue);
+        },
 
-            setSelectedValueByUrl()
-            {
-                const urlParams = this.getUrlParams(document.location.search);
-                const defaultItemsPerPage = App.config.pagination.columnsPerPage * App.config.pagination.rowsPerPage[0];
+        setSelectedValueByUrl() {
+            const urlParams = this.getUrlParams(document.location.search);
+            const defaultItemsPerPage = App.config.pagination.columnsPerPage * App.config.pagination.rowsPerPage[0];
 
-                if (urlParams.items)
-                {
-                    if (this.paginationValues.includes(parseInt(urlParams.items)))
-                    {
-                        this.selectedValue = urlParams.items;
-                    }
-                    else
-                    {
-                        this.selectedValue = defaultItemsPerPage;
-                    }
-                }
-                else
-                {
+            if (urlParams.items) {
+                if (this.paginationValues.includes(parseInt(urlParams.items))) {
+                    this.selectedValue = urlParams.items;
+                } else {
                     this.selectedValue = defaultItemsPerPage;
                 }
-
-                this.$store.commit("setItemsPerPage", parseInt(this.selectedValue));
+            } else {
+                this.selectedValue = defaultItemsPerPage;
             }
+
+            this.$store.commit("setItemsPerPage", parseInt(this.selectedValue));
         }
+    }
 });

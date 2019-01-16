@@ -11,39 +11,31 @@ Vue.component("item-list-sorting", {
         "template"
     ],
 
-    data()
-    {
+    data() {
         return {
             selectedSorting: {}
         };
     },
 
-    created()
-    {
+    created() {
         this.$options.template = this.template || "#vue-item-list-sorting";
         this.setSelectedValue();
     },
 
-    methods:
-        {
-            updateSorting()
-            {
+    methods: {
+            updateSorting() {
                 this.setUrlParamValue('sorting', this.selectedSorting);
             },
 
             /**
              * Determine the initial value and set it in the vuex storage.
              */
-            setSelectedValue()
-            {
+            setSelectedValue() {
                 const urlParams = this.getUrlParams(document.location.search);
 
-                if (urlParams.sorting)
-                {
+                if (urlParams.sorting) {
                     this.selectedSorting = urlParams.sorting;
-                }
-                else
-                {
+                } else {
                     this.selectedSorting = this.defaultSorting;
                 }
 

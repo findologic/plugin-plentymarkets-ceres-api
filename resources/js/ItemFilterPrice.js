@@ -10,8 +10,7 @@ Vue.component("item-filter-price", {
         "facet"
     ],
 
-    data()
-    {
+    data() {
         return {
             priceMin: "",
             priceMax: "",
@@ -19,8 +18,7 @@ Vue.component("item-filter-price", {
         };
     },
 
-    created()
-    {
+    created() {
         this.$options.template = this.template || "#vue-item-filter-price";
 
         const values = this.getSelectedFilterValue(this.facet.id);
@@ -29,33 +27,27 @@ Vue.component("item-filter-price", {
         this.priceMax = values ? values.max : "";
     },
 
-    computed:
-        {
-            isDisabled()
-            {
-                return (this.priceMin === "" && this.priceMax === "") ||
-                    (parseInt(this.priceMin) >= parseInt(this.priceMax)) ||
-                    this.isLoading;
-            },
-
-            ...Vuex.mapState({
-                isLoading: state => state.itemList.isLoading
-            })
+    computed: {
+        isDisabled() {
+            return (this.priceMin === "" && this.priceMax === "") ||
+                (parseInt(this.priceMin) >= parseInt(this.priceMax)) ||
+                this.isLoading;
         },
 
-    methods:
-        {
-            selectAll(event)
-            {
-                event.target.select();
-            },
+        ...Vuex.mapState({
+            isLoading: state => state.itemList.isLoading
+        })
+    },
 
-            triggerFilter()
-            {
-                if (!this.isDisabled)
-                {
-                    this.updateSelectedFilters(this.facet.id, {min: this.priceMin, max: this.priceMax});
-                }
+    methods: {
+        selectAll(event) {
+            event.target.select();
+        },
+
+        triggerFilter() {
+            if (!this.isDisabled) {
+                this.updateSelectedFilters(this.facet.id, {min: this.priceMin, max: this.priceMax});
             }
         }
+    }
 });

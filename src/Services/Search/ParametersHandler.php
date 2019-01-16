@@ -35,7 +35,7 @@ class ParametersHandler
     public function getConfig()
     {
         if (!$this->config) {
-            $this->config = pluginApp('\Ceres\Config\CeresConfig');
+            $this->config = pluginApp(CeresConfig::class);
         }
 
         return $this->config;

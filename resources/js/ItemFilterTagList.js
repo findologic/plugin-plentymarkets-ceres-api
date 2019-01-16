@@ -10,22 +10,18 @@ Vue.component("item-filter-tag-list", {
     ],
 
     computed: {
-        tagList()
-        {
+        tagList() {
             return this.getSelectedFilters();
         }
     },
 
-    created()
-    {
+    created() {
         this.$options.template = this.template || "#vue-item-filter-tag-list";
     },
 
-    methods:
-        {
-            removeTag(tag)
-            {
-                this.removeSelectedFilter(tag.id, tag.name);
-            }
+    methods: {
+        removeTag(tag) {
+            this.removeSelectedFilter(tag.id, tag.name);
         }
+    }
 });

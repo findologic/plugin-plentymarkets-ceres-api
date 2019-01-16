@@ -8,6 +8,9 @@ namespace Findologic\Api\Response\Parser;
  */
 class FiltersParser
 {
+    /**
+     * @var int
+     */
     protected $valueId;
 
     /**
@@ -52,8 +55,8 @@ class FiltersParser
     }
 
     /**
-     * @param $filterType
-     * @param $filterItem
+     * @param string $filterType
+     * @param array $filterItem
      * @param \SimpleXMLElement $data
      * @return array
      */

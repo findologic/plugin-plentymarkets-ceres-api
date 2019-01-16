@@ -49,9 +49,6 @@ class ResponseParser
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data));
-
-            //tODO: remove after testing
-            $this->logger->error('Findologic response data:', $response->getData());
         } catch (\Exception $e) {
             $this->logger->warning('Could not parse response from server.');
             $this->logger->logException($e);

@@ -78,10 +78,18 @@ class SearchService implements SearchServiceInterface
     public function getCategoryService()
     {
         if (!$this->categoryService) {
-            $this->categoryService = pluginApp('\IO\Services\CategoryService');
+            $this->categoryService = pluginApp(CategoryService::class);
         }
 
         return $this->categoryService;
+    }
+
+    /**
+     * @return Response|null
+     */
+    public function getResults()
+    {
+        return $this->results;
     }
 
     /**
@@ -92,8 +100,6 @@ class SearchService implements SearchServiceInterface
         try {
             $results = $this->search($request);
             $productsIds = $results->getProductMainVariationsIds();
-
-            $this->logger->error('Product ids', $productsIds);
 
             /** @var ExternalSearch $searchQuery */
             $searchQuery->setResults($productsIds, $results->getResultsCount());
@@ -125,10 +131,6 @@ class SearchService implements SearchServiceInterface
      */
     public function search($request)
     {
-        if ($this->results) {
-            return $this->results;
-        }
-
         try {
             $this->aliveTest();
 

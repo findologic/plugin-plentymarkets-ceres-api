@@ -21,12 +21,11 @@ Vue.component("item-filter", {
             return this.facet.values.sort(function (facetA, facetB) {
                 if (facetA.position > facetB.position) {
                     return 1;
-                }
-                if (facetA.position < facetB.position) {
+                } else if (facetA.position < facetB.position) {
                     return -1;
+                } else {
+                    return 0;
                 }
-
-                return 0;
             });
         }
     }, Vuex.mapState({
@@ -254,17 +253,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var PARAMETER_ATTRIBUTES = 'attrib';
-var PARAMETER_PROPERTIES = 'properties';
-var PARAMETER_SORT_ORDER = 'order';
-var PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'count';
-var PARAMETER_PAGINATION_START = 'first';
 
 exports.default = {
-    PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES,
-    PARAMETER_PROPERTIES: PARAMETER_PROPERTIES,
-    PARAMETER_SORT_ORDER: PARAMETER_SORT_ORDER,
-    PARAMETER_PAGINATION_ITEMS_PER_PAGE: PARAMETER_PAGINATION_ITEMS_PER_PAGE,
-    PARAMETER_PAGINATION_START: PARAMETER_PAGINATION_START
+    PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES
 };
 
 },{}],7:[function(require,module,exports){
@@ -284,6 +275,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     methods: {
+        /*
+         * Plentymarkets method for getting url params
+         * @returns {Object}
+         */
         getUrlParams: function getUrlParams(urlParams) {
             if (urlParams) {
                 var tokens;
@@ -302,6 +297,12 @@ exports.default = {
 
             return {};
         },
+
+
+        /*
+         * FINDOLOGIC method for getting url params
+         * @returns {Object}
+         */
         getSearchParams: function getSearchParams() {
             var queryString = document.location.search;
             var requestParameters = {};
@@ -409,6 +410,14 @@ exports.default = {
 
             return requestParameters;
         },
+
+
+        /*
+         * Update url with selected filters
+         *
+         * @param {string} facetId
+         * @param {string|array} facetValue
+         */
         updateSelectedFilters: function updateSelectedFilters(facetId, facetValue) {
             var params = this.getSearchParams();
 
@@ -452,6 +461,15 @@ exports.default = {
 
             document.location.search = '?' + $.param(params);
         },
+
+
+        /*
+         * Check if value is selected
+         *
+         * @param {string} facetId
+         * @param {string} facetValue
+         * @returns {boolean}
+         */
         isValueSelected: function isValueSelected(facetId, facetValue) {
             var params = this.getSearchParams();
 
@@ -475,6 +493,13 @@ exports.default = {
 
             return false;
         },
+
+
+        /*
+         * Get the list of selected filters from url
+         *
+         * @returns {Object}
+         */
         getSelectedFilters: function getSelectedFilters() {
             var selectedFilters = [];
             var params = this.getSearchParams();
@@ -514,6 +539,14 @@ exports.default = {
 
             return selectedFilters;
         },
+
+
+        /*
+         * Remove selected filter from url
+         *
+         * @param {string} facetId
+         * @param {string} facetValue
+         */
         removeSelectedFilter: function removeSelectedFilter(facetId, facetValue) {
             facetValue = facetValue.replace(' > ', '_');
             var params = this.getSearchParams();
@@ -534,6 +567,14 @@ exports.default = {
 
             document.location.search = '?' + $.param(params);
         },
+
+
+        /*
+         * Get selected filter value from url
+         *
+         * @param {string} facetId
+         * @returns {Object|null}
+         */
         getSelectedFilterValue: function getSelectedFilterValue(facetId) {
             var params = this.getSearchParams();
 
@@ -549,6 +590,14 @@ exports.default = {
 
             return attributes[facetId];
         },
+
+
+        /*
+         * Get simple url parameter value
+         *
+         * @param {string} key
+         * @returns {string|null}
+         */
         getUrlParamValue: function getUrlParamValue(key) {
             var params = this.getSearchParams();
 
@@ -558,6 +607,14 @@ exports.default = {
 
             return params[key];
         },
+
+
+        /*
+         * Get simple url parameter value
+         *
+         * @param {string} key
+         * @param {string|array} value
+         */
         setUrlParamValue: function setUrlParamValue(key, value) {
             var params = this.getSearchParams();
 
@@ -565,10 +622,21 @@ exports.default = {
 
             document.location.search = '?' + $.param(params);
         },
+
+
+        /*
+         * Get key from object by value
+         *
+         * @param {Object} object
+         * @param {string} value
+         * @returns {string|number}
+         */
         getKeyByValue: function getKeyByValue(object, value) {
             for (var prop in object) {
                 if (object.hasOwnProperty(prop)) {
-                    if (object[prop] === value) return prop;
+                    if (object[prop] === value) {
+                        return prop;
+                    }
                 }
             }
 

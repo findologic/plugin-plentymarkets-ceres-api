@@ -2,6 +2,10 @@ import Constants from '../constants';
 
 export default {
     methods:{
+        /*
+         * Plentymarkets method for getting url params
+         * @returns {Object}
+         */
         getUrlParams(urlParams) {
             if (urlParams) {
                 var tokens;
@@ -21,8 +25,11 @@ export default {
             return {};
         },
 
-        getSearchParams()
-        {
+        /*
+         * FINDOLOGIC method for getting url params
+         * @returns {Object}
+         */
+        getSearchParams() {
             var queryString = document.location.search;
             var requestParameters = {};
 
@@ -120,8 +127,13 @@ export default {
             return requestParameters;
         },
 
-        updateSelectedFilters(facetId, facetValue)
-        {
+        /*
+         * Update url with selected filters
+         *
+         * @param {string} facetId
+         * @param {string|array} facetValue
+         */
+        updateSelectedFilters(facetId, facetValue) {
             let params = this.getSearchParams();
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
@@ -165,8 +177,14 @@ export default {
             document.location.search = '?' + $.param(params);
         },
 
-        isValueSelected(facetId, facetValue)
-        {
+        /*
+         * Check if value is selected
+         *
+         * @param {string} facetId
+         * @param {string} facetValue
+         * @returns {boolean}
+         */
+        isValueSelected(facetId, facetValue) {
             let params = this.getSearchParams();
 
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
@@ -190,8 +208,12 @@ export default {
             return false;
         },
 
-        getSelectedFilters()
-        {
+        /*
+         * Get the list of selected filters from url
+         *
+         * @returns {Object}
+         */
+        getSelectedFilters() {
             let selectedFilters = [];
             let params = this.getSearchParams();
 
@@ -201,7 +223,7 @@ export default {
 
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            for(var filter in attributes) {
+            for (var filter in attributes) {
                 if (filter === 'price') {
                     selectedFilters.push({
                         id: 'price',
@@ -231,8 +253,13 @@ export default {
             return selectedFilters;
         },
 
-        removeSelectedFilter(facetId, facetValue)
-        {
+        /*
+         * Remove selected filter from url
+         *
+         * @param {string} facetId
+         * @param {string} facetValue
+         */
+        removeSelectedFilter(facetId, facetValue) {
             facetValue = facetValue.replace(' > ', '_');
             let params = this.getSearchParams();
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
@@ -253,6 +280,12 @@ export default {
             document.location.search = '?' + $.param(params);
         },
 
+        /*
+         * Get selected filter value from url
+         *
+         * @param {string} facetId
+         * @returns {Object|null}
+         */
         getSelectedFilterValue(facetId) {
             let params = this.getSearchParams();
 
@@ -269,8 +302,13 @@ export default {
             return attributes[facetId];
         },
 
-        getUrlParamValue(key)
-        {
+        /*
+         * Get simple url parameter value
+         *
+         * @param {string} key
+         * @returns {string|null}
+         */
+        getUrlParamValue(key) {
             let params = this.getSearchParams();
 
             if (!(key in params)) {
@@ -280,8 +318,13 @@ export default {
             return params[key];
         },
 
-        setUrlParamValue(key, value)
-        {
+        /*
+         * Get simple url parameter value
+         *
+         * @param {string} key
+         * @param {string|array} value
+         */
+        setUrlParamValue(key, value) {
             let params = this.getSearchParams();
 
             params[key] = value;
@@ -289,11 +332,19 @@ export default {
             document.location.search = '?' + $.param(params);
         },
 
+        /*
+         * Get key from object by value
+         *
+         * @param {Object} object
+         * @param {string} value
+         * @returns {string|number}
+         */
         getKeyByValue(object, value) {
-            for(var prop in object) {
-                if(object.hasOwnProperty(prop)) {
-                    if(object[prop] === value)
+            for (var prop in object) {
+                if (object.hasOwnProperty(prop)) {
+                    if (object[prop] === value) {
                         return prop;
+                    }
                 }
             }
 

@@ -55,12 +55,9 @@ class FindologicServiceProvider extends ServiceProvider
         $eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) use ($configRepository) {
-
                 $container->addScriptTemplate(
                     'Findologic::content.scripts',
-                    [
-                        'shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, '')))
-                    ]
+                    ['shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, '')))]
                 );
 
                 $container->addStyleTemplate('Findologic::content.styles');
@@ -81,14 +78,8 @@ class FindologicServiceProvider extends ServiceProvider
             }
         );
 
-        if (substr($request->getRequestUri(), 0, 7) !== "/search") {
-            return;
-        }
-
-        $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container)
-        {
-            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter')
-            {
+        $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
         }, 0);

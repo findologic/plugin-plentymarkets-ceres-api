@@ -10,22 +10,16 @@ Vue.component("item-filter", {
         "facet"
     ],
 
-    computed:
-        {
-            facets()
-            {
-                return this.facet.values.sort((facetA, facetB) =>
-                {
-                    if (facetA.position > facetB.position)
-                    {
+    computed: {
+            facets() {
+                return this.facet.values.sort((facetA, facetB) => {
+                    if (facetA.position > facetB.position) {
                         return 1;
-                    }
-                    if (facetA.position < facetB.position)
-                    {
+                    } else if (facetA.position < facetB.position) {
                         return -1;
+                    } else {
+                        return 0;
                     }
-
-                    return 0;
                 });
             },
 
@@ -35,26 +29,21 @@ Vue.component("item-filter", {
             })
         },
 
-    created()
-    {
+    created() {
         this.$options.template = this.template || "#vue-item-filter";
     },
 
-    methods:
-        {
-            updateFacet(facetValue)
-            {
-                this.updateSelectedFilters(this.facet.id, facetValue);
-            },
+    methods: {
+        updateFacet(facetValue) {
+            this.updateSelectedFilters(this.facet.id, facetValue);
+        },
 
-            isSelected(facetValue)
-            {
-                return this.isValueSelected(this.facet.id, facetValue);
-            },
+        isSelected(facetValue) {
+            return this.isValueSelected(this.facet.id, facetValue);
+        },
 
-            getSubCategoryValue(parentCategory, subCategory)
-            {
-                return parentCategory.name + '_' + subCategory.name;
-            }
+        getSubCategoryValue(parentCategory, subCategory) {
+            return parentCategory.name + '_' + subCategory.name;
         }
+    }
 });
