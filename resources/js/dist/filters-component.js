@@ -276,7 +276,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     methods: {
         /*
-         * Plentymarkets method for getting url params
+         * Plentymarkets standart method for parsing params from string into object
+         *
+         * @param {string} urlParams
          * @returns {Object}
          */
         getUrlParams: function getUrlParams(urlParams) {
@@ -300,8 +302,10 @@ exports.default = {
 
 
         /*
-         * FINDOLOGIC method for getting url params
-         * @returns {Object}
+         * FINDOLOGIC method for parsing url params into a parameter map from current url
+         * Taken from direct integration flUtils class
+         *
+         * @returns {{}} The parameter map
          */
         getSearchParams: function getSearchParams() {
             var queryString = document.location.search;

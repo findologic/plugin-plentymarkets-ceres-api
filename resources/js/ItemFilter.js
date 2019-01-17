@@ -11,23 +11,23 @@ Vue.component("item-filter", {
     ],
 
     computed: {
-            facets() {
-                return this.facet.values.sort((facetA, facetB) => {
-                    if (facetA.position > facetB.position) {
-                        return 1;
-                    } else if (facetA.position < facetB.position) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-            },
-
-            ...Vuex.mapState({
-                selectedFacets: state => state.itemList.selectedFacets,
-                isLoading: state => state.itemList.isLoading
-            })
+        facets() {
+            return this.facet.values.sort((facetA, facetB) => {
+                if (facetA.position > facetB.position) {
+                    return 1;
+                } else if (facetA.position < facetB.position) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
         },
+
+        ...Vuex.mapState({
+            selectedFacets: state => state.itemList.selectedFacets,
+            isLoading: state => state.itemList.isLoading
+        })
+    },
 
     created() {
         this.$options.template = this.template || "#vue-item-filter";

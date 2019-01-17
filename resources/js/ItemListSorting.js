@@ -23,23 +23,23 @@ Vue.component("item-list-sorting", {
     },
 
     methods: {
-            updateSorting() {
-                this.setUrlParamValue('sorting', this.selectedSorting);
-            },
+        updateSorting() {
+            this.setUrlParamValue('sorting', this.selectedSorting);
+        },
 
-            /**
-             * Determine the initial value and set it in the vuex storage.
-             */
-            setSelectedValue() {
-                const urlParams = this.getUrlParams(document.location.search);
+        /**
+         * Determine the initial value and set it in the vuex storage.
+         */
+        setSelectedValue() {
+            const urlParams = this.getUrlParams(document.location.search);
 
-                if (urlParams.sorting) {
-                    this.selectedSorting = urlParams.sorting;
-                } else {
-                    this.selectedSorting = this.defaultSorting;
-                }
-
-                this.$store.commit("setItemListSorting", this.selectedSorting);
+            if (urlParams.sorting) {
+                this.selectedSorting = urlParams.sorting;
+            } else {
+                this.selectedSorting = this.defaultSorting;
             }
+
+            this.$store.commit("setItemListSorting", this.selectedSorting);
         }
+    }
 });

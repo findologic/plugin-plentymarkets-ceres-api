@@ -32,7 +32,7 @@ class ParametersBuilder
     public function getCategoryService()
     {
         if (!$this->categoryService) {
-            $this->categoryService = pluginApp('\IO\Services\CategoryService');
+            $this->categoryService = pluginApp(CategoryService::class);
         }
 
         return $this->categoryService;
