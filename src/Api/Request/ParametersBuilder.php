@@ -8,6 +8,7 @@ use Plenty\Modules\Category\Models\Category;
 use Plenty\Plugin\Log\LoggerFactory;
 use IO\Services\CategoryService;
 use Ceres\Helper\ExternalSearch;
+use Plenty\Plugin\Http\Request as HttpRequest;
 
 class ParametersBuilder
 {
@@ -27,7 +28,7 @@ class ParametersBuilder
     }
 
     /**
-     * @return CategoryService|null
+     * @return CategoryService
      */
     public function getCategoryService()
     {
@@ -40,14 +41,36 @@ class ParametersBuilder
 
     /**
      * @param Request $request
+     * @param HttpRequest $httpRequest
      * @param ExternalSearch $externalSearch
      * @param Category|null $category
      * @return Request
      */
-    public function setSearchParams(Request $request, ExternalSearch $externalSearch, $category = null)
-    {
+    public function setSearchParams(
+        Request $request,
+        HttpRequest $httpRequest,
+        ExternalSearch $externalSearch,
+        $category = null
+    ) {
+        $parameters = (array) $httpRequest->all();
+
         $request->setParam('query', $externalSearch->searchString);
         $request->setPropertyParam(Plugin::API_PROPERTY_MAIN_VARIATION_ID);
+
+        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
+            $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
+            foreach ($attributes as $key => $value) {
+                if (is_array($value)) {
+                    $value = array_unique($value);
+                }
+
+                if ($key === 'cat' && $category) {
+                    continue;
+                }
+
+                $request->setAttributeParam($key, $value);
+            }
+        }
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
             $request->setParam('selected', ['cat' => [$categoryFullName]]);

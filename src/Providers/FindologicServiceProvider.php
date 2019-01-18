@@ -13,6 +13,7 @@ use Plenty\Plugin\ServiceProvider;
 use Plenty\Plugin\Log\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Helper\ResourceContainer;
+use IO\Helper\ComponentContainer;
 
 /**
  * Class FindologicServiceProvider
@@ -29,7 +30,7 @@ class FindologicServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //$this->getApplication()->register(FindologicRouteServiceProvider::class);
+        $this->getApplication()->singleton(SearchService::class);
     }
 
     /**
@@ -55,27 +56,33 @@ class FindologicServiceProvider extends ServiceProvider
             'IO.Resources.Import',
             function (ResourceContainer $container) use ($configRepository) {
                 $container->addScriptTemplate(
-                    'Findologic::content.script',
-                    [
-                        'shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, '')))
-                    ]
+                    'Findologic::content.scripts',
+                    ['shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, '')))]
                 );
+
+                $container->addStyleTemplate('Findologic::content.styles');
             }, 0
         );
 
         $eventDispatcher->listen(
             'Ceres.Search.Options',
             function (ExternalSearchOptions $searchOptions) use ($searchService, $request) {
-                $searchService->handleSearchOptions($searchOptions, $request);
+                $searchService->handleSearchOptions($request, $searchOptions);
             }
         );
 
         $eventDispatcher->listen(
             'Ceres.Search.Query',
             function (ExternalSearch $externalSearch) use ($searchService, $request) {
-                $searchService->handleSearchQuery($externalSearch);
+                $searchService->handleSearchQuery($request, $externalSearch);
             }
         );
+
+        $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
+            }
+        }, 0);
     }
 
     /**

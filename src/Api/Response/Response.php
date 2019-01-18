@@ -37,9 +37,12 @@ class Response
      * @param null $default
      * @return mixed|null
      */
-    public function getData($key, $default = null)
+    public function getData($key = null, $default = null)
     {
-        //TODO: maybe check if data for provided key is empty
+        if (!$key) {
+            return $this->data;
+        }
+
         return isset($this->data[$key]) ? $this->data[$key] : $default;
     }
 
