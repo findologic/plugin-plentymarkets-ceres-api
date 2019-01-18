@@ -1,0 +1,5 @@
+const PARAMETER_ATTRIBUTES = 'attrib';
+
+export default {
+    PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES
+}

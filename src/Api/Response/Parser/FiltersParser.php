@@ -9,6 +9,11 @@ namespace Findologic\Api\Response\Parser;
 class FiltersParser
 {
     /**
+     * @var int
+     */
+    protected $valueId;
+
+    /**
      * @param \SimpleXMLElement $data
      * @return array
      */
@@ -16,22 +21,29 @@ class FiltersParser
     {
         $filters = [];
 
-        if (!empty($data->filters) ) {
+        if (!empty($data->filters)) {
             foreach ($data->filters->filter as $filter) {
+                $filterName = $filter->name->__toString();
                 $filterData = [
-                    'name' => $filter->name->__toString(),
-                    'select' => $filter->select->__toString()
+                    'id' => $filterName,
+                    'name' => $filter->display->__toString(),
+                    'select' => $filter->select->__toString(),
+                    'type' => ''
                 ];
 
                 if ($filter->type) {
                     $filterData['type'] = $filter->type->__toString();
                 }
 
+                if ($filterName === 'price') {
+                    $filterData['type'] = 'price';
+                }
+
                 foreach ($filter->items->item as $item) {
                     $filterItem = [];
-                    $this->parseFilterItem($filterItem, $item);
+                    $this->parseFilterItem($filterData['type'], $filterItem, $item);
                     if (!empty($filterItem)) {
-                        $filterData['items'][] = $filterItem;
+                        $filterData['values'][] = $filterItem;
                     }
                 }
 
@@ -43,22 +55,29 @@ class FiltersParser
     }
 
     /**
-     * @param $filterItem
+     * @param string $filterType
+     * @param array $filterItem
      * @param \SimpleXMLElement $data
      * @return array
      */
-    public function parseFilterItem(&$filterItem, $data)
+    public function parseFilterItem($filterType, &$filterItem, $data)
     {
         if (!empty($data)) {
             $filterItem['name'] = $data->name->__toString();
-            $filterItem['weight'] = $data->weight->__toString();
-            $filterItem['frequency'] = $data->frequency->__toString();
+            $filterItem['position'] = $data->weight->__toString();
+            $filterItem['count'] = $data->frequency->__toString();
             $filterItem['image'] = $data->image->__toString();
+            $filterItem['id'] = ++$this->valueId;
+
+            if ($filterType === 'price') {
+                $filterItem['priceMin'] = $data->parameters->min;
+                $filterItem['priceMax'] = $data->parameters->max;
+            }
 
             if (!empty($data->items)) {
                 foreach ($data->items->item as $item) {
                     $newItem = [];
-                    $this->parseFilterItem($newItem, $item);
+                    $this->parseFilterItem($filterType, $newItem, $item);
                     $filterItem['items'][] = $newItem;
                 }
             }

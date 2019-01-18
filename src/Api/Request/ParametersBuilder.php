@@ -27,7 +27,7 @@ class ParametersBuilder
     }
 
     /**
-     * @return CategoryService|null
+     * @return CategoryService
      */
     public function getCategoryService()
     {
@@ -46,7 +46,7 @@ class ParametersBuilder
      */
     public function setSearchParams($request, $httpRequest, $category = null)
     {
-        $parameters = $httpRequest->all();
+        $parameters = (array) $httpRequest->all();
 
         $request->setParam('query', $parameters['query'] ?? '');
         $request->setPropertyParam(Plugin::API_PROPERTY_MAIN_VARIATION_ID);
@@ -54,6 +54,10 @@ class ParametersBuilder
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
             foreach ($attributes as $key => $value) {
+                if (is_array($value)) {
+                    $value = array_unique($value);
+                }
+
                 if ($key === 'cat' && $category) {
                     continue;
                 }
