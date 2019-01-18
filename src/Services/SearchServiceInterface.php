@@ -14,13 +14,13 @@ interface SearchServiceInterface
 {
     /**
      * @param Request $request
-     * @param ExternalSearchOptions|null $searchOptions
+     * @param ExternalSearchOptions $searchOptions
      */
-    public function handleSearchOptions($request, $searchOptions = null);
+    public function handleSearchOptions(Request $request, ExternalSearchOptions $searchOptions);
 
     /**
      * @param Request $request
-     * @param ExternalSearch|null $searchQuery
+     * @param ExternalSearch $externalSearch
      */
-    public function handleSearchQuery($request, $searchQuery = null);
+    public function handleSearchQuery(Request $request, ExternalSearch $externalSearch);
 }
