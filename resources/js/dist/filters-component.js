@@ -86,7 +86,7 @@ Vue.component("item-filter-price", {
         var values = this.getSelectedFilterValue(this.facet.id);
 
         this.priceMin = values ? values.min : "";
-        this.priceMax = values ? values.max : "";
+        this.priceMax = values ? values.max : Number.MAX_VALUE;
     },
 
 
@@ -424,6 +424,10 @@ exports.default = {
          */
         updateSelectedFilters: function updateSelectedFilters(facetId, facetValue) {
             var params = this.getSearchParams();
+
+            if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
 
             if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
                 params[_constants2.default.PARAMETER_ATTRIBUTES] = {};
