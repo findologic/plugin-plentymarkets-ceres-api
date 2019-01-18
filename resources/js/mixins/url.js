@@ -140,6 +140,10 @@ export default {
         updateSelectedFilters(facetId, facetValue) {
             let params = this.getSearchParams();
 
+            if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
+
             if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 params[Constants.PARAMETER_ATTRIBUTES] = {};
             }
