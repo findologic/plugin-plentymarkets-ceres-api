@@ -24,7 +24,7 @@ Vue.component("item-filter-price", {
         const values = this.getSelectedFilterValue(this.facet.id);
 
         this.priceMin = values ? values.min : "";
-        this.priceMax = values ? values.max : Number.MAX_VALUE;
+        this.priceMax = values ? values.max : "";
     },
 
     computed: {
@@ -46,6 +46,11 @@ Vue.component("item-filter-price", {
 
         triggerFilter() {
             if (!this.isDisabled) {
+                let facetValue = {
+                    min: this.priceMin,
+                    max: this.priceMax ? this.priceMax : Number.MAX_SAFE_INTEGER
+                };
+
                 this.updateSelectedFilters(this.facet.id, {min: this.priceMin, max: this.priceMax});
             }
         }

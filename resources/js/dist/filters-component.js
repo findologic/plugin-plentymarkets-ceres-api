@@ -86,7 +86,7 @@ Vue.component("item-filter-price", {
         var values = this.getSelectedFilterValue(this.facet.id);
 
         this.priceMin = values ? values.min : "";
-        this.priceMax = values ? values.max : Number.MAX_VALUE;
+        this.priceMax = values ? values.max : "";
     },
 
 
@@ -106,6 +106,11 @@ Vue.component("item-filter-price", {
         },
         triggerFilter: function triggerFilter() {
             if (!this.isDisabled) {
+                var facetValue = {
+                    min: this.priceMin,
+                    max: this.priceMax ? this.priceMax : Number.MAX_SAFE_INTEGER
+                };
+
                 this.updateSelectedFilters(this.facet.id, { min: this.priceMin, max: this.priceMax });
             }
         }
