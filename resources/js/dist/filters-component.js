@@ -111,7 +111,7 @@ Vue.component("item-filter-price", {
                     max: this.priceMax ? this.priceMax : Number.MAX_SAFE_INTEGER
                 };
 
-                this.updateSelectedFilters(this.facet.id, { min: this.priceMin, max: this.priceMax });
+                this.updateSelectedFilters(this.facet.id, facetValue);
             }
         }
     }
