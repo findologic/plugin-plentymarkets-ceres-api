@@ -5,9 +5,10 @@ namespace Findologic\Api\Request;
 use Findologic\Constants\Plugin;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
-use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use IO\Services\CategoryService;
+use Ceres\Helper\ExternalSearch;
+use Plenty\Plugin\Http\Request as HttpRequest;
 
 class ParametersBuilder
 {
@@ -27,7 +28,7 @@ class ParametersBuilder
     }
 
     /**
-     * @return CategoryService|null
+     * @return CategoryService
      */
     public function getCategoryService()
     {
@@ -41,19 +42,28 @@ class ParametersBuilder
     /**
      * @param Request $request
      * @param HttpRequest $httpRequest
+     * @param ExternalSearch $externalSearch
      * @param Category|null $category
      * @return Request
      */
-    public function setSearchParams($request, $httpRequest, $category = null)
-    {
-        $parameters = $httpRequest->all();
+    public function setSearchParams(
+        Request $request,
+        HttpRequest $httpRequest,
+        ExternalSearch $externalSearch,
+        $category = null
+    ) {
+        $parameters = (array) $httpRequest->all();
 
-        $request->setParam('query', $parameters['query'] ?? '');
+        $request->setParam('query', $externalSearch->searchString);
         $request->setPropertyParam(Plugin::API_PROPERTY_VARIATION_ID);
 
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
             foreach ($attributes as $key => $value) {
+                if (is_array($value)) {
+                    $value = array_unique($value);
+                }
+
                 if ($key === 'cat' && $category) {
                     continue;
                 }
@@ -66,32 +76,29 @@ class ParametersBuilder
             $request->setParam('selected', ['cat' => [$categoryFullName]]);
         }
 
-        if (isset($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER]) && in_array($parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $parameters[Plugin::PLENTY_PARAMETER_SORT_ORDER]);
+        if (in_array($externalSearch->sorting, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
+            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $externalSearch->sorting);
         }
 
-        $request = $this->setPagination($request, $parameters);
+        $request = $this->setPagination($request, $externalSearch);
 
         return $request;
     }
 
     /**
      * @param Request $request
-     * @param array $parameters
+     * @param ExternalSearch $externalSearch
      * @return Request
      */
-    protected function setPagination(Request $request, array $parameters)
+    protected function setPagination(Request $request, ExternalSearch $externalSearch)
     {
-        $pageSize = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE] ?? 0;
+        $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $externalSearch->itemsPerPage);
 
-        if ($pageSize > 0) {
-            $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $pageSize);
-        }
-
-        $paginationStart = $parameters[Plugin::PLENTY_PARAMETER_PAGINATION_START] ?? 0;
-
-        if ($paginationStart > 0) {
-            $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, $paginationStart);
+        if ($externalSearch->page > 1) {
+            $request->setParam(
+                Plugin::API_PARAMETER_PAGINATION_START,
+                ($externalSearch->page - 1) * $externalSearch->itemsPerPage
+            );
         }
 
         return $request;

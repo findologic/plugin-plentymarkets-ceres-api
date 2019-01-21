@@ -9,11 +9,11 @@ use Findologic\Api\Client;
 use Findologic\Constants\Plugin;
 use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
+use Ceres\Helper\ExternalSearch;
+use Ceres\Helper\ExternalSearchOptions;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
-use Ceres\Helper\ExternalSearch;
-use Ceres\Helper\ExternalSearchOptions;
 use IO\Services\CategoryService;
 
 /**
@@ -74,7 +74,7 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @return CategoryService|null
+     * @return CategoryService
      */
     public function getCategoryService()
     {
@@ -86,31 +86,36 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param ExternalSearch $searchQuery
-     * @param HttpRequest $request
+     * @return Response|null
      */
-    public function handleSearchQuery($searchQuery, $request)
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
-            $results = $this->search($request);
+            $results = $this->search($request, $externalSearch);
             $productsIds = $results->getVariationIds();
 
-            if (!empty($productsIds) && is_array($productsIds)) {
-                $searchQuery->setResults($productsIds, $results->getResultsCount());
-            }
-
-            //TODO: how to handle no results ?
+            /** @var ExternalSearch $searchQuery */
+            $externalSearch->setResults($productsIds, $results->getResultsCount());
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);
         }
+
+        return $this->results;
     }
 
     /**
-     * @param ExternalSearchOptions $searchOptions
-     * @param HttpRequest $request
+     * @inheritdoc
      */
-    public function handleSearchOptions($searchOptions, $request)
+    public function handleSearchOptions(HttpRequest $request, ExternalSearchOptions $searchOptions)
     {
         try {
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
@@ -122,17 +127,23 @@ class SearchService implements SearchServiceInterface
 
     /**
      * @param HttpRequest $request
+     * @param ExternalSearch $externalSearch
      * @return \Findologic\Api\Response\Response
      * @throws AliveException
      */
-    protected function search($request)
+    public function search(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
             $this->aliveTest();
 
+            /** @var CategoryService $category */
             $category = $this->getCategoryService() ?? null;
 
-            $apiRequest = $this->requestBuilder->build($request, $category ? $category->getCurrentCategory() : null);
+            $apiRequest = $this->requestBuilder->build(
+                $request,
+                $externalSearch,
+                $category ? $category->getCurrentCategory() : null
+            );
             $this->results = $this->responseParser->parse($this->client->call($apiRequest));
         } catch (AliveException $e) {
             $this->logger->error('Findologic server did not responded to alive request. ' . $e->getMessage());

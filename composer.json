@@ -8,7 +8,6 @@
     "findologic/http_request2": "2.3.1",
     "plentymarkets/plugin-ceres": "2.17.1",
     "plentymarkets/plugin-io": "2.17.1"
-
   },
   "require-dev": {
     "phpunit/phpunit": "^6"
