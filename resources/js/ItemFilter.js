@@ -35,10 +35,18 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
+            if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
+
             this.updateSelectedFilters(this.facet.id, facetValue);
         },
 
         isSelected(facetValue) {
+            if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
+
             return this.isValueSelected(this.facet.id, facetValue);
         },
 

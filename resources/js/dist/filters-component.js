@@ -44,9 +44,17 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
+            if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
+
             this.updateSelectedFilters(this.facet.id, facetValue);
         },
         isSelected: function isSelected(facetValue) {
+            if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
+
             return this.isValueSelected(this.facet.id, facetValue);
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
@@ -429,10 +437,6 @@ exports.default = {
          */
         updateSelectedFilters: function updateSelectedFilters(facetId, facetValue) {
             var params = this.getSearchParams();
-
-            if (facetValue.hasOwnProperty('name')) {
-                facetValue = facetValue.name;
-            }
 
             if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
                 params[_constants2.default.PARAMETER_ATTRIBUTES] = {};
