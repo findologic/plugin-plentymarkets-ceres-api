@@ -44,14 +44,18 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
-            if (facetValue.hasOwnProperty('name')) {
+            if (typeof facetValue.name === 'function') {
+                facetValue = facetValue.name();
+            } else if (facetValue.hasOwnProperty('name')) {
                 facetValue = facetValue.name;
             }
 
             this.updateSelectedFilters(this.facet.id, facetValue);
         },
         isSelected: function isSelected(facetValue) {
-            if (facetValue.hasOwnProperty('name')) {
+            if (typeof facetValue.name === 'function') {
+                facetValue = facetValue.name();
+            } else if (facetValue.hasOwnProperty('name')) {
                 facetValue = facetValue.name;
             }
 

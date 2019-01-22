@@ -35,7 +35,9 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
-            if (facetValue.hasOwnProperty('name')) {
+            if (typeof facetValue.name === 'function') {
+                facetValue = facetValue.name();
+            } else if (facetValue.hasOwnProperty('name')) {
                 facetValue = facetValue.name;
             }
 
@@ -43,7 +45,9 @@ Vue.component("item-filter", {
         },
 
         isSelected(facetValue) {
-            if (facetValue.hasOwnProperty('name')) {
+            if (typeof facetValue.name === 'function') {
+                facetValue = facetValue.name();
+            } else if (facetValue.hasOwnProperty('name')) {
                 facetValue = facetValue.name;
             }
 
