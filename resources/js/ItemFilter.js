@@ -35,10 +35,22 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
+            if (typeof facetValue.name === 'function') {
+                facetValue = facetValue.name();
+            } else if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
+
             this.updateSelectedFilters(this.facet.id, facetValue);
         },
 
         isSelected(facetValue) {
+            if (typeof facetValue.name === 'function') {
+                facetValue = facetValue.name();
+            } else if (facetValue.hasOwnProperty('name')) {
+                facetValue = facetValue.name;
+            }
+
             return this.isValueSelected(this.facet.id, facetValue);
         },
 

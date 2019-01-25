@@ -23,7 +23,7 @@ class Plugin
     const API_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'count';
     const API_PARAMETER_PAGINATION_START = 'first';
 
-    const API_PROPERTY_MAIN_VARIATION_ID = 'main_variation_id';
+    const API_PROPERTY_VARIATION_ID = 'variation_id';
 
     const API_CONFIGURATION_KEY_CONNECTION_TIME_OUT = 'connection_time_out';
     const API_CONFIGURATION_KEY_TIME_OUT = 'time_out';
