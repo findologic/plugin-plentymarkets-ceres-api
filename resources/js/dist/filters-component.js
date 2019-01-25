@@ -55,7 +55,7 @@ Vue.component("item-filter", {
     }
 });
 
-},{"./mixins/url":7}],2:[function(require,module,exports){
+},{"./mixins/url":8}],2:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -117,7 +117,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"./mixins/url":7}],3:[function(require,module,exports){
+},{"./mixins/url":8}],3:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -151,7 +151,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"./mixins/url":7}],4:[function(require,module,exports){
+},{"./mixins/url":8}],4:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -201,7 +201,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"./mixins/url":7}],5:[function(require,module,exports){
+},{"./mixins/url":8}],5:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -251,7 +251,80 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"./mixins/url":7}],6:[function(require,module,exports){
+},{"./mixins/url":8}],6:[function(require,module,exports){
+"use strict";
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _url = require("./mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("pagination", {
+    mixins: [_url2.default],
+
+    delimiters: ["${", "}"],
+
+    props: ["template"],
+
+    data: function data() {
+        return {
+            lastPageMax: 0
+        };
+    },
+
+
+    computed: _extends({
+        pageMax: function pageMax() {
+            if (this.isLoading) {
+                return this.lastPageMax;
+            }
+
+            var pageMax = this.totalItems / parseInt(this.itemsPerPage);
+
+            if (this.totalItems % parseInt(this.itemsPerPage) > 0) {
+                pageMax += 1;
+            }
+
+            this.lastPageMax = parseInt(pageMax) || 1;
+
+            return parseInt(pageMax) || 1;
+        }
+    }, Vuex.mapState({
+        page: function page(state) {
+            return state.itemList.page || 1;
+        },
+        isLoading: function isLoading(state) {
+            return state.itemList.isLoading;
+        },
+        itemsPerPage: function itemsPerPage(state) {
+            return state.itemList.itemsPerPage;
+        },
+        totalItems: function totalItems(state) {
+            return state.itemList.totalItems;
+        }
+    })),
+
+    created: function created() {
+        this.$options.template = this.template;
+
+        var urlParams = this.getUrlParams(document.location.search);
+        var page = urlParams.page || 1;
+
+        this.$store.commit("setItemListPage", parseInt(page));
+    },
+
+
+    methods: {
+        setPage: function setPage(page) {
+            this.setUrlParamValue('page', page);
+        }
+    }
+});
+
+},{"./mixins/url":8}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -263,7 +336,7 @@ exports.default = {
     PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -658,7 +731,7 @@ exports.default = {
     }
 };
 
-},{"../constants":6}]},{},[1,2,3,4,5])
+},{"../constants":7}]},{},[1,2,3,4,5,6])
 
 
 //# sourceMappingURL=filters-component.js.map
