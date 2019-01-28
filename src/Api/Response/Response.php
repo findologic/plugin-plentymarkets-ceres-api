@@ -63,14 +63,14 @@ class Response
     /**
      * @return array
      */
-    public function getProductMainVariationsIds()
+    public function getVariationIds()
     {
         $ids = [];
 
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
             foreach ($products as $product) {
-                if (isset($product['properties'][Plugin::API_PROPERTY_MAIN_VARIATION_ID])) {
-                    $ids[] = (int)$product['properties'][Plugin::API_PROPERTY_MAIN_VARIATION_ID];
+                if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
+                    $ids[] = (int)$product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
                 }
             }
         }

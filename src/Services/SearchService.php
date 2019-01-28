@@ -100,7 +100,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $results = $this->search($request, $externalSearch);
-            $productsIds = $results->getProductMainVariationsIds();
+            $productsIds = $results->getVariationIds();
 
             /** @var ExternalSearch $searchQuery */
             $externalSearch->setResults($productsIds, $results->getResultsCount());
