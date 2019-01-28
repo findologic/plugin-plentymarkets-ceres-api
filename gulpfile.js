@@ -15,17 +15,17 @@ const sourcemaps = require("gulp-sourcemaps")
 
 gulp.task("js", () => {
     var builder = browserify({
-        entries: ["ItemFilter.js", "ItemFilterPrice.js", "ItemFilterTagList.js", "ItemListSorting.js", "ItemsPerPage.js"],
+        entries: ["ItemFilter.js", "ItemFilterPrice.js", "ItemFilterTagList.js", "ItemListSorting.js", "ItemsPerPage.js", "Pagination.js"],
         debug: true,
         basedir: JS_SRC,
         paths: ["./resources/js"],
         transform: babelify
-    })
+    });
 
     return builder
         .bundle()
         .on("error", function(err) {
-            console.log(err.toString())
+            console.log(err.toString());
             this.emit("end")
         })
         .pipe(source(OUTPUT_PREFIX + "-component.js"))
