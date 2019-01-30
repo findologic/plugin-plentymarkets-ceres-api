@@ -1,4 +1,4 @@
-import url from "./mixins/url";
+import url from "../../mixins/url";
 
 Vue.component("item-list-sorting", {
     mixins: [url],

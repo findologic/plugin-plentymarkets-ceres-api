@@ -1,4 +1,4 @@
-import url from './mixins/url'
+import url from '../../../mixins/url'
 
 Vue.component("item-filter", {
     mixins: [url],
@@ -35,23 +35,11 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
-            if (typeof facetValue.name === 'function') {
-                facetValue = facetValue.name();
-            } else if (facetValue.hasOwnProperty('name')) {
-                facetValue = facetValue.name;
-            }
-
-            this.updateSelectedFilters(this.facet.id, facetValue);
+            this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
 
-        isSelected(facetValue) {
-            if (typeof facetValue.name === 'function') {
-                facetValue = facetValue.name();
-            } else if (facetValue.hasOwnProperty('name')) {
-                facetValue = facetValue.name;
-            }
-
-            return this.isValueSelected(this.facet.id, facetValue);
+        isSelected(facetValueId) {
+            return this.selectedFacets.findIndex(selectedFacet => selectedFacet.id === facetValueId) > -1;
         },
 
         getSubCategoryValue(parentCategory, subCategory) {

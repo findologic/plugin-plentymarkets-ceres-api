@@ -1,4 +1,4 @@
-import url from "./mixins/url";
+import url from "../../mixins/url";
 
 Vue.component("items-per-page", {
     mixins: [url],
