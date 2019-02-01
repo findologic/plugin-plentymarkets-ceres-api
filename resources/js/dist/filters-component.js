@@ -223,7 +223,7 @@ var _url2 = _interopRequireDefault(_url);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Vue.component("item-search", {
-
+    mixins: [_url2.default],
     props: {
         template: {
             type: String,
