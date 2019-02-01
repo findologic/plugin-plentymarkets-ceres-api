@@ -2,23 +2,10 @@ import Url from "./mixins/url";
 
 Vue.component("item-search", {
     mixins: [Url],
-    props: {
-        template:
-            {
-                type: String,
-                default: "#vue-item-search"
-            },
-        showItemImages:
-            {
-                type: Boolean,
-                default: false
-            },
-        forwardToSingleItem:
-            {
-                type: Boolean,
-                default: App.config.search.forwardToSingleItem
-            }
-    },
+    delimiters: ["${", "}"],
+    props: [
+        "template"
+    ],
 
     data()
     {

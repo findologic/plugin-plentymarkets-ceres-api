@@ -224,20 +224,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 Vue.component("item-search", {
     mixins: [_url2.default],
-    props: {
-        template: {
-            type: String,
-            default: "#vue-item-search"
-        },
-        showItemImages: {
-            type: Boolean,
-            default: false
-        },
-        forwardToSingleItem: {
-            type: Boolean,
-            default: App.config.search.forwardToSingleItem
-        }
-    },
+    delimiters: ["${", "}"],
+    props: ["template"],
 
     data: function data() {
         return {
