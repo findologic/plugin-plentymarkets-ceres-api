@@ -35,10 +35,12 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
-            this.updateSelectedFilters(this.facet.id, facetValue.name);
+            console.log(facetValue);
+            this.updateSelectedFilters(facetValue.id, facetValue.name);
         },
 
         isSelected(facetValueId) {
+            console.log(facetValueId);
             return this.selectedFacets.findIndex(selectedFacet => selectedFacet.id === facetValueId) > -1;
         },
 
