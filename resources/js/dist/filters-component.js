@@ -67,7 +67,7 @@ Vue.component("item-filter", {
     }
 });
 
-},{"./mixins/url":8}],2:[function(require,module,exports){
+},{"./mixins/url":9}],2:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -129,7 +129,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"./mixins/url":8}],3:[function(require,module,exports){
+},{"./mixins/url":9}],3:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -163,7 +163,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"./mixins/url":8}],4:[function(require,module,exports){
+},{"./mixins/url":9}],4:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -213,7 +213,98 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"./mixins/url":8}],5:[function(require,module,exports){
+},{"./mixins/url":9}],5:[function(require,module,exports){
+"use strict";
+
+var _url = require("./mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-search", {
+
+    props: {
+        template: {
+            type: String,
+            default: "#vue-item-search"
+        },
+        showItemImages: {
+            type: Boolean,
+            default: false
+        },
+        forwardToSingleItem: {
+            type: Boolean,
+            default: App.config.search.forwardToSingleItem
+        }
+    },
+
+    data: function data() {
+        return {
+            isSearchFocused: false
+        };
+    },
+
+
+    computed: {
+        selectedAutocompleteItem: function selectedAutocompleteItem() {
+            return null;
+        }
+    },
+
+    created: function created() {
+        this.$options.template = this.template;
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        this.$nextTick(function () {
+            var urlParams = _url2.default.getUrlParams(document.location.search);
+
+            _this.$store.commit("setItemListSearchString", urlParams.query);
+
+            if (urlParams === null || typeof urlParams === 'undefined') {
+                _this.$refs.searchInput.value = '';
+            } else {
+                _this.$refs.searchInput.value = urlParams.query;
+            }
+        });
+    },
+
+
+    methods: {
+        prepareSearch: function prepareSearch() {
+            this.search();
+
+            $("#searchBox").collapse("hide");
+        },
+        search: function search() {
+            var searchBaseURL = "/search?query=";
+
+            if (App.defaultLanguage !== App.language) {
+                searchBaseURL = "/" + App.language + "/search?query=";
+            }
+
+            window.open(searchBaseURL + this.$refs.searchInput.value, "_self", false);
+        },
+        autocomplete: function autocomplete(searchString) {},
+        selectAutocompleteItem: function selectAutocompleteItem(item) {},
+        keyup: function keyup() {},
+        keydown: function keydown() {},
+
+
+        // hide autocomplete after 100ms to make clicking on it possible
+        setIsSearchFocused: function setIsSearchFocused(value) {
+            var _this2 = this;
+
+            setTimeout(function () {
+                _this2.isSearchFocused = !!value;
+            }, 100);
+        }
+    }
+});
+
+},{"./mixins/url":9}],6:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
@@ -263,7 +354,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"./mixins/url":8}],6:[function(require,module,exports){
+},{"./mixins/url":9}],7:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -336,7 +427,7 @@ Vue.component("pagination", {
     }
 });
 
-},{"./mixins/url":8}],7:[function(require,module,exports){
+},{"./mixins/url":9}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -348,7 +439,7 @@ exports.default = {
     PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -739,7 +830,7 @@ exports.default = {
     }
 };
 
-},{"../constants":7}]},{},[1,2,3,4,5,6])
+},{"../constants":8}]},{},[1,2,3,4,6,7,5])
 
 
 //# sourceMappingURL=filters-component.js.map
