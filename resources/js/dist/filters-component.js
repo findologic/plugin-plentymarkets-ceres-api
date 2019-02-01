@@ -314,7 +314,9 @@ Vue.component("item-filter", {
             var facet = this.facets.filter(function (facet) {
                 return facet.id === facetValueId;
             });
-            return this.isValueSelected(this.facet.id, facet.name);
+            if (facet.length === 1) {
+                return this.isValueSelected(this.facet.id, facet[0].name);
+            }
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return parentCategory.name + '_' + subCategory.name;
