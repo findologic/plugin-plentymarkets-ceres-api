@@ -15,7 +15,7 @@
                 </div>
                 <div class="sub-category-container" v-if="value.items.length > 0">
                     <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
-                        <input :id="'option-' + subCategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="isSelected(value.id)" @change="updateFacet(value)" :disabled="isLoading">
+                        <input :id="'option-' + subCategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="isSelected(subCategory.id)" @change="updateFacet(subCategory)" :disabled="isLoading">
                         <label :for="'option-' + subCategory.id" class="form-check-label">
                             ${ subCategory.name }
                         </label>
