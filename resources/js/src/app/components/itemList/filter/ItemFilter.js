@@ -39,7 +39,10 @@ Vue.component("item-filter", {
         },
 
         isSelected(facetValueId) {
-            return this.selectedFacets.findIndex(selectedFacet => selectedFacet.id === facetValueId) > -1;
+            const facet = this.facets.filter((facet) => {
+                return facet.id === facetValueId
+            });
+            return this.isValueSelected(this.facet.id, facet.name)
         },
 
         getSubCategoryValue(parentCategory, subCategory) {

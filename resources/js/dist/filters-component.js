@@ -311,9 +311,10 @@ Vue.component("item-filter", {
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
         isSelected: function isSelected(facetValueId) {
-            return this.selectedFacets.findIndex(function (selectedFacet) {
-                return selectedFacet.id === facetValueId;
-            }) > -1;
+            var facet = this.facets.filter(function (facet) {
+                return facet.id === facetValueId;
+            });
+            return this.isValueSelected(this.facet.id, facet.name);
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return parentCategory.name + '_' + subCategory.name;
