@@ -35,7 +35,7 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
-            this.updateSelectedFilters(facetValue.id, facetValue.name);
+            this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
 
         isSelected(facetValueId) {
