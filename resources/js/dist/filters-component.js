@@ -216,50 +216,12 @@ Vue.component("item-list-sorting", {
 },{"./mixins/url":9}],5:[function(require,module,exports){
 "use strict";
 
-var _url = require("./mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 Vue.component("item-search", {
-    mixins: [_url2.default],
-    delimiters: ["${", "}"],
-    props: ["template"],
-
-    data: function data() {
-        return {
-            isSearchFocused: false
-        };
-    },
-
-
     computed: {
         selectedAutocompleteItem: function selectedAutocompleteItem() {
             return null;
         }
     },
-
-    created: function created() {
-        this.$options.template = this.template;
-    },
-    mounted: function mounted() {
-        var _this = this;
-
-        this.$nextTick(function () {
-            var urlParams = _url2.default.getUrlParams(document.location.search);
-
-            _this.$store.commit("setItemListSearchString", urlParams.query);
-
-            if (urlParams === null || typeof urlParams === 'undefined') {
-                _this.$refs.searchInput.value = '';
-            } else {
-                _this.$refs.searchInput.value = urlParams.query;
-            }
-        });
-    },
-
-
     methods: {
         prepareSearch: function prepareSearch() {
             this.search();
@@ -278,21 +240,11 @@ Vue.component("item-search", {
         autocomplete: function autocomplete(searchString) {},
         selectAutocompleteItem: function selectAutocompleteItem(item) {},
         keyup: function keyup() {},
-        keydown: function keydown() {},
-
-
-        // hide autocomplete after 100ms to make clicking on it possible
-        setIsSearchFocused: function setIsSearchFocused(value) {
-            var _this2 = this;
-
-            setTimeout(function () {
-                _this2.isSearchFocused = !!value;
-            }, 100);
-        }
+        keydown: function keydown() {}
     }
 });
 
-},{"./mixins/url":9}],6:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 var _url = require("./mixins/url");
