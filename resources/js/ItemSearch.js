@@ -4,6 +4,14 @@ Vue.component("item-search", {
         'template'
     ],
 
+    data()
+    {
+        return {
+            isSearchFocused: false
+        };
+    },
+
+
     computed:
     {
         selectedAutocompleteItem()
@@ -52,6 +60,15 @@ Vue.component("item-search", {
 
         keydown()
         {
+        },
+
+        // hide autocomplete after 100ms to make clicking on it possible
+        setIsSearchFocused(value)
+        {
+            setTimeout(() =>
+            {
+                this.isSearchFocused = !!value;
+            }, 100);
         }
     }
 });

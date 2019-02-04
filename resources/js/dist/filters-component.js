@@ -220,6 +220,13 @@ Vue.component("item-search", {
 
     props: ['template'],
 
+    data: function data() {
+        return {
+            isSearchFocused: false
+        };
+    },
+
+
     computed: {
         selectedAutocompleteItem: function selectedAutocompleteItem() {
             return null;
@@ -249,7 +256,17 @@ Vue.component("item-search", {
         autocomplete: function autocomplete(searchString) {},
         selectAutocompleteItem: function selectAutocompleteItem(item) {},
         keyup: function keyup() {},
-        keydown: function keydown() {}
+        keydown: function keydown() {},
+
+
+        // hide autocomplete after 100ms to make clicking on it possible
+        setIsSearchFocused: function setIsSearchFocused(value) {
+            var _this = this;
+
+            setTimeout(function () {
+                _this.isSearchFocused = !!value;
+            }, 100);
+        }
     }
 });
 
