@@ -214,28 +214,37 @@ Vue.component("item-list-sorting", {
 });
 
 },{"./mixins/url":9}],5:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Vue.component("item-search", {
+
+    props: ['template'],
+
     computed: {
         selectedAutocompleteItem: function selectedAutocompleteItem() {
             return null;
         }
     },
+
+    created: function created() {
+        this.$options.template = this.template;
+    },
+
+
     methods: {
         prepareSearch: function prepareSearch() {
             this.search();
 
-            $("#searchBox").collapse("hide");
+            $('#searchBox').collapse('hide');
         },
         search: function search() {
-            var searchBaseURL = "/search?query=";
+            var searchBaseURL = '/search?query=';
 
             if (App.defaultLanguage !== App.language) {
-                searchBaseURL = "/" + App.language + "/search?query=";
+                searchBaseURL = '/' + App.language + '/search?query=';
             }
 
-            window.open(searchBaseURL + this.$refs.searchInput.value, "_self", false);
+            window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
         autocomplete: function autocomplete(searchString) {},
         selectAutocompleteItem: function selectAutocompleteItem(item) {},
