@@ -7,6 +7,9 @@ Vue.component("item-search", {
     data()
     {
         return {
+            promiseCount: 0,
+            autocompleteResult: [],
+            selectedAutocompleteIndex: -1,
             isSearchFocused: false
         };
     },
