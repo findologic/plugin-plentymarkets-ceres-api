@@ -52,13 +52,6 @@ class FindologicServiceProvider extends ServiceProvider
             return;
         }
 
-        if (
-            strpos($request->getUri(), '/search') === false &&
-            !$configRepository->get(Plugin::CONFIG_NAVIGATION_SEARCH_ENABLED, false)
-        ) {
-            return;
-        }
-
         $eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) use ($configRepository) {
@@ -70,6 +63,13 @@ class FindologicServiceProvider extends ServiceProvider
                 $container->addStyleTemplate('Findologic::content.styles');
             }, 0
         );
+
+        if (
+            strpos($request->getUri(), '/search') === false &&
+            !$configRepository->get(Plugin::CONFIG_NAVIGATION_SEARCH_ENABLED, false)
+        ) {
+            return;
+        }
 
         $eventDispatcher->listen(
             'Ceres.Search.Options',
