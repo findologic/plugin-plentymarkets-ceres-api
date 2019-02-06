@@ -12,6 +12,17 @@
   },
   {
     "tab": "Findologic Search",
+    "key": "nav_enabled",
+    "label": "Navigation search enabled",
+    "type": "dropdown",
+    "possibleValues": {
+      "0": "No",
+      "1": "Yes"
+    },
+    "default"   : "0"
+  },
+  {
+    "tab": "Findologic Search",
     "key": "url",
     "label": "Search server url",
     "type": "text",

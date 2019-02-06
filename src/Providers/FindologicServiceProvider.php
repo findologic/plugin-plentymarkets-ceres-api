@@ -52,6 +52,13 @@ class FindologicServiceProvider extends ServiceProvider
             return;
         }
 
+        if (
+            strpos($request->getUri(), '/search') === false &&
+            !$configRepository->get(Plugin::CONFIG_NAVIGATION_SEARCH_ENABLED, false)
+        ) {
+            return;
+        }
+
         $eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) use ($configRepository) {

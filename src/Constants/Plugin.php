@@ -33,6 +33,7 @@ class Plugin
     const API_SORT_ORDER_AVAILABLE_OPTIONS = ['price ASC', 'price DESC', 'label ASC', 'label DESC', 'salesfrequency ASC', 'salesfrequency DESC', 'dateadded ASC', 'dateadded DESC'];
 
     const CONFIG_ENABLED = 'Findologic.enabled';
+    const CONFIG_NAVIGATION_SEARCH_ENABLED = 'Findologic.nav_enabled';
     const CONFIG_URL = 'Findologic.url';
     const CONFIG_SHOPKEY = 'Findologic.shopkey';
 }
