@@ -64,6 +64,12 @@ class FindologicServiceProvider extends ServiceProvider
             }, 0
         );
 
+        $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
+            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
+            }
+        }, 0);
+
         if (
             strpos($request->getUri(), '/search') === false &&
             !$configRepository->get(Plugin::CONFIG_NAVIGATION_SEARCH_ENABLED, false)
@@ -84,12 +90,6 @@ class FindologicServiceProvider extends ServiceProvider
                 $searchService->handleSearchQuery($request, $externalSearch);
             }
         );
-
-        $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
-            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
-                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
-            }
-        }, 0);
     }
 
     /**
