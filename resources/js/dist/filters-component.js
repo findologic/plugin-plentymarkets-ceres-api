@@ -284,7 +284,7 @@ Vue.component("item-filter", {
                 return value.id === facetValueId;
             });
 
-            return this.isValueSelected(this.facet.id, facetValue);
+            return this.isValueSelected(this.facet.id, facetValue.name);
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return {
