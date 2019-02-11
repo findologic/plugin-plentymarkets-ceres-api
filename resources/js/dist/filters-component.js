@@ -280,9 +280,13 @@ Vue.component("item-filter", {
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
         isSelected: function isSelected(facetValueId) {
-            return this.facets.filter(function (facet) {
+            var facet = this.facets.filter(function (facet) {
                 return facet.id === facetValueId;
             });
+
+            if (facet.length === 1) {
+                return this.isValueSelected(this.facet.id, facet[0].name);
+            }
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return {
@@ -627,17 +631,15 @@ exports.default = {
 
             if (!(facetId in attributes)) {
                 return false;
-            }
-
-            if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
+            } else if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
                 return true;
-            }
-
-            if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
+            } else if (facetId === 'cat') {
+                return this.getKeyBySuffix(attributes[facetId], facetValue) !== -1;
+            } else if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
                 return true;
+            } else {
+                return false;
             }
-
-            return false;
         },
 
 
@@ -781,6 +783,26 @@ exports.default = {
             for (var prop in object) {
                 if (object.hasOwnProperty(prop)) {
                     if (object[prop] === value) {
+                        return prop;
+                    }
+                }
+            }
+
+            return -1;
+        },
+
+
+        /*
+         * Get key from object by value suffix
+         *
+         * @param {Object} object
+         * @param {string} value
+         * @returns {string|number}
+         */
+        getKeyBySuffix: function getKeyBySuffix(object, value) {
+            for (var prop in object) {
+                if (object.hasOwnProperty(prop)) {
+                    if (object[prop].endsWith(value)) {
                         return prop;
                     }
                 }

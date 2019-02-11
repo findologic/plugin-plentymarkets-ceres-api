@@ -199,17 +199,15 @@ export default {
 
             if (!(facetId in attributes)) {
                 return false;
-            }
-
-            if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
+            } else if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
                 return true;
-            }
-
-            if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
+            } else if (facetId === 'cat') {
+                return this.getKeyBySuffix(attributes[facetId], facetValue) !== -1;
+            } else if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
                 return true;
+            } else {
+                return false;
             }
-
-            return false;
         },
 
         /*
@@ -347,6 +345,25 @@ export default {
             for (var prop in object) {
                 if (object.hasOwnProperty(prop)) {
                     if (object[prop] === value) {
+                        return prop;
+                    }
+                }
+            }
+
+            return -1;
+        },
+
+        /*
+         * Get key from object by value suffix
+         *
+         * @param {Object} object
+         * @param {string} value
+         * @returns {string|number}
+         */
+        getKeyBySuffix(object, value) {
+            for (var prop in object) {
+                if (object.hasOwnProperty(prop)) {
+                    if (object[prop].endsWith(value)) {
                         return prop;
                     }
                 }
