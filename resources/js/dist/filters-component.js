@@ -49,33 +49,17 @@ Vue.component("item-list-sorting", {
 });
 
 },{"../../mixins/url":9}],2:[function(require,module,exports){
-"use strict";
-
-var _url = require("../../mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+'use strict';
 
 Vue.component("item-search", {
 
-    props: {
-        template: {
-            type: String,
-            default: "#vue-item-search"
-        },
-        showItemImages: {
-            type: Boolean,
-            default: false
-        },
-        forwardToSingleItem: {
-            type: Boolean,
-            default: App.config.search.forwardToSingleItem
-        }
-    },
+    props: ['template'],
 
     data: function data() {
         return {
+            promiseCount: 0,
+            autocompleteResult: [],
+            selectedAutocompleteIndex: -1,
             isSearchFocused: false
         };
     },
@@ -90,37 +74,22 @@ Vue.component("item-search", {
     created: function created() {
         this.$options.template = this.template;
     },
-    mounted: function mounted() {
-        var _this = this;
-
-        this.$nextTick(function () {
-            var urlParams = _this.getUrlParams(document.location.search);
-
-            _this.$store.commit("setItemListSearchString", urlParams.query);
-
-            if (urlParams === null || typeof urlParams === 'undefined') {
-                _this.$refs.searchInput.value = '';
-            } else {
-                _this.$refs.searchInput.value = urlParams.query;
-            }
-        });
-    },
 
 
     methods: {
         prepareSearch: function prepareSearch() {
             this.search();
 
-            $("#searchBox").collapse("hide");
+            $('#searchBox').collapse('hide');
         },
         search: function search() {
-            var searchBaseURL = "/search?query=";
+            var searchBaseURL = '/search?query=';
 
             if (App.defaultLanguage !== App.language) {
-                searchBaseURL = "/" + App.language + "/search?query=";
+                searchBaseURL = '/' + App.language + '/search?query=';
             }
 
-            window.open(searchBaseURL + this.$refs.searchInput.value, "_self", false);
+            window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
         autocomplete: function autocomplete(searchString) {},
         selectAutocompleteItem: function selectAutocompleteItem(item) {},
@@ -130,16 +99,16 @@ Vue.component("item-search", {
 
         // hide autocomplete after 100ms to make clicking on it possible
         setIsSearchFocused: function setIsSearchFocused(value) {
-            var _this2 = this;
+            var _this = this;
 
             setTimeout(function () {
-                _this2.isSearchFocused = !!value;
+                _this.isSearchFocused = !!value;
             }, 100);
         }
     }
 });
 
-},{"../../mixins/url":9}],3:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../mixins/url");
