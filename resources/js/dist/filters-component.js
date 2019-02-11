@@ -277,19 +277,18 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
+            this.$store.commit('toggleSelectedFacet', facetValue);
+
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
         isSelected: function isSelected(facetValueId) {
-            var facet = this.facets.filter(function (facet) {
-                return facet.id === facetValueId;
-            });
-
-            if (facet.length === 1) {
-                return this.isValueSelected(this.facet.id, facet[0].name);
-            }
+            return this.selectedFacets.findIndex(function (selectedFacet) {
+                return selectedFacet.id === facetValueId;
+            }) > -1;
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return {
+                id: subCategory.id,
                 name: parentCategory.name + '_' + subCategory.name
             };
         }

@@ -35,19 +35,18 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
+            this.$store.commit('toggleSelectedFacet', facetValue);
+
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
 
         isSelected(facetValueId) {
-            const facet = this.facets.filter(facet => facet.id === facetValueId);
-
-            if (facet.length === 1) {
-                return this.isValueSelected(this.facet.id, facet[0].name)
-            }
+            return this.selectedFacets.findIndex(selectedFacet => selectedFacet.id === facetValueId) > -1;
         },
 
         getSubCategoryValue(parentCategory, subCategory) {
             return {
+                id: subCategory.id,
                 name: parentCategory.name + '_' + subCategory.name
             };
         }
