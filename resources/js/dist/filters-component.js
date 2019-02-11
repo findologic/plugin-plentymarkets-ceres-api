@@ -263,8 +263,9 @@ Vue.component("item-filter", {
         }
     }, Vuex.mapState({
         selectedFacets: function selectedFacets() {
-            return undefined.getSelectedFilters();
+            return this.getSelectedFilters();
         },
+
         isLoading: function isLoading(state) {
             return state.itemList.isLoading;
         }
