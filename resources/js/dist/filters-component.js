@@ -48,7 +48,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"../../mixins/url":9}],2:[function(require,module,exports){
+},{"../../mixins/url":10}],2:[function(require,module,exports){
 'use strict';
 
 Vue.component("item-search", {
@@ -158,7 +158,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"../../mixins/url":9}],4:[function(require,module,exports){
+},{"../../mixins/url":10}],4:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -231,7 +231,7 @@ Vue.component("pagination", {
     }
 });
 
-},{"../../mixins/url":9}],5:[function(require,module,exports){
+},{"../../mixins/url":10}],5:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -312,7 +312,7 @@ Vue.component("item-filter", {
     }
 });
 
-},{"../../../mixins/url":9}],6:[function(require,module,exports){
+},{"../../../mixins/url":10}],6:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -374,7 +374,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"../../../mixins/url":9}],7:[function(require,module,exports){
+},{"../../../mixins/url":10}],7:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../../mixins/url");
@@ -408,7 +408,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"../../../mixins/url":9}],8:[function(require,module,exports){
+},{"../../../mixins/url":10}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -421,6 +421,19 @@ exports.default = {
 };
 
 },{}],9:[function(require,module,exports){
+"use strict";
+
+Vue.directive("render-category", {
+    bind: function bind(el, binding) {
+        el.onclick = function (event) {
+            event.preventDefault();
+
+            window.open(event.target.href, '_self');
+        };
+    }
+});
+
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -829,7 +842,7 @@ exports.default = {
     }
 };
 
-},{"../constants":8}]},{},[5,6,7,1,3,4,2])
+},{"../constants":8}]},{},[5,6,7,1,3,4,2,9])
 
 
 //# sourceMappingURL=filters-component.js.map
