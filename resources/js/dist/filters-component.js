@@ -262,10 +262,9 @@ Vue.component("item-filter", {
             });
         }
     }, Vuex.mapState({
-        selectedFacets: function selectedFacets() {
-            return this.getSelectedFilters();
+        selectedFacets: function selectedFacets(state) {
+            return state.itemList.selectedFacets;
         },
-
         isLoading: function isLoading(state) {
             return state.itemList.isLoading;
         }
@@ -278,14 +277,14 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
-            this.$store.commit('toggleSelectedFacet', facetValue);
-
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
         isSelected: function isSelected(facetValueId) {
-            return this.selectedFacets.findIndex(function (selectedFacet) {
-                return selectedFacet.id === facetValueId;
-            }) > -1;
+            var facetValue = this.facet.values.filter(function (value) {
+                return value.id === facetValueId;
+            });
+
+            return this.isValueSelected(this.facet.id, facetValue);
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return {

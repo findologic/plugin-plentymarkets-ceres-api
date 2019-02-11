@@ -24,9 +24,7 @@ Vue.component("item-filter", {
         },
 
         ...Vuex.mapState({
-            selectedFacets() {
-                return this.getSelectedFilters()
-            },
+            selectedFacets: state => state.itemList.selectedFacets,
             isLoading: state => state.itemList.isLoading
         })
     },
@@ -37,13 +35,13 @@ Vue.component("item-filter", {
 
     methods: {
         updateFacet(facetValue) {
-            this.$store.commit('toggleSelectedFacet', facetValue);
-
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
 
         isSelected(facetValueId) {
-            return this.selectedFacets.findIndex(selectedFacet => selectedFacet.id === facetValueId) > -1;
+            let facetValue = this.facet.values.filter((value) => value.id === facetValueId);
+
+            return this.isValueSelected(this.facet.id, facetValue);
         },
 
         getSubCategoryValue(parentCategory, subCategory) {
