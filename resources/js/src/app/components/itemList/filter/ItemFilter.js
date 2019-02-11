@@ -39,12 +39,7 @@ Vue.component("item-filter", {
         },
 
         isSelected(facetValueId) {
-            const facet = this.facets.filter((facet) => {
-                return facet.id === facetValueId
-            });
-            if (facet.length === 1) {
-                return this.isValueSelected(this.facet.id, facet[0].name)
-            }
+            return this.facets.filter(facet => facet.id === facetValueId);
         },
 
         getSubCategoryValue(parentCategory, subCategory) {

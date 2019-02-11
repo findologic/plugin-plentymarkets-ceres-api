@@ -280,12 +280,9 @@ Vue.component("item-filter", {
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
         isSelected: function isSelected(facetValueId) {
-            var facet = this.facets.filter(function (facet) {
+            return this.facets.filter(function (facet) {
                 return facet.id === facetValueId;
             });
-            if (facet.length === 1) {
-                return this.isValueSelected(this.facet.id, facet[0].name);
-            }
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return {
