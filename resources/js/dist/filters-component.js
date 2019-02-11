@@ -262,8 +262,8 @@ Vue.component("item-filter", {
             });
         }
     }, Vuex.mapState({
-        selectedFacets: function selectedFacets(state) {
-            return state.itemList.selectedFacets;
+        selectedFacets: function selectedFacets() {
+            return undefined.getSelectedFilters();
         },
         isLoading: function isLoading(state) {
             return state.itemList.isLoading;

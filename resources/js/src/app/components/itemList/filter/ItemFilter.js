@@ -24,7 +24,7 @@ Vue.component("item-filter", {
         },
 
         ...Vuex.mapState({
-            selectedFacets: state => state.itemList.selectedFacets,
+            selectedFacets: () => this.getSelectedFilters(),
             isLoading: state => state.itemList.isLoading
         })
     },
