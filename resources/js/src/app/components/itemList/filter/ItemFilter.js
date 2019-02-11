@@ -48,7 +48,9 @@ Vue.component("item-filter", {
         },
 
         getSubCategoryValue(parentCategory, subCategory) {
-            return parentCategory.name + '_' + subCategory.name;
+            return {
+                name: parentCategory.name + '_' + subCategory.name
+            };
         }
     }
 });
