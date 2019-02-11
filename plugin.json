@@ -11,7 +11,8 @@
     {
       "key"           :"Findologic\\Containers\\SearchFilterContainer",
       "name"          :"Findologic Filters",
-      "description"   :"Display Findologic filters"
+      "description"   :"Display Findologic filters",
+      "defaultLayoutContainer": "Search.Filter"
     }
   ],
   "dependencies": {

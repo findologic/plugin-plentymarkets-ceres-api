@@ -1,172 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _url = require("./mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-Vue.component("item-filter", {
-    mixins: [_url2.default],
-
-    delimiters: ["${", "}"],
-
-    props: ["template", "facet"],
-
-    computed: _extends({
-        facets: function facets() {
-            return this.facet.values.sort(function (facetA, facetB) {
-                if (facetA.position > facetB.position) {
-                    return 1;
-                } else if (facetA.position < facetB.position) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            });
-        }
-    }, Vuex.mapState({
-        selectedFacets: function selectedFacets(state) {
-            return state.itemList.selectedFacets;
-        },
-        isLoading: function isLoading(state) {
-            return state.itemList.isLoading;
-        }
-    })),
-
-    created: function created() {
-        this.$options.template = this.template || "#vue-item-filter";
-    },
-
-
-    methods: {
-        updateFacet: function updateFacet(facetValue) {
-            if (typeof facetValue.name === 'function') {
-                facetValue = facetValue.name();
-            } else if (facetValue.hasOwnProperty('name')) {
-                facetValue = facetValue.name;
-            }
-
-            this.updateSelectedFilters(this.facet.id, facetValue);
-        },
-        isSelected: function isSelected(facetValue) {
-            if (typeof facetValue.name === 'function') {
-                facetValue = facetValue.name();
-            } else if (facetValue.hasOwnProperty('name')) {
-                facetValue = facetValue.name;
-            }
-
-            return this.isValueSelected(this.facet.id, facetValue);
-        },
-        getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
-            return parentCategory.name + '_' + subCategory.name;
-        }
-    }
-});
-
-},{"./mixins/url":9}],2:[function(require,module,exports){
-"use strict";
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _url = require("./mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-Vue.component("item-filter-price", {
-    mixins: [_url2.default],
-
-    delimiters: ["${", "}"],
-
-    props: ["template", "facet"],
-
-    data: function data() {
-        return {
-            priceMin: "",
-            priceMax: "",
-            currency: App.activeCurrency
-        };
-    },
-    created: function created() {
-        this.$options.template = this.template || "#vue-item-filter-price";
-
-        var values = this.getSelectedFilterValue(this.facet.id);
-
-        this.priceMin = values ? values.min : "";
-        this.priceMax = values ? values.max : "";
-    },
-
-
-    computed: _extends({
-        isDisabled: function isDisabled() {
-            return this.priceMin === "" && this.priceMax === "" || parseInt(this.priceMin) >= parseInt(this.priceMax) || this.isLoading;
-        }
-    }, Vuex.mapState({
-        isLoading: function isLoading(state) {
-            return state.itemList.isLoading;
-        }
-    })),
-
-    methods: {
-        selectAll: function selectAll(event) {
-            event.target.select();
-        },
-        triggerFilter: function triggerFilter() {
-            if (!this.isDisabled) {
-                var facetValue = {
-                    min: this.priceMin,
-                    max: this.priceMax ? this.priceMax : Number.MAX_SAFE_INTEGER
-                };
-
-                this.updateSelectedFilters(this.facet.id, facetValue);
-            }
-        }
-    }
-});
-
-},{"./mixins/url":9}],3:[function(require,module,exports){
-"use strict";
-
-var _url = require("./mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-Vue.component("item-filter-tag-list", {
-    mixins: [_url2.default],
-
-    delimiters: ["${", "}"],
-
-    props: ["template"],
-
-    computed: {
-        tagList: function tagList() {
-            return this.getSelectedFilters();
-        }
-    },
-
-    created: function created() {
-        this.$options.template = this.template || "#vue-item-filter-tag-list";
-    },
-
-
-    methods: {
-        removeTag: function removeTag(tag) {
-            this.removeSelectedFilter(tag.id, tag.name);
-        }
-    }
-});
-
-},{"./mixins/url":9}],4:[function(require,module,exports){
-"use strict";
-
-var _url = require("./mixins/url");
+var _url = require("../../mixins/url");
 
 var _url2 = _interopRequireDefault(_url);
 
@@ -213,7 +48,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"./mixins/url":9}],5:[function(require,module,exports){
+},{"../../mixins/url":9}],2:[function(require,module,exports){
 'use strict';
 
 Vue.component("item-search", {
@@ -273,10 +108,10 @@ Vue.component("item-search", {
     }
 });
 
-},{}],6:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 
-var _url = require("./mixins/url");
+var _url = require("../../mixins/url");
 
 var _url2 = _interopRequireDefault(_url);
 
@@ -323,12 +158,12 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"./mixins/url":9}],7:[function(require,module,exports){
+},{"../../mixins/url":9}],4:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _url = require("./mixins/url");
+var _url = require("../../mixins/url");
 
 var _url2 = _interopRequireDefault(_url);
 
@@ -396,7 +231,184 @@ Vue.component("pagination", {
     }
 });
 
-},{"./mixins/url":9}],8:[function(require,module,exports){
+},{"../../mixins/url":9}],5:[function(require,module,exports){
+"use strict";
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _url = require("../../../mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-filter", {
+    mixins: [_url2.default],
+
+    delimiters: ["${", "}"],
+
+    props: ["template", "facet"],
+
+    computed: _extends({
+        facets: function facets() {
+            return this.facet.values.sort(function (facetA, facetB) {
+                if (facetA.position > facetB.position) {
+                    return 1;
+                } else if (facetA.position < facetB.position) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+        }
+    }, Vuex.mapState({
+        selectedFacets: function selectedFacets(state) {
+            return state.itemList.selectedFacets;
+        },
+        isLoading: function isLoading(state) {
+            return state.itemList.isLoading;
+        }
+    })),
+
+    created: function created() {
+        this.$options.template = this.template || "#vue-item-filter";
+    },
+
+
+    methods: {
+        updateFacet: function updateFacet(facetValue) {
+            this.updateSelectedFilters(this.facet.id, facetValue.name);
+        },
+        isSelected: function isSelected(facetValueId) {
+            var facetValue = this.facet.values.filter(function (value) {
+                return value.id === facetValueId;
+            });
+
+            // Only the category filter can have nested values.
+            if (facetValue.length === 0 && this.facet.id === 'cat') {
+                for (var i in this.facet.values) {
+                    if (this.facet.values[i].hasOwnProperty('items') === false) {
+                        continue;
+                    }
+
+                    facetValue = this.facet.values[i].items.filter(function (value) {
+                        return value.id === facetValueId;
+                    });
+
+                    if (facetValue.length > 0) {
+                        break;
+                    }
+                }
+            }
+
+            return facetValue.length && this.isValueSelected(this.facet.id, facetValue[0].name);
+        },
+        getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
+            return {
+                id: subCategory.id,
+                name: parentCategory.name + '_' + subCategory.name
+            };
+        }
+    }
+});
+
+},{"../../../mixins/url":9}],6:[function(require,module,exports){
+"use strict";
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _url = require("../../../mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-filter-price", {
+    mixins: [_url2.default],
+
+    delimiters: ["${", "}"],
+
+    props: ["template", "facet"],
+
+    data: function data() {
+        return {
+            priceMin: "",
+            priceMax: "",
+            currency: App.activeCurrency
+        };
+    },
+    created: function created() {
+        this.$options.template = this.template || "#vue-item-filter-price";
+
+        var values = this.getSelectedFilterValue(this.facet.id);
+
+        this.priceMin = values ? values.min : "";
+        this.priceMax = values ? values.max : "";
+    },
+
+
+    computed: _extends({
+        isDisabled: function isDisabled() {
+            return this.priceMin === "" && this.priceMax === "" || parseInt(this.priceMin) >= parseInt(this.priceMax) || this.isLoading;
+        }
+    }, Vuex.mapState({
+        isLoading: function isLoading(state) {
+            return state.itemList.isLoading;
+        }
+    })),
+
+    methods: {
+        selectAll: function selectAll(event) {
+            event.target.select();
+        },
+        triggerFilter: function triggerFilter() {
+            if (!this.isDisabled) {
+                var facetValue = {
+                    min: this.priceMin,
+                    max: this.priceMax ? this.priceMax : Number.MAX_SAFE_INTEGER
+                };
+
+                this.updateSelectedFilters(this.facet.id, facetValue);
+            }
+        }
+    }
+});
+
+},{"../../../mixins/url":9}],7:[function(require,module,exports){
+"use strict";
+
+var _url = require("../../../mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-filter-tag-list", {
+    mixins: [_url2.default],
+
+    delimiters: ["${", "}"],
+
+    props: ["template"],
+
+    computed: {
+        tagList: function tagList() {
+            return this.getSelectedFilters();
+        }
+    },
+
+    created: function created() {
+        this.$options.template = this.template || "#vue-item-filter-tag-list";
+    },
+
+
+    methods: {
+        removeTag: function removeTag(tag) {
+            this.removeSelectedFilter(tag.id, tag.name);
+        }
+    }
+});
+
+},{"../../../mixins/url":9}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -635,17 +647,15 @@ exports.default = {
 
             if (!(facetId in attributes)) {
                 return false;
-            }
-
-            if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
+            } else if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
                 return true;
-            }
-
-            if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
+            } else if (facetId === 'cat') {
+                return this.getKeyBySuffix(attributes[facetId], facetValue) !== -1;
+            } else if (this.getKeyByValue(attributes[facetId], facetValue) !== -1) {
                 return true;
+            } else {
+                return false;
             }
-
-            return false;
         },
 
 
@@ -795,11 +805,31 @@ exports.default = {
             }
 
             return -1;
+        },
+
+
+        /*
+         * Get key from object by value suffix
+         *
+         * @param {Object} object
+         * @param {string} value
+         * @returns {string|number}
+         */
+        getKeyBySuffix: function getKeyBySuffix(object, value) {
+            for (var prop in object) {
+                if (object.hasOwnProperty(prop)) {
+                    if (object[prop].endsWith(value)) {
+                        return prop;
+                    }
+                }
+            }
+
+            return -1;
         }
     }
 };
 
-},{"../constants":8}]},{},[1,2,3,4,6,7,5])
+},{"../constants":8}]},{},[5,6,7,1,3,4,2])
 
 
 //# sourceMappingURL=filters-component.js.map

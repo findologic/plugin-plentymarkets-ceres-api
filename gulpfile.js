@@ -1,6 +1,6 @@
 require("babel-polyfill")
 
-const JS_SRC = "./resources/js/"
+const JS_SRC = "./resources/js/src/"
 const DIST = "./resources/js/dist/"
 const OUTPUT_PREFIX = "filters"
 
@@ -15,7 +15,15 @@ const sourcemaps = require("gulp-sourcemaps")
 
 gulp.task("js", () => {
     var builder = browserify({
-        entries: ["ItemFilter.js", "ItemFilterPrice.js", "ItemFilterTagList.js", "ItemListSorting.js", "ItemsPerPage.js", "Pagination.js", "ItemSearch.js"],
+        entries: [
+            "app/components/itemList/filter/ItemFilter.js",
+            "app/components/itemList/filter/ItemFilterPrice.js",
+            "app/components/itemList/filter/ItemFilterTagList.js",
+            "app/components/itemList/ItemListSorting.js",
+            "app/components/itemList/ItemsPerPage.js",
+            "app/components/itemList/Pagination.js",
+            "app/components/itemList/ItemSearch.js"
+        ],
         debug: true,
         basedir: JS_SRC,
         paths: ["./resources/js"],
