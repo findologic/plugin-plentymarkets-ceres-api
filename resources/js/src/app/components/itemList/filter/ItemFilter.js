@@ -41,6 +41,21 @@ Vue.component("item-filter", {
         isSelected(facetValueId) {
             let facetValue = this.facet.values.filter((value) => value.id === facetValueId);
 
+            // Only the category filter can have nested values.
+            if (facetValue.length === 0 && this.facet.id === 'cat') {
+                for (let i in this.facet.values) {
+                    if (this.facet.values[i].hasOwnProperty('items') === false) {
+                        continue;
+                    }
+
+                    facetValue = this.facet.values[i].items.filter((value) => value.id === facetValueId);
+
+                    if (facetValue.length > 0) {
+                        break;
+                    }
+                }
+            }
+
             return facetValue.length && this.isValueSelected(this.facet.id, facetValue[0].name);
         },
 
