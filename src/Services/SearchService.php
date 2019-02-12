@@ -61,11 +61,6 @@ class SearchService implements SearchServiceInterface
      */
     protected $results;
 
-    /**
-     * @var ItemSearchService
-     */
-    protected $itemSearchService;
-
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -81,7 +76,6 @@ class SearchService implements SearchServiceInterface
             Plugin::PLUGIN_NAMESPACE,
             Plugin::PLUGIN_IDENTIFIER
         );
-        $this->itemSearchService = pluginApp(ItemSearchService::class);
     }
 
     /**
@@ -180,6 +174,7 @@ class SearchService implements SearchServiceInterface
     private function filterInvalidVariationIds(array $ids)
     {
         $externalSearchFactories = [];
+        $itemSearchService = pluginApp(ItemSearchService::class);
 
         foreach ($ids as $id) {
             $externalSearchFactories[$id] = VariationList::getSearchFactory([
@@ -188,7 +183,7 @@ class SearchService implements SearchServiceInterface
             ]);
         }
 
-        $this->itemSearchService->getResults($externalSearchFactories);
+        $itemSearchService->getResults($externalSearchFactories);
 
         return array_keys($externalSearchFactories);
     }
