@@ -107,8 +107,6 @@ class SearchService implements SearchServiceInterface
             $results = $this->search($request, $externalSearch);
             $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
-            $this->logger->error('filtered ids', $productsIds);
-
             /** @var ExternalSearch $searchQuery */
             $externalSearch->setResults($productsIds, $results->getResultsCount());
         } catch (\Exception $e) {
@@ -185,6 +183,7 @@ class SearchService implements SearchServiceInterface
             ]);
         }
 
+        // Return only the variation IDs which actually yielded a result.
         return array_keys(array_filter($itemSearchService->getResults($externalSearchFactories), function ($result) {
             return $result['total'] > 0;
         }));
