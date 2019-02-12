@@ -185,6 +185,10 @@ class SearchService implements SearchServiceInterface
             ]);
         }
 
-        return array_keys($itemSearchService->getResults($externalSearchFactories));
+        $result = $itemSearchService->getResults($externalSearchFactories);
+
+        $this->logger->error('plenty result', $result);
+
+        return array_keys($result);
     }
 }
