@@ -185,11 +185,8 @@ class SearchService implements SearchServiceInterface
             ]);
         }
 
-        $result = $itemSearchService->getResults($externalSearchFactories);
-
-        $this->logger->error('plenty result', empty($result[1012]) ? 'empty' : $result[1012]);
-        $this->logger->error('plenty result', empty($result[1020]) ? 'empty' : $result[1020]);
-
-        return array_keys($result);
+        return array_keys(array_filter($itemSearchService->getResults($externalSearchFactories), function ($result) {
+            return $result['total'] > 0;
+        }));
     }
 }
