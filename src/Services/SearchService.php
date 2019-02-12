@@ -71,8 +71,7 @@ class SearchService implements SearchServiceInterface
         RequestBuilder $requestBuilder,
         ResponseParser $responseParser,
         ParametersHandler $searchParametersHandler,
-        LoggerFactory $loggerFactory,
-        ItemSearchService $itemSearchService
+        LoggerFactory $loggerFactory
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
@@ -82,7 +81,7 @@ class SearchService implements SearchServiceInterface
             Plugin::PLUGIN_NAMESPACE,
             Plugin::PLUGIN_IDENTIFIER
         );
-        $this->itemSearchService = $itemSearchService;
+        $this->itemSearchService = pluginApp(ItemSearchService::class);
     }
 
     /**
