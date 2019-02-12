@@ -185,8 +185,6 @@ class SearchService implements SearchServiceInterface
             ]);
         }
 
-        $itemSearchService->getResults($externalSearchFactories);
-
-        return array_keys($externalSearchFactories);
+        return array_keys($itemSearchService->getResults($externalSearchFactories));
     }
 }
