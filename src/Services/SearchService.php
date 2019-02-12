@@ -15,6 +15,8 @@ use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Services\CategoryService;
+use IO\Services\ItemSearch\Services\ItemSearchService;
+use IO\Services\ItemSearch\SearchPresets\VariationList;
 
 /**
  * Class SearchService
@@ -70,7 +72,10 @@ class SearchService implements SearchServiceInterface
         $this->requestBuilder = $requestBuilder;
         $this->responseParser = $responseParser;
         $this->searchParametersHandler = $searchParametersHandler;
-        $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+        $this->logger = $loggerFactory->getLogger(
+            Plugin::PLUGIN_NAMESPACE,
+            Plugin::PLUGIN_IDENTIFIER
+        );
     }
 
     /**
@@ -100,7 +105,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $results = $this->search($request, $externalSearch);
-            $productsIds = $results->getVariationIds();
+            $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
             /** @var ExternalSearch $searchQuery */
             $externalSearch->setResults($productsIds, $results->getResultsCount());
@@ -164,5 +169,23 @@ class SearchService implements SearchServiceInterface
         if ($response !== Plugin::API_ALIVE_RESPONSE_BODY) {
             throw new AliveException('Server is not alive!');
         }
+    }
+
+    private function filterInvalidVariationIds(array $ids)
+    {
+        $externalSearchFactories = [];
+        $itemSearchService = pluginApp(ItemSearchService::class);
+
+        foreach ($ids as $id) {
+            $externalSearchFactories[$id] = VariationList::getSearchFactory([
+                'variationIds'      => [$id],
+                'excludeFromCache'  => true
+            ]);
+        }
+
+        // Return only the variation IDs which actually yielded a result.
+        return array_keys(array_filter($itemSearchService->getResults($externalSearchFactories), function ($result) {
+            return $result['total'] > 0;
+        }));
     }
 }
