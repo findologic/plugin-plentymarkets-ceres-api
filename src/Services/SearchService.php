@@ -107,7 +107,7 @@ class SearchService implements SearchServiceInterface
             $results = $this->search($request, $externalSearch);
             $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
-            $this->logger->error(print_r($productsIds, true));
+            $this->logger->error('filtered ids', $productsIds);
 
             /** @var ExternalSearch $searchQuery */
             $externalSearch->setResults($productsIds, $results->getResultsCount());
