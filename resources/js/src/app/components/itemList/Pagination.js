@@ -1,6 +1,6 @@
 import url from "../../mixins/url";
 
-Vue.component("pagination", {
+let options = {
     mixins: [url],
 
     delimiters: ["${", "}"],
@@ -54,4 +54,7 @@ Vue.component("pagination", {
             this.setUrlParamValue('page', page);
         }
     }
-});
+};
+
+Vue.component('pagination', options);
+Vue.component('custom-pagination', options);

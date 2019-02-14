@@ -169,7 +169,7 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("pagination", {
+var options = {
     mixins: [_url2.default],
 
     delimiters: ["${", "}"],
@@ -229,7 +229,10 @@ Vue.component("pagination", {
             this.setUrlParamValue('page', page);
         }
     }
-});
+};
+
+Vue.component('pagination', options);
+Vue.component('custom-pagination', options);
 
 },{"../../mixins/url":10}],5:[function(require,module,exports){
 "use strict";
