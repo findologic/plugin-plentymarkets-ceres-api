@@ -119,7 +119,7 @@ class SearchService implements SearchServiceInterface
                 );
                 $results = $this->responseParser->createResponseObject();
                 $results->setData(Response::DATA_PRODUCTS, $searchResults);
-                $this->results = $this->responseParser->parse($results);
+                $this->results = $this->responseParser->parse($this->client->call($results));
             } else {
                 $results = $this->search($request, $externalSearch);
                 $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
