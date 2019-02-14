@@ -34,8 +34,10 @@ class FindologicServiceProvider extends ServiceProvider
     }
 
     /**
+
+     * @param ConfigRepository $configRepositor
      * @param Dispatcher $eventDispatcher
-     * @param ConfigRepository $configRepository
+     * @param Request $request
      * @param SearchService $searchService
      */
     public function boot(
