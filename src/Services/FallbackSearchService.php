@@ -1,6 +1,7 @@
 <?php
 
-use Findologic\Services\SearchServiceInterface;
+namespace Findologic\Services;
+
 use IO\Services\ItemSearch\SearchPresets\SearchItems;
 use IO\Services\ItemSearch\Services\ItemSearchService;
 
