@@ -117,9 +117,8 @@ class SearchService implements SearchServiceInterface
                     array_keys($searchResults['itemList']['documents']),
                     $searchResults['itemList']['total']
                 );
-                $this->results = $this->responseParser->createResponseObject()
-                    ->setData(Response::DATA_PRODUCTS, $searchResults);
-                $this->logger->error('dump1', $this->results);
+                $this->results = $this->responseParser->createResponseObject();
+                $this->results->setData(Response::DATA_PRODUCTS, $searchResults);
             } else {
                 $results = $this->search($request, $externalSearch);
                 $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
@@ -127,8 +126,6 @@ class SearchService implements SearchServiceInterface
                 /** @var ExternalSearch $searchQuery */
                 $externalSearch->setResults($productsIds, $results->getResultsCount());
             }
-            $this->search($request, $externalSearch);
-            $this->logger->error('dump2', $this->results);
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);
