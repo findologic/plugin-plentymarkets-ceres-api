@@ -2,7 +2,6 @@
 
 namespace Findologic\Services;
 
-use FallbackSearchService;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
