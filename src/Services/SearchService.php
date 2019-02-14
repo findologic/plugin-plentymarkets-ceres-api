@@ -2,6 +2,7 @@
 
 namespace Findologic\Services;
 
+use FallbackSearchService;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -61,12 +62,18 @@ class SearchService implements SearchServiceInterface
      */
     protected $results;
 
+    /**
+     * @var FallbackSearchService
+     */
+    protected $fallbackSearchService;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
         ResponseParser $responseParser,
         ParametersHandler $searchParametersHandler,
-        LoggerFactory $loggerFactory
+        LoggerFactory $loggerFactory,
+        FallbackSearchService $fallbackSearchService
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
@@ -76,6 +83,7 @@ class SearchService implements SearchServiceInterface
             Plugin::PLUGIN_NAMESPACE,
             Plugin::PLUGIN_IDENTIFIER
         );
+        $this->fallbackSearchService = $fallbackSearchService;
     }
 
     /**
@@ -104,11 +112,19 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
-            $results = $this->search($request, $externalSearch);
-            $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
+            if ($externalSearch->categoryId === null && $request->get('attrib') === null){
+                $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
+                $externalSearch->setResults(
+                    array_keys($searchResults['itemList']['documents']),
+                    $searchResults['itemList']['total']
+                );
+            } else {
+                $results = $this->search($request, $externalSearch);
+                $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
-            /** @var ExternalSearch $searchQuery */
-            $externalSearch->setResults($productsIds, $results->getResultsCount());
+                /** @var ExternalSearch $searchQuery */
+                $externalSearch->setResults($productsIds, $results->getResultsCount());
+            }
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);
