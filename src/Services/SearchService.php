@@ -117,6 +117,7 @@ class SearchService implements SearchServiceInterface
                     array_keys($searchResults['itemList']['documents']),
                     $searchResults['itemList']['total']
                 );
+                $this->results = $searchResults;
             } else {
                 $results = $this->search($request, $externalSearch);
                 $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
