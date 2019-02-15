@@ -119,19 +119,23 @@ class SearchService implements SearchServiceInterface
                 );
                 $results = $this->responseParser->createResponseObject();
                 $getIdsFromSearchResultItemsDocuments = function($document) {
-                    return $document['id'];
+                    return [
+                        'id' => $document['id'],
+                        'relevance' => $document['score'],
+                        'direct' => '0',
+                    ];
                 };
-                $this->logger->error('zz', array_map(
+                $products = array_map(
                     $getIdsFromSearchResultItemsDocuments,
                     $searchResults['itemList']['documents']
-                ));
+                );
+
+                $this->logger->error('zz', $products);
                 $results->setData(
                     Response::DATA_PRODUCTS,
-                    array_map(
-                        $getIdsFromSearchResultItemsDocuments,
-                        $searchResults['itemList']['documents']
-                    )
+                    $products
                 );
+                $results->setData(Response::DATA_RESULTS, (string)count($products));
                 $this->results = $results;
             } else {
                 $results = $this->search($request, $externalSearch);
