@@ -135,7 +135,9 @@ class SearchService implements SearchServiceInterface
                     Response::DATA_PRODUCTS,
                     $products
                 );
-                $results->setData(Response::DATA_RESULTS, (string)count($products));
+                $count = [];
+                $count['count'] = (string)count($products);
+                $results->setData(Response::DATA_RESULTS, $count);
                 $this->results = $results;
             } else {
                 $results = $this->search($request, $externalSearch);
