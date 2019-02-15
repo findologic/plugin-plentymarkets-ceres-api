@@ -112,6 +112,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             if ($externalSearch->categoryId === null && $request->get('attrib') === null){
+                $this->search($request, $externalSearch); // test
                 $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
                 $externalSearch->setResults(
                     array_keys($searchResults['itemList']['documents']),
@@ -169,6 +170,7 @@ class SearchService implements SearchServiceInterface
                 $category ? $category->getCurrentCategory() : null
             );
             $this->results = $this->responseParser->parse($this->client->call($apiRequest));
+            $this->logger->error('4', $this->results);
         } catch (AliveException $e) {
             $this->logger->error('Findologic server did not responded to alive request. ' . $e->getMessage());
             throw $e;
