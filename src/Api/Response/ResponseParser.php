@@ -177,6 +177,8 @@ class ResponseParser
             }
         }
 
+        $this->logger->error('3', $products);
+
         return $products;
     }
 }
