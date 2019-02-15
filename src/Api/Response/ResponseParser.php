@@ -33,7 +33,7 @@ class ResponseParser
      * @param string $responseData
      * @return Response
      */
-    public function parse($responseData)
+    public function parse($responseData, $logger = null)
     {
         /**
          * @var Response $response
@@ -49,6 +49,9 @@ class ResponseParser
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data));
+            if ($logger !== null) {
+                $logger->error('should', $this->parseProducts($data));
+            }
         } catch (\Exception $e) {
             $this->logger->warning('Could not parse response from server.');
             $this->logger->logException($e);
