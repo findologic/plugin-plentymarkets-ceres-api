@@ -120,8 +120,7 @@ class SearchService implements SearchServiceInterface
                 );
                 $results = $this->responseParser->createResponseObject();
                 $results->setData(Response::DATA_PRODUCTS, $searchResults);
-                $this->logger->error('1', $searchResults['itemList']['documents']);
-                $this->logger->error('2', $searchResults);
+                $this->logger->error('result.clone', $results);
             } else {
                 $results = $this->search($request, $externalSearch);
                 $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
@@ -169,8 +168,8 @@ class SearchService implements SearchServiceInterface
                 $externalSearch,
                 $category ? $category->getCurrentCategory() : null
             );
+            $this->logger->error('result.original', $this->responseParser->parse($this->client->call($apiRequest)));
             $this->results = $this->responseParser->parse($this->client->call($apiRequest));
-            $this->logger->error('4', $this->results);
         } catch (AliveException $e) {
             $this->logger->error('Findologic server did not responded to alive request. ' . $e->getMessage());
             throw $e;
