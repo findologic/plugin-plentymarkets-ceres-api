@@ -96,7 +96,7 @@ class ParametersBuilder
             $externalSearch->categoryId !== null &&
             !array_key_exists(Plugin::API_PARAMETER_ATTRIBUTES, $_GET)
         ) {
-            $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, 0);
+//            $request->setParam(Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE, 0);
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, 0);
             return $request;
         }
