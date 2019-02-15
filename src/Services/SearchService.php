@@ -118,7 +118,8 @@ class SearchService implements SearchServiceInterface
                     $searchResults['itemList']['total']
                 );
                 $results = $this->responseParser->createResponseObject();
-                $results->setData(Response::DATA_PRODUCTS, $searchResults['itemList']['documents']);
+                $getIdsFromSearchResultItemsDocuments = function($document) { return $document->id; };
+                $results->setData(Response::DATA_PRODUCTS, array_map($getIdsFromSearchResultItemsDocuments,$searchResults['itemList']['documents']));
                 $this->results = $results;
             } else {
                 $results = $this->search($request, $externalSearch);
