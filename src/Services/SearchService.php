@@ -180,10 +180,10 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
-            $results = $this->search($request, $externalSearch);
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
                 $this->doNavigation($request, $externalSearch);
             } else {
+                $results = $this->search($request, $externalSearch);
                 $this->doSearch($results, $externalSearch);
             }
         } catch (\Exception $e) {
