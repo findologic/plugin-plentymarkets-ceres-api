@@ -138,16 +138,16 @@ class SearchService implements SearchServiceInterface
         );
 
         $results = $this->responseParser->createResponseObject();
-        $this->createSearchDataProducts($searchResults, $results);
-        $this->createSearchDataResults($searchResults, $results);
+        $this->createSearchDataProducts($searchResults['itemList']['documents'], $results);
+        $this->createSearchDataResults($searchResults['itemList']['documents'], $results);
         $this->results = $results;
     }
 
     /**
-     * @param ExternalSearch $searchResults
+     * @param array $searchResults
      * @param Response $results
      */
-    public function createSearchDataProducts(ExternalSearch $searchResults, Response $results) {
+    public function createSearchDataProducts(array $searchResults, Response $results) {
         $getObjectFromSearchResultItemsDocuments = function($document) {
             return [
                 'id' => $document['id'],
@@ -157,7 +157,7 @@ class SearchService implements SearchServiceInterface
         };
         $products = array_map(
             $getObjectFromSearchResultItemsDocuments,
-            $searchResults['itemList']['documents']
+            $searchResults
         );
 
         $results->setData(
@@ -167,12 +167,12 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param ExternalSearch $searchResults
+     * @param array $searchResults
      * @param Response $results
      */
-    public function createSearchDataResults(ExternalSearch $searchResults, Response $results) {
+    public function createSearchDataResults(array $searchResults, Response $results) {
         $count = [];
-        $count['count'] = (string)count($searchResults['itemList']['documents']);
+        $count['count'] = (string)count($searchResults);
         $results->setData(Response::DATA_RESULTS, $count);
     }
 
