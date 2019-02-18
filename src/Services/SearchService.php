@@ -106,45 +106,86 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
+     * @param HttpRequest $request
+     * @param ExternalSearch $externalSearch
+     * @throws AliveException
+     */
+    public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
+        $results = $this->search($request, $externalSearch);
+        $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
+
+        /** @var ExternalSearch $searchQuery */
+        $externalSearch->setResults($productsIds, $results->getResultsCount());
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @param ExternalSearch $externalSearch
+     */
+    public function doSearch(HttpRequest $request, ExternalSearch $externalSearch) {
+        $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
+
+        $getIdsFromSearchResultItemsDocuments = function ($document) {
+            return $document['id'];
+        };
+
+        $externalSearch->setResults(
+            array_map(
+                $getIdsFromSearchResultItemsDocuments,
+                $searchResults['itemList']['documents']
+            ),
+            $searchResults['itemList']['total']
+        );
+
+        $results = $this->responseParser->createResponseObject();
+        $this->createSearchDataProducts($searchResults, $results);
+        $this->createSearchDataResults($searchResults, $results);
+        $this->results = $results;
+    }
+
+    /**
+     * @param ExternalSearch $searchResults
+     * @param Response $results
+     */
+    public function createSearchDataProducts(ExternalSearch $searchResults, Response $results) {
+        $getObjectFromSearchResultItemsDocuments = function($document) {
+            return [
+                'id' => $document['id'],
+                'relevance' => $document['score'],
+                'direct' => '0',
+            ];
+        };
+        $products = array_map(
+            $getObjectFromSearchResultItemsDocuments,
+            $searchResults['itemList']['documents']
+        );
+
+        $results->setData(
+            Response::DATA_PRODUCTS,
+            $products
+        );
+    }
+
+    /**
+     * @param ExternalSearch $searchResults
+     * @param Response $results
+     */
+    public function createSearchDataResults(ExternalSearch $searchResults, Response $results) {
+        $count = [];
+        $count['count'] = (string)count($searchResults['itemList']['documents']);
+        $results->setData(Response::DATA_RESULTS, $count);
+    }
+
+    /**
      * @inheritdoc
      */
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
             if ($externalSearch->categoryId === null && $request->get('attrib') === null){
-                $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
-                $externalSearch->setResults(
-                    array_keys($searchResults['itemList']['documents']),
-                    $searchResults['itemList']['total']
-                );
-                $results = $this->responseParser->createResponseObject();
-                $getIdsFromSearchResultItemsDocuments = function($document) {
-                    return [
-                        'id' => $document['id'],
-                        'relevance' => $document['score'],
-                        'direct' => '0',
-                    ];
-                };
-                $products = array_map(
-                    $getIdsFromSearchResultItemsDocuments,
-                    $searchResults['itemList']['documents']
-                );
-
-                $this->logger->error('zz', $products);
-                $results->setData(
-                    Response::DATA_PRODUCTS,
-                    $products
-                );
-                $count = [];
-                $count['count'] = (string)count($products);
-                $results->setData(Response::DATA_RESULTS, $count);
-                $this->results = $results;
+                $this->doSearch($request, $externalSearch);
             } else {
-                $results = $this->search($request, $externalSearch);
-                $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
-
-                /** @var ExternalSearch $searchQuery */
-                $externalSearch->setResults($productsIds, $results->getResultsCount());
+                $this->doNavigation($request, $externalSearch);
             }
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
