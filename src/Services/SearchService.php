@@ -182,10 +182,10 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
-            if ($externalSearch->categoryId === null && $request->get('attrib') === null){
-                $this->doSearch($request, $externalSearch);
-            } else {
+            if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
                 $this->doNavigation($request, $externalSearch);
+            } else {
+                $this->doSearch($request, $externalSearch);
             }
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
