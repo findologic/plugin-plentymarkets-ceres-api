@@ -106,12 +106,10 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param HttpRequest $request
+     * @param Response $results
      * @param ExternalSearch $externalSearch
-     * @throws AliveException
      */
-    public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
-        $results = $this->search($request, $externalSearch);
+    public function doNavigation(Response $results, ExternalSearch $externalSearch) {
         $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
         /** @var ExternalSearch $searchQuery */
@@ -182,8 +180,9 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
+            $results = $this->search($request, $externalSearch);
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
-                $this->doNavigation($request, $externalSearch);
+                $this->doNavigation($results, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
             }
