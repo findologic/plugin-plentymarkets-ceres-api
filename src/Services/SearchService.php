@@ -135,17 +135,14 @@ class SearchService implements SearchServiceInterface
             $searchResults['itemList']['total']
         );
 
-        $results = $this->responseParser->createResponseObject();
-        $this->createSearchDataProducts($searchResults['itemList']['documents'], $results);
-        $this->createSearchDataResults($searchResults['itemList']['documents'], $results);
-        $this->results = $results;
+        $this->createSearchDataProducts($searchResults['itemList']['documents']);
+        $this->createSearchDataResults($searchResults['itemList']['documents']);
     }
 
     /**
      * @param array $searchResults
-     * @param Response $results
      */
-    public function createSearchDataProducts(array $searchResults, Response $results) {
+    public function createSearchDataProducts(array $searchResults) {
         $getObjectFromSearchResultItemsDocuments = function($document) {
             return [
                 'id' => $document['id'],
@@ -158,7 +155,7 @@ class SearchService implements SearchServiceInterface
             $searchResults
         );
 
-        $results->setData(
+        $this->results->setData(
             Response::DATA_PRODUCTS,
             $products
         );
@@ -166,12 +163,11 @@ class SearchService implements SearchServiceInterface
 
     /**
      * @param array $searchResults
-     * @param Response $results
      */
-    public function createSearchDataResults(array $searchResults, Response $results) {
+    public function createSearchDataResults(array $searchResults) {
         $count = [];
         $count['count'] = (string)count($searchResults);
-        $results->setData(Response::DATA_RESULTS, $count);
+        $this->results->setData(Response::DATA_RESULTS, $count);
     }
 
     /**
@@ -180,10 +176,10 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
+            $results = $this->search($request, $externalSearch);
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
                 $this->doNavigation($request, $externalSearch);
             } else {
-                $results = $this->search($request, $externalSearch);
                 $this->doSearch($results, $externalSearch);
             }
         } catch (\Exception $e) {
