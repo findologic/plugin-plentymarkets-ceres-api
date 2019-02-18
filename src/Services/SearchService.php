@@ -120,29 +120,23 @@ class SearchService implements SearchServiceInterface
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
      */
-    public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
-        $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
+    public function doNavigation(Response $results, HttpRequest $request, ExternalSearch $externalSearch) {
+//        $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
         $getIdsFromSearchResultItemsDocuments = function ($document) {
             return $document['id'];
         };
 
-        $this->logger->error('data', $searchResults['itemList']['documents']);
-        $this->logger->error('data:ids', array_map(
-            $getIdsFromSearchResultItemsDocuments,
-            $searchResults['itemList']['documents']
-        ));
-        $this->logger->error('count', $searchResults['itemList']['total']);
         $externalSearch->setResults(
             array_map(
                 $getIdsFromSearchResultItemsDocuments,
-                $searchResults['itemList']['documents']
+                $results['itemList']['documents']
             ),
-            $searchResults['itemList']['total']
+            $results['itemList']['total']
         );
 
-        $this->createSearchDataProducts($searchResults['itemList']['documents']);
-        $this->createSearchDataResults($searchResults['itemList']['documents']);
+        $this->createSearchDataProducts($results['itemList']['documents']);
+        $this->createSearchDataResults($results['itemList']['documents']);
     }
 
     /**
@@ -183,12 +177,9 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $results = $this->search($request, $externalSearch);
-            $this->logger->error('catId', $externalSearch->categoryId);
-            $this->logger->error('attrib', $request->get('attrib'));
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
-                $this->doNavigation($request, $externalSearch);
+                $this->doNavigation($results, $request, $externalSearch);
             } else {
-                $this->logger->error('its a search ?');
                 $this->doSearch($results, $externalSearch);
             }
         } catch (\Exception $e) {
