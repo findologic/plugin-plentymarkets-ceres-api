@@ -186,6 +186,7 @@ class SearchService implements SearchServiceInterface
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
                 $this->doNavigation($request, $externalSearch);
             } else {
+                $this->logger->error('its a search ?');
                 $this->doSearch($results, $externalSearch);
             }
         } catch (\Exception $e) {
