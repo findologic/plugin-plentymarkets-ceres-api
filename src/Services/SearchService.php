@@ -135,8 +135,8 @@ class SearchService implements SearchServiceInterface
             $searchResults['itemList']['total']
         );
 
-        $this->createSearchDataProducts($searchResults['itemList']['documents']);
-        $this->createSearchDataResults($searchResults['itemList']['documents']);
+//        $this->createSearchDataProducts($searchResults['itemList']['documents']);
+//        $this->createSearchDataResults($searchResults['itemList']['documents']);
     }
 
     /**
