@@ -2,6 +2,7 @@
 
 namespace Findologic\Services;
 
+use IO\Services\ItemSearch\SearchPresets\Facets;
 use IO\Services\ItemSearch\SearchPresets\SearchItems;
 use IO\Services\ItemSearch\Services\ItemSearchService;
 
@@ -28,7 +29,10 @@ class FallbackSearchService implements SearchServiceInterface {
         \Ceres\Helper\ExternalSearch $externalSearch
     ) {
         $itemListOptions = $this->createItemListOptions($request, $externalSearch);
-        $defaultSearchFactory = ['itemList' => SearchItems::getSearchFactory($itemListOptions)];
+        $defaultSearchFactory = [
+            'itemList' => SearchItems::getSearchFactory($itemListOptions),
+            'facets'   => Facets::getSearchFactory($itemListOptions)
+        ];
 
         $itemSearchService = pluginApp(ItemSearchService::class);
         return $itemSearchService->getResults($defaultSearchFactory);
