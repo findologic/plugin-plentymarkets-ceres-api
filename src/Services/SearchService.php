@@ -121,7 +121,9 @@ class SearchService implements SearchServiceInterface
      * @param ExternalSearch $externalSearch
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
+        $this->logger->error('navigation');
         $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
+        $this->logger->error('$searchResults', $searchResults);
 
         $getIdsFromSearchResultItemsDocuments = function ($document) {
             return $document['id'];
