@@ -109,7 +109,7 @@ class SearchService implements SearchServiceInterface
      * @param Response $results
      * @param ExternalSearch $externalSearch
      */
-    public function doNavigation(Response $results, ExternalSearch $externalSearch) {
+    public function doSearch(Response $results, ExternalSearch $externalSearch) {
         $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
         /** @var ExternalSearch $searchQuery */
@@ -120,7 +120,7 @@ class SearchService implements SearchServiceInterface
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
      */
-    public function doSearch(HttpRequest $request, ExternalSearch $externalSearch) {
+    public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
         $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
         $getIdsFromSearchResultItemsDocuments = function ($document) {
@@ -182,9 +182,9 @@ class SearchService implements SearchServiceInterface
         try {
             $results = $this->search($request, $externalSearch);
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
-                $this->doNavigation($results, $externalSearch);
+                $this->doNavigation($request, $externalSearch);
             } else {
-                $this->doSearch($request, $externalSearch);
+                $this->doSearch($results, $externalSearch);
             }
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
