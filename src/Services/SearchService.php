@@ -127,6 +127,12 @@ class SearchService implements SearchServiceInterface
             return $document['id'];
         };
 
+        $this->logger->error('data', $searchResults['itemList']['documents']);
+        $this->logger->error('data:ids', array_map(
+            $getIdsFromSearchResultItemsDocuments,
+            $searchResults['itemList']['documents']
+        ));
+        $this->logger->error('count', $searchResults['itemList']['total']);
         $externalSearch->setResults(
             array_map(
                 $getIdsFromSearchResultItemsDocuments,
@@ -135,8 +141,8 @@ class SearchService implements SearchServiceInterface
             $searchResults['itemList']['total']
         );
 
-//        $this->createSearchDataProducts($searchResults['itemList']['documents']);
-//        $this->createSearchDataResults($searchResults['itemList']['documents']);
+        $this->createSearchDataProducts($searchResults['itemList']['documents']);
+        $this->createSearchDataResults($searchResults['itemList']['documents']);
     }
 
     /**
