@@ -19,16 +19,10 @@ class FallbackSearchService implements SearchServiceInterface {
      */
     protected $responseParser;
 
-    /**
-     * @var ItemSearchService $itemSearchService
-     */
-    private $itemSearchService;
-
     public function __construct(
         ResponseParser $responseParser
     )
     {
-        $this->itemSearchService = pluginApp(ItemSearchService::class);
         $this->responseParser = $responseParser;
     }
 
@@ -80,7 +74,9 @@ class FallbackSearchService implements SearchServiceInterface {
             'itemList' => CategoryItems::getSearchFactory($itemListOptions),
             'facets'   => Facets::getSearchFactory($itemListOptions)
         ];
-        return $this->itemSearchService->getResults($defaultSearchFactory);
+
+        $itemSearchService = pluginApp(ItemSearchService::class);
+        return $itemSearchService->getResults($defaultSearchFactory);
     }
 
     /**
