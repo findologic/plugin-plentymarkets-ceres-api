@@ -48,7 +48,7 @@ class FallbackSearchService implements SearchServiceInterface {
 
         $response = $this->responseParser->createResponseObject();
         $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
-        $this->setSearchDataResults($searchResults['itemList']['documents'], $response);
+        $this->setSearchDataResults($searchResults['itemList']['total'], $response);
 
         return $response;
     }
@@ -106,12 +106,10 @@ class FallbackSearchService implements SearchServiceInterface {
     }
 
     /**
-     * @param array $searchResults
+     * @param string $dataResults
      * @param Response $response
      */
-    private function setSearchDataResults(array $searchResults, Response $response) {
-        $count = [];
-        $count['count'] = (string)count($searchResults);
-        $response->setData(Response::DATA_RESULTS, $count);
+    private function setSearchDataResults(string $dataResults, Response $response) {
+        $response->setData(Response::DATA_RESULTS, $dataResults);
     }
 }
