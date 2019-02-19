@@ -124,11 +124,9 @@ class SearchService implements SearchServiceInterface
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
         $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
-        $this->logger->error('ids', $response->getVariationIds());
-        $this->logger->error('count', $response->getData(Response::DATA_RESULTS));
         $externalSearch->setResults(
             $response->getVariationIds(),
-            $response->getData(Response::DATA_RESULTS)
+            $response->getData(Response::DATA_RESULTS)['count']
         );
 
         return $response;

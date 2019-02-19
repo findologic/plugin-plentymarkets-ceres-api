@@ -110,6 +110,8 @@ class FallbackSearchService implements SearchServiceInterface {
      * @param Response $response
      */
     private function setSearchDataResults(string $dataResults, Response $response) {
-        $response->setData(Response::DATA_RESULTS, $dataResults);
+        $count = [];
+        $count['count'] = $dataResults;
+        $response->setData(Response::DATA_RESULTS, $count);
     }
 }
