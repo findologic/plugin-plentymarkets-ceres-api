@@ -22,5 +22,16 @@
     "key": "shopkey",
     "label": "Shop key",
     "type": "text"
+  },
+  {
+    "tab": "Findologic Search",
+    "key": "nav_enabled",
+    "label": "Navigation enabled",
+    "type": "dropdown",
+    "possibleValues": {
+      "0": "No",
+      "1": "Yes"
+    },
+    "default"   : "0"
   }
 ]

@@ -51,6 +51,7 @@ class FallbackSearchService implements SearchServiceInterface
         $response = $this->responseParser->createResponseObject();
         $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
         $this->setSearchDataResults($searchResults['itemList']['total'], $response);
+        $this->setFilters($searchResults['facets'], $response);
 
         return $response;
     }
@@ -118,5 +119,13 @@ class FallbackSearchService implements SearchServiceInterface
         $count = [];
         $count['count'] = (string)$dataResults;
         $response->setData(Response::DATA_RESULTS, $count);
+    }
+
+    /**
+     * @param string $dataResults
+     * @param Response $response
+     */
+    private function setFilters(string $dataResults, Response $response) {
+        $response->setData(Response::DATA_FILTERS, $dataResults);
     }
 }
