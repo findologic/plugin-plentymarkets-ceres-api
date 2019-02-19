@@ -126,7 +126,7 @@ class SearchService implements SearchServiceInterface
 
         $externalSearch->setResults(
             $response->getVariationIds(),
-            $response->getData(Response::DATA_RESULTS)['count']
+            (int)$response->getData(Response::DATA_RESULTS)['count']
         );
 
         return $response;
