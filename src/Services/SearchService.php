@@ -128,6 +128,7 @@ class SearchService implements SearchServiceInterface
             $response->getVariationIds(),
             (int)$response->getData(Response::DATA_RESULTS)['count']
         );
+        $this->logger->error('count', (int)$response->getData(Response::DATA_RESULTS)['count']);
 
         return $response;
     }
