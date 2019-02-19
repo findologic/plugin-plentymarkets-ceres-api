@@ -109,7 +109,8 @@ class SearchService implements SearchServiceInterface
      * @param Response $results
      * @param ExternalSearch $externalSearch
      */
-    public function doSearch(Response $results, ExternalSearch $externalSearch) {
+    public function doSearch(Response $results, ExternalSearch $externalSearch)
+    {
         $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
         /** @var ExternalSearch $searchQuery */
@@ -120,7 +121,8 @@ class SearchService implements SearchServiceInterface
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
      */
-    public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
+    public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
+    {
         $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
         $externalSearch->setResults(
