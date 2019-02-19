@@ -119,55 +119,17 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
+     * @return Response
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
-        $searchResults = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
-
-        $getIdsFromSearchResultItemsDocuments = function ($document) {
-            return $document['id'];
-        };
+        $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
         $externalSearch->setResults(
-            array_map(
-                $getIdsFromSearchResultItemsDocuments,
-                $searchResults['itemList']['documents']
-            ),
-            $searchResults['itemList']['total']
+            $response->getVariationIds(),
+            $response->getData(Response::DATA_RESULTS)
         );
 
-        $this->createSearchDataProducts($searchResults['itemList']['documents']);
-        $this->createSearchDataResults($searchResults['itemList']['documents']);
-    }
-
-    /**
-     * @param array $searchResults
-     */
-    public function createSearchDataProducts(array $searchResults) {
-        $getObjectFromSearchResultItemsDocuments = function($document) {
-            return [
-                'id' => $document['id'],
-                'relevance' => $document['score'],
-                'direct' => '0',
-            ];
-        };
-        $products = array_map(
-            $getObjectFromSearchResultItemsDocuments,
-            $searchResults
-        );
-
-        $this->results->setData(
-            Response::DATA_PRODUCTS,
-            $products
-        );
-    }
-
-    /**
-     * @param array $searchResults
-     */
-    public function createSearchDataResults(array $searchResults) {
-        $count = [];
-        $count['count'] = (string)count($searchResults);
-        $this->results->setData(Response::DATA_RESULTS, $count);
+        return $response;
     }
 
     /**
@@ -177,8 +139,8 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $results = $this->search($request, $externalSearch);
-            if ($externalSearch->categoryId !== null && $request->get('attrib') === null){
-                $this->doNavigation($request, $externalSearch);
+            if ($externalSearch->categoryId !== null && $request->get('attrib') === null) {
+                $this->results = $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($results, $externalSearch);
             }

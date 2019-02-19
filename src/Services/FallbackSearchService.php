@@ -2,52 +2,70 @@
 
 namespace Findologic\Services;
 
+use Ceres\Helper\ExternalSearch;
+use Ceres\Helper\ExternalSearchOptions;
+use Findologic\Api\Response\ResponseParser;
+use Findologic\Constants\Plugin;
 use IO\Services\ItemSearch\SearchPresets\CategoryItems;
 use IO\Services\ItemSearch\SearchPresets\Facets;
 use IO\Services\ItemSearch\Services\ItemSearchService;
+use Plenty\Plugin\Http\Request;
+use Findologic\Api\Response\Response;
 
 class FallbackSearchService implements SearchServiceInterface {
 
     /**
-     * @param \Plenty\Plugin\Http\Request $request
-     * @param \Ceres\Helper\ExternalSearchOptions $searchOptions
+     * @var ResponseParser
+     */
+    protected $responseParser;
+
+    /**
+     * @var ItemSearchService $itemSearchService
+     */
+    private $itemSearchService;
+
+    public function __construct(
+        ResponseParser $responseParser
+    )
+    {
+        $this->itemSearchService = pluginApp(ItemSearchService::class);
+        $this->responseParser = $responseParser;
+    }
+
+    /**
+     * @param Request $request
+     * @param ExternalSearchOptions $searchOptions
      */
     public function handleSearchOptions(
-        \Plenty\Plugin\Http\Request $request,
-        \Ceres\Helper\ExternalSearchOptions $searchOptions
+        Request $request,
+        ExternalSearchOptions $searchOptions
     ) {
-        // I'm just a lonely empty function :(
+        // Search options are always provided by FINDOLOGIC,
+        // therefore no actual implementation is needed.
     }
 
     /**
-     * @param \Plenty\Plugin\Http\Request $request
-     * @param \Ceres\Helper\ExternalSearch $externalSearch
-     * @return \Ceres\Helper\ExternalSearch
+     * @param Request $request
+     * @param ExternalSearch $externalSearch
+     * @return Response
      */
-    public function handleSearchQuery(
-        \Plenty\Plugin\Http\Request $request,
-        \Ceres\Helper\ExternalSearch $externalSearch
-    ) {
-        $itemListOptions = $this->createItemListOptions($request, $externalSearch);
-        $defaultSearchFactory = [
-            'itemList' => CategoryItems::getSearchFactory($itemListOptions),
-            'facets'   => Facets::getSearchFactory($itemListOptions)
-        ];
+    public function handleSearchQuery(Request $request, ExternalSearch $externalSearch) {
+        $searchResults = $this->getSearchResults($request, $externalSearch);
 
-        $itemSearchService = pluginApp(ItemSearchService::class);
-        return $itemSearchService->getResults($defaultSearchFactory);
+        $response = $this->responseParser->createResponseObject();
+        $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
+        $this->setSearchDataResults($searchResults['itemList']['documents'], $response);
+
+        return $response;
     }
 
     /**
-     * @param \Plenty\Plugin\Http\Request $request
-     * @param \Ceres\Helper\ExternalSearch $externalSearch
+     * @param Request $request
+     * @param ExternalSearch $externalSearch
      * @return array
      */
-    private function createItemListOptions(
-        \Plenty\Plugin\Http\Request $request,
-        \Ceres\Helper\ExternalSearch $externalSearch
-    ) {
-        return [
+    private function getSearchResults(Request $request, ExternalSearch $externalSearch) {
+        $itemListOptions = [
             'page' => $externalSearch->page,
             'itemsPerPage' => $externalSearch->itemsPerPage,
             'sorting' => $externalSearch->sorting,
@@ -57,5 +75,47 @@ class FallbackSearchService implements SearchServiceInterface {
             'priceMin' => $request->get('priceMin', 0),
             'priceMax' => $request->get('priceMax', 0),
         ];
+
+        $defaultSearchFactory = [
+            'itemList' => CategoryItems::getSearchFactory($itemListOptions),
+            'facets'   => Facets::getSearchFactory($itemListOptions)
+        ];
+        return $this->itemSearchService->getResults($defaultSearchFactory);
+    }
+
+    /**
+     * @param array $searchResults
+     * @param Response $response
+     */
+    private function setSearchDataProducts(array $searchResults, Response $response) {
+        $getObjectFromSearchResultItemsDocuments = function($document) {
+            return [
+                'id' => $document['id'],
+                'relevance' => $document['score'],
+                'direct' => '0',
+                'properties' => [
+                    Plugin::API_PROPERTY_VARIATION_ID => $document['id']
+                ]
+            ];
+        };
+        $products = array_map(
+            $getObjectFromSearchResultItemsDocuments,
+            $searchResults
+        );
+
+        $response->setData(
+            Response::DATA_PRODUCTS,
+            $products
+        );
+    }
+
+    /**
+     * @param array $searchResults
+     * @param Response $response
+     */
+    private function setSearchDataResults(array $searchResults, Response $response) {
+        $count = [];
+        $count['count'] = (string)count($searchResults);
+        $response->setData(Response::DATA_RESULTS, $count);
     }
 }
