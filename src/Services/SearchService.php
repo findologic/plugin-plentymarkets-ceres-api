@@ -119,7 +119,6 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
-     * @return Response
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch) {
         $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
@@ -129,7 +128,8 @@ class SearchService implements SearchServiceInterface
             $response->getData(Response::DATA_RESULTS)['count']
         );
 
-        return $response;
+        $this->results->setData(Response::DATA_RESULTS, $response->getData(Response::DATA_RESULTS));
+        $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
     }
 
     /**
@@ -140,7 +140,7 @@ class SearchService implements SearchServiceInterface
         try {
             $results = $this->search($request, $externalSearch);
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null) {
-                $this->results = $this->doNavigation($request, $externalSearch);
+                $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($results, $externalSearch);
             }
