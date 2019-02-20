@@ -122,10 +122,10 @@ class FallbackSearchService implements SearchServiceInterface
     }
 
     /**
-     * @param string $dataResults
+     * @param array $dataResults
      * @param Response $response
      */
-    private function setFilters(string $dataResults, Response $response) {
+    private function setFilters(array $dataResults, Response $response) {
         $response->setData(Response::DATA_FILTERS, $dataResults);
     }
 }
