@@ -134,8 +134,6 @@ class SearchService implements SearchServiceInterface
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $isFindologicNavigation = $this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED, false);
-
         $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
         $externalSearch->setResults(
@@ -143,7 +141,7 @@ class SearchService implements SearchServiceInterface
             $response->getData(Response::DATA_RESULTS)['count']
         );
 
-        if ($isFindologicNavigation) {
+        if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED, false)) {
             $this->search($request, $externalSearch);
             $this->results->setData(Response::DATA_RESULTS, $response->getData(Response::DATA_RESULTS));
             $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
