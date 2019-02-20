@@ -138,10 +138,10 @@ class SearchService implements SearchServiceInterface
 
         $externalSearch->setResults(
             $response->getVariationIds(),
-            $response->getData(Response::DATA_RESULTS)['count']
+            $response->getResultsCount()
         );
 
-        if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED, false)) {
+        if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
             $this->results->setData(Response::DATA_RESULTS, $response->getData(Response::DATA_RESULTS));
             $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
@@ -156,7 +156,8 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
-            if ($externalSearch->categoryId !== null && $request->get('attrib') === null) { // Is Navigation
+            // Is Navigation
+            if ($externalSearch->categoryId !== null && $request->get('attrib') === null) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);

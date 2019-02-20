@@ -65,7 +65,7 @@ class FindologicServiceProvider extends ServiceProvider
 
         $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
         $this->activeOnCatPage = !$this->isSearchPage && $configRepository->get(
-                Plugin::CONFIG_NAVIGATION_ENABLED, false);
+                Plugin::CONFIG_NAVIGATION_ENABLED);
 
         $eventDispatcher->listen(
             'IO.Resources.Import',
