@@ -136,7 +136,8 @@ class SearchService implements SearchServiceInterface
     {
         $isFindologicNavigation = $this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED, false);
 
-        if ($isFindologicNavigation) $this->search($request, $externalSearch);
+//        if ($isFindologicNavigation)
+        $this->search($request, $externalSearch);
         $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
         $externalSearch->setResults(
