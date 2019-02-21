@@ -28,14 +28,23 @@ class FindologicServiceProvider extends ServiceProvider
      */
     protected $logger = false;
 
+    /**
+     * @var bool
+     */
+    protected $isSearchPage = false;
+
+    /**
+     * @var bool
+     */
+    protected $activeOnCatPage = false;
+
     public function register()
     {
         $this->getApplication()->singleton(SearchService::class);
     }
 
     /**
-
-     * @param ConfigRepository $configRepositor
+     * @param ConfigRepository $configRepository
      * @param Dispatcher $eventDispatcher
      * @param Request $request
      * @param SearchService $searchService
@@ -54,24 +63,40 @@ class FindologicServiceProvider extends ServiceProvider
             return;
         }
 
+        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
+        $this->activeOnCatPage = !$this->isSearchPage && $configRepository->get(
+                Plugin::CONFIG_NAVIGATION_ENABLED);
+
         $eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) use ($configRepository) {
                 $container->addScriptTemplate(
                     'Findologic::content.scripts',
-                    ['shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, '')))]
+                    [
+                        'shopkey' => strtoupper(md5($configRepository->get(Plugin::CONFIG_SHOPKEY, ''))),
+                        'isSearchPage' => $this->isSearchPage,
+                        'activeOnCatPage' => $this->activeOnCatPage,
+                    ]
                 );
 
                 $container->addStyleTemplate('Findologic::content.styles');
             }, 0
         );
 
-        $eventDispatcher->listen(
-            'Ceres.Search.Options',
-            function (ExternalSearchOptions $searchOptions) use ($searchService, $request) {
-                $searchService->handleSearchOptions($request, $searchOptions);
-            }
-        );
+        if ($this->isSearchPage || $this->activeOnCatPage) {
+            $eventDispatcher->listen(
+                'Ceres.Search.Options',
+                function (ExternalSearchOptions $searchOptions) use ($searchService, $request) {
+                    $searchService->handleSearchOptions($request, $searchOptions);
+                }
+            );
+
+            $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
+                if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
+                    $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
+                }
+            }, 0);
+        }
 
         $eventDispatcher->listen(
             'Ceres.Search.Query',
@@ -79,12 +104,6 @@ class FindologicServiceProvider extends ServiceProvider
                 $searchService->handleSearchQuery($request, $externalSearch);
             }
         );
-
-        $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
-            if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
-                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
-            }
-        }, 0);
     }
 
     /**
