@@ -11,6 +11,7 @@ use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
+use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
@@ -66,13 +67,19 @@ class SearchService implements SearchServiceInterface
      */
     protected $fallbackSearchService;
 
+    /**
+     * @var ConfigRepository
+     */
+    protected $configRepository;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
         ResponseParser $responseParser,
         ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
-        FallbackSearchService $fallbackSearchService
+        FallbackSearchService $fallbackSearchService,
+        ConfigRepository $configRepository
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
@@ -83,6 +90,7 @@ class SearchService implements SearchServiceInterface
             Plugin::PLUGIN_IDENTIFIER
         );
         $this->fallbackSearchService = $fallbackSearchService;
+        $this->configRepository = $configRepository;
     }
 
     /**
@@ -106,11 +114,13 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param Response $results
+     * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
+     * @throws AliveException
      */
-    public function doSearch(Response $results, ExternalSearch $externalSearch)
+    public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
+        $results = $this->search($request, $externalSearch);
         $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
         /** @var ExternalSearch $searchQuery */
@@ -120,6 +130,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
+     * @throws AliveException
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
     {
@@ -127,11 +138,16 @@ class SearchService implements SearchServiceInterface
 
         $externalSearch->setResults(
             $response->getVariationIds(),
-            $response->getData(Response::DATA_RESULTS)['count']
+            $response->getResultsCount()
         );
 
-        $this->results->setData(Response::DATA_RESULTS, $response->getData(Response::DATA_RESULTS));
-        $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
+        if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
+            $this->search($request, $externalSearch);
+            $this->results->setData(Response::DATA_RESULTS, $response->getData(Response::DATA_RESULTS));
+            $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
+        } else {
+            $this->results = $response;
+        }
     }
 
     /**
@@ -140,11 +156,11 @@ class SearchService implements SearchServiceInterface
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
         try {
-            $results = $this->search($request, $externalSearch);
+            // Is Navigation and is no filter selected
             if ($externalSearch->categoryId !== null && $request->get('attrib') === null) {
                 $this->doNavigation($request, $externalSearch);
             } else {
-                $this->doSearch($results, $externalSearch);
+                $this->doSearch($request, $externalSearch);
             }
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
