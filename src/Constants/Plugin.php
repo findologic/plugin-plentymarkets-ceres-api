@@ -30,7 +30,16 @@ class Plugin
 
     const API_ALIVE_RESPONSE_BODY = 'alive';
 
-    const API_SORT_ORDER_AVAILABLE_OPTIONS = ['price ASC', 'price DESC', 'label ASC', 'label DESC', 'salesfrequency ASC', 'salesfrequency DESC', 'dateadded ASC', 'dateadded DESC'];
+    // item.score is missing on purpose since it is the default option and shouldn't actually be sent in the request.
+    const API_SORT_ORDER_AVAILABLE_OPTIONS = [
+        'sorting.price.avg_asc',
+        'sorting.price.avg_desc',
+        'texts.name1_asc',
+        'texts.name1_desc',
+        'default.recommended_sorting',
+        'variation.createdAt_desc',
+        'variation.createdAt_asc'
+    ];
 
     const CONFIG_ENABLED = 'Findologic.enabled';
     const CONFIG_URL = 'Findologic.url';

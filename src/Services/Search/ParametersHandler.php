@@ -60,7 +60,7 @@ class ParametersHandler
      */
     public function handlePaginationAndSorting($search, $request)
     {
-        $search->setSortingOptions($this->getSortingOptions(), $this->getCurrentSorting($request));
+        $search->setSortingOptions($this->getSortingOptions(), 'item.score');
         $search->setItemsPerPage($this->getItemsPerPage($search), $this->getCurrentItemsPerPage($request, $search));
 
         return $search;
@@ -72,22 +72,13 @@ class ParametersHandler
     public function getSortingOptions()
     {
         return [
-            '' => $this->getTranslator()->trans("Findologic::search.sortRevelance"),
-            'price ASC' => $this->getTranslator()->trans("Findologic::search.sortPriceAsc"),
-            'price DESC' => $this->getTranslator()->trans("Findologic::search.sortPriceDesc"),
-            'label ASC' => $this->getTranslator()->trans("Findologic::search.sortLabelAsc"),
-            'salesfrequency DESC' => $this->getTranslator()->trans("Findologic::search.sortSalesFrequency"),
-            'dateadded DESC' => $this->getTranslator()->trans("Findologic::search.sortDateAdded"),
+            'item.score' => $this->getTranslator()->trans("Findologic::search.sortRevelance"),
+            'sorting.price.avg_asc' => $this->getTranslator()->trans("Findologic::search.sortPriceAsc"),
+            'sorting.price.avg_desc' => $this->getTranslator()->trans("Findologic::search.sortPriceDesc"),
+            'texts.name1_asc' => $this->getTranslator()->trans("Findologic::search.sortLabelAsc"),
+            'default.recommended_sorting' => $this->getTranslator()->trans("Findologic::search.sortSalesFrequency"),
+            'variation.createdAt_desc' => $this->getTranslator()->trans("Findologic::search.sortDateAdded")
         ];
-    }
-
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    public function getCurrentSorting($request)
-    {
-        return $request->get(Plugin::PLENTY_PARAMETER_SORT_ORDER, '');
     }
 
     /**
