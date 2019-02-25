@@ -34,8 +34,10 @@ class Plugin
         'sorting.price.avg_asc',
         'sorting.price.avg_desc',
         'texts.name1_asc',
+        'texts.name1_desc',
         'default.recommended_sorting',
-        'variation.createdAt_desc'
+        'variation.createdAt_desc',
+        'variation.createdAt_asc'
     ];
 
     const CONFIG_ENABLED = 'Findologic.enabled';
