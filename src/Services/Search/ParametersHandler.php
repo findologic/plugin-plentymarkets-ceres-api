@@ -60,7 +60,7 @@ class ParametersHandler
      */
     public function handlePaginationAndSorting($search, $request)
     {
-        $search->setSortingOptions($this->getSortingOptions(), $this->getCurrentSorting($request));
+        $search->setSortingOptions($this->getSortingOptions(), 'item.score');
         $search->setItemsPerPage($this->getItemsPerPage($search), $this->getCurrentItemsPerPage($request, $search));
 
         return $search;
