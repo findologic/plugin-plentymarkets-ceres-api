@@ -30,6 +30,7 @@ class Plugin
 
     const API_ALIVE_RESPONSE_BODY = 'alive';
 
+    // item.score is missing on purpose since it is the default option and shouldn't actually be sent in the request.
     const API_SORT_ORDER_AVAILABLE_OPTIONS = [
         'sorting.price.avg_asc',
         'sorting.price.avg_desc',

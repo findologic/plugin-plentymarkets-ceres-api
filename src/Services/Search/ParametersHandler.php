@@ -72,22 +72,13 @@ class ParametersHandler
     public function getSortingOptions()
     {
         return [
-            '' => $this->getTranslator()->trans("Findologic::search.sortRevelance"),
+            'item.score' => $this->getTranslator()->trans("Findologic::search.sortRevelance"),
             'sorting.price.avg_asc' => $this->getTranslator()->trans("Findologic::search.sortPriceAsc"),
             'sorting.price.avg_desc' => $this->getTranslator()->trans("Findologic::search.sortPriceDesc"),
             'texts.name1_asc' => $this->getTranslator()->trans("Findologic::search.sortLabelAsc"),
             'default.recommended_sorting' => $this->getTranslator()->trans("Findologic::search.sortSalesFrequency"),
             'variation.createdAt_desc' => $this->getTranslator()->trans("Findologic::search.sortDateAdded")
         ];
-    }
-
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    public function getCurrentSorting($request)
-    {
-        return $request->get(Plugin::PLENTY_PARAMETER_SORT_ORDER, '');
     }
 
     /**
