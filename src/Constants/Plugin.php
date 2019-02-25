@@ -30,7 +30,13 @@ class Plugin
 
     const API_ALIVE_RESPONSE_BODY = 'alive';
 
-    const API_SORT_ORDER_AVAILABLE_OPTIONS = ['price ASC', 'price DESC', 'label ASC', 'label DESC', 'salesfrequency ASC', 'salesfrequency DESC', 'dateadded ASC', 'dateadded DESC'];
+    const API_SORT_ORDER_AVAILABLE_OPTIONS = [
+        'sorting.price.avg_asc',
+        'sorting.price.avg_desc',
+        'texts.name1_asc',
+        'default.recommended_sorting',
+        'variation.createdAt_desc'
+    ];
 
     const CONFIG_ENABLED = 'Findologic.enabled';
     const CONFIG_URL = 'Findologic.url';

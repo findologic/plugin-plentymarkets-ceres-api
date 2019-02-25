@@ -73,11 +73,11 @@ class ParametersHandler
     {
         return [
             '' => $this->getTranslator()->trans("Findologic::search.sortRevelance"),
-            'price ASC' => $this->getTranslator()->trans("Findologic::search.sortPriceAsc"),
-            'price DESC' => $this->getTranslator()->trans("Findologic::search.sortPriceDesc"),
-            'label ASC' => $this->getTranslator()->trans("Findologic::search.sortLabelAsc"),
-            'salesfrequency DESC' => $this->getTranslator()->trans("Findologic::search.sortSalesFrequency"),
-            'dateadded DESC' => $this->getTranslator()->trans("Findologic::search.sortDateAdded"),
+            'sorting.price.avg_asc' => $this->getTranslator()->trans("Findologic::search.sortPriceAsc"),
+            'sorting.price.avg_desc' => $this->getTranslator()->trans("Findologic::search.sortPriceDesc"),
+            'texts.name1_asc' => $this->getTranslator()->trans("Findologic::search.sortLabelAsc"),
+            'default.recommended_sorting' => $this->getTranslator()->trans("Findologic::search.sortSalesFrequency"),
+            'variation.createdAt_desc' => $this->getTranslator()->trans("Findologic::search.sortDateAdded")
         ];
     }
 

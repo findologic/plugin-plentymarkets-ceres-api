@@ -12,6 +12,14 @@ use Plenty\Plugin\Http\Request as HttpRequest;
 
 class ParametersBuilder
 {
+    const SORT_MAPPING = [
+        'sorting.price.avg_asc' => 'price ASC',
+        'sorting.price.avg_desc' => 'price DESC',
+        'texts.name1_asc' => 'label ASC',
+        'default.recommended_sorting' => 'salesfrequency DESC',
+        'variation.createdAt_desc' => 'dateadded DESC'
+    ];
+
     /**
      * @var CategoryService
      */
@@ -77,7 +85,7 @@ class ParametersBuilder
         }
 
         if (in_array($externalSearch->sorting, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, $externalSearch->sorting);
+            $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, self::SORT_MAPPING[$externalSearch->sorting]);
         }
 
         $request = $this->setPagination($request, $externalSearch);
