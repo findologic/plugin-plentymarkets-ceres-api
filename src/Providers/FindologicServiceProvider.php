@@ -83,14 +83,19 @@ class FindologicServiceProvider extends ServiceProvider
             }, 0
         );
 
-        if ($this->isSearchPage || $this->activeOnCatPage) {
+        // Add the sorting options only in two cases:
+        // * Current page is a search page.
+        // * Current page is a category page, FINDOLOGIC is active for these pages and a filter is selected.
+        if ($this->isSearchPage || ($this->activeOnCatPage && $request->get(Plugin::API_PARAMETER_ATTRIBUTES))) {
             $eventDispatcher->listen(
                 'Ceres.Search.Options',
                 function (ExternalSearchOptions $searchOptions) use ($searchService, $request) {
                     $searchService->handleSearchOptions($request, $searchOptions);
                 }
             );
+        }
 
+        if ($this->isSearchPage || $this->activeOnCatPage) {
             $eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
                 if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
                     $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
