@@ -1,8 +1,22 @@
 Vue.component("item-search", {
 
-    props: [
-        'template'
-    ],
+    props: {
+        template:
+            {
+                type: String,
+                default: "#vue-item-search"
+            },
+        showItemImages:
+            {
+                type: Boolean,
+                default: false
+            },
+        forwardToSingleItem:
+            {
+                type: Boolean,
+                default: App.config.search.forwardToSingleItem
+            }
+    },
 
     data()
     {
@@ -32,21 +46,21 @@ Vue.component("item-search", {
     {
         prepareSearch()
         {
-            // this.search();
-            //
-            // $('#searchBox').collapse('hide');
+            this.search();
+
+            $('#searchBox').collapse('hide');
         },
 
         search()
         {
-            // let searchBaseURL = '/search?query=';
-            //
-            // if (App.defaultLanguage !== App.language)
-            // {
-            //     searchBaseURL = `/${App.language}/search?query=`;
-            // }
-            //
-            // window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
+            let searchBaseURL = '/search?query=';
+
+            if (App.defaultLanguage !== App.language)
+            {
+                searchBaseURL = `/${App.language}/search?query=`;
+            }
+
+            window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
 
         autocomplete(searchString)
@@ -68,10 +82,10 @@ Vue.component("item-search", {
         // hide autocomplete after 100ms to make clicking on it possible
         setIsSearchFocused(value)
         {
-            // setTimeout(() =>
-            // {
-            //     this.isSearchFocused = !!value;
-            // }, 100);
+            setTimeout(() =>
+            {
+                this.isSearchFocused = !!value;
+            }, 100);
         }
     }
 });

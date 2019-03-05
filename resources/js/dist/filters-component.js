@@ -53,7 +53,20 @@ Vue.component("item-list-sorting", {
 
 Vue.component("item-search", {
 
-    props: ['template'],
+    props: {
+        template: {
+            type: String,
+            default: "#vue-item-search"
+        },
+        showItemImages: {
+            type: Boolean,
+            default: false
+        },
+        forwardToSingleItem: {
+            type: Boolean,
+            default: App.config.search.forwardToSingleItem
+        }
+    },
 
     data: function data() {
         return {
@@ -78,19 +91,18 @@ Vue.component("item-search", {
 
     methods: {
         prepareSearch: function prepareSearch() {
-            // this.search();
-            //
-            // $('#searchBox').collapse('hide');
+            this.search();
+
+            $('#searchBox').collapse('hide');
         },
         search: function search() {
-            // let searchBaseURL = '/search?query=';
-            //
-            // if (App.defaultLanguage !== App.language)
-            // {
-            //     searchBaseURL = `/${App.language}/search?query=`;
-            // }
-            //
-            // window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
+            var searchBaseURL = '/search?query=';
+
+            if (App.defaultLanguage !== App.language) {
+                searchBaseURL = "/" + App.language + "/search?query=";
+            }
+
+            window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
         autocomplete: function autocomplete(searchString) {},
         selectAutocompleteItem: function selectAutocompleteItem(item) {},
@@ -100,10 +112,11 @@ Vue.component("item-search", {
 
         // hide autocomplete after 100ms to make clicking on it possible
         setIsSearchFocused: function setIsSearchFocused(value) {
-            // setTimeout(() =>
-            // {
-            //     this.isSearchFocused = !!value;
-            // }, 100);
+            var _this = this;
+
+            setTimeout(function () {
+                _this.isSearchFocused = !!value;
+            }, 100);
         }
     }
 });
