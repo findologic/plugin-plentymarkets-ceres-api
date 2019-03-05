@@ -12,13 +12,6 @@
   },
   {
     "tab": "Findologic Search",
-    "key": "url",
-    "label": "Search server url",
-    "type": "text",
-    "default": "https://service.findologic.com/ps/xml_2.0/"
-  },
-  {
-    "tab": "Findologic Search",
     "key": "shopkey",
     "label": "Shop key",
     "type": "text"
