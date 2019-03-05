@@ -1,21 +1,18 @@
 Vue.component("item-search", {
 
     props: {
-        template:
-            {
-                type: String,
-                default: "#vue-item-search"
-            },
-        showItemImages:
-            {
-                type: Boolean,
-                default: false
-            },
-        forwardToSingleItem:
-            {
-                type: Boolean,
-                default: App.config.search.forwardToSingleItem
-            }
+        template: {
+            type: String,
+            default: "#vue-item-search"
+        },
+        showItemImages: {
+            type: Boolean,
+            default: false
+        },
+        forwardToSingleItem: {
+            type: Boolean,
+            default: App.config.search.forwardToSingleItem
+        }
     },
 
     data()
