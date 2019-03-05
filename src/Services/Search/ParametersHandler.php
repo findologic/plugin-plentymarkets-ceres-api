@@ -72,7 +72,7 @@ class ParametersHandler
     public function getSortingOptions()
     {
         return [
-            'item.score' => $this->getTranslator()->trans("Findologic::search.sortRevelance"),
+            'item.score' => $this->getTranslator()->trans("Findologic::search.sortRelevance"),
             'sorting.price.avg_asc' => $this->getTranslator()->trans("Findologic::search.sortPriceAsc"),
             'sorting.price.avg_desc' => $this->getTranslator()->trans("Findologic::search.sortPriceDesc"),
             'texts.name1_asc' => $this->getTranslator()->trans("Findologic::search.sortLabelAsc"),
