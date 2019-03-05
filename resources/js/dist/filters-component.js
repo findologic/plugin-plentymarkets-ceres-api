@@ -48,133 +48,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"../../mixins/url":9}],2:[function(require,module,exports){
-"use strict";
-
-var _url = require("../../mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-Vue.component("items-per-page", {
-    mixins: [_url2.default],
-
-    delimiters: ["${", "}"],
-
-    props: ["paginationValues", "template"],
-
-    data: function data() {
-        return {
-            selectedValue: null
-        };
-    },
-    created: function created() {
-        this.$options.template = this.template || "#vue-items-per-page";
-        this.setSelectedValueByUrl();
-    },
-
-
-    methods: {
-        itemsPerPageChanged: function itemsPerPageChanged() {
-            this.setUrlParamValue('items', this.selectedValue);
-        },
-        setSelectedValueByUrl: function setSelectedValueByUrl() {
-            var urlParams = this.getUrlParams(document.location.search);
-            var defaultItemsPerPage = App.config.pagination.columnsPerPage * App.config.pagination.rowsPerPage[0];
-
-            if (urlParams.items) {
-                if (this.paginationValues.includes(parseInt(urlParams.items))) {
-                    this.selectedValue = urlParams.items;
-                } else {
-                    this.selectedValue = defaultItemsPerPage;
-                }
-            } else {
-                this.selectedValue = defaultItemsPerPage;
-            }
-
-            this.$store.commit("setItemsPerPage", parseInt(this.selectedValue));
-        }
-    }
-});
-
-},{"../../mixins/url":9}],3:[function(require,module,exports){
-"use strict";
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _url = require("../../mixins/url");
-
-var _url2 = _interopRequireDefault(_url);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var options = {
-    mixins: [_url2.default],
-
-    delimiters: ["${", "}"],
-
-    props: ["template"],
-
-    data: function data() {
-        return {
-            lastPageMax: 0
-        };
-    },
-
-
-    computed: _extends({
-        pageMax: function pageMax() {
-            if (this.isLoading) {
-                return this.lastPageMax;
-            }
-
-            var pageMax = this.totalItems / parseInt(this.itemsPerPage);
-
-            if (this.totalItems % parseInt(this.itemsPerPage) > 0) {
-                pageMax += 1;
-            }
-
-            this.lastPageMax = parseInt(pageMax) || 1;
-
-            return parseInt(pageMax) || 1;
-        }
-    }, Vuex.mapState({
-        page: function page(state) {
-            return state.itemList.page || 1;
-        },
-        isLoading: function isLoading(state) {
-            return state.itemList.isLoading;
-        },
-        itemsPerPage: function itemsPerPage(state) {
-            return state.itemList.itemsPerPage;
-        },
-        totalItems: function totalItems(state) {
-            return state.itemList.totalItems;
-        }
-    })),
-
-    created: function created() {
-        this.$options.template = this.template;
-
-        var urlParams = this.getUrlParams(document.location.search);
-        var page = urlParams.page || 1;
-
-        this.$store.commit("setItemListPage", parseInt(page));
-    },
-
-
-    methods: {
-        setPage: function setPage(page) {
-            this.setUrlParamValue('page', page);
-        }
-    }
-};
-
-Vue.component('pagination', options);
-Vue.component('custom-pagination', options);
-
-},{"../../mixins/url":9}],4:[function(require,module,exports){
+},{"../../mixins/url":6}],2:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -255,7 +129,7 @@ Vue.component("item-filter", {
     }
 });
 
-},{"../../../mixins/url":9}],5:[function(require,module,exports){
+},{"../../../mixins/url":6}],3:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -317,7 +191,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"../../../mixins/url":9}],6:[function(require,module,exports){
+},{"../../../mixins/url":6}],4:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../../mixins/url");
@@ -351,7 +225,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"../../../mixins/url":9}],7:[function(require,module,exports){
+},{"../../../mixins/url":6}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -363,20 +237,7 @@ exports.default = {
     PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES
 };
 
-},{}],8:[function(require,module,exports){
-"use strict";
-
-Vue.directive("render-category", {
-    bind: function bind(el, binding) {
-        el.onclick = function (event) {
-            event.preventDefault();
-
-            window.open(event.target.href, '_self');
-        };
-    }
-});
-
-},{}],9:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -785,7 +646,7 @@ exports.default = {
     }
 };
 
-},{"../constants":7}]},{},[4,5,6,1,2,3,8])
+},{"../constants":5}]},{},[2,3,4,1])
 
 
 //# sourceMappingURL=filters-component.js.map

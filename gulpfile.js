@@ -20,10 +20,10 @@ gulp.task("js", () => {
             "app/components/itemList/filter/ItemFilterPrice.js",
             "app/components/itemList/filter/ItemFilterTagList.js",
             "app/components/itemList/ItemListSorting.js",
-            "app/components/itemList/ItemsPerPage.js",
-            "app/components/itemList/Pagination.js",
+            // "app/components/itemList/ItemsPerPage.js",
+            // "app/components/itemList/Pagination.js",
             // "app/components/itemList/ItemSearch.js",
-            "app/directives/navigation/renderCategory.js"
+            // "app/directives/navigation/renderCategory.js"
         ],
         debug: true,
         basedir: JS_SRC,
