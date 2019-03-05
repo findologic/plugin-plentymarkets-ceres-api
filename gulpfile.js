@@ -16,12 +16,12 @@ const sourcemaps = require("gulp-sourcemaps")
 gulp.task("js", () => {
     var builder = browserify({
         entries: [
-            // "app/components/itemList/filter/ItemFilter.js",
-            // "app/components/itemList/filter/ItemFilterPrice.js",
-            // "app/components/itemList/filter/ItemFilterTagList.js",
-            // "app/components/itemList/ItemListSorting.js",
-            // "app/components/itemList/ItemsPerPage.js",
-            // "app/components/itemList/Pagination.js",
+            "app/components/itemList/filter/ItemFilter.js",
+            "app/components/itemList/filter/ItemFilterPrice.js",
+            "app/components/itemList/filter/ItemFilterTagList.js",
+            "app/components/itemList/ItemListSorting.js",
+            "app/components/itemList/ItemsPerPage.js",
+            "app/components/itemList/Pagination.js",
             // "app/components/itemList/ItemSearch.js",
             "app/directives/navigation/renderCategory.js"
         ],
