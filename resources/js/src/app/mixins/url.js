@@ -177,6 +177,7 @@ export default {
             }
 
             params[Constants.PARAMETER_ATTRIBUTES] = attributes;
+            params['page'] = 1;
 
             document.location.search = '?' + $.param(params);
         },
