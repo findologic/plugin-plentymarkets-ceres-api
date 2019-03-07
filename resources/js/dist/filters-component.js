@@ -49,11 +49,24 @@ Vue.component("item-list-sorting", {
 });
 
 },{"../../mixins/url":10}],2:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Vue.component("item-search", {
 
-    props: ['template'],
+    props: {
+        template: {
+            type: String,
+            default: "#vue-item-search"
+        },
+        showItemImages: {
+            type: Boolean,
+            default: false
+        },
+        forwardToSingleItem: {
+            type: Boolean,
+            default: App.config.search.forwardToSingleItem
+        }
+    },
 
     data: function data() {
         return {
@@ -86,7 +99,7 @@ Vue.component("item-search", {
             var searchBaseURL = '/search?query=';
 
             if (App.defaultLanguage !== App.language) {
-                searchBaseURL = '/' + App.language + '/search?query=';
+                searchBaseURL = "/" + App.language + "/search?query=";
             }
 
             window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
