@@ -39,9 +39,9 @@ class FiltersParser
                     $filterData['type'] = 'price';
                 }
 
-                foreach ($filter->items->item as $item) {
+                foreach ($filter->items->item as $key => $item) {
                     $filterItem = [];
-                    $this->parseFilterItem($filterData['type'], $filterItem, $item);
+                    $this->parseFilterItem($filterData['type'], $filterItem, $item, $key);
                     if (!empty($filterItem)) {
                         $filterData['values'][] = $filterItem;
                     }
@@ -58,13 +58,14 @@ class FiltersParser
      * @param string $filterType
      * @param array $filterItem
      * @param \SimpleXMLElement $data
+     * @param int $index
      * @return array
      */
-    public function parseFilterItem($filterType, &$filterItem, $data)
+    public function parseFilterItem($filterType, &$filterItem, $data, $index)
     {
         if (!empty($data)) {
             $filterItem['name'] = $data->name->__toString();
-            $filterItem['position'] = $data->weight->__toString();
+            $filterItem['position'] = $index;
             $filterItem['count'] = $data->frequency->__toString();
             $filterItem['image'] = $data->image->__toString();
             $filterItem['id'] = ++$this->valueId;
@@ -75,9 +76,9 @@ class FiltersParser
             }
 
             if (!empty($data->items)) {
-                foreach ($data->items->item as $item) {
+                foreach ($data->items->item as $key => $item) {
                     $newItem = [];
-                    $this->parseFilterItem($filterType, $newItem, $item);
+                    $this->parseFilterItem($filterType, $newItem, $item, $key);
                     $filterItem['items'][] = $newItem;
                 }
             }
