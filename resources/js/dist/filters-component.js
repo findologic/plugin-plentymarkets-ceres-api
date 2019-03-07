@@ -653,6 +653,7 @@ exports.default = {
             }
 
             params[_constants2.default.PARAMETER_ATTRIBUTES] = attributes;
+            params['page'] = 1;
 
             document.location.search = '?' + $.param(params);
         },

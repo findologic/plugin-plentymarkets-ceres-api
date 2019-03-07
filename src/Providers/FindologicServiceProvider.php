@@ -55,10 +55,6 @@ class FindologicServiceProvider extends ServiceProvider
         Request $request,
         SearchService $searchService
     ) {
-        if (!$configRepository->get(Plugin::CONFIG_ENABLED, false)) {
-            return;
-        }
-
         if (!$configRepository->get(Plugin::CONFIG_SHOPKEY, false)) {
             return;
         }

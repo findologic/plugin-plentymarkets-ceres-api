@@ -19,6 +19,7 @@ class RequestBuilder
     const DEFAULT_REQUEST_TYPE = 'request';
     const ALIVE_REQUEST_TYPE = 'alive';
     const CATEGORY_REQUEST_TYPE = 'category';
+    const SEARCH_SERVER_URL = 'https://service.findologic.com/ps/xml_2.0/';
 
     /**
      * @var ParametersBuilder
@@ -92,7 +93,7 @@ class RequestBuilder
      */
     public function getCleanShopUrl($type = self::DEFAULT_REQUEST_TYPE)
     {
-        $url = ltrim($this->configRepository->get(Plugin::CONFIG_URL), '/') . '/';
+        $url = self::SEARCH_SERVER_URL;
 
         if ($type == self::ALIVE_REQUEST_TYPE) {
             $url .= 'alivetest.php';

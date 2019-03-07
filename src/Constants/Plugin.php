@@ -41,8 +41,6 @@ class Plugin
         'variation.createdAt_asc'
     ];
 
-    const CONFIG_ENABLED = 'Findologic.enabled';
-    const CONFIG_URL = 'Findologic.url';
     const CONFIG_SHOPKEY = 'Findologic.shopkey';
     const CONFIG_NAVIGATION_ENABLED = 'Findologic.nav_enabled';
 }
