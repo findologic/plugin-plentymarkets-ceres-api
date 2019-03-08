@@ -155,9 +155,11 @@ class SearchService implements SearchServiceInterface
      */
     public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
     {
+        $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
+        $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
+
         try {
-            // Is Navigation and is no filter selected
-            if ($externalSearch->categoryId !== null && $request->get('attrib') === null) {
+            if ($isCategoryPage && (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
