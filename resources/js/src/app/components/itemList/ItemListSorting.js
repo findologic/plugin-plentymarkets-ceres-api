@@ -1,4 +1,5 @@
 import url from "../../mixins/url";
+import Constants from '../../constants';
 
 Vue.component("item-list-sorting", {
     mixins: [url],
@@ -24,7 +25,16 @@ Vue.component("item-list-sorting", {
 
     methods: {
         updateSorting() {
-            this.setUrlParamValue('sorting', this.selectedSorting);
+            this.setUrlParamValues([
+                {
+                    key: Constants.PARAMETER_SORTING,
+                    value: this.selectedSorting
+                },
+                {
+                    key: Constants.PARAMETER_PAGE,
+                    value: 1
+                }
+            ]);
         },
 
         /**

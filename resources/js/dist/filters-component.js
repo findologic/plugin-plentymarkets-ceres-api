@@ -5,6 +5,10 @@ var _url = require("../../mixins/url");
 
 var _url2 = _interopRequireDefault(_url);
 
+var _constants = require("../../constants");
+
+var _constants2 = _interopRequireDefault(_constants);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Vue.component("item-list-sorting", {
@@ -27,7 +31,13 @@ Vue.component("item-list-sorting", {
 
     methods: {
         updateSorting: function updateSorting() {
-            this.setUrlParamValue('sorting', this.selectedSorting);
+            this.setUrlParamValues([{
+                key: _constants2.default.PARAMETER_SORTING,
+                value: this.selectedSorting
+            }, {
+                key: _constants2.default.PARAMETER_PAGE,
+                value: 1
+            }]);
         },
 
 
@@ -48,7 +58,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"../../mixins/url":10}],2:[function(require,module,exports){
+},{"../../constants":8,"../../mixins/url":10}],2:[function(require,module,exports){
 "use strict";
 
 Vue.component("item-search", {
@@ -128,6 +138,10 @@ var _url = require("../../mixins/url");
 
 var _url2 = _interopRequireDefault(_url);
 
+var _constants = require("../../constants");
+
+var _constants2 = _interopRequireDefault(_constants);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Vue.component("items-per-page", {
@@ -150,7 +164,13 @@ Vue.component("items-per-page", {
 
     methods: {
         itemsPerPageChanged: function itemsPerPageChanged() {
-            this.setUrlParamValue('items', this.selectedValue);
+            this.setUrlParamValues([{
+                key: _constants2.default.PARAMETER_ITEMS,
+                value: this.selectedValue
+            }, {
+                key: _constants2.default.PARAMETER_PAGE,
+                value: 1
+            }]);
         },
         setSelectedValueByUrl: function setSelectedValueByUrl() {
             var urlParams = this.getUrlParams(document.location.search);
@@ -171,7 +191,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"../../mixins/url":10}],4:[function(require,module,exports){
+},{"../../constants":8,"../../mixins/url":10}],4:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -431,9 +451,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var PARAMETER_ATTRIBUTES = 'attrib';
+var PARAMETER_PAGE = 'page';
+var PARAMETER_SORTING = 'sorting';
+var PARAMETER_ITEMS = 'items';
 
 exports.default = {
-    PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES
+    PARAMETER_ATTRIBUTES: PARAMETER_ATTRIBUTES,
+    PARAMETER_PAGE: PARAMETER_PAGE,
+    PARAMETER_SORTING: PARAMETER_SORTING,
+    PARAMETER_ITEMS: PARAMETER_ITEMS
 };
 
 },{}],9:[function(require,module,exports){
@@ -653,7 +679,7 @@ exports.default = {
             }
 
             params[_constants2.default.PARAMETER_ATTRIBUTES] = attributes;
-            params['page'] = 1;
+            params[_constants2.default.PARAMETER_PAGE] = 1;
 
             document.location.search = '?' + $.param(params);
         },
@@ -758,6 +784,7 @@ exports.default = {
             }
 
             params[_constants2.default.PARAMETER_ATTRIBUTES] = attributes;
+            params[_constants2.default.PARAMETER_PAGE] = 1;
 
             document.location.search = '?' + $.param(params);
         },
@@ -813,6 +840,22 @@ exports.default = {
             var params = this.getSearchParams();
 
             params[key] = value;
+
+            document.location.search = '?' + $.param(params);
+        },
+
+
+        /**
+         * Set multiple url parameter values
+         *
+         * @param {array} keyValueArray
+         */
+        setUrlParamValues: function setUrlParamValues(keyValueArray) {
+            var params = this.getSearchParams();
+
+            keyValueArray.forEach(function (keyValueObject) {
+                params[keyValueObject.key] = keyValueObject.value;
+            });
 
             document.location.search = '?' + $.param(params);
         },
