@@ -177,7 +177,7 @@ export default {
             }
 
             params[Constants.PARAMETER_ATTRIBUTES] = attributes;
-            params['page'] = 1;
+            params[Constants.PARAMETER_PAGE] = 1;
 
             document.location.search = '?' + $.param(params);
         },
@@ -279,6 +279,7 @@ export default {
             }
 
             params[Constants.PARAMETER_ATTRIBUTES] = attributes;
+            params[Constants.PARAMETER_PAGE] = 1;
 
             document.location.search = '?' + $.param(params);
         },
@@ -331,6 +332,21 @@ export default {
             let params = this.getSearchParams();
 
             params[key] = value;
+
+            document.location.search = '?' + $.param(params);
+        },
+
+        /**
+         * Set multiple url parameter values
+         *
+         * @param {array} keyValueArray
+         */
+        setUrlParamValues(keyValueArray) {
+            let params = this.getSearchParams();
+
+            keyValueArray.forEach(function (keyValueObject) {
+                params[keyValueObject.key] = keyValueObject.value;
+            });
 
             document.location.search = '?' + $.param(params);
         },

@@ -1,4 +1,5 @@
 import url from "../../mixins/url";
+import Constants from '../../constants';
 
 Vue.component("items-per-page", {
     mixins: [url],
@@ -23,7 +24,16 @@ Vue.component("items-per-page", {
 
     methods: {
         itemsPerPageChanged() {
-            this.setUrlParamValue('items', this.selectedValue);
+            this.setUrlParamValues([
+                {
+                    key: Constants.PARAMETER_ITEMS,
+                    value: this.selectedValue
+                },
+                {
+                    key: Constants.PARAMETER_PAGE,
+                    value: 1
+                }
+            ]);
         },
 
         setSelectedValueByUrl() {
