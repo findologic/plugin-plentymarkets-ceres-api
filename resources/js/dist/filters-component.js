@@ -58,7 +58,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"../../constants":9,"../../mixins/url":11}],2:[function(require,module,exports){
+},{"../../constants":10,"../../mixins/url":12}],2:[function(require,module,exports){
 "use strict";
 
 Vue.component("item-search", {
@@ -191,7 +191,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"../../constants":9,"../../mixins/url":11}],4:[function(require,module,exports){
+},{"../../constants":10,"../../mixins/url":12}],4:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -267,7 +267,50 @@ var options = {
 Vue.component('pagination', options);
 Vue.component('custom-pagination', options);
 
-},{"../../mixins/url":11}],5:[function(require,module,exports){
+},{"../../mixins/url":12}],5:[function(require,module,exports){
+"use strict";
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _url = require("../../../mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-color-tiles", {
+    mixins: [_url2.default],
+
+    props: ["template", "facet"],
+
+    created: function created() {
+        this.$options.template = this.template || "#vue-item-color-tiles";
+    },
+
+
+    computed: _extends({}, Vuex.mapState({
+        isLoading: function isLoading(state) {
+            return state.itemList.isLoading;
+        }
+    })),
+
+    methods: {
+        isSelected: function isSelected(facetValueName) {
+            var facetValue = this.facet.values.filter(function (value) {
+                return value.name === facetValueName;
+            });
+
+            return facetValue.length && this.isValueSelected(this.facet.id, facetValue[0].name);
+        },
+
+
+        tileClicked: function tileClicked(value) {
+            this.updateSelectedFilters(this.facet.id, value);
+        }
+    }
+});
+
+},{"../../../mixins/url":12}],6:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -348,7 +391,7 @@ Vue.component("item-filter", {
     }
 });
 
-},{"../../../mixins/url":11}],6:[function(require,module,exports){
+},{"../../../mixins/url":12}],7:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -410,7 +453,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"../../../mixins/url":11}],7:[function(require,module,exports){
+},{"../../../mixins/url":12}],8:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../../mixins/url");
@@ -447,7 +490,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"../../../mixins/url":11}],8:[function(require,module,exports){
+},{"../../../mixins/url":12}],9:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -519,7 +562,7 @@ Vue.component("item-price-slider", {
     }
 });
 
-},{"../../../mixins/url":11}],9:[function(require,module,exports){
+},{"../../../mixins/url":12}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -537,7 +580,7 @@ exports.default = {
     PARAMETER_ITEMS: PARAMETER_ITEMS
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 Vue.directive("render-category", {
@@ -550,7 +593,7 @@ Vue.directive("render-category", {
     }
 });
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -992,7 +1035,7 @@ exports.default = {
     }
 };
 
-},{"../constants":9}]},{},[5,6,7,8,1,3,4,2,10])
+},{"../constants":10}]},{},[6,7,8,9,5,1,3,4,2,11])
 
 
 //# sourceMappingURL=filters-component.js.map

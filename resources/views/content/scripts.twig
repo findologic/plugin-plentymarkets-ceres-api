@@ -18,6 +18,31 @@
     })();
 </script>
 
+<script>
+    /**
+     * Replace img tags with svg source with inline svg
+     */
+    $(function() {
+        $('.fl-item-color-tiles-container img[src$=".svg"]').each(function() {
+            var $img = jQuery(this);
+            var imgURL = $img.attr('src');
+            var attributes = $img.prop("attributes");
+
+            $.get(imgURL, function(data) {
+                var $svg = jQuery(data).find('svg');
+
+                $svg = $svg.removeAttr('xmlns:a');
+
+                $.each(attributes, function() {
+                    $svg.attr(this.name, this.value);
+                });
+
+                $img.replaceWith($svg);
+            }, 'xml');
+        });
+    });
+</script>
+
 {% if isSearchPage or activeOnCatPage %}
     <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component.js"></script>
 {% endif %}

@@ -1,0 +1,14 @@
+<script type="x/template" id="vue-item-color-tiles">
+    <div class="fl-item-color-tiles-container">
+        <ul class="item-color-tiles-list">
+            <li class="item-color-tiles-list-item" v-for="colorValue in facet.values">
+                <label class="color-tile-label" @click="tileClicked(colorValue.name)">
+                    <div class="color-tile-background" v-bind:style="{background: colorValue.hexValue}"></div>
+                    <div v-show="isSelected(colorValue.name)">
+                        <img src="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.svg"/>
+                    </div>
+                </label>
+            </li>
+        </ul>
+    </div>
+</script>
