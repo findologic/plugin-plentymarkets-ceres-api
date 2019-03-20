@@ -2,6 +2,8 @@
 
 namespace Findologic\Api\Response\Parser;
 
+use Findologic\Constants\Plugin;
+
 /**
  * Class FiltersParser
  * @package Findologic\Api\Response\Parser
@@ -35,8 +37,15 @@ class FiltersParser
                     $filterData['type'] = $filter->type->__toString();
                 }
 
-                if ($filterName === 'price') {
+                if ($filterName === 'price' && $filterData['type'] !== Plugin::FILTER_TYPE_RANGE_SLIDER) {
                     $filterData['type'] = 'price';
+                }
+
+                if ($filterData['type'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
+                    $filterData['currency'] = $filter->attributes->unit->__toString();
+                    $filterData['minPrice'] = (float)$filter->attributes->totalRange->min;
+                    $filterData['maxPrice'] = (float)$filter->attributes->totalRange->max;
+                    $filterData['step'] = (float)$filter->attributes->stepSize;
                 }
 
                 foreach ($filter->items->item as $key => $item) {

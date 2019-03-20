@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 <style>
     .findologic-container .category-container, .findologic-container .sub-category-container {
         position: relative;
@@ -9,5 +10,34 @@
 
     .search-box-inner .autocomplete-suggestions {
         display: none !important;
+    }
+
+    .fl-price-range-slider-container #price-slider-range {
+        margin-top: 20px;
+    }
+
+    .fl-price-range-slider-container .price-range-input {
+        width: 50%;
+        height: 35px;
+        padding: 5px;
+        display: inline;
+    }
+
+    .fl-price-range-slider-container .currency-sign {
+        margin-left: 5px;
+    }
+
+    .fl-price-range-slider-container .range-slider-submit-btn {
+        margin-top: 10px;
+    }
+
+    @media screen and (max-width: 543px) {
+        .fl-price-range-slider-container .range-slider-submit-btn {
+            width: 100%;
+        }
+
+        .fl-price-range-slider-container .range-slider-submit-btn > .fa {
+            float: none;
+        }
     }
 </style>
