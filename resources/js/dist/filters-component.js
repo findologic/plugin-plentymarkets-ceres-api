@@ -642,7 +642,7 @@ exports.default = {
         updateSelectedFilters: function updateSelectedFilters(facetId, facetValue) {
             var params = this.getSearchParams();
 
-            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
+            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params) || params[_constants2.default.PARAMETER_ATTRIBUTES] === '') {
                 params[_constants2.default.PARAMETER_ATTRIBUTES] = {};
             }
 
@@ -695,7 +695,7 @@ exports.default = {
         isValueSelected: function isValueSelected(facetId, facetValue) {
             var params = this.getSearchParams();
 
-            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
+            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params) || params[_constants2.default.PARAMETER_ATTRIBUTES] === '') {
                 return false;
             }
 
@@ -799,7 +799,7 @@ exports.default = {
         getSelectedFilterValue: function getSelectedFilterValue(facetId) {
             var params = this.getSearchParams();
 
-            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
+            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params) || params[_constants2.default.PARAMETER_ATTRIBUTES] === '') {
                 return null;
             }
 
