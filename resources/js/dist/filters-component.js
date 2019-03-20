@@ -724,7 +724,7 @@ exports.default = {
             var selectedFilters = [];
             var params = this.getSearchParams();
 
-            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params)) {
+            if (!(_constants2.default.PARAMETER_ATTRIBUTES in params) || params[_constants2.default.PARAMETER_ATTRIBUTES] === "") {
                 return selectedFilters;
             }
 

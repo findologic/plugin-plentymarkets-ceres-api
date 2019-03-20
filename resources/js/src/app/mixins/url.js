@@ -220,7 +220,8 @@ export default {
             let selectedFilters = [];
             let params = this.getSearchParams();
 
-            if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
+            if (!(Constants.PARAMETER_ATTRIBUTES in params) ||
+                params[Constants.PARAMETER_ATTRIBUTES] === "") {
                 return selectedFilters;
             }
 
