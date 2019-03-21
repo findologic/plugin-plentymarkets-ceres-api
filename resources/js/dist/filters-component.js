@@ -701,6 +701,10 @@ exports.default = {
                 }
             }
 
+            if (requestParameters[_constants2.default.PARAMETER_ATTRIBUTES] === '') {
+                delete requestParameters[_constants2.default.PARAMETER_ATTRIBUTES];
+            }
+
             return requestParameters;
         },
 
