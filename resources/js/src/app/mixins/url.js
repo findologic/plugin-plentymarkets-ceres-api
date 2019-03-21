@@ -128,6 +128,10 @@ export default {
                 }
             }
 
+            if (requestParameters[Constants.PARAMETER_ATTRIBUTES] === '') {
+                delete requestParameters[Constants.PARAMETER_ATTRIBUTES];
+            }
+
             return requestParameters;
         },
 
@@ -140,8 +144,7 @@ export default {
         updateSelectedFilters(facetId, facetValue) {
             let params = this.getSearchParams();
 
-            if (!(Constants.PARAMETER_ATTRIBUTES in params) ||
-                params[Constants.PARAMETER_ATTRIBUTES] === '') {
+            if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 params[Constants.PARAMETER_ATTRIBUTES] = {};
             }
 
@@ -193,8 +196,7 @@ export default {
         isValueSelected(facetId, facetValue) {
             let params = this.getSearchParams();
 
-            if (!(Constants.PARAMETER_ATTRIBUTES in params) ||
-                params[Constants.PARAMETER_ATTRIBUTES] === '') {
+            if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 return false;
             }
 
@@ -296,8 +298,7 @@ export default {
         getSelectedFilterValue(facetId) {
             let params = this.getSearchParams();
 
-            if (!(Constants.PARAMETER_ATTRIBUTES in params) ||
-            params[Constants.PARAMETER_ATTRIBUTES] === '') {
+            if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
                 return null;
             }
 
