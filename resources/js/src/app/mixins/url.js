@@ -128,6 +128,10 @@ export default {
                 }
             }
 
+            if (requestParameters[Constants.PARAMETER_ATTRIBUTES] === '') {
+                delete requestParameters[Constants.PARAMETER_ATTRIBUTES];
+            }
+
             return requestParameters;
         },
 
