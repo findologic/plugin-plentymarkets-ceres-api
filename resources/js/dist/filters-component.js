@@ -442,7 +442,7 @@ Vue.component("item-filter-tag-list", {
             this.removeSelectedFilter(tag.id, tag.name);
         },
         resetAllTags: function resetAllTags() {
-            _url2.default.removeAllAttribsAndRefresh();
+            this.removeAllAttribsAndRefresh();
         }
     }
 });

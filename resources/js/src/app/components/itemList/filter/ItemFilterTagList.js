@@ -25,7 +25,7 @@ Vue.component("item-filter-tag-list", {
         },
 
         resetAllTags() {
-            url.removeAllAttribsAndRefresh();
+            this.removeAllAttribsAndRefresh();
         }
     }
 });
