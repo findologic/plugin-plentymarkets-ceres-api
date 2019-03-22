@@ -440,6 +440,9 @@ Vue.component("item-filter-tag-list", {
     methods: {
         removeTag: function removeTag(tag) {
             this.removeSelectedFilter(tag.id, tag.name);
+        },
+        resetAllTags: function resetAllTags() {
+            _url2.default.removeAllAttribsAndRefresh();
         }
     }
 });
@@ -898,6 +901,16 @@ exports.default = {
             }
 
             return -1;
+        },
+
+
+        /**
+         *  Remove all `attrib` url params and reload the page
+         */
+        removeAllAttribsAndRefresh: function removeAllAttribsAndRefresh() {
+            var params = this.getSearchParams();
+            delete params['attrib'];
+            document.location.search = '?' + $.param(params);
         }
     }
 };

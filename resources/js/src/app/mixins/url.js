@@ -387,6 +387,15 @@ export default {
             }
 
             return -1;
+        },
+
+        /**
+         *  Remove all `attrib` url params and reload the page
+         */
+        removeAllAttribsAndRefresh() {
+            let params = this.getSearchParams();
+            delete params['attrib'];
+            document.location.search = '?' + $.param(params);
         }
     }
 }
