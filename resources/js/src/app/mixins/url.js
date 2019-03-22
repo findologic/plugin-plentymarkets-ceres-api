@@ -394,7 +394,8 @@ export default {
          */
         removeAllAttribsAndRefresh() {
             let params = this.getSearchParams();
-            delete params['attrib'];
+            params[Constants.PARAMETER_PAGE] = 1;
+            delete params[Constants.PARAMETER_ATTRIBUTES];
             document.location.search = '?' + $.param(params);
         }
     }
