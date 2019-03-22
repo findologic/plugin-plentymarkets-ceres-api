@@ -128,6 +128,10 @@ export default {
                 }
             }
 
+            if (requestParameters[Constants.PARAMETER_ATTRIBUTES] === '') {
+                delete requestParameters[Constants.PARAMETER_ATTRIBUTES];
+            }
+
             return requestParameters;
         },
 
@@ -387,6 +391,16 @@ export default {
             }
 
             return -1;
+        },
+
+        /**
+         *  Remove all `attrib` url params and reload the page
+         */
+        removeAllAttribsAndRefresh() {
+            let params = this.getSearchParams();
+            params[Constants.PARAMETER_PAGE] = 1;
+            delete params[Constants.PARAMETER_ATTRIBUTES];
+            document.location.search = '?' + $.param(params);
         }
     }
 }

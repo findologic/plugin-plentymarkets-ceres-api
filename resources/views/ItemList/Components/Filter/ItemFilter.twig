@@ -4,6 +4,9 @@
         <div v-if="facet.type === 'price'">
             <item-filter-price :facet="facet"></item-filter-price>
         </div>
+        <div v-else-if="facet.type === 'range-slider'">
+            <item-price-slider :facet="facet"></item-price-slider>
+        </div>
         <div v-else-if="facet.id === 'cat'">
             <div class="form-check" v-for="value in facets" :key="value.id">
                 <div class="category-container">
