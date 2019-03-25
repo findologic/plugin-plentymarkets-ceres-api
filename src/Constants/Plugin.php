@@ -45,4 +45,5 @@ class Plugin
     const CONFIG_NAVIGATION_ENABLED = 'Findologic.nav_enabled';
 
     const FILTER_TYPE_RANGE_SLIDER = 'range-slider';
+    const FILTER_TYPE_COLOR = 'color';
 }

@@ -84,6 +84,10 @@ class FiltersParser
                 $filterItem['priceMax'] = $data->parameters->max;
             }
 
+            if ($filterType === Plugin::FILTER_TYPE_COLOR) {
+                $filterItem['hexValue'] = $data->color->__toString();
+            }
+
             if (!empty($data->items)) {
                 foreach ($data->items->item as $key => $item) {
                     $newItem = [];
