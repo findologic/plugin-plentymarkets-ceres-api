@@ -4,13 +4,13 @@
   "description": "Findologic api plugin for plentymarkets system",
   "require": {
     "php": "^7.0",
-    "plentymarkets/plugin-interface": "dev-beta7",
-    "findologic/http_request2": "2.3.1",
-    "plentymarkets/plugin-ceres": "2.17.1",
-    "plentymarkets/plugin-io": "2.17.1"
+    "findologic/http_request2": "2.3.1"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6"
+    "phpunit/phpunit": "^6",
+    "plentymarkets/plugin-ceres": "2.17.1",
+    "plentymarkets/plugin-io": "2.17.1",
+    "plentymarkets/plugin-interface": "dev-fixed-return-types"
   },
   "repositories": [
     {
@@ -58,6 +58,10 @@
           }
         }
       ]
+    },
+    {
+      "type": "git",
+      "url": "git@github.com:findologic/plugin-interface.git"
     }
   ],
   "autoload": {
