@@ -41,14 +41,19 @@
         }
     }
 
+    .fl-item-color-tiles-container .item-color-tiles-list {
+        padding-left: 0;
+    }
+
     .fl-item-color-tiles-container .item-color-tiles-list .item-color-tiles-list-item {
-        margin: 10px;
-        display: inline;
+        margin: 10px 10px 10px 0;
+        display: inline-block;
     }
 
     .fl-item-color-tiles-container .item-color-tiles-list .item-color-tiles-list-item .color-tile-label {
         border: 1px solid #ccc;
         position: relative;
+        cursor: pointer;
     }
 
     .fl-item-color-tiles-container .item-color-tiles-list .item-color-tiles-list-item .color-tile-label svg {
@@ -64,7 +69,11 @@
     }
 
     .fl-item-color-tiles-container .item-color-tiles-list .item-color-tiles-list-item .color-tile-label .color-tile-background {
-        width: 50px;
-        height: 50px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .fl-item-color-tiles-container .item-color-tiles-list .item-color-tiles-list-item .color-tile-label .color-tile-background:hover {
+        border: 1px solid #DDD;
     }
 </style>
