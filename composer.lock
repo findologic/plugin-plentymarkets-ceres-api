@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5f1282eee848c89730fd843566c5620",
+    "content-hash": "a267022c0023485bc15b89d3c063190b",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -976,21 +976,11 @@
             "time": "2015-02-10T20:07:52+00:00"
         },
         {
-            "name": "plentymarkets/plugin-ceres",
-            "version": "2.17.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-ceres",
-                "reference": "origin/stable"
-            },
-            "type": "library"
-        },
-        {
             "name": "plentymarkets/plugin-interface",
             "version": "dev-beta7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-interface.git",
+                "url": "git@github.com:plentymarkets/plugin-interface.git",
                 "reference": "c6aee2323801f911afa314a2a0f59416b2bc56c2"
             },
             "dist": {
@@ -1010,16 +1000,6 @@
             ],
             "description": "Interface for plentymarkets plugin development with PHP 7",
             "time": "2018-12-11T13:14:58+00:00"
-        },
-        {
-            "name": "plentymarkets/plugin-io",
-            "version": "2.17.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "2.17.1"
-            },
-            "type": "library"
         },
         {
             "name": "psr/log",
@@ -2834,7 +2814,28 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2018-08-09T05:50:03+00:00"
+        },
+        {
+            "name": "plentymarkets/plugin-ceres",
+            "version": "2.17.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-ceres",
+                "reference": "origin/stable"
+            },
+            "type": "library"
+        },
+        {
+            "name": "plentymarkets/plugin-io",
+            "version": "2.17.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-io",
+                "reference": "2.17.1"
+            },
+            "type": "library"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3486,9 +3487,7 @@
             "time": "2018-01-29T19:49:41+00:00"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "plentymarkets/plugin-interface": 20
@@ -3498,7 +3497,5 @@
     "platform": {
         "php": "^7.0"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
