@@ -17,7 +17,6 @@ class ParametersBuilder
         'sorting.price.avg_desc' => 'price DESC',
         'texts.name1_asc' => 'label ASC',
         'texts.name1_desc' => 'label DESC',
-        'default.recommended_sorting' => 'salesfrequency DESC',
         'variation.createdAt_desc' => 'dateadded DESC',
         'variation.createdAt_asc' => 'dateadded ASC'
     ];
