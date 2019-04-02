@@ -85,7 +85,9 @@ class ParametersBuilder
             $request->setParam('selected', ['cat' => [$categoryFullName]]);
         }
 
-        if (in_array($externalSearch->sorting, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
+        if ($externalSearch->sorting !== 'item.score' &&
+            in_array($externalSearch->sorting, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)
+        ) {
             $request->setParam(Plugin::API_PARAMETER_SORT_ORDER, self::SORT_MAPPING[$externalSearch->sorting]);
         }
 
