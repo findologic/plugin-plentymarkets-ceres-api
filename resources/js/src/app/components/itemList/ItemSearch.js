@@ -43,8 +43,6 @@ Vue.component("item-search", {
     {
         prepareSearch()
         {
-            this.search();
-
             $('#searchBox').collapse('hide');
         },
 
