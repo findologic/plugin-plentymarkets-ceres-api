@@ -3,6 +3,8 @@
 namespace Findologic\Api\Response\Parser;
 
 use Findologic\Constants\Plugin;
+use Findologic\Api\Services\ColorImage;
+use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 
 /**
  * Class FiltersParser
@@ -14,6 +16,26 @@ class FiltersParser
      * @var int
      */
     protected $valueId;
+
+    /**
+     * @var ColorImage
+     */
+    protected $colorImageService;
+
+    /**
+     * @var LibraryCallContract
+     */
+    protected $libraryCallContract;
+
+    /**
+     * FiltersParser constructor.
+     * @param LibraryCallContract $libraryCallContract
+     */
+    public function __construct(LibraryCallContract $libraryCallContract, ColorImage $colorImageService)
+    {
+        $this->libraryCallContract = $libraryCallContract;
+        $this->colorImageService = $colorImageService;
+    }
 
     /**
      * @param \SimpleXMLElement $data
@@ -85,6 +107,14 @@ class FiltersParser
             }
 
             if ($filterType === Plugin::FILTER_TYPE_COLOR) {
+                if (isset($data->image) && $data->image->__toString() !== '') {
+                    $filterItem['colorImageUrl'] = null;
+
+                    if ($this->colorImageService->isImageAccessible($data->image->__toString())) {
+                        $filterItem['colorImageUrl'] = $data->image->__toString();
+                    }
+                }
+
                 $filterItem['hexValue'] = $data->color->__toString();
             }
 
