@@ -2,6 +2,7 @@
 
 namespace Findologic\Tests\Api\Request;
 
+use Ceres\Helper\ExternalSearch;
 use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
 use Findologic\Constants\Plugin;
@@ -47,14 +48,10 @@ class ParametersBuilderTest extends TestCase
         return [
             'Category page request' => [
                 [
-                    'query' => 'Test',
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'color' => ['red', 'blue'],
                         'cat' => ['Category 2'],
                     ],
-                    Plugin::PLENTY_PARAMETER_SORT_ORDER => 'price ASC',
-                    Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE => 20,
-                    Plugin::PLENTY_PARAMETER_PAGINATION_START => 10,
                 ],
                 [
                     'parentCategoryId' => null,
@@ -63,39 +60,35 @@ class ParametersBuilderTest extends TestCase
                 [
                     'query' => 'Test',
                     'properties' => [
-                        0 => 'main_variation_id'
+                        0 => 'variation_id'
                     ],
                     'attrib' => [
                         'color' => ['red', 'blue']
                     ],
                     'selected' => ['cat' => ['Category']],
                     'order' => 'price ASC',
-                    'count' => 20,
-                    'first' => 10
+                    'count' => 0,
+                    'first' => 0
                 ]
             ],
             'Search page request' => [
                 [
-                    'query' => 'Test',
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'size' => ['l', 'xl'],
                         'cat' => 'Category'
                     ],
-                    Plugin::PLENTY_PARAMETER_SORT_ORDER => 'price DESC',
-                    Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE => 10,
-                    Plugin::PLENTY_PARAMETER_PAGINATION_START => 0,
                 ],
                 false,
                 [
                     'query' => 'Test',
                     'properties' => [
-                        0 => 'main_variation_id'
+                        0 => 'variation_id'
                     ],
                     'attrib' => [
                         'size' => ['l', 'xl'],
                         'cat' => 'Category'
                     ],
-                    'order' => 'price DESC',
+                    'order' => 'price ASC',
                     'count' => 10
                 ]
             ]
@@ -112,6 +105,13 @@ class ParametersBuilderTest extends TestCase
         $httpRequestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $httpRequestMock->expects($this->once())->method('all')->willReturn($parameters);
 
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $searchQueryMock->searchString = 'Test';
+        $searchQueryMock->sorting = 'sorting.price.avg_asc';
+        $searchQueryMock->itemsPerPage = 10;
+        $searchQueryMock->page = 1;
+        $searchQueryMock->categoryId = null;
+
         $categoryMock = null;
         $parametersBuilderMock = $this->getParametersBuilderMock();
 
@@ -123,52 +123,34 @@ class ParametersBuilderTest extends TestCase
             $details->name = $category['name'];
 
             $categoryMock->details = [$details];
+
+            $searchQueryMock->categoryId = 2;
         }
 
-        $result = $parametersBuilderMock->setSearchParams($requestMock, $httpRequestMock, $categoryMock);
+        $result = $parametersBuilderMock->setSearchParams($requestMock, $httpRequestMock, $searchQueryMock, $categoryMock);
 
         $this->assertEquals($expectedParameters, $result->getParams());
     }
 
-    public function providerGetCategoryName()
+    public function testGetCategoryName()
     {
-        return [
-            'Get category name' => [
-                [
-                    2 => ['parentCategoryId' => 1, 'name' => 'Test1'],
-                    1 => ['parentCategoryId' => 0, 'name' => 'Test0']
-                ],
-                'Test0_Test1'
-            ]
-        ];
-    }
+        $parentCategoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+        $parentCategoryMock->parentCategoryId = 0;
+        $details = new \stdClass();
+        $details->name = 'Test0';
+        $parentCategoryMock->details = [$details];
 
-    /**
-     * @param array $categories
-     * @param string $expectedCategoryName
-     *
-     * @dataProvider providerGetCategoryName
-     */
-    public function testGetCategoryName(array $categories, $expectedCategoryName)
-    {
-        $mockedCategories = [];
+        $categoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
+        $categoryMock->parentCategoryId = 1;
+        $details = new \stdClass();
+        $details->name = 'Test1';
+        $categoryMock->details = [$details];
 
-        foreach ($categories as $id => $category) {
-            $categoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
-            $categoryMock->parentCategoryId = $category['parentCategoryId'];
-
-            $details = new \stdClass();
-            $details->name = $category['name'];
-            $categoryMock->details = [$details];
-
-            $mockedCategories[] = [$id, $categoryMock];
-        }
-
-        $this->categoryService->expects($this->any())->method('get')->willReturnMap($mockedCategories);
+        $this->categoryService->expects($this->once())->method('get')->willReturn($parentCategoryMock);
 
         $parametersBuilderMock = $this->getParametersBuilderMock();
 
-        $this->assertEquals($expectedCategoryName, $parametersBuilderMock->getCategoryName($mockedCategories[0][1]));
+        $this->assertEquals('Test0_Test1', $parametersBuilderMock->getCategoryName($categoryMock));
     }
 
     /**

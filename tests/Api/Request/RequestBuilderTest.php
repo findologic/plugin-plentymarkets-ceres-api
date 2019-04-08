@@ -54,7 +54,7 @@ class RequestBuilderTest extends TestCase
     {
         return [
             'Build alive request' => [
-                'http://test.com/alivetest.php',
+                'https://service.findologic.com/ps/xml_2.0/alivetest.php',
                 [
                     'shopkey' => 'TESTSHOPKEY'
                 ]
@@ -70,7 +70,7 @@ class RequestBuilderTest extends TestCase
         $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject']);
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
 
-        $this->configRepository->expects($this->any())->method('get')->willReturnOnConsecutiveCalls('http://test.com', 'TESTSHOPKEY');
+        $this->configRepository->expects($this->once())->method('get')->with('Findologic.shopkey')->willReturn('TESTSHOPKEY');
 
         /** @var Request|MockObject $result */
         $result = $requestBuilderMock->buildAliveRequest();
@@ -82,18 +82,8 @@ class RequestBuilderTest extends TestCase
     {
         return [
             'Build - No user ip provided' => [
-                [
-                    'query' => 'Query',
-                    Plugin::API_PARAMETER_ATTRIBUTES => [
-                        'size' => ['xl'],
-                    ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '30',
-                    Plugin::API_PARAMETER_PAGINATION_START => '60',
-                    'properties' => []
-                ],
                 false,
-                'http://test.com/index.php',
+                'https://service.findologic.com/ps/xml_2.0/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -102,18 +92,8 @@ class RequestBuilderTest extends TestCase
                 ]
             ],
             'Category page request' => [
-                [
-                    'query' => 'Test',
-                    Plugin::API_PARAMETER_ATTRIBUTES => [
-                        'size' => ['l', 'xl']
-                    ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price DESC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '10',
-                    Plugin::API_PARAMETER_PAGINATION_START => '0',
-                    'properties' => []
-                ],
                 '127.0.0.1',
-                'http://test.com/selector.php',
+                'https://service.findologic.com/ps/xml_2.0/selector.php',
                 true,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -123,18 +103,8 @@ class RequestBuilderTest extends TestCase
                 ]
             ],
             'Search page request' => [
-                [
-                    'query' => 'Test',
-                    Plugin::API_PARAMETER_ATTRIBUTES => [
-                        'color' => ['red', 'blue']
-                    ],
-                    Plugin::API_PARAMETER_SORT_ORDER => 'price ASC',
-                    Plugin::API_PARAMETER_PAGINATION_ITEMS_PER_PAGE => '20',
-                    Plugin::API_PARAMETER_PAGINATION_START => '10',
-                    'properties' => []
-                ],
                 '127.0.0.1',
-                'http://test.com/index.php',
+                'https://service.findologic.com/ps/xml_2.0/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -149,7 +119,7 @@ class RequestBuilderTest extends TestCase
     /**
      * @dataProvider providerBuild
      */
-    public function testBuild($parameters, $userIp, $expectedUrl, $category, $expectedParams)
+    public function testBuild($userIp, $expectedUrl, $category, $expectedParams)
     {
         /** @var HttpRequest|MockObject $httpRequestMock */
         $httpRequestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -158,7 +128,7 @@ class RequestBuilderTest extends TestCase
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $searchQueryMock->searchString = 'Test';
 
-        $this->configRepository->expects($this->any())->method('get')->willReturnOnConsecutiveCalls('http://test.com', 'TESTSHOPKEY');
+        $this->configRepository->expects($this->once())->method('get')->with('Findologic.shopkey')->willReturn('TESTSHOPKEY');
 
         $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject', 'getUserIp', 'getPluginVersion']);
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
@@ -174,7 +144,7 @@ class RequestBuilderTest extends TestCase
         }
 
         /** @var Request|MockObject $result */
-        $result = $requestBuilderMock->build($httpRequestMock, $categoryMock);
+        $result = $requestBuilderMock->build($httpRequestMock, $searchQueryMock, $categoryMock);
 
         $this->assertEquals($expectedUrl, $result->getUrl());
         $this->assertEquals($expectedParams, $result->getParams());

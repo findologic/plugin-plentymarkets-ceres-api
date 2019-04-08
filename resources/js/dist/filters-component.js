@@ -499,37 +499,37 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("item-price-slider", {
+Vue.component("item-range-slider", {
     mixins: [_url2.default],
 
     props: ["template", "facet"],
 
     data: function data() {
         return {
-            priceFrom: "",
-            priceTo: ""
+            valueFrom: "",
+            valueTo: ""
         };
     },
     created: function created() {
         var self = this;
 
-        this.$options.template = this.template || "#vue-item-price-slider";
+        this.$options.template = this.template || "#vue-item-range-slider";
 
         var values = this.getSelectedFilterValue(this.facet.id);
 
-        this.priceFrom = values ? values.min : this.facet.minPrice;
-        this.priceTo = values ? values.max : this.facet.maxPrice;
+        this.valueFrom = values ? values.min : this.facet.minValue;
+        this.valueTo = values ? values.max : this.facet.maxValue;
 
         $(function () {
-            $("#price-slider-range").slider({
+            $("#" + self.sanitizedFacetId).slider({
                 step: self.facet.step,
                 range: true,
-                min: self.facet.minPrice,
-                max: self.facet.maxPrice,
-                values: [self.priceFrom, self.priceTo],
+                min: self.facet.minValue,
+                max: self.facet.maxValue,
+                values: [self.valueFrom, self.valueTo],
                 slide: function slide(event, ui) {
-                    self.priceFrom = ui.values[0];
-                    self.priceTo = ui.values[1];
+                    self.valueFrom = ui.values[0];
+                    self.valueTo = ui.values[1];
                 }
             });
         });
@@ -537,8 +537,11 @@ Vue.component("item-price-slider", {
 
 
     computed: _extends({
+        sanitizedFacetId: function sanitizedFacetId() {
+            return 'fl-range-slider-' + this.facet.id.replace(/\W/g, '-').replace(/-+/, '-').replace(/-$/, '');
+        },
         isDisabled: function isDisabled() {
-            return this.priceFrom === "" && this.priceTo === "" || parseInt(this.priceFrom) >= parseInt(this.priceTo) || this.isLoading;
+            return this.valueFrom === "" && this.valueTo === "" || parseInt(this.valueFrom) >= parseInt(this.valueTo) || this.isLoading;
         }
     }, Vuex.mapState({
         isLoading: function isLoading(state) {
@@ -550,8 +553,8 @@ Vue.component("item-price-slider", {
         triggerFilter: function triggerFilter() {
             if (!this.isDisabled) {
                 var facetValue = {
-                    min: this.priceFrom,
-                    max: this.priceTo ? this.priceTo : Number.MAX_SAFE_INTEGER
+                    min: this.valueFrom,
+                    max: this.valueTo ? this.valueTo : Number.MAX_SAFE_INTEGER
                 };
 
                 this.updateSelectedFilters(this.facet.id, facetValue);

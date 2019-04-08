@@ -5,7 +5,7 @@
             <item-filter-price :facet="facet"></item-filter-price>
         </div>
         <div v-else-if="facet.type === 'range-slider'">
-            <item-price-slider :facet="facet"></item-price-slider>
+            <item-range-slider :facet="facet"></item-range-slider>
         </div>
         <div v-else-if="facet.type === 'color'">
             <item-color-tiles :facet="facet"></item-color-tiles>

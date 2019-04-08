@@ -42,9 +42,9 @@ class FiltersParser
                 }
 
                 if ($filterData['type'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
-                    $filterData['currency'] = $filter->attributes->unit->__toString();
-                    $filterData['minPrice'] = (float)$filter->attributes->totalRange->min;
-                    $filterData['maxPrice'] = (float)$filter->attributes->totalRange->max;
+                    $filterData['unit'] = $filter->attributes->unit->__toString();
+                    $filterData['minValue'] = (float)$filter->attributes->totalRange->min;
+                    $filterData['maxValue'] = (float)$filter->attributes->totalRange->max;
                     $filterData['step'] = (float)$filter->attributes->stepSize;
                 }
 
