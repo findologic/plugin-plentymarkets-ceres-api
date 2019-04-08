@@ -73,6 +73,7 @@ class FiltersParser
     public function parseFilterItem($filterType, &$filterItem, $data, $index)
     {
         if (!empty($data)) {
+            $filterItem['items'] = [];
             $filterItem['name'] = $data->name->__toString();
             $filterItem['position'] = $index;
             $filterItem['count'] = $data->frequency->__toString();
