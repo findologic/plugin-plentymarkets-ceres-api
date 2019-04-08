@@ -19,7 +19,7 @@ gulp.task("js", () => {
             "app/components/itemList/filter/ItemFilter.js",
             "app/components/itemList/filter/ItemFilterPrice.js",
             "app/components/itemList/filter/ItemFilterTagList.js",
-            "app/components/itemList/filter/ItemPriceSlider.js",
+            "app/components/itemList/filter/ItemRangeSlider.js",
             "app/components/itemList/filter/ItemColorTiles.js",
             "app/components/itemList/ItemListSorting.js",
             "app/components/itemList/ItemsPerPage.js",
