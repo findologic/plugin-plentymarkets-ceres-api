@@ -11,6 +11,7 @@ use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -91,6 +92,23 @@ class SearchService implements SearchServiceInterface
         );
         $this->fallbackSearchService = $fallbackSearchService;
         $this->configRepository = $configRepository;
+    }
+
+    /**
+     * @return ItemSearchService
+     */
+    public function getItemSearchService()
+    {
+        return pluginApp(ItemSearchService::class);
+    }
+
+    /**
+     * @param int $id
+     * @return VariationSearchFactory
+     */
+    public function getSearchFactory($id)
+    {
+        return VariationList::getSearchFactory(['variationIds' => [$id], 'excludeFromCache' => true]);
     }
 
     /**
@@ -229,13 +247,10 @@ class SearchService implements SearchServiceInterface
     private function filterInvalidVariationIds(array $ids)
     {
         $externalSearchFactories = [];
-        $itemSearchService = pluginApp(ItemSearchService::class);
+        $itemSearchService = $this->getItemSearchService();
 
         foreach ($ids as $id) {
-            $externalSearchFactories[$id] = VariationList::getSearchFactory([
-                'variationIds'      => [$id],
-                'excludeFromCache'  => true
-            ]);
+            $externalSearchFactories[$id] = $this->getSearchFactory($id);
         }
 
         // Return only the variation IDs which actually yielded a result.
