@@ -5,7 +5,9 @@
                 <label class="color-tile-label" @click="tileClicked(colorValue.name)">
                     <div class="color-tile-background" v-bind:style="{background: colorValue.hexValue}">
                         <div v-show="isSelected(colorValue.name)">
-                            <img src="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.svg"/>
+                            <img class="fl-svg"
+                                 data-src="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.svg"
+                                 data-fallback="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.png"/>
                         </div>
                     </div>
                 </label>
