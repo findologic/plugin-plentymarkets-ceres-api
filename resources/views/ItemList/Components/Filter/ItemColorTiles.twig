@@ -1,10 +1,16 @@
 <script type="x/template" id="vue-item-color-tiles">
     <div class="fl-item-color-tiles-container">
-        <ul class="item-color-tiles-list">
-            <li class="item-color-tiles-list-item" v-for="colorValue in facet.values">
-                <label class="color-tile-label" @click="tileClicked(colorValue.name)">
-                    <div class="color-tile-background" v-bind:style="{background: colorValue.hexValue}">
-                        <div v-show="isSelected(colorValue.name)">
+        <ul class="fl-item-color-tiles-list">
+            <li class="fl-item-color-tiles-list-item" v-for="colorValue in facet.values">
+                <label class="fl-color-tile-label" @click="tileClicked(colorValue.name)">
+                    <div class="fl-color-tile-background" v-bind:style="{background: colorValue.hexValue}">
+                        <img class="fl-color-tile-image"
+                             v-show="colorValue.colorImageUrl"
+                             :src="colorValue.colorImageUrl"/>
+                        <img class="fl-color-tile-image"
+                             v-show="!colorValue.colorImageUrl && !colorValue.hexValue"
+                             src="{{ plugin_path("Findologic") }}/images/no-picture.jpg"/>
+                        <div class="fl-color-tile-selected-image" v-show="isSelected(colorValue.name)">
                             <img class="fl-svg"
                                  data-src="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.svg"
                                  data-fallback="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.png"/>
