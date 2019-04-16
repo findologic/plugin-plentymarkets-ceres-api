@@ -43,6 +43,8 @@ Vue.component("item-search", {
     {
         prepareSearch()
         {
+            this.$store.commit("setItemListSearchString", this.$refs.searchInput.value);
+
             $('#searchBox').collapse('hide');
         },
 
@@ -54,6 +56,8 @@ Vue.component("item-search", {
             {
                 searchBaseURL = `/${App.language}/search?query=`;
             }
+
+            this.$store.commit("setItemListSearchString", this.$refs.searchInput.value);
 
             window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
