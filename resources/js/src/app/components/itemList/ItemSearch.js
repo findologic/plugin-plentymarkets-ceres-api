@@ -1,4 +1,7 @@
+import url from "../../mixins/url";
+
 Vue.component("item-search", {
+    mixins: [url],
 
     props: {
         template: {
@@ -37,6 +40,18 @@ Vue.component("item-search", {
     created()
     {
         this.$options.template = this.template;
+    },
+
+    mounted()
+    {
+        this.$nextTick(() =>
+        {
+            const urlParams = this.getUrlParams(document.location.search);
+
+            this.$store.commit("setItemListSearchString", urlParams.query);
+
+            this.$refs.searchInput.value = urlParams.query ? urlParams.query : '';
+        });
     },
 
     methods:
