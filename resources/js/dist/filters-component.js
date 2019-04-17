@@ -119,8 +119,6 @@ Vue.component("item-search", {
 
     methods: {
         prepareSearch: function prepareSearch() {
-            this.$store.commit("setItemListSearchString", this.$refs.searchInput.value);
-
             $('#searchBox').collapse('hide');
         },
         search: function search() {
@@ -129,8 +127,6 @@ Vue.component("item-search", {
             if (App.defaultLanguage !== App.language) {
                 searchBaseURL = "/" + App.language + "/search?query=";
             }
-
-            this.$store.commit("setItemListSearchString", this.$refs.searchInput.value);
 
             window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
