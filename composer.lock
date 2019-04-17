@@ -1806,7 +1806,7 @@
             "version": "dev-fixed-return-types",
             "source": {
                 "type": "git",
-                "url": "git@github.com:findologic/plugin-interface.git",
+                "url": "https://github.com/findologic/plugin-interface",
                 "reference": "b6d5b26bbc26f43f9694870081d09d778d1aff07"
             },
             "require": {
