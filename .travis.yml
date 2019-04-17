@@ -3,6 +3,10 @@ language: php
 php:
   - 7.1
 
+cache:
+  directories:
+    - ${HOME}/.composer/cache/files
+
 install:
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar --version
