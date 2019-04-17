@@ -61,6 +61,12 @@ Vue.component("item-list-sorting", {
 },{"../../constants":10,"../../mixins/url":12}],2:[function(require,module,exports){
 "use strict";
 
+var _url = require("../../mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 Vue.component("item-search", {
 
     props: {
@@ -97,6 +103,17 @@ Vue.component("item-search", {
     created: function created() {
         this.$options.template = this.template;
     },
+    mounted: function mounted() {
+        var _this = this;
+
+        this.$nextTick(function () {
+            var urlParams = _this.getUrlParams(document.location.search);
+
+            _this.$store.commit("setItemListSearchString", urlParams.query);
+
+            _this.$refs.searchInput.value = urlParams.query ? urlParams.query : '';
+        });
+    },
 
 
     methods: {
@@ -124,16 +141,16 @@ Vue.component("item-search", {
 
         // hide autocomplete after 100ms to make clicking on it possible
         setIsSearchFocused: function setIsSearchFocused(value) {
-            var _this = this;
+            var _this2 = this;
 
             setTimeout(function () {
-                _this.isSearchFocused = !!value;
+                _this2.isSearchFocused = !!value;
             }, 100);
         }
     }
 });
 
-},{}],3:[function(require,module,exports){
+},{"../../mixins/url":12}],3:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../mixins/url");
