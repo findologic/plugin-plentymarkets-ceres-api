@@ -43,9 +43,11 @@ Vue.component("item-search", {
 
     mounted()
     {
+        const self = this;
+
         this.$nextTick(() =>
         {
-            const urlParams = this.getUrlParams(document.location.search);
+            const urlParams = self.getUrlParams(document.location.search);
 
             this.$store.commit("setItemListSearchString", urlParams.query);
 
