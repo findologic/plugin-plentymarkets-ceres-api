@@ -1,6 +1,7 @@
 import url from "../../mixins/url";
 
 Vue.component("item-search", {
+    mixins: [url],
 
     props: {
         template: {
@@ -45,7 +46,7 @@ Vue.component("item-search", {
     {
         this.$nextTick(() =>
         {
-            this.getUrlParamsFromCurrentLocation();
+            const urlParams = this.getUrlParams(document.location.search);
 
             this.$store.commit("setItemListSearchString", urlParams.query);
 
@@ -99,11 +100,6 @@ Vue.component("item-search", {
             {
                 this.isSearchFocused = !!value;
             }, 100);
-        },
-
-        getUrlParamsFromCurrentLocation()
-        {
-            return this.getUrlParams(document.location.search);
         }
     }
 });
