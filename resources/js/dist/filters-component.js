@@ -68,6 +68,7 @@ var _url2 = _interopRequireDefault(_url);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Vue.component("item-search", {
+    mixins: [_url2.default],
 
     props: {
         template: {
@@ -107,7 +108,7 @@ Vue.component("item-search", {
         var _this = this;
 
         this.$nextTick(function () {
-            _this.getUrlParamsFromCurrentLocation();
+            var urlParams = _this.getUrlParams(document.location.search);
 
             _this.$store.commit("setItemListSearchString", urlParams.query);
 
@@ -146,9 +147,6 @@ Vue.component("item-search", {
             setTimeout(function () {
                 _this2.isSearchFocused = !!value;
             }, 100);
-        },
-        getUrlParamsFromCurrentLocation: function getUrlParamsFromCurrentLocation() {
-            return this.getUrlParams(document.location.search);
         }
     }
 });
