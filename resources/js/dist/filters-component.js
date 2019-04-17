@@ -106,10 +106,8 @@ Vue.component("item-search", {
     mounted: function mounted() {
         var _this = this;
 
-        var self = this;
-
         this.$nextTick(function () {
-            var urlParams = self.getUrlParams(document.location.search);
+            _this.getUrlParamsFromCurrentLocation();
 
             _this.$store.commit("setItemListSearchString", urlParams.query);
 
@@ -148,6 +146,9 @@ Vue.component("item-search", {
             setTimeout(function () {
                 _this2.isSearchFocused = !!value;
             }, 100);
+        },
+        getUrlParamsFromCurrentLocation: function getUrlParamsFromCurrentLocation() {
+            return this.getUrlParams(document.location.search);
         }
     }
 });
