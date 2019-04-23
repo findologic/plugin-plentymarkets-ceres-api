@@ -21,6 +21,11 @@
     display: inline;
 }
 
+.fl-range-slider-container .fl-range-slider-row {
+    margin-left: -7px;
+    margin-right: -23px;
+}
+
 .fl-range-slider-container .fl-unit {
     margin-left: 5px;
 }
