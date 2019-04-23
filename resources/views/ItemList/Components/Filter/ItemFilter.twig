@@ -7,6 +7,16 @@
         <div v-else-if="facet.type === 'range-slider'">
             <item-range-slider :facet="facet"></item-range-slider>
         </div>
+        <div v-else-if="facet.type === 'image'">
+            <div class="form-check" v-for="value in facets" :key="value.id">
+                <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="isSelected(value.id)" @change="updateFacet(value)" :disabled="isLoading">
+                <label :for="'option-' + value.id" class="form-check-label">
+                    <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
+                    <span v-show="!value.imageUrl">${ value.name }</span>
+                </label>
+                <div class="filter-badge">${ value.count }</div>
+            </div>
+        </div>
         <div v-else-if="facet.type === 'color'">
             <item-color-tiles :facet="facet"></item-color-tiles>
         </div>

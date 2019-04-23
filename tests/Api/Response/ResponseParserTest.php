@@ -66,6 +66,9 @@ class ResponseParserTest extends TestCase
         return $responseParserMock->getMock();
     }
 
+    /**
+     * @return string
+     */
     protected function getResponse()
     {
         return '<?xml version="1.0"?>

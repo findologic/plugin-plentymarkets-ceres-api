@@ -3,7 +3,7 @@
 namespace Findologic\Api\Response\Parser;
 
 use Findologic\Constants\Plugin;
-use Findologic\Api\Services\ColorImage;
+use Findologic\Api\Services\Image;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 
 /**
@@ -18,9 +18,9 @@ class FiltersParser
     protected $valueId;
 
     /**
-     * @var ColorImage
+     * @var Image
      */
-    protected $colorImageService;
+    protected $imageService;
 
     /**
      * @var LibraryCallContract
@@ -30,11 +30,12 @@ class FiltersParser
     /**
      * FiltersParser constructor.
      * @param LibraryCallContract $libraryCallContract
+     * @param Image $colorImageService
      */
-    public function __construct(LibraryCallContract $libraryCallContract, ColorImage $colorImageService)
+    public function __construct(LibraryCallContract $libraryCallContract, Image $colorImageService)
     {
         $this->libraryCallContract = $libraryCallContract;
-        $this->colorImageService = $colorImageService;
+        $this->imageService = $colorImageService;
     }
 
     /**
@@ -90,7 +91,7 @@ class FiltersParser
      * @param array $filterItem
      * @param \SimpleXMLElement $data
      * @param int $index
-     * @return array
+     * @return void
      */
     public function parseFilterItem($filterType, &$filterItem, $data, $index)
     {
@@ -107,11 +108,19 @@ class FiltersParser
                 $filterItem['priceMax'] = $data->parameters->max;
             }
 
+            if ($filterType === Plugin::FILTER_TYPE_IMAGE) {
+                if (isset($data->image) && $data->image->__toString() !== '' && $data->image->__toString()[0] !== '/') {
+                    if ($this->imageService->isImageAccessible($data->image->__toString())) {
+                        $filterItem['imageUrl'] = $data->image->__toString();
+                    }
+                }
+            }
+
             if ($filterType === Plugin::FILTER_TYPE_COLOR) {
                 if (isset($data->image) && $data->image->__toString() !== '') {
                     $filterItem['colorImageUrl'] = null;
 
-                    if ($this->colorImageService->isImageAccessible($data->image->__toString())) {
+                    if ($this->imageService->isImageAccessible($data->image->__toString())) {
                         $filterItem['colorImageUrl'] = $data->image->__toString();
                     }
                 }
