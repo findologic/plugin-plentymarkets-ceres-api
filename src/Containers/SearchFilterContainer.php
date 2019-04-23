@@ -17,7 +17,7 @@ class SearchFilterContainer
         $searchResults = $searchService->getResults();
 
         return $twig->render(
-            'Findologic::content.FiltersContainer',
+            'Findologic::ItemList.Components.Filter.FiltersContainer',
             [
                 'resultsCount' => $searchResults->getResultsCount(),
                 'facets' => $searchResults->getData(Response::DATA_FILTERS)
