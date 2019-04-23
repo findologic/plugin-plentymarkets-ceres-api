@@ -3,9 +3,5 @@
 {{ component( "Findologic::ItemList.Components.Filter.ItemColorTiles" ) }}
 
 <div class="findologic-container">
-    {% if resultsCount > 0 %}
-        <item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
-    {% else %}
-        {% include "Findologic::content.NoResults" %}
-    {% endif %}
+    <item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
 </div>
