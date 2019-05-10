@@ -10,9 +10,15 @@
   [
     {
       "key"           :"Findologic\\Containers\\SearchFilterContainer",
-      "name"          :"Findologic Filters",
+      "name"          :"Filters",
       "description"   :"Display Findologic filters",
       "defaultLayoutContainer": "Search.Filter"
+    },
+    {
+      "key"           :"Findologic\\Containers\\SearchBarContainer",
+      "name"          :"Search Bar",
+      "description"   :"Display search bar customized for Findologic",
+      "defaultLayoutContainer": "Search.SearchBar"
     }
   ],
   "dependencies": {
