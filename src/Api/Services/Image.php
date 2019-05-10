@@ -11,7 +11,7 @@ use Findologic\Constants\Plugin;
  * Class ColorImage
  * @package Findologic\Api
  */
-class ColorImage
+class Image
 {
     /**
      * @var LibraryCallContract
