@@ -17,9 +17,9 @@ use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
-use IO\Services\CategoryService;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionException;
 
 /**
  * Class SearchServiceTest
@@ -58,12 +58,12 @@ class SearchServiceTest extends TestCase
     protected $logger;
 
     /**
-     * @var FallbackSearchService
+     * @var FallbackSearchService|MockObject
      */
     protected $fallbackSearchService;
 
     /**
-     * @var ConfigRepository
+     * @var ConfigRepository|MockObject
      */
     protected $configRepository;
 
@@ -80,43 +80,9 @@ class SearchServiceTest extends TestCase
         $this->configRepository = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
     }
 
-    public function testHandleSearchQueryAliveException()
-    {
-        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->requestBuilder->expects($this->once())->method('buildAliveRequest')->willReturn($requestMock);
-        $this->requestBuilder->expects($this->never())->method('build');
-
-        $searchServiceMock = $this->getSearchServiceMock();
-
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $searchQueryMock->categoryId = null;
-
-        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
-
-        $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
-    }
-
-    public function testHandleSearchQueryException()
-    {
-        $this->client->expects($this->once())->method('call')->willThrowException(new \Exception('Test'));
-        $this->requestBuilder->expects($this->never())->method('build');
-        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->requestBuilder->expects($this->once())->method('buildAliveRequest')->willReturn($requestMock);
-
-        $searchServiceMock = $this->getSearchServiceMock();
-
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $searchQueryMock->categoryId = null;
-
-        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
-
-        $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
-    }
-
     public function testHandleSearchQuery()
     {
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->requestBuilder->expects($this->once())->method('buildAliveRequest')->willReturn($requestMock);
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
@@ -139,6 +105,7 @@ class SearchServiceTest extends TestCase
     /**
      * @param array|null $methods
      * @return SearchService|MockObject
+     * @throws ReflectionException
      */
     protected function getSearchServiceMock($methods = null)
     {
