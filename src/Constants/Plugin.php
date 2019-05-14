@@ -16,7 +16,6 @@ class Plugin
     const PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'items';
     const PLENTY_PARAMETER_PAGINATION_START = 'first';
 
-    const API_OUTPUT_ADAPTER = 'XML_2.0';
     const API_PARAMETER_ATTRIBUTES = 'attrib';
     const API_PARAMETER_PROPERTIES = 'properties';
     const API_PARAMETER_SORT_ORDER = 'order';
