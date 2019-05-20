@@ -211,22 +211,15 @@ class SearchService implements SearchServiceInterface
      */
     public function search(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        try {
-            $this->aliveTest();
+        /** @var CategoryService $category */
+        $category = $this->getCategoryService() ?? null;
 
-            /** @var CategoryService $category */
-            $category = $this->getCategoryService() ?? null;
-
-            $apiRequest = $this->requestBuilder->build(
-                $request,
-                $externalSearch,
-                $category ? $category->getCurrentCategory() : null
-            );
-            $this->results = $this->responseParser->parse($this->client->call($apiRequest));
-        } catch (AliveException $e) {
-            $this->logger->error('Findologic server did not responded to alive request. ' . $e->getMessage());
-            throw $e;
-        }
+        $apiRequest = $this->requestBuilder->build(
+            $request,
+            $externalSearch,
+            $category ? $category->getCurrentCategory() : null
+        );
+        $this->results = $this->responseParser->parse($this->client->call($apiRequest));
 
         return $this->results;
     }
@@ -234,7 +227,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @throws AliveException
      */
-    protected function aliveTest()
+    public function aliveTest()
     {
         $request = $this->requestBuilder->buildAliveRequest();
         $response = $this->client->call($request);

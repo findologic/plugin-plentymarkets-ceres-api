@@ -14,6 +14,8 @@ use Plenty\Plugin\Log\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Helper\ResourceContainer;
 use IO\Helper\ComponentContainer;
+use Findologic\Exception\AliveException;
+use \Exception;
 
 /**
  * Class FindologicServiceProvider
@@ -56,6 +58,18 @@ class FindologicServiceProvider extends ServiceProvider
         SearchService $searchService
     ) {
         if (!$configRepository->get(Plugin::CONFIG_SHOPKEY, false)) {
+            return;
+        }
+
+        try {
+            $searchService->aliveTest();
+        } catch (AliveException $e) {
+            $this->getLoggerObject()->error('FINDOLOGIC search is not available!');
+
+            return;
+        } catch (Exception $e) {
+            $this->getLoggerObject()->logException($e);
+
             return;
         }
 
