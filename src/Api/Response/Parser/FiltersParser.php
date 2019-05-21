@@ -56,6 +56,8 @@ class FiltersParser
                     'type' => ''
                 ];
 
+                $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';
+
                 if ($filter->type) {
                     $filterData['type'] = $filter->type->__toString();
                 }
