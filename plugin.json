@@ -1,23 +1,40 @@
 {
-  "name": "Findologic",
-  "description": "Findologic search plugin",
-  "namespace": "Findologic",
-  "author": "AdeoWeb",
-  "type": "template",
   "version": "0.0.7",
+  "name": "FINDOLOGIC",
+  "marketplaceName": {
+    "de": "FINDOLOGIC",
+    "en": "FINDOLOGIC"
+  },
+  "description" : "The official FINDOLOGIC plugin for plentymarkets Ceres.",
+  "author": "FINDOLOGIC GmbH",
+  "pluginIcon" : "icon_plugin_xs.png",
+  "price" : 0.00,
+  "shortDescription": {
+    "de": "Das offizielle FINDOLOGIC plugin für plentymarkets Ceres",
+    "en": "The official FINDOLOGIC plugin for plentymarkets Ceres."
+  },
+  "authorIcon": "icon_author_xs_1.png",
+  "email": "plugins@findologic.com",
+  "phone": "+43 662 45 67 08",
+  "type": "template",
+  "require": {
+    "Ceres": ">=4.0.0",
+    "IO": ">=4.0.0"
+  },
+  "namespace": "Findologic",
   "serviceProvider": "Findologic\\Providers\\FindologicServiceProvider",
   "dataProviders":
   [
     {
-      "key"           :"Findologic\\Containers\\SearchFilterContainer",
-      "name"          :"Filters",
-      "description"   :"Display Findologic filters",
+      "key": "Findologic\\Containers\\SearchFilterContainer",
+      "name": "Filters",
+      "description": "Display Findologic filters",
       "defaultLayoutContainer": "Search.Filter"
     },
     {
-      "key"           :"Findologic\\Containers\\SearchBarContainer",
-      "name"          :"Search Bar",
-      "description"   :"Display search bar customized for Findologic",
+      "key": "Findologic\\Containers\\SearchBarContainer",
+      "name": "Search Bar",
+      "description": "Display search bar customized for Findologic",
       "defaultLayoutContainer": "Search.SearchBar"
     }
   ],
