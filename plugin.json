@@ -28,13 +28,13 @@
     {
       "key": "Findologic\\Containers\\SearchFilterContainer",
       "name": "Filters",
-      "description": "Display Findologic filters",
+      "description": "Display FINDOLOGIC filters",
       "defaultLayoutContainer": "Search.Filter"
     },
     {
       "key": "Findologic\\Containers\\SearchBarContainer",
       "name": "Search Bar",
-      "description": "Display search bar customized for Findologic",
+      "description": "Display search bar customized for FINDOLOGIC",
       "defaultLayoutContainer": "Search.SearchBar"
     }
   ],
