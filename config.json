@@ -1,12 +1,12 @@
 [
   {
-    "tab": "Findologic Search",
+    "tab": "Config.tab.searchConfig",
     "key": "shopkey",
     "label": "Config.shopkey",
     "type": "text"
   },
   {
-    "tab": "Findologic Search",
+    "tab": "Config.tab.searchConfig",
     "key": "nav_enabled",
     "label": "Config.navEnabled",
     "type": "dropdown",
