@@ -1,19 +1,34 @@
-[
-  {
-    "tab": "Config.tabSearchConfig",
-    "key": "shopkey",
-    "label": "Config.shopkey",
-    "type": "text"
-  },
-  {
-    "tab": "Config.tabSearchConfig",
-    "key": "nav_enabled",
-    "label": "Config.navEnabled",
-    "type": "dropdown",
-    "possibleValues": {
-      "0": "Config.optionDisabled",
-      "1": "Config.optionEnabled"
-    },
-    "default" : "1"
+{
+  "formatVersion": 1,
+  "menu": {
+    "Config.FINDOLOGICSearchTab": {
+      "label": "Config.FINDOLOGICSearchTab",
+      "formFields": {
+        "shopkey": {
+          "type": "inputText",
+          "required": false,
+          "label": "Config.shopkeyLabel",
+          "options": {}
+        },
+        "nav_enabled": {
+          "type": "selectBox",
+          "required": false,
+          "label": "Config.navEnabledLabel",
+          "options": {
+            "defaultValue": "1",
+            "selectBoxValues": [
+              {
+                "value": "0",
+                "caption": "Config.navDisabled"
+              },
+              {
+                "value": "1",
+                "caption": "Config.navEnabled"
+              }
+            ]
+          }
+        }
+      }
+    }
   }
-]
+}
