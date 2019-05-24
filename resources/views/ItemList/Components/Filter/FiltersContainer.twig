@@ -1,0 +1,7 @@
+{{ component( "Ceres::ItemList.Components.Filter.ItemFilterList") }}
+{{ component( "Findologic::ItemList.Components.Filter.ItemRangeSlider") }}
+{{ component( "Findologic::ItemList.Components.Filter.ItemColorTiles" ) }}
+
+<div class="findologic-container">
+    <item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
+</div>

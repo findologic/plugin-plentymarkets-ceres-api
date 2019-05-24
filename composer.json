@@ -1,0 +1,81 @@
+{
+  "name": "findologic/plugin-plentymarkets-api",
+  "type": "project",
+  "description": "Findologic api plugin for plentymarkets system",
+  "require": {
+    "php": "^7.0",
+    "findologic/http_request2": "2.3.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6",
+    "plentymarkets/plugin-io": "2.17.1",
+    "plentymarkets/plugin-interface": "dev-fixed-return-types",
+    "plentymarkets/plugin-ceres": "3.2.2"
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": [
+        {
+          "name": "plentymarkets/plugin-io",
+          "version": "2.17.1",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-io",
+            "reference": "2.17.1"
+          }
+        },
+        {
+          "name": "plentymarkets/plugin-io",
+          "version": "2.15.0",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-io",
+            "reference": "2.15.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "package",
+      "package": [
+        {
+          "name": "plentymarkets/plugin-ceres",
+          "version": "3.2.2",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-ceres",
+            "reference": "3.2.2"
+          }
+        },
+        {
+          "name": "plentymarkets/plugin-ceres",
+          "version": "2.17.1",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-ceres",
+            "reference": "2.17.1"
+          }
+        },
+        {
+          "name": "plentymarkets/plugin-ceres",
+          "version": "2.15.0",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-ceres",
+            "reference": "2.15.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/findologic/plugin-interface.git"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Findologic\\": "src/"
+    }
+  }
+}
