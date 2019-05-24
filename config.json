@@ -1,12 +1,12 @@
 [
   {
-    "tab": "Config.tab.searchConfig",
+    "tab": "Config.tabSearchConfig",
     "key": "shopkey",
     "label": "Config.shopkey",
     "type": "text"
   },
   {
-    "tab": "Config.tab.searchConfig",
+    "tab": "Config.tabSearchConfig",
     "key": "nav_enabled",
     "label": "Config.navEnabled",
     "type": "dropdown",
