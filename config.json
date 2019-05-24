@@ -8,12 +8,12 @@
   {
     "tab": "Findologic Search",
     "key": "nav_enabled",
-    "label": "Config.nav_enabled",
+    "label": "Config.navEnabled",
     "type": "dropdown",
     "possibleValues": {
-      "0": "No",
-      "1": "Yes"
+      "0": "Config.optionDisabled",
+      "1": "Config.optionEnabled"
     },
-    "default"   : "1"
+    "default" : "1"
   }
 ]
