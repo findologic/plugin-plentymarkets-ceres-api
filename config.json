@@ -2,13 +2,13 @@
   {
     "tab": "Findologic Search",
     "key": "shopkey",
-    "label": "Shop key",
+    "label": "Config.shopkey",
     "type": "text"
   },
   {
     "tab": "Findologic Search",
     "key": "nav_enabled",
-    "label": "Navigation enabled",
+    "label": "Config.nav_enabled",
     "type": "dropdown",
     "possibleValues": {
       "0": "No",
