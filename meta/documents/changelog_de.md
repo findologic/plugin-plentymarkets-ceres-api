@@ -1,6 +1,6 @@
 # Release Notes für FINDOLOGIC
 
-## 1.0.1 (2019-06-03)
+## 1.0.2 (2019-06-03)
 
 * Eine Notiz bezüglich der Unterstützung von Mehrsprachigkeit wurde dem Beschreibungstext hinzugefügt.
 
