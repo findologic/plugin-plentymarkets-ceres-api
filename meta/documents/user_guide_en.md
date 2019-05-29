@@ -1,3 +1,7 @@
+# Multilingualism
+
+Consider that this plugin currently only supports one of the available shop languages. The actively used language can be configured in consultation with FINDOLOGIC.
+
 # OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
 Get the fully integrated shopping experience in your online store!
 Our open and modular platform with intelligent search, navigation, merchandising, shopping guide, 1:1 personalization, analytics, as well as our high-performance user interface, offers everything via lean integration. Put your users in focus and separate yourself from the competition with us.

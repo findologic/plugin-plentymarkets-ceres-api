@@ -1,3 +1,7 @@
+# Mehrsprachigkeit
+
+Zu beachten ist, dass dieses zur Zeit Plugin nur eine der verfügbaren Sprachen des Shops unterstützt. Welche das ist, kann per Absprache mit FINDOLOGIC konfiguriert werden.
+
 # UNSERE SHOPPING EXPERIENCE PLATFORM FÜR IHRE USER
 
 Holen Sie sich Ihr ganzheitliches Einkaufserlebnis in Ihren Shop!

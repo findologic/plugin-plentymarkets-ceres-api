@@ -4,6 +4,10 @@
 
 ### Funktionen
 
+* Mehrsprachigkeit
+
+  Zur Zeit wird nur eine der verfügbaren Sprachen des Shops unterstützt. Welche das ist, kann per Absprache mit FINDOLOGIC konfiguriert werden.
+
 * Personalisierung
 
   Mit FINDOLOGIC Personalisierung haben Sie ab sofort für jede Zielgruppe einen eigens optimierten Shop.

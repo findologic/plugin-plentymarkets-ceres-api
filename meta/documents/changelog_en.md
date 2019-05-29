@@ -4,6 +4,10 @@
 
 ### Features
 
+* Multilingualism
+
+  At the moment only one of the available shop languages is supported. The actively used language can be configured in consultation with FINDOLOGIC.
+
 * Personalization
 
   With FINDOLOGIC Personalization you now have a specifically optimized store for every target group.
