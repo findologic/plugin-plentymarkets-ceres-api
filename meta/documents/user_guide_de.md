@@ -24,7 +24,7 @@ Nutzen Sie das intuitive FINDOLOGIC Backend mit unseren speziell entwickelten To
 Stellen Sie Ihren Usern im Rahmen einer Berater-Kampagne smarte Fragen, welche auch ein Verkäufer einer stationären Filiale stellen würde. Somit finden Ihre User einfach und schnell das passende Wunschprodukt.
 
 ## Unsere Referenzen:
-*„User Experience wurde im Magento-Shop deutlich verbessert!“* -  **Shop4Runners**
-*„FINDOLOGIC erweitert die Suche zu einem mächtigen Onsite Merchandising Tool!“* - **Design Bestseller**
-*„Steigerung der Conversion-Rate um 25% in unserem Shopware-Shop!“* - **Feinkost Käfer**
-*„Conversion-Rate mit FINDOLOGIC um 20% gestiegen!“* - **Adler Mode**
+* „User Experience wurde im Magento-Shop deutlich verbessert!“* -  **Shop4Runners**
+* „FINDOLOGIC erweitert die Suche zu einem mächtigen Onsite Merchandising Tool!“* - **Design Bestseller**
+* „Steigerung der Conversion-Rate um 25% in unserem Shopware-Shop!“* - **Feinkost Käfer**
+* „Conversion-Rate mit FINDOLOGIC um 20% gestiegen!“* - **Adler Mode**

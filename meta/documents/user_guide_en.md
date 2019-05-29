@@ -22,6 +22,6 @@ Use the intuitive FINDOLOGIC backend with our specially developed tools for comp
 As part of a shopping advisor campaign, ask your users smart questions that a salesperson from a stationary branch store would also ask. Thus your users will find the right product quickly and easily.
 
 ## Our references:
-*„Revenue increased by 46% in our Magento-shop with FINDOLOGIC!“* - **Shop4Runners**
-*„FINDOLOGIC expanded the search to become a powerful on-site merchandising tool!“* - **Design Bestseller**
-*„Conversion-Rate increased by 20% with FINDOLOGIC!“* - **Adler Mode**
+* „Revenue increased by 46% in our Magento-shop with FINDOLOGIC!“* - **Shop4Runners**
+* „FINDOLOGIC expanded the search to become a powerful on-site merchandising tool!“* - **Design Bestseller**
+* „Conversion-Rate increased by 20% with FINDOLOGIC!“* - **Adler Mode**
