@@ -2,7 +2,8 @@
 
 ## 1.0.3 (2019-06-04)
 
-* Installationsanleitung hinzugefügt
+* Installationsanleitung hinzugefügt.
+* Update der Plugin Beschreibung.
 
 ## 1.0.2 (2019-06-03)
 
