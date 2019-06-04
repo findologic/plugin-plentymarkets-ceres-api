@@ -1,27 +1,33 @@
-# Multilingualism
+### Prerequisites
 
-Consider that this plugin currently only supports one of the available shop languages. The actively used language can be configured in consultation with FINDOLOGIC.
+* Ceres >= 4.0.0 is required for the installation of the FINDOLOGIC plugin.
+  * If it's not possible to upgrade your Ceres version to >= 4.0.0, an alternative installation must be performed. For more information please contact [support@findologic.com](mailto:support@findologic.com)
+* The current version of the plugin only supports one of the available shop languages. The actively used language can be configured in consultation with FINDOLOGIC.
 
-# OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
+### Installation and configuration
+
+* Please find the step-by-step guide in the **SUPPORT** tab
+
+## OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
 Get the fully integrated shopping experience in your online store!
 Our open and modular platform with intelligent search, navigation, merchandising, shopping guide, 1:1 personalization, analytics, as well as our high-performance user interface, offers everything via lean integration. Put your users in focus and separate yourself from the competition with us.
 
-## Personalization:
+### Personalization
 With FINDOLOGIC Personalization you now have a specifically optimized store for every target group.
 
-## Search:
+### Search
 The search function represents the most important sales tool in your online store. Our algorithm, which has been refined for over 10 years, lets your customers really find what they are looking for on a 1:1 personalized basis. At the outset of their search, our Smart Suggest offers an intelligent drop-down to give your users the fastest possible orientation. Especially for mobile users.
 
-## Navigation:
+### Navigation
 Your users will see the most relevant products via your online store globally at any point during the customer journey. With 1:1 personalization and our sophisticated merchandising. Provide a fully-integrated, high-performance, consistent and personalized user experience across all category pages.
 
-## Merchandising:
+### Merchandising
 Use the intuitive FINDOLOGIC backend with our specially developed tools for compact and efficient sales and onsite marketing controls.
 
-## Shopping Guide:
+### Shopping Guide
 As part of a shopping advisor campaign, ask your users smart questions that a salesperson from a stationary branch store would also ask. Thus your users will find the right product quickly and easily.
 
-## Our references:
-* „Revenue increased by 46% in our Magento-shop with FINDOLOGIC!“* - **Shop4Runners**
-* „FINDOLOGIC expanded the search to become a powerful on-site merchandising tool!“* - **Design Bestseller**
-* „Conversion-Rate increased by 20% with FINDOLOGIC!“* - **Adler Mode**
+### Our references
+* *„Revenue increased by 46% in our Magento-shop with FINDOLOGIC!“* - **Shop4Runners**
+* *„FINDOLOGIC expanded the search to become a powerful on-site merchandising tool!“* - **Design Bestseller**
+* *„Conversion-Rate increased by 20% with FINDOLOGIC!“* - **Adler Mode**
