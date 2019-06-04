@@ -2,7 +2,7 @@
  
 ### Installing and activating plugin
 
-* For the installation of the plugin in your plentymarkets system, please go through the guide **First steps and requirements** in the **DESCRIPTION** tab 
+* For the installation of the plugin in your plentymarkets system, please go through the guide **First steps and requirements** in the **DESCRIPTION** tab.
 
 ### Configuring container links
 
