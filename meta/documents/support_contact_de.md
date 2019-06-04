@@ -2,7 +2,7 @@
  
 ### Plugin installieren und aktivieren
 
-* Folgen Sie der Anleitung **Erste Schritte und Anforderungen** im Reiter **Beschreibung** zur Installation eines Plugins in ihrem plentymarkets System
+* Folgen Sie der Anleitung **Erste Schritte und Anforderungen** im Reiter **Beschreibung** zur Installation eines Plugins in ihrem plentymarkets System.
 
 ### Container Verknüpfungen einrichten: 
 
@@ -16,7 +16,7 @@
  
 ### Konfiguration des FINDOLOGIC Plugin:
 
-Wenn Sie das Plugin aktiviert haben müssen Sie noch den FINDOLOGIC Shopkey eintragen, der Sie zur Nutzung des Services berechtigt
+Wenn Sie das Plugin aktiviert haben müssen Sie noch den FINDOLOGIC Shopkey eintragen, der Sie zur Nutzung des Services berechtigt.
 
 1. Öffnen Sie das Menü **Plugins » Plugin-Übersicht**.
 2. Wählen Sie das Plugin-Set.
