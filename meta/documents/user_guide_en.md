@@ -6,7 +6,7 @@
 
 ### Installation and configuration
 
-* Please find the step-by-step guide in the **SUPPORT** tab
+* Please find the step-by-step guide in the **SUPPORT** tab.
 
 ## OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
 Get the fully integrated shopping experience in your online store!
