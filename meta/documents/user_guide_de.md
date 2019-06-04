@@ -6,7 +6,7 @@
 
 ### Installation und Konfiguration
 
-* Eine Schritt für Schritt Anleitung finden sie im Reiter **SUPPORT**
+* Eine Schritt für Schritt Anleitung finden sie im Reiter **SUPPORT**.
 
 ## UNSERE SHOPPING EXPERIENCE PLATFORM FÜR IHRE USER
 
