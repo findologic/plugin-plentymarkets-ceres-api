@@ -1,19 +1,34 @@
-[
-  {
-    "tab": "Findologic Search",
-    "key": "shopkey",
-    "label": "Shop key",
-    "type": "text"
-  },
-  {
-    "tab": "Findologic Search",
-    "key": "nav_enabled",
-    "label": "Navigation enabled",
-    "type": "dropdown",
-    "possibleValues": {
-      "0": "No",
-      "1": "Yes"
-    },
-    "default"   : "1"
+{
+  "formatVersion": 1,
+  "menu": {
+    "Config.FINDOLOGICSearchTab": {
+      "label": "Config.FINDOLOGICSearchTab",
+      "formFields": {
+        "shopkey": {
+          "type": "inputText",
+          "required": false,
+          "label": "Config.shopkeyLabel",
+          "options": {}
+        },
+        "nav_enabled": {
+          "type": "selectBox",
+          "required": false,
+          "label": "Config.navEnabledLabel",
+          "options": {
+            "defaultValue": "1",
+            "selectBoxValues": [
+              {
+                "value": "0",
+                "caption": "Config.navDisabled"
+              },
+              {
+                "value": "1",
+                "caption": "Config.navEnabled"
+              }
+            ]
+          }
+        }
+      }
+    }
   }
-]
+}
