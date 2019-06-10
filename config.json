@@ -5,7 +5,7 @@
       "label": "Config.FINDOLOGICSearchTab",
       "formFields": {
         "shopkey": {
-          "type": "inputText",
+          "type": "inputTextArea",
           "required": false,
           "label": "Config.shopkeyLabel",
           "options": {}

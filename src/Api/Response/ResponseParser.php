@@ -2,6 +2,7 @@
 
 namespace Findologic\Api\Response;
 
+use Exception;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Constants\Plugin;
 use Plenty\Log\Contracts\LoggerContract;
@@ -35,9 +36,7 @@ class ResponseParser
      */
     public function parse($responseData)
     {
-        /**
-         * @var Response $response
-         */
+        /** @var Response $response */
         $response = $this->createResponseObject();
 
         try {
@@ -49,7 +48,7 @@ class ResponseParser
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->warning('Could not parse response from server.');
             $this->logger->logException($e);
         }
@@ -58,14 +57,23 @@ class ResponseParser
     }
 
     /**
-     * @param $xmlString
+     * @param string $xmlString
      * @return \SimpleXMLElement
+     * @throws Exception
      */
     public function loadXml($xmlString = '')
     {
-        return simplexml_load_string($xmlString);
+        $parsedXml = simplexml_load_string($xmlString);
+        if (!$parsedXml) {
+            throw new Exception('Error while parsing xmlString to xmlElement');
+        }
+
+        return $parsedXml;
     }
 
+    /**
+     * @return Response
+     */
     public function createResponseObject()
     {
         return pluginApp(Response::class);
