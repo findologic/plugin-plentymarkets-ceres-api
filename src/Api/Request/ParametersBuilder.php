@@ -18,7 +18,9 @@ class ParametersBuilder
         'texts.name1_asc' => 'label ASC',
         'texts.name1_desc' => 'label DESC',
         'variation.createdAt_desc' => 'dateadded DESC',
-        'variation.createdAt_asc' => 'dateadded ASC'
+        'variation.createdAt_asc' => 'dateadded ASC',
+        'variation.position_asc' => 'salesfrequency ASC',
+        'variation.position_desc' => 'salesfrequency DESC'
     ];
 
     /**

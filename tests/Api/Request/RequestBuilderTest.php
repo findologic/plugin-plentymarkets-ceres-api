@@ -50,7 +50,7 @@ class RequestBuilderTest extends TestCase
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
 
-    public function providerBuildAliveRequest()
+    public function buildAliveRequestProvider()
     {
         return [
             'Build alive request' => [
@@ -63,9 +63,12 @@ class RequestBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider providerBuildAliveRequest
+     * @dataProvider buildAliveRequestProvider
+     *
+     * @param string $expectedUrl
+     * @param array $expectedParams
      */
-    public function testBuildAliveRequest($expectedUrl, $expectedParams)
+    public function testBuildAliveRequest(string $expectedUrl, array $expectedParams)
     {
         $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject']);
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
@@ -78,7 +81,7 @@ class RequestBuilderTest extends TestCase
         $this->assertEquals($expectedParams, $result->getParams());
     }
 
-    public function providerBuild()
+    public function buildProvider()
     {
         return [
             'Build - No user ip provided' => [
@@ -117,10 +120,19 @@ class RequestBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider providerBuild
+     * @dataProvider buildProvider
+     *
+     * @param string $userIp
+     * @param string $expectedUrl
+     * @param bool $category
+     * @param array $expectedParams
      */
-    public function testBuild($userIp, $expectedUrl, $category, $expectedParams)
-    {
+    public function testBuild(
+        string $userIp,
+        string $expectedUrl,
+        bool $category,
+        array $expectedParams
+    ) {
         /** @var HttpRequest|MockObject $httpRequestMock */
         $httpRequestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
 

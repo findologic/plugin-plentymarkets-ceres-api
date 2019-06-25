@@ -12,7 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class RequestTest extends TestCase
 {
-    public function providerGetRequestUrl()
+    public function getRequestUrlProvider()
     {
         return [
             [
@@ -24,10 +24,17 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @dataProvider providerGetRequestUrl
+     * @dataProvider getRequestUrlProvider
+     *
+     * @param string $url
+     * @param array $params
+     * @param string $expectedResult
      */
-    public function testGetRequestUrl($url, $params, $expectedResult)
-    {
+    public function testGetRequestUrl(
+        string $url,
+        array $params,
+        string $expectedResult
+    ) {
         $requestMock = $this->getRequestMock();
         $requestMock->setUrl($url)->setParams($params);
 
