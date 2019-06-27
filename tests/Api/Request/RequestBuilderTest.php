@@ -13,6 +13,7 @@ use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Findologic\Components\PluginConfig;
+use Findologic\Constants\Plugin;
 
 /**
  * Class RequestBuilderTest
@@ -85,6 +86,7 @@ class RequestBuilderTest extends TestCase
                 'https://service.findologic.com/ps/xml_2.0/index.php',
                 false,
                 [
+                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'revision' => '0.0.1'
                 ]
@@ -94,6 +96,7 @@ class RequestBuilderTest extends TestCase
                 'https://service.findologic.com/ps/xml_2.0/selector.php',
                 true,
                 [
+                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
                     'revision' => '0.0.1'
@@ -104,6 +107,7 @@ class RequestBuilderTest extends TestCase
                 'https://service.findologic.com/ps/xml_2.0/index.php',
                 false,
                 [
+                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
                     'revision' => '0.0.1'
