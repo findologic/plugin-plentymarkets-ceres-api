@@ -25,7 +25,7 @@ Wenn Sie das Plugin aktiviert haben müssen Sie noch den FINDOLOGIC Shopkey eint
 5. Tragen Sie Ihren Shopkey in dem entsprechenden Feld ein. (Sollten Sie noch keinen Shopkey zur Verfügung haben, wenden Sie sich bitte an [sales@findologic.com](mailto:sales@findologic.com))
 6. Mit der Einstellung **Navigation enabled** die Einbindung in Navigationsseiten aktivieren oder deaktivieren.
 
-![shopkey_configuration](shopkey_config_de.png)
+![shopkey_configuration](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/master/meta/images/shopkey_config_de.png)
  
  
 ## Weitere Informationen
