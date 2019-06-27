@@ -5,15 +5,14 @@ namespace Findologic\Tests\Api\Request;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
-use Findologic\Constants\Plugin;
 use Ceres\Helper\ExternalSearch;
 use IO\Services\CategoryService;
-use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Findologic\Components\PluginConfig;
 
 /**
  * Class RequestBuilderTest
@@ -27,9 +26,9 @@ class RequestBuilderTest extends TestCase
     protected $parametersBuilder;
 
     /**
-     * @var ConfigRepository|MockObject
+     * @var PluginConfig|MockObject
      */
-    protected $configRepository;
+    protected $pluginConfig;
 
     /**
      * @var LoggerFactory|MockObject
@@ -44,7 +43,7 @@ class RequestBuilderTest extends TestCase
     public function setUp()
     {
         $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
@@ -70,7 +69,7 @@ class RequestBuilderTest extends TestCase
         $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject']);
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
 
-        $this->configRepository->expects($this->once())->method('get')->with('Findologic.shopkey')->willReturn('TESTSHOPKEY');
+        $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('TESTSHOPKEY');
 
         /** @var Request|MockObject $result */
         $result = $requestBuilderMock->buildAliveRequest();
@@ -125,7 +124,7 @@ class RequestBuilderTest extends TestCase
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $searchQueryMock->searchString = 'Test';
 
-        $this->configRepository->expects($this->once())->method('get')->with('Findologic.shopkey')->willReturn('TESTSHOPKEY');
+        $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('TESTSHOPKEY');
 
         $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject', 'getUserIp', 'getPluginVersion']);
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
@@ -156,7 +155,7 @@ class RequestBuilderTest extends TestCase
         return $this->getMockBuilder(RequestBuilder::class)
             ->setConstructorArgs([
                 'parametersBuilder' => $this->parametersBuilder,
-                'configRepository' => $this->configRepository,
+                'pluginConfig' => $this->pluginConfig,
                 'loggerFactory' => $this->loggerFactory
             ])
             ->setMethods($methods)

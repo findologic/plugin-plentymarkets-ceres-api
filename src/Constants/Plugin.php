@@ -4,7 +4,7 @@ namespace Findologic\Constants;
 
 /**
  * Class Plugin
- * @package FindologicCeres\Constants
+ * @package Findologic\Constants
  */
 class Plugin
 {
