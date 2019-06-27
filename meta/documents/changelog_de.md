@@ -1,5 +1,15 @@
 # Release Notes für FINDOLOGIC
 
+## 1.1.0 (2019-06-27)
+
+### Hinzugefügt
+
+* Shops mit mehreren Sprachen werden unterstützt.
+
+### Behoben
+
+* Das Plugin verwendet explizit das richtige Ausgabeformat (XML).
+
 ## 1.0.3 (2019-06-04)
 
 * Installationsanleitung hinzugefügt.

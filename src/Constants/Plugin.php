@@ -4,11 +4,11 @@ namespace Findologic\Constants;
 
 /**
  * Class Plugin
- * @package FindologicCeres\Constants
+ * @package Findologic\Constants
  */
 class Plugin
 {
-    const PLUGIN_VERSION = '1.0.3';
+    const PLUGIN_VERSION = '1.1.0';
     const PLUGIN_NAMESPACE = 'Findologic';
     const PLUGIN_IDENTIFIER = 'findologic-plugin-api';
 
@@ -16,6 +16,7 @@ class Plugin
     const PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'items';
     const PLENTY_PARAMETER_PAGINATION_START = 'first';
 
+    const API_OUTPUT_ADAPTER = 'XML_2.0';
     const API_PARAMETER_ATTRIBUTES = 'attrib';
     const API_PARAMETER_PROPERTIES = 'properties';
     const API_PARAMETER_SORT_ORDER = 'order';
