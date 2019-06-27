@@ -1,22 +1,21 @@
 <?php
 
-namespace Findologic\Tests\Providers;
+namespace Findologic\Tests\Middlewares;
 
 use Findologic\Services\SearchService;
 use Plenty\Log\Contracts\LoggerContract;
-use Plenty\Plugin\ConfigRepository;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Findologic\Providers\FindologicServiceProvider;
-use Findologic\Constants\Plugin;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\Http\Request;
+use Findologic\Components\PluginConfig;
+use Findologic\Middlewares\Middleware;
 
 /**
- * Class SearchServiceTest
+ * Class MiddlewareTest
  * @package Findologic\Tests
  */
-class FindologicServiceProviderTest extends TestCase
+class MiddlewareTest extends TestCase
 {
     /**
      * @var SearchService|MockObject
@@ -34,56 +33,46 @@ class FindologicServiceProviderTest extends TestCase
     protected $eventDispatcher;
 
     /**
-     * @var ConfigRepository|MockObject
+     * @var PluginConfig|MockObject
      */
-    protected $configRepository;
+    protected $pluginConfig;
 
     /**
-     * @var FindologicServiceProvider
+     * @var Middleware|MockObject
      */
-    protected $findologicServiceProvider;
+    protected $middleware;
 
     public function setUp()
     {
         $this->searchService = $this->getMockBuilder(SearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->eventDispatcher = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
-
-        $this->findologicServiceProvider = $this->getMockBuilder(FindologicServiceProvider::class)->disableOriginalConstructor()->setMethods(['getLoggerObject'])->getMock();
-        $loggerMock = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->findologicServiceProvider->method('getLoggerObject')->willReturn($loggerMock);
+        $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)->disableOriginalConstructor()->setMethods([])->getMock();
     }
 
     public function testBootShopKeyNotSet()
     {
-        $this->configRepository->expects($this->once())->method('get')->willReturn('');
+        $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('');
 
         $this->searchService->expects($this->never())->method('aliveTest');
 
         $this->eventDispatcher->expects($this->never())->method('listen');
 
-        $this->runBoot();
+        $this->runBefore();
     }
 
     public function testBootShopKeySetAndAliveTestFails()
     {
-        $this->configRepository->expects($this->once())->method('get')->willReturn('testShopKey');
-
-        $this->searchService->expects($this->once())->method('aliveTest')->willThrowException(new \Exception());
+        $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('testShopKey');
 
         $this->eventDispatcher->expects($this->never())->method('listen');
 
-        $this->runBoot();
+        $this->runBefore();
     }
 
     public function testIsNotSearchPageAndIsNotActiveOnCatPage()
     {
-        $this->configRepository->expects($this->any())->method('get')->willReturnMap([
-            [
-                Plugin::CONFIG_SHOPKEY, false, 'testShopKey'
-            ]
-        ]);
+        $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testShopKey');
 
         $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
 
@@ -92,16 +81,12 @@ class FindologicServiceProviderTest extends TestCase
 
         $this->request->method('getUri')->willReturn('https://testshop.com/testpage');
 
-        $this->runBoot();
+        $this->runBefore();
     }
 
     public function testIsSearchPageAndIsNotActiveOnCatPage()
     {
-        $this->configRepository->expects($this->any())->method('get')->willReturnMap([
-            [
-                Plugin::CONFIG_SHOPKEY, false, 'testShopKey'
-            ]
-        ]);
+        $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testShopKey');
 
         $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
 
@@ -114,34 +99,44 @@ class FindologicServiceProviderTest extends TestCase
 
         $this->request->method('getUri')->willReturn('https://testshop.com/search');
 
-        $this->runBoot();
+        $this->runBefore();
     }
 
     public function testIsNotSearchPageAndIsActiveOnCatPage()
     {
-        $this->configRepository->expects($this->any())->method('get')->willReturn('testConfigValue');
+        $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testConfigValue');
 
         $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
 
-        $this->eventDispatcher->expects($this->exactly(4))->method('listen')->withConsecutive(
+        $this->eventDispatcher->expects($this->exactly(2))->method('listen')->withConsecutive(
             ['IO.Resources.Import'],
-            ['Ceres.Search.Options'],
-            ['IO.Component.Import'],
             ['Ceres.Search.Query']
         );
 
         $this->request->method('getUri')->willReturn('https://testshop.com/testpage');
 
-        $this->runBoot();
+        $this->runBefore();
     }
 
-    protected function runBoot()
+    protected function runBefore()
     {
-        $this->findologicServiceProvider->boot(
-            $this->configRepository,
-            $this->eventDispatcher,
-            $this->request,
-            $this->searchService
+        $this->middleware = $this->getMockBuilder(Middleware::class)
+            ->setConstructorArgs([
+                'pluginConfig' => $this->pluginConfig,
+                'searchService' => $this->searchService,
+                'eventDispatcher' => $this->eventDispatcher
+            ])
+            ->setMethods(
+                [
+                    'getLoggerObject'
+                ]
+            )
+            ->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->middleware->method('getLoggerObject')->willReturn($loggerMock);
+
+        $this->middleware->before(
+            $this->request
         );
     }
 }

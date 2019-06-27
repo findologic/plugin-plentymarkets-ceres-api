@@ -5,10 +5,10 @@ namespace Findologic\Api\Request;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
-use Plenty\Plugin\ConfigRepository;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Components\PluginConfig;
 
 /**
  * Class RequestBuilder
@@ -27,9 +27,9 @@ class RequestBuilder
     protected $parametersBuilder;
 
     /**
-     * @var ConfigRepository
+     * @var PluginConfig
      */
-    protected $configRepository;
+    protected $pluginConfig;
 
     /**
      * @var LoggerContract
@@ -41,10 +41,13 @@ class RequestBuilder
      */
     protected $request;
 
-    public function __construct(ParametersBuilder $parametersBuilder, ConfigRepository $configRepository, LoggerFactory $loggerFactory)
-    {
+    public function __construct(
+        ParametersBuilder $parametersBuilder,
+        PluginConfig $pluginConfig,
+        LoggerFactory $loggerFactory
+    ) {
         $this->parametersBuilder = $parametersBuilder;
-        $this->configRepository = $configRepository;
+        $this->pluginConfig = $pluginConfig;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
@@ -73,7 +76,7 @@ class RequestBuilder
         $request = $this->createRequestObject();
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT, 1);
         $request->setUrl(
-            $this->getCleanShopUrl(self::ALIVE_REQUEST_TYPE))->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY)
+            $this->getCleanShopUrl(self::ALIVE_REQUEST_TYPE))->setParam('shopkey', $this->pluginConfig->getShopKey()
         );
 
         return $request;
@@ -147,7 +150,8 @@ class RequestBuilder
     {
         $request->setUrl($this->getCleanShopUrl($requestType));
         $request->setParam('revision', $this->getPluginVersion());
-        $request->setParam('shopkey', $this->configRepository->get(Plugin::CONFIG_SHOPKEY));
+        $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
+        $request->setParam('shopkey', $this->pluginConfig->getShopKey());
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT, Client::DEFAULT_CONNECTION_TIME_OUT);
 
         if ($this->getUserIp()) {

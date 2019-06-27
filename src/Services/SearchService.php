@@ -225,16 +225,14 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @throws AliveException
+     * @returns bool
      */
     public function aliveTest()
     {
         $request = $this->requestBuilder->buildAliveRequest();
         $response = $this->client->call($request);
 
-        if ($response !== Plugin::API_ALIVE_RESPONSE_BODY) {
-            throw new AliveException('Server is not alive!');
-        }
+        return $response === Plugin::API_ALIVE_RESPONSE_BODY;
     }
 
     private function filterInvalidVariationIds(array $ids)

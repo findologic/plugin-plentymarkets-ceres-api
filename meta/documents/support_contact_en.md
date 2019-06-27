@@ -31,7 +31,7 @@ After activating the plugin it's necessary to add the FINDOLOGIC shopkey in orde
    In case you don't receive a shopkey yet, please contact [sales@findologic.com](mailto:sales@findologic.com)
 6. With the setting **Navigation enabled** the integration on navigation pages can be enabled or disabled
 
-![shopkey_configuration](shopkey_config_en.png)
+![shopkey_configuration](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/master/meta/images/shopkey_config_en.png)
 
 ## Further information
 
