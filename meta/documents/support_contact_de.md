@@ -22,7 +22,14 @@ Wenn Sie das Plugin aktiviert haben müssen Sie noch den FINDOLOGIC Shopkey eint
 2. Wählen Sie das Plugin-Set.
 3. Klicken Sie auf das FINDOLOGIC Plugin.
 4. Öffnen Sie das Menü **Konfiguration » FINDOLOGIC Search**.
-5. Tragen Sie Ihren Shopkey in dem entsprechenden Feld ein. (Sollten Sie noch keinen Shopkey zur Verfügung haben, wenden Sie sich bitte an [sales@findologic.com](mailto:sales@findologic.com))
+5. Tragen Sie Ihre Sprache und Shopkey in dem entsprechenden Feld ein. Bei Verwendung von mehreren Sprachen tragen Sie mehrere Zeilen ein.
+   ```
+   de: A1B2C3D4E5F6
+   en: A7B8C9D10E11
+   es: A12B13C14D15
+   ``` 
+   Sollten Sie noch keinen Shopkey zur Verfügung haben, wenden Sie sich bitte an [sales@findologic.com](mailto:sales@findologic.com)
+
 6. Mit der Einstellung **Navigation enabled** die Einbindung in Navigationsseiten aktivieren oder deaktivieren.
 
 ![shopkey_configuration](shopkey_config_de.png)

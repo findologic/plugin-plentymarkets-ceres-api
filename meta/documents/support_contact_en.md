@@ -22,7 +22,13 @@ After activating the plugin it's necessary to add the FINDOLOGIC shopkey in orde
 2. Select the plugin set.
 3. Click on the FINDOLOGIC plugin.
 4. Go to **Configuration » FINDOLOGIC Search**.
-5. Add your shopkey to the corresponding field. (In case you don't receive a shopkey yet, please contact [sales@findologic.com](mailto:sales@findologic.com))
+5. Add your language and shopkey to the corresponding field. If you are using more than one language add a line for each language.
+   ```
+   de: A1B2C3D4E5F6
+   en: A7B8C9D10E11
+   es: A12B13C14D15
+   ```
+   In case you don't receive a shopkey yet, please contact [sales@findologic.com](mailto:sales@findologic.com)
 6. With the setting **Navigation enabled** the integration on navigation pages can be enabled or disabled
 
 ![shopkey_configuration](shopkey_config_en.png)
