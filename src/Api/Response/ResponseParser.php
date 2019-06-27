@@ -166,7 +166,6 @@ class ResponseParser
                 $productData = [
                     'id' => $product['id']->__toString(),
                     'relevance' => $product['relevance']->__toString(),
-                    'direct' => $product['direct']->__toString(),
                 ];
 
                 foreach ($product->properties->property as $property) {
