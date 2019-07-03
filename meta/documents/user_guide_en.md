@@ -2,7 +2,6 @@
 
 * Ceres >= 4.0.0 is required for the installation of the FINDOLOGIC plugin.
   * If it's not possible to upgrade your Ceres version to >= 4.0.0, an alternative installation must be performed. For more information please contact [support@findologic.com](mailto:support@findologic.com)
-* The current version of the plugin only supports one of the available shop languages. The actively used language can be configured in consultation with FINDOLOGIC.
 
 ### Installation and configuration
 
