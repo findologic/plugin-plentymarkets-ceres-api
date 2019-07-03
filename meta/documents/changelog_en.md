@@ -1,5 +1,15 @@
 # Release Notes for FINDOLOGIC
 
+## 1.1.1 (2019-07-03)
+
+### Fixed
+
+* Sort option "Top seller" is supported.
+
+### Changed
+
+* Removed wrong feature statement in user guide.
+
 ## 1.1.0 (2019-06-27)
 
 ### Added

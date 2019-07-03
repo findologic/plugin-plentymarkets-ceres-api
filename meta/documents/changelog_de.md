@@ -1,5 +1,15 @@
 # Release Notes für FINDOLOGIC
 
+## 1.1.1 (2019-07-03)
+
+### Behoben
+
+* Sortieroption "Meistverkaufte Artikel" wird unterstützt.
+
+### Geändert
+
+* Beschreibungstext für Voraussetzungen des Plugins wurde geändert.
+
 ## 1.1.0 (2019-06-27)
 
 ### Hinzugefügt
