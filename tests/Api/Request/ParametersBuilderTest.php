@@ -43,7 +43,7 @@ class ParametersBuilderTest extends TestCase
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
 
-    public function providerSetSearchParams()
+    public function setSearchParamsProvider()
     {
         return [
             'Category page request' => [
@@ -96,9 +96,13 @@ class ParametersBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider providerSetSearchParams
+     * @dataProvider setSearchParamsProvider
+     *
+     * @param array $parameters
+     * @param array|bool $category
+     * @param array $expectedParameters
      */
-    public function testSetSearchParams($parameters, $category, $expectedParameters)
+    public function testSetSearchParams(array $parameters, $category, array $expectedParameters)
     {
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods(null)->getMock();
 
