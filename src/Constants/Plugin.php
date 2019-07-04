@@ -37,7 +37,9 @@ class Plugin
         'texts.name1_desc',
         'variation.createdAt_desc',
         'variation.createdAt_asc',
-        'item.score'
+        'item.score',
+        'variation.position_asc',
+        'variation.position_desc'
     ];
 
     const CONFIG_SHOPKEY = 'Findologic.shopkey';
