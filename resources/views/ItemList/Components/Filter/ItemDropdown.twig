@@ -1,0 +1,15 @@
+<script type="x/template" id="vue-item-dropdown">
+    <div class="fl-item-dropdown-container">
+        <div class="fl-dropdown">
+            <button v-if="selectedValue" class="fl-dropdown-btn">${ selectedValue }</button>
+            <button v-else class="fl-dropdown-btn">{{ trans("Findologic::Template.pleaseSelect") }}</button>
+            <div class="fl-dropdown-content" v-show="isShowDropdown">
+                <span v-for="value in facet.values" @click="selected(value.name)" class="fl-dropdown-item">
+                    <input class="form-check-input hidden-xs-up" type="checkbox">
+                    <label class="form-check-label fl-dropdown-item-label">${ value.name }</label>
+                    <span class="fl-filter-badge">${ value.count }</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</script>
