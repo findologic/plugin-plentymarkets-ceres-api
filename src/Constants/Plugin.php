@@ -8,9 +8,9 @@ namespace Findologic\Constants;
  */
 class Plugin
 {
-    const PLUGIN_VERSION = '1.1.1';
     const PLUGIN_NAMESPACE = 'Findologic';
     const PLUGIN_IDENTIFIER = 'findologic-plugin-api';
+    const PLUGIN_VERSION_UNKNOWN = 'UNKNOWN';
 
     const PLENTY_PARAMETER_SORT_ORDER = 'sorting';
     const PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'items';
