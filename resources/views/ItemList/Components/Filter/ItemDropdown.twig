@@ -1,0 +1,9 @@
+<script type="x/template" id="vue-item-dropdown">
+    <div class="fl-item-dropdown-container">
+        <ul class="fl-filter">
+            <select v-model="filterDropdown" @change="selected(filterDropdown)">
+                <option v-for="value in facet.values" v-bind:value="value.name">${value.name} ${value.count}</option>
+            </select>
+        </ul>
+    </div>
+</script>
