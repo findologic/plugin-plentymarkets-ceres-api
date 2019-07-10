@@ -20,9 +20,6 @@
         <div v-else-if="facet.type === 'color'">
             <item-color-tiles :facet="facet"></item-color-tiles>
         </div>
-        <div v-else-if="facet.type === 'select'">
-            <item-dropdown :facet="facet"></item-dropdown>
-        </div>
         <div v-else-if="facet.id === 'cat'">
             <div class="form-check" v-for="value in facets" :key="value.id">
                 <div class="category-container">
@@ -42,6 +39,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else-if="facet.type === 'select'">
+            <item-dropdown :facet="facet"></item-dropdown>
         </div>
         <div v-else>
             <div class="form-check" v-for="value in facets" :key="value.id">
