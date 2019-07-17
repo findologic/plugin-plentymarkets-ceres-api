@@ -3,7 +3,7 @@
         <span class="fl-dropdown-label" v-if="selectedValue" >${ selectedValue }</span>
         <span class="fl-dropdown-label" v-else >{{ trans("Findologic::Template.pleaseSelect") }}</span>
         <ul v-show="isShowDropdown" class="fl-dropdown-content form-check">
-            <li v-for="value in facet.values" class="fl-dropdown-item form-check-label">
+            <li v-for="value in facet.values" @click="selected(value.name)" class="fl-dropdown-item form-check-label">
                 <label>${ value.name }</label>
                 <div class="filter-badge">${ value.count }</div>
             </li>
