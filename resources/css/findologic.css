@@ -93,6 +93,20 @@
     z-index: 2;
 }
 
+.fl-dropdown-container {
+    cursor: pointer;
+    position: relative;
+}
+
+.fl-dropdown-container .fl-dropdown-content {
+    list-style-type: none;
+    position: absolute;
+}
+
+.fl-dropdown-container .fl-dropdown-content .fl-dropdown-item {
+    cursor: pointer;
+}
+
 /*.fl-dropdown-btn {*/
 /*    background-color: #3498DB;*/
 /*    color: white;*/

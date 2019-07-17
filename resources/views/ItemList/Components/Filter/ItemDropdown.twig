@@ -1,11 +1,11 @@
 <script type="x/template" id="vue-item-dropdown">
-    <div class="fl-item-dropdown-container">
+    <div class="fl-dropdown-container custom-select">
         <span v-if="selectedValue" >${ selectedValue }</span>
         <span v-else >{{ trans("Findologic::Template.pleaseSelect") }}</span>
-        <ul v-show="isShowDropdown">
-            <li v-for="value in facet.values">
-                <label class="form-check-label fl-dropdown-item-label">${ value.name }</label>
-                <span class="fl-filter-badge">${ value.count }</span>
+        <ul v-show="isShowDropdown" class="fl-dropdown-content">
+            <li v-for="value in facet.values" class="fl-dropdown-item">
+                <label>${ value.name }</label>
+                <span>${ value.count }</span>
             </li>
         </ul>
     </div>
