@@ -18,13 +18,13 @@ Vue.component("item-dropdown", {
     created() {
         this.$options.template = this.template || "#vue-item-dropdown";
 
-        window.addEventListener('click', this.onClick);
+        // window.addEventListener('click', this.onClick);
 
         this.selectedValue = this.getSelectedValue();
     },
 
     beforeDestroy() {
-        window.removeEventListener('click', this.onClick);
+        // window.removeEventListener('click', this.onClick);
     },
 
     computed: {
@@ -42,24 +42,28 @@ Vue.component("item-dropdown", {
             }
         },
 
-        onClick(event) {
-            if (!this.$el.children[0].contains(event.target)) {
-                this.hideDropdown();
-            } else {
-                this.showDropdown();
-            }
-        },
+        // onClick(event) {
+        //     if (!this.$el.children[0].contains(event.target)) {
+        //         this.hideDropdown();
+        //     } else {
+        //         this.showDropdown();
+        //     }
+        // },
 
         selected: function (value) {
             this.updateSelectedFilters(this.facet.id, value);
         },
 
-        showDropdown: function () {
-            this.isShowDropdown = true;
-        },
+        // showDropdown: function () {
+        //     this.isShowDropdown = true;
+        // },
+        //
+        // hideDropdown: function () {
+        //     this.isShowDropdown = false;
+        // },
 
-        hideDropdown: function () {
-            this.isShowDropdown = false;
+        toggleDropdown: function () {
+            this.isShowDropdown = !this.isShowDropdown;
         }
     }
 });
