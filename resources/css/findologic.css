@@ -97,22 +97,41 @@
     cursor: pointer;
     position: relative;
     padding-left: 0;
+    border: 2px solid #efefef;
 }
 
 .fl-dropdown-container .fl-dropdown-content {
     list-style-type: none;
     position: absolute;
     width: 100%;
-    padding-left: 0;
     z-index: 1;
     background-color: #fff;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    margin-top: 13px;
 }
 
-.fl-dropdown-container .fl-dropdown-content .fl-dropdown-item,
-.fl-dropdown-container .fl-dropdown-content .fl-dropdown-item .form-check-label{
+.fl-dropdown-container .fl-dropdown-content .fl-dropdown-item {
+    padding-left: 1rem;
     cursor: pointer;
+}
+
+.fl-dropdown-container .fl-dropdown-content .fl-dropdown-item label {
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.fl-dropdown-container .fl-dropdown-content .fl-dropdown-item .filter-badge {
+    position: relative;
+    top: 7px;
+    float: right;
 }
 
 .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item:first-child {
     margin-top: 1rem;
+}
+
+.fl-dropdown-container .fl-dropdown-label {
+    padding-left: 1rem;
 }
