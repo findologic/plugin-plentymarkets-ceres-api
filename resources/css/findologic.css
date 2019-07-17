@@ -113,13 +113,13 @@
 }
 
 .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item {
-    padding-left: 1rem;
     cursor: pointer;
 }
 
 .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item label {
     cursor: pointer;
     margin-bottom: 0;
+    padding-left: 1rem;
 }
 
 .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item .filter-badge {
