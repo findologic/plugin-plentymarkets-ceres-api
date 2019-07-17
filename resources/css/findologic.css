@@ -96,15 +96,21 @@
 .fl-dropdown-container {
     cursor: pointer;
     position: relative;
+    padding-left: 0;
 }
 
 .fl-dropdown-container .fl-dropdown-content {
     list-style-type: none;
     position: absolute;
+    width: 100%;
+    padding-left: 0;
+    z-index: 1;
+    background-color: #fff;
 }
 
 .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item {
     cursor: pointer;
+    padding: 0.6rem 0 0 0;
 }
 
 /*.fl-dropdown-btn {*/
