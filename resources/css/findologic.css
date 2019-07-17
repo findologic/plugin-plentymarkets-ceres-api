@@ -122,7 +122,7 @@
     padding-left: 1rem;
 }
 
-.fl-dropdown-container .fl-dropdown-content .fl-dropdown-item.form-check-label .filter-badge {
+.list-controls #filterCollapse .page-content .card .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item.form-check-label .filter-badge {
     position: relative;
     top: 7px;
     float: right;
