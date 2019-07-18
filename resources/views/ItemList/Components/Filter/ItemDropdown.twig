@@ -1,5 +1,5 @@
 <script type="x/template" id="vue-item-dropdown">
-    <div class="fl-dropdown-container custom-select" @click="toggleDropdown()">
+    <div class="fl-dropdown-container custom-select" @click="toggleDropdown()" @blur="hideDropDown()">
         <span class="fl-dropdown-label" v-if="selectedValue" >${ selectedValue }</span>
         <span class="fl-dropdown-label" v-else >{{ trans("Findologic::Template.pleaseSelect") }}</span>
         <ul v-show="isShowDropdown" class="fl-dropdown-content form-check">

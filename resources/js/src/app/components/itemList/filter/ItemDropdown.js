@@ -58,9 +58,9 @@ Vue.component("item-dropdown", {
         //     this.isShowDropdown = true;
         // },
         //
-        // hideDropdown: function () {
-        //     this.isShowDropdown = false;
-        // },
+        hideDropdown: function () {
+            this.isShowDropdown = false;
+        },
 
         toggleDropdown: function () {
             this.isShowDropdown = !this.isShowDropdown;
