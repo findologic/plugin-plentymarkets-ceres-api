@@ -102,6 +102,7 @@
     position: relative;
     padding-left: 0;
     border: 2px solid #efefef;
+    margin-bottom: 2rem;
 }
 
 .fl-dropdown-container .fl-dropdown-content {
