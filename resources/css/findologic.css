@@ -48,13 +48,19 @@
     }
 }
 
+.fl-item-color-tiles-container {
+    margin-bottom: 3rem;
+}
+
 .fl-item-color-tiles-container .fl-item-color-tiles-list {
     padding-left: 0;
+    list-style-type: none;
+    overflow: hidden;
 }
 
 .fl-item-color-tiles-container .fl-item-color-tiles-list .fl-item-color-tiles-list-item {
     margin: 10px 10px 10px 0;
-    display: inline-block;
+    float: left;
 }
 
 .fl-item-color-tiles-container .fl-item-color-tiles-list .fl-item-color-tiles-list-item .fl-color-tile-label {
