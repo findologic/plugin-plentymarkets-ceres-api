@@ -352,12 +352,7 @@ Vue.component("item-dropdown", {
     created: function created() {
         this.$options.template = this.template || "#vue-item-dropdown";
 
-        // window.addEventListener('click', this.onClick);
-
         this.selectedValue = this.getSelectedValue();
-    },
-    beforeDestroy: function beforeDestroy() {
-        // window.removeEventListener('click', this.onClick);
     },
 
 
@@ -376,22 +371,10 @@ Vue.component("item-dropdown", {
             }
         },
 
-        // onClick(event) {
-        //     if (!this.$el.children[0].contains(event.target)) {
-        //         this.hideDropdown();
-        //     } else {
-        //         this.showDropdown();
-        //     }
-        // },
-
         selected: function selected(value) {
             this.updateSelectedFilters(this.facet.id, value);
         },
 
-        // showDropdown: function () {
-        //     this.isShowDropdown = true;
-        // },
-        //
         hideDropdown: function hideDropdown() {
             this.isShowDropdown = false;
         },
