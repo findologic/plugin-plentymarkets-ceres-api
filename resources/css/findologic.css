@@ -10,6 +10,10 @@
     display: none !important;
 }
 
+.fl-range-slider-container {
+    display: inline-block;
+}
+
 .fl-range-slider-container .fl-range-slider {
     margin-top: 20px;
 }
