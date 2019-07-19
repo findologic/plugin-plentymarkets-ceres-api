@@ -6,6 +6,8 @@ use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
 use Plenty\Log\Contracts\LoggerContract;
+use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use Plenty\Modules\Plugin\Models\Plugin as PluginModel;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Components\PluginConfig;
@@ -138,7 +140,23 @@ class RequestBuilder
      */
     public function getPluginVersion()
     {
-        return Plugin::PLUGIN_VERSION;
+        /** @var PluginRepositoryContract $pluginRepository */
+        $pluginRepository = pluginApp(PluginRepositoryContract::class);
+
+        /** @var PluginModel $findologicPlugin */
+        $pluginsResult = $pluginRepository->searchPlugins(['name' => Plugin::PLUGIN_NAMESPACE])->getResult();
+
+        if (empty($pluginsResult)) {
+            return Plugin::PLUGIN_VERSION_UNKNOWN;
+        }
+
+        $findologicPlugin = $pluginRepository->decoratePlugin($pluginsResult[0]);
+
+        if (empty($findologicPlugin->versionProductive)) {
+            return Plugin::PLUGIN_VERSION_UNKNOWN;
+        }
+
+        return $findologicPlugin->versionProductive;
     }
 
     /**

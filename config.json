@@ -29,6 +29,25 @@
           }
         }
       }
+    },
+    "Config.FINDOLOGICSmartSuggest": {
+      "label": "Config.FINDOLOGICSmartSuggest",
+      "formFields": {
+        "search_result_container": {
+          "type": "inputText",
+          "label": "Config.searchResultContainerLabel",
+          "options": {
+            "defaultValue": "fl-result"
+          }
+        },
+        "navigation_container": {
+          "type": "inputText",
+          "label": "Config.navigationContainerLabel",
+          "options": {
+            "defaultValue": "fl-navigation-result"
+          }
+        }
+      }
     }
   }
 }
