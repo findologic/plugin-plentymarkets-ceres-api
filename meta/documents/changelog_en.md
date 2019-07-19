@@ -1,5 +1,16 @@
 # Release Notes for FINDOLOGIC
 
+## 1.1.2 (2019-07-19)
+
+### Changed
+
+* Added constraints for the latest supported versions for required plugins Ceres (4.0.2) and IO (4.1.2).
+* Updated user guide and images.
+* Currently used plugin version, which is sent to FINDOLOGIC with each request, is loaded dynamically via Plentymarkets.
+* Third party JS libraries are loaded via a CDN.
+* A minified version of this plugin's JS files are used.
+* Updated the FINDOLOGIC snippet and added new configuration options for it.
+
 ## 1.1.1 (2019-07-03)
 
 ### Fixed
