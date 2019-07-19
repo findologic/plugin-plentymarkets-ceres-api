@@ -44,6 +44,8 @@ class Plugin
 
     const CONFIG_SHOPKEY = 'Findologic.shopkey';
     const CONFIG_NAVIGATION_ENABLED = 'Findologic.nav_enabled';
+    const CONFIG_SEARCH_RESULT_CONTAINER = 'Findologic.search_result_container';
+    const CONFIG_NAVIGATION_CONTAINER = 'Findologic.navigation_container';
 
     const FILTER_TYPE_RANGE_SLIDER = 'range-slider';
     const FILTER_TYPE_COLOR = 'color';
