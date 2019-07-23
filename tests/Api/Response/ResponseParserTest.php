@@ -48,6 +48,12 @@ class ResponseParserTest extends TestCase
 
         $results = $responseParserMock->parse($this->getResponse());
         $this->assertEquals(3, $results->getResultsCount());
+
+        $promotionsData = $results->getData(Response::DATA_PROMOTION);
+        $this->assertEquals($promotionsData, [
+            'image' => 'http://www.example.com/special-offer.jpg',
+            'link' => 'http://www.example.com/special-offer'
+        ]);
     }
 
     /**
