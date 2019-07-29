@@ -1,17 +1,17 @@
-require("babel-polyfill")
+require("babel-polyfill");
 
-const JS_SRC = "./resources/js/src/"
-const DIST = "./resources/js/dist/"
-const OUTPUT_PREFIX = "filters"
+const JS_SRC = "./resources/js/src/";
+const DIST = "./resources/js/dist/";
+const OUTPUT_PREFIX = "filters";
 
-const babelify = require("babelify")
-const browserify = require("browserify")
-const buffer = require("vinyl-buffer")
-const concat = require("gulp-concat")
-const gulp = require("gulp")
-const minify = require("gulp-minify")
-const source = require("vinyl-source-stream")
-const sourcemaps = require("gulp-sourcemaps")
+const babelify = require("babelify");
+const browserify = require("browserify");
+const buffer = require("vinyl-buffer");
+const concat = require("gulp-concat");
+const gulp = require("gulp");
+const minify = require("gulp-minify");
+const source = require("vinyl-source-stream");
+const sourcemaps = require("gulp-sourcemaps");
 
 gulp.task("js", () => {
     var builder = browserify({
@@ -51,6 +51,6 @@ gulp.task("js", () => {
             })
         )
         .pipe(gulp.dest(DIST))
-})
+});
 
-gulp.task("default", ["js"])
+gulp.task("default", gulp.series("js"));
