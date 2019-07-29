@@ -40,9 +40,23 @@
       "name": "Search Bar",
       "description": "Display search bar customized for FINDOLOGIC",
       "defaultLayoutContainer": "Search.SearchBar"
+    },
+    {
+      "key": "Findologic\\Containers\\PromotionContainer",
+      "name": "Promotion",
+      "description": "Display promotion banner",
+      "defaultLayoutContainer": "CategoryItem.Promotion"
     }
   ],
   "dependencies": {
     "findologic/http_request2": "2.3.1"
-  }
+  },
+  "containers": [
+    {
+      "key": "CategoryItem.Promotion",
+      "name": "Category item list: Add content to main container",
+      "description": "Provides content for promotion banners (search and category pages only)",
+      "multiple": false
+    }
+  ]
 }

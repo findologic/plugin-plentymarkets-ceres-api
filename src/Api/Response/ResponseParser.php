@@ -138,7 +138,7 @@ class ResponseParser
     {
         $promotion = [];
 
-        if (!empty($data->promotion) ) {
+        if (isset($data->promotion) && !empty($data->promotion->attributes()) ) {
             $promotion['image'] = $data->promotion->attributes()->image->__toString();
             $promotion['link'] = $data->promotion->attributes()->link->__toString();
         }
