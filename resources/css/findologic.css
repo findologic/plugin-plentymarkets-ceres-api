@@ -92,3 +92,11 @@
     position: absolute;
     z-index: 2;
 }
+
+#fl-promotion {
+    text-align: center;
+}
+
+#fl-promotion .image {
+    width: 100%;
+}

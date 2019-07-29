@@ -1,5 +1,12 @@
 # Release Notes for FINDOLOGIC
 
+## 1.2.0 (2019-07-29)
+
+### Added
+
+* Support for landing pages that are configured in FINDOLOGIC's backend.
+* Support for promotion banners (incl. a respective data provider).
+
 ## 1.1.2 (2019-07-19)
 
 ### Changed

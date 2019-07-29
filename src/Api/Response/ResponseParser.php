@@ -41,9 +41,12 @@ class ResponseParser
 
         try {
             $data = $this->loadXml($responseData);
+            $landingPageData = $this->parseLandingPage($data);
+            if ($landingPageData) {
+                $this->handleLandingPage($landingPageData);
+            }
             $response->setData(Response::DATA_SERVERS, $this->parseServers($data));
             $response->setData(Response::DATA_QUERY, $this->parseQuery($data));
-            $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data));
             $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data));
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
@@ -69,6 +72,14 @@ class ResponseParser
         }
 
         return $parsedXml;
+    }
+
+    /**
+     * @param string $landingPageData
+     */
+    public function handleLandingPage($landingPageData)
+    {
+        header('Location: ' . $landingPageData);
     }
 
     /**
@@ -117,17 +128,18 @@ class ResponseParser
 
     /**
      * @param \SimpleXMLElement $data
-     * @return array
+     * @return string|null
      */
     protected function parseLandingPage(\SimpleXMLElement $data)
     {
-        $landingPage = [];
-
-        if (!empty($data->landingPage) ) {
-            $landingPage['link'] = $data->landingPage->attributes()->link->__toString();
+        if (!isset($data->landingPage)
+            || empty($data->landingPage->attributes())
+            || !isset($data->landingPage->attributes()->link)
+        ) {
+            return null;
         }
 
-        return $landingPage;
+        return $data->landingPage->attributes()->link->__toString();
     }
 
     /**
@@ -138,7 +150,7 @@ class ResponseParser
     {
         $promotion = [];
 
-        if (!empty($data->promotion) ) {
+        if (isset($data->promotion) && !empty($data->promotion->attributes()) ) {
             $promotion['image'] = $data->promotion->attributes()->image->__toString();
             $promotion['link'] = $data->promotion->attributes()->link->__toString();
         }
