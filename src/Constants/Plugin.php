@@ -12,9 +12,7 @@ class Plugin
     const PLUGIN_IDENTIFIER = 'findologic-plugin-api';
     const PLUGIN_VERSION_UNKNOWN = 'UNKNOWN';
 
-    const PLENTY_PARAMETER_SORT_ORDER = 'sorting';
     const PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'items';
-    const PLENTY_PARAMETER_PAGINATION_START = 'first';
 
     const API_OUTPUT_ADAPTER = 'XML_2.0';
     const API_PARAMETER_ATTRIBUTES = 'attrib';
