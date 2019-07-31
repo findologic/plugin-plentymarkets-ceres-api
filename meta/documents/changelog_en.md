@@ -1,5 +1,15 @@
 # Release Notes for FINDOLOGIC
 
+## 1.2.1 (2019-07-31)
+
+### Fixed
+
+* Navigating to the second search result page would cause an error since Plentymarkets couldn't load metadata for FINDOLOGIC's plugin.
+
+### Changed
+
+* Updated version constraint for plugin Ceres, now supporting 4.0.0 - 4.x.x.
+
 ## 1.2.0 (2019-07-29)
 
 ### Added
