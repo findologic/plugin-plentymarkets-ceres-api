@@ -444,7 +444,7 @@ Vue.component("item-filter-price", {
 
     computed: _extends({
         isDisabled: function isDisabled() {
-            return this.priceMin === "" && this.priceMax === "" || parseInt(this.priceMin) >= parseInt(this.priceMax) || this.isLoading;
+            return this.priceMin === "" && this.priceMax === "" || parseFloat(this.priceMin) >= parseFloat(this.priceMax) || this.isLoading;
         }
     }, Vuex.mapState({
         isLoading: function isLoading(state) {
@@ -559,7 +559,7 @@ Vue.component("item-range-slider", {
             return 'fl-range-slider-' + this.facet.id.replace(/\W/g, '-').replace(/-+/, '-').replace(/-$/, '');
         },
         isDisabled: function isDisabled() {
-            return this.valueFrom === "" && this.valueTo === "" || parseInt(this.valueFrom) >= parseInt(this.valueTo) || this.isLoading;
+            return this.valueFrom === "" && this.valueTo === "" || parseFloat(this.valueFrom) >= parseFloat(this.valueTo) || this.isLoading;
         }
     }, Vuex.mapState({
         isLoading: function isLoading(state) {
