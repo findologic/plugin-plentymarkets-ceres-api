@@ -13,7 +13,7 @@ const sass = require("gulp-sass");
 const minify = require("gulp-minify");
 const source = require("vinyl-source-stream");
 const sourcemaps = require("gulp-sourcemaps");
-const minifyCSS = require("gulp-minify-css");
+const cleanCss = require("gulp-clean-css");
 
 gulp.task("js", () => {
     var builder = browserify({
@@ -61,7 +61,7 @@ gulp.task('sass', function () {
     return gulp.src('resources/scss/**/*.scss')
         .pipe(sass())
         .pipe(concat('findologic.min.css'))
-        .pipe(minifyCSS())
+        .pipe(cleanCss())
         .pipe(gulp.dest('resources/css'));
 });
 
