@@ -1,5 +1,12 @@
 # Release Notes für FINDOLOGIC
 
+## 1.2.2 (2019-08-06)
+
+### Behoben
+
+* Leerzeichen im konfigurierten Shopkey werden entfernt, da sie sonst nicht valide sind.
+* Filter vom Typ Bereichsslider erlauben Kommazahlen (kleiner 1) als Min-/Maxwerte.
+
 ## 1.2.1 (2019-07-31)
 
 ### Behoben
