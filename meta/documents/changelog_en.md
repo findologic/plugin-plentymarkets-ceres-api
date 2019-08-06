@@ -1,5 +1,12 @@
 # Release Notes for FINDOLOGIC
 
+## 1.2.2 (2019-08-06)
+
+### Fixed
+
+* Whitespaces in configured shopkeys will be trimmed, since they would be invalid.
+* Filters of type range-slider allow floating point numbers smaller than 1 to be submitted.
+
 ## 1.2.1 (2019-07-31)
 
 ### Fixed
