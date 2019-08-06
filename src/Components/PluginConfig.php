@@ -133,7 +133,7 @@ class PluginConfig
         $configShopKeysArray = array_filter(explode(PHP_EOL, $configShopKeys));
 
         foreach ($configShopKeysArray as $item) {
-            $item = explode(':', $item);
+            $item = array_map('trim', explode(':', $item));
 
             if (count($item) > 1) {
                 $this->shopkeys[strtolower($item[0])] = $item[1];
