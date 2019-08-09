@@ -20,6 +20,7 @@ class Plugin
     const API_PARAMETER_SORT_ORDER = 'order';
     const API_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'count';
     const API_PARAMETER_PAGINATION_START = 'first';
+    const API_PARAMETER_FORCE_ORIGINAL_QUERY = 'forceOriginalQuery';
 
     const API_PROPERTY_VARIATION_ID = 'variation_id';
 

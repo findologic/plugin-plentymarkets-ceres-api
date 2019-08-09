@@ -17,6 +17,7 @@ class Response
     const DATA_RESULTS = 'results';
     const DATA_PRODUCTS = 'products';
     const DATA_FILTERS = 'filters';
+    const DATA_SMART_DID_YOU_MEAN = 'smart_did_you_mean';
 
     protected $data = [];
 

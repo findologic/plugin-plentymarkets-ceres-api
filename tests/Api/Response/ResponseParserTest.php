@@ -9,6 +9,7 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use SimpleXMLElement;
 
 /**
  * Class ResponseParserTest
@@ -60,6 +61,121 @@ class ResponseParserTest extends TestCase
             'image' => 'http://www.example.com/special-offer.jpg',
             'link' => 'http://www.example.com/special-offer'
         ]);
+    }
+
+    /**
+     * @dataProvider smartDidYouMeanProvider
+     *
+     * @param string $response
+     * @param array|null $expectedResult
+     */
+    public function testSmartDidYouMeanParsing(string $response, $expectedResult)
+    {
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods(null)->getMock();
+        /** @var ResponseParser|MockObject $responseParserMock */
+        $responseParserMock = $this->getResponseParserMock(['createResponseObject', 'handleLandingPage']);
+        $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
+
+        $results = $responseParserMock->parse($response);
+
+        $this->assertEquals($results->getData(Response::DATA_SMART_DID_YOU_MEAN), $expectedResult);
+    }
+
+    public function smartDidYouMeanProvider()
+    {
+        return [
+            'No Smart Did-You-Mean data provided' => [
+                '<?xml version="1.0"?>
+                <searchResult>
+                    <servers>
+                        <frontend>frontend.findologic.com</frontend>
+                        <backend>backend.findologic.com</backend>
+                    </servers>
+                    <query>
+                        <limit first="0" count="10"/>
+                        <queryString>Test</queryString>
+                        <searchedWordCount>1</searchedWordCount>
+                        <foundWordCount>1</foundWordCount>
+                    </query>
+                    <results><count>0</count></results>
+                    <products/>
+                    <filters/>
+                </searchResult>',
+                null
+            ],
+            'Did-You-Mean query present' => [
+                '<?xml version="1.0"?>
+                <searchResult>
+                    <servers>
+                        <frontend>frontend.findologic.com</frontend>
+                        <backend>backend.findologic.com</backend>
+                    </servers>
+                    <query>
+                        <limit first="0" count="10"/>
+                        <queryString>Test</queryString>
+                        <searchedWordCount>1</searchedWordCount>
+                        <foundWordCount>1</foundWordCount>
+                        <didYouMeanQuery>TestDidYouMeanQuery</didYouMeanQuery>
+                    </query>
+                    <results><count>0</count></results>
+                    <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'type' => 'did-you-mean',
+                    'alternative_query' => 'TestDidYouMeanQuery',
+                    'original_query' => 'Test'
+                ]
+            ],
+            'Improved query present' => [
+                '<?xml version="1.0"?>
+                <searchResult>
+                    <servers>
+                        <frontend>frontend.findologic.com</frontend>
+                        <backend>backend.findologic.com</backend>
+                    </servers>
+                    <query>
+                        <limit first="0" count="10"/>
+                        <originalQuery>OriginalTest</originalQuery>
+                        <queryString type="improved">Test</queryString>
+                        <searchedWordCount>1</searchedWordCount>
+                        <foundWordCount>1</foundWordCount>
+                    </query>
+                    <results><count>0</count></results>
+                    <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'type' => 'improved',
+                    'alternative_query' => 'Test',
+                    'original_query' => 'OriginalTest'
+                ]
+            ],
+            'Corrected query present' => [
+                '<?xml version="1.0"?>
+                <searchResult>
+                    <servers>
+                        <frontend>frontend.findologic.com</frontend>
+                        <backend>backend.findologic.com</backend>
+                    </servers>
+                    <query>
+                        <limit first="0" count="10"/>
+                        <originalQuery>OriginalTest</originalQuery>
+                        <queryString type="corrected">Test</queryString>
+                        <searchedWordCount>1</searchedWordCount>
+                        <foundWordCount>1</foundWordCount>
+                    </query>
+                    <results><count>0</count></results>
+                    <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'type' => 'corrected',
+                    'alternative_query' => 'Test',
+                    'original_query' => 'OriginalTest'
+                ]
+            ]
+        ];
     }
 
     /**

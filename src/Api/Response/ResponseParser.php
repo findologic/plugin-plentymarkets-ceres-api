@@ -7,6 +7,7 @@ use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Constants\Plugin;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
+use SimpleXMLElement;
 
 /**
  * Class ResponseParser
@@ -51,6 +52,7 @@ class ResponseParser
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data));
+            $response->setData(Response::DATA_SMART_DID_YOU_MEAN, $this->parseSmartDidYouMean($data));
         } catch (Exception $e) {
             $this->logger->warning('Could not parse response from server.');
             $this->logger->logException($e);
@@ -61,7 +63,7 @@ class ResponseParser
 
     /**
      * @param string $xmlString
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      * @throws Exception
      */
     public function loadXml($xmlString = '')
@@ -91,10 +93,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseServers(\SimpleXMLElement $data)
+    protected function parseServers(SimpleXMLElement $data)
     {
         $servers = [];
 
@@ -107,10 +109,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseQuery(\SimpleXMLElement $data)
+    protected function parseQuery(SimpleXMLElement $data)
     {
         $query = [];
 
@@ -127,10 +129,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return string|null
      */
-    protected function parseLandingPage(\SimpleXMLElement $data)
+    protected function parseLandingPage(SimpleXMLElement $data)
     {
         if (!isset($data->landingPage)
             || empty($data->landingPage->attributes())
@@ -143,10 +145,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parsePromotion(\SimpleXMLElement $data)
+    protected function parsePromotion(SimpleXMLElement $data)
     {
         $promotion = [];
 
@@ -159,10 +161,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseResults(\SimpleXMLElement $data)
+    protected function parseResults(SimpleXMLElement $data)
     {
         $results = [];
 
@@ -174,10 +176,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseProducts(\SimpleXMLElement $data)
+    protected function parseProducts(SimpleXMLElement $data)
     {
         $products = [];
 
@@ -197,5 +199,29 @@ class ResponseParser
         }
 
         return $products;
+    }
+
+    /**
+     * @param SimpleXMLElement $data
+     * @return array|null
+     */
+    protected function parseSmartDidYouMean(SimpleXMLElement $data)
+    {
+        $originalQuery = isset($data->query->originalQuery) ? $data->query->originalQuery->__toString() : null;
+        $didYouMeanQuery = isset($data->query->didYouMeanQuery) ? $data->query->didYouMeanQuery->__toString() : null;
+        $currentQuery = isset($data->query->queryString) ? $data->query->queryString->__toString() : null;
+        $queryStringType = isset($data->query->queryString->attributes()->type)
+            ? $data->query->queryString->attributes()->type->__toString()
+            : null;
+
+        if ((empty($originalQuery) && empty($didYouMeanQuery)) || $queryStringType === 'forced') {
+            return null;
+        }
+
+        return [
+            'type' => !empty($didYouMeanQuery) ? 'did-you-mean' : $queryStringType,
+            'alternative_query' => !empty($didYouMeanQuery) ? $didYouMeanQuery : $currentQuery,
+            'original_query' => !empty($didYouMeanQuery) ? $currentQuery : $originalQuery
+        ];
     }
 }

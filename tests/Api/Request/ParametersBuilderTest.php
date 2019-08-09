@@ -91,6 +91,51 @@ class ParametersBuilderTest extends TestCase
                     'order' => 'price ASC',
                     'count' => 10
                 ]
+            ],
+            'Force original query enabled' => [
+                [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'size' => ['l', 'xl'],
+                        'cat' => 'Category'
+                    ],
+                    Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => 1
+                ],
+                false,
+                [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'size' => ['l', 'xl'],
+                        'cat' => 'Category'
+                    ],
+                    'order' => 'price ASC',
+                    'count' => 10,
+                    Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => true
+                ]
+            ],
+            'Force original query disabled' => [
+                [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'size' => ['l', 'xl'],
+                        'cat' => 'Category'
+                    ],
+                    Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => 0
+                ],
+                false,
+                [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'size' => ['l', 'xl'],
+                        'cat' => 'Category'
+                    ],
+                    'order' => 'price ASC',
+                    'count' => 10
+                ]
             ]
         ];
     }
