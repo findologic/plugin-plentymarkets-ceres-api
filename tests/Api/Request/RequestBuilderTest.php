@@ -7,6 +7,8 @@ use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
 use Ceres\Helper\ExternalSearch;
 use IO\Services\CategoryService;
+use IO\Services\WebstoreConfigurationService;
+use Plenty\Modules\System\Models\WebstoreConfiguration;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
@@ -41,11 +43,17 @@ class RequestBuilderTest extends TestCase
      */
     protected $logger;
 
+    /**
+     * @var WebstoreConfigurationService|MockObject
+     */
+    protected $webstoreConfigurationService;
+
     public function setUp()
     {
         $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->webstoreConfigurationService = $this->getMockBuilder(WebstoreConfigurationService::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
@@ -54,7 +62,7 @@ class RequestBuilderTest extends TestCase
     {
         return [
             'Build alive request' => [
-                'https://service.findologic.com/ps/xml_2.0/alivetest.php',
+                'https://service.findologic.com/ps/xml_2.1/alivetest.php',
                 [
                     'shopkey' => 'TESTSHOPKEY'
                 ]
@@ -86,7 +94,7 @@ class RequestBuilderTest extends TestCase
         return [
             'Build - No user ip provided' => [
                 false,
-                'https://service.findologic.com/ps/xml_2.0/index.php',
+                'https://service.findologic.com/ps/xml_2.1/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -96,7 +104,7 @@ class RequestBuilderTest extends TestCase
             ],
             'Category page request' => [
                 '127.0.0.1',
-                'https://service.findologic.com/ps/xml_2.0/selector.php',
+                'https://service.findologic.com/ps/xml_2.1/selector.php',
                 true,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -107,7 +115,7 @@ class RequestBuilderTest extends TestCase
             ],
             'Search page request' => [
                 '127.0.0.1',
-                'https://service.findologic.com/ps/xml_2.0/index.php',
+                'https://service.findologic.com/ps/xml_2.1/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -162,6 +170,49 @@ class RequestBuilderTest extends TestCase
         $this->assertEquals($expectedParams, $result->getParams());
     }
 
+    public function getUrlProvider()
+    {
+        return [
+            'Secure domain is configured' => [
+                'https://example.com',
+                '',
+                'https://service.findologic.com/ps/example.com/index.php'
+            ],
+            'Domain is configured' => [
+                '',
+                'http://example.com',
+                'https://service.findologic.com/ps/example.com/index.php'
+            ],
+            'No domain is configured' => [
+                '',
+                '',
+                'https://service.findologic.com/ps/xml_2.1/index.php'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider getUrlProvider
+     *
+     * @param string $domainSsl
+     * @param string $domain
+     * @param string $generatedUrl
+     */
+    public function testGetUrl(string $domainSsl, string $domain, string $generatedUrl)
+    {
+        $webstoreConfigMock = $this->getMockBuilder(WebstoreConfiguration::class)->disableOriginalConstructor()->getMock();
+        $webstoreConfigMock->domainSsl = $domainSsl;
+        $webstoreConfigMock->domain = $domain;
+
+        $this->webstoreConfigurationService->expects($this->once())->method('getWebstoreConfig')->willReturn(
+            $webstoreConfigMock
+        );
+
+        $requestBuilderMock = $this->getRequestBuilderMock();
+
+        $this->assertEquals($generatedUrl, $requestBuilderMock->getUrl());
+    }
+
     /**
      * @param array|null $methods
      * @return RequestBuilder|MockObject
@@ -172,7 +223,8 @@ class RequestBuilderTest extends TestCase
             ->setConstructorArgs([
                 'parametersBuilder' => $this->parametersBuilder,
                 'pluginConfig' => $this->pluginConfig,
-                'loggerFactory' => $this->loggerFactory
+                'loggerFactory' => $this->loggerFactory,
+                'webstoreConfigurationService' => $this->webstoreConfigurationService
             ])
             ->setMethods($methods)
             ->getMock();

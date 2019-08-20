@@ -1,0 +1,16 @@
+<script type="x/template" id="vue-item-filter-list">
+    <div class="findologic-filter-wrapper" v-show="facets && facets.length > 0">
+        {{ component( "Ceres::ItemList.Components.Filter.ItemFilter") }}
+        {{ component( "Ceres::ItemList.Components.Filter.ItemFilterPrice") }}
+        {{ component( "Findologic::ItemList.Components.Filter.ItemRangeSlider") }}
+        {{ component( "Findologic::ItemList.Components.Filter.ItemColorTiles" ) }}
+
+        <div class="ml-0" id="filterCollapse">
+            <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
+                <div class="card-columns row">
+                    <item-filter v-for="facet in facets" :facet="facet" :key="facet.id"></item-filter>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
