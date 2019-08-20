@@ -47,7 +47,7 @@ Vue.component("item-range-slider", {
 
         isDisabled() {
             return (this.valueFrom === "" && this.valueTo === "") ||
-                (parseFloat(this.valueFrom) >= parseFloat(this.valueTo)) ||
+                (parseFloat(this.valueFrom) > parseFloat(this.valueTo)) ||
                 this.isLoading;
         },
 
