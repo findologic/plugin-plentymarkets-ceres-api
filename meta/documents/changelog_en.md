@@ -1,5 +1,12 @@
 # Release Notes for FINDOLOGIC
 
+## 1.2.3 (2019-08-21)
+
+### Fixed
+
+* Default layout container definitions can be selected and saved in the backend.
+* Filters of type range-slider allow min/max range to be the same.
+
 ## 1.2.2 (2019-08-06)
 
 ### Fixed
