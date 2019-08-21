@@ -30,7 +30,7 @@ Vue.component("item-filter-price", {
     computed: {
         isDisabled() {
             return (this.priceMin === "" && this.priceMax === "") ||
-                (parseInt(this.priceMin) >= parseInt(this.priceMax)) ||
+                (parseFloat(this.priceMin) >= parseFloat(this.priceMax)) ||
                 this.isLoading;
         },
 
