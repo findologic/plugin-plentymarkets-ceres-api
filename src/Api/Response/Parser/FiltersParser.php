@@ -44,45 +44,47 @@ class FiltersParser
      */
     public function parse($data)
     {
+        if (!$data) {
+            return [];
+        }
+
         $filters = [];
 
-        if (!empty($data->filters)) {
-            foreach ($data->filters->filter as $filter) {
-                $filterName = $filter->name->__toString();
-                $filterData = [
-                    'id' => $filterName,
-                    'name' => $filter->display->__toString(),
-                    'select' => $filter->select->__toString(),
-                    'type' => ''
-                ];
+        foreach ($data->filter as $filter) {
+            $filterName = $filter->name->__toString();
+            $filterData = [
+                'id' => $filterName,
+                'name' => $filter->display->__toString(),
+                'select' => $filter->select->__toString(),
+                'type' => ''
+            ];
 
-                $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';
+            $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';
 
-                if ($filter->type) {
-                    $filterData['type'] = $filter->type->__toString();
-                }
-
-                if ($filterName === 'price' && $filterData['type'] !== Plugin::FILTER_TYPE_RANGE_SLIDER) {
-                    $filterData['type'] = 'price';
-                }
-
-                if ($filterData['type'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
-                    $filterData['unit'] = $filter->attributes->unit->__toString();
-                    $filterData['minValue'] = (float)$filter->attributes->totalRange->min;
-                    $filterData['maxValue'] = (float)$filter->attributes->totalRange->max;
-                    $filterData['step'] = (float)$filter->attributes->stepSize;
-                }
-
-                foreach ($filter->items->item as $key => $item) {
-                    $filterItem = [];
-                    $this->parseFilterItem($filterData['type'], $filterItem, $item, $key);
-                    if (!empty($filterItem)) {
-                        $filterData['values'][] = $filterItem;
-                    }
-                }
-
-                $filters[] = $filterData;
+            if ($filter->type) {
+                $filterData['type'] = $filter->type->__toString();
             }
+
+            if ($filterName === 'price' && $filterData['type'] !== Plugin::FILTER_TYPE_RANGE_SLIDER) {
+                $filterData['type'] = 'price';
+            }
+
+            if ($filterData['type'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
+                $filterData['unit'] = $filter->attributes->unit->__toString();
+                $filterData['minValue'] = (float)$filter->attributes->totalRange->min;
+                $filterData['maxValue'] = (float)$filter->attributes->totalRange->max;
+                $filterData['step'] = (float)$filter->attributes->stepSize;
+            }
+
+            foreach ($filter->items->item as $key => $item) {
+                $filterItem = [];
+                $this->parseFilterItem($filterData['type'], $filterItem, $item, $key);
+                if (!empty($filterItem)) {
+                    $filterData['values'][] = $filterItem;
+                }
+            }
+
+            $filters[] = $filterData;
         }
 
         return $filters;

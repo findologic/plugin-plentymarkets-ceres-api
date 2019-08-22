@@ -1,5 +1,5 @@
 <script type="x/template" id="vue-item-filter">
-    <div v-if="facet.name" class="card" :class="facet.cssClass">
+    <div v-if="facet.name" class="card col-md-4" :class="facet.cssClass">
         <div class="h3">${facet.name}</div>
         <div v-if="facet.type === 'price'">
             <item-filter-price :facet="facet"></item-filter-price>
