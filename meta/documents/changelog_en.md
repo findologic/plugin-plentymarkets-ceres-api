@@ -1,5 +1,47 @@
 # Release Notes for FINDOLOGIC
 
+## 1.2.3 (2019-08-21)
+
+### Fixed
+
+* Default layout container definitions can be selected and saved in the backend.
+* Filters of type range-slider allow min/max range to be the same.
+
+## 1.2.2 (2019-08-06)
+
+### Fixed
+
+* Whitespaces in configured shopkeys will be trimmed, since they would be invalid.
+* Filters of type range-slider allow floating point numbers smaller than 1 to be submitted.
+
+## 1.2.1 (2019-07-31)
+
+### Fixed
+
+* Navigating to the second search result page would cause an error since Plentymarkets couldn't load metadata for FINDOLOGIC's plugin.
+
+### Changed
+
+* Updated version constraint for plugin Ceres, now supporting 4.0.0 - 4.x.x.
+
+## 1.2.0 (2019-07-29)
+
+### Added
+
+* Support for landing pages that are configured in FINDOLOGIC's backend.
+* Support for promotion banners (incl. a respective data provider).
+
+## 1.1.2 (2019-07-19)
+
+### Changed
+
+* Added constraints for the latest supported versions for required plugins Ceres (4.0.2) and IO (4.1.2).
+* Updated user guide and images.
+* Currently used plugin version, which is sent to FINDOLOGIC with each request, is loaded dynamically via Plentymarkets.
+* Third party JS libraries are loaded via a CDN.
+* A minified version of this plugin's JS files are used.
+* Updated the FINDOLOGIC snippet and added new configuration options for it.
+
 ## 1.1.1 (2019-07-03)
 
 ### Fixed

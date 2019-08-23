@@ -1,5 +1,47 @@
 # Release Notes für FINDOLOGIC
 
+## 1.2.3 (2019-08-21)
+
+### Behoben
+
+* Die Standard Container-Verknüpfungen in der Pluginkonfiguration sind nicht länger inaktiv.
+* Filter vom Typ Bereichsslider erlauben nun die selben Min-/Maxwerte.
+
+## 1.2.2 (2019-08-06)
+
+### Behoben
+
+* Leerzeichen im konfigurierten Shopkey werden entfernt, da sie sonst nicht valide sind.
+* Filter vom Typ Bereichsslider erlauben Kommazahlen (kleiner 1) als Min-/Maxwerte.
+
+## 1.2.1 (2019-07-31)
+
+### Behoben
+
+* Der Aufruf der zweiten Suchergebnisseite führte zu einem Fehler, da Plentymarkets keine Metainformationen über das FINDOLOGIC Plugin laden konnte.
+
+### Geändert
+
+* Die Schranke für die höchste unterstützte Version des Plugins Ceres wurde angehoben (4.0.0 - 4.x.x).
+
+## 1.2.0 (2019-07-29)
+
+### Hinzugefügt
+
+* Unterstützung für Landingpages die bei FINDOLOGIC konfiguriert sind.
+* Unterstützung für Promotionsbanner (inklusive Dataprovider).
+
+## 1.1.2 (2019-07-19)
+
+### Geändert
+
+* Es wurde eine Schranke für die höchste unterstütze Version der Plugins Ceres (4.0.2) und IO (4.1.2) eingeführt.
+* Beschreibungstext und Bilder wurden aktualisiert.
+* Die aktuell verwendete Version des Plugins, die bei jeder Anfrage an FINDOLOGIC mitgeschickt wird, wird dynamisch über Plentymarkets ermittelt.
+* Javascript Dateien von Drittanbietern werden von dem entsprechenden CDN geladen.
+* Javascript Dateien des Plugins werden in einer minifizierten Version geladen.
+* Das Plugin benutzt die aktuelle Version des FINDOLOGIC Snippets. Hierfür wurden weitere Einstellungsmöglichkeiten hinzugefügt.
+
 ## 1.1.1 (2019-07-03)
 
 ### Behoben

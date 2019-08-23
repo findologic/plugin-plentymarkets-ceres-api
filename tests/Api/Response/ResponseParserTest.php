@@ -39,15 +39,27 @@ class ResponseParserTest extends TestCase
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testParse()
     {
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods(null)->getMock();
         /** @var ResponseParser|MockObject $responseParserMock */
-        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
+        $responseParserMock = $this->getResponseParserMock(['createResponseObject', 'handleLandingPage']);
         $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
+        $responseParserMock->expects($this->once())
+            ->method('handleLandingPage')
+            ->with('http://www.example.com/imprint');
 
         $results = $responseParserMock->parse($this->getResponse());
         $this->assertEquals(3, $results->getResultsCount());
+
+        $promotionsData = $results->getData(Response::DATA_PROMOTION);
+        $this->assertEquals($promotionsData, [
+            'image' => 'http://www.example.com/special-offer.jpg',
+            'link' => 'http://www.example.com/special-offer'
+        ]);
     }
 
     /**

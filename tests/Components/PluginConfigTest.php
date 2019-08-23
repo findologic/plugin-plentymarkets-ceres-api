@@ -145,7 +145,19 @@ class PluginConfigTest extends TestCase
                 [
                     'ABC123'
                 ]
-            ]
+            ],
+            'Shopkey contains whitespaces' => [
+                "de:   ABC123    \n",
+                [
+                    'de' => 'ABC123'
+                ]
+            ],
+            'Language key contains whitespaces' => [
+                "  de  :ABC123\n",
+                [
+                    'de' => 'ABC123'
+                ]
+            ],
         ];
     }
 

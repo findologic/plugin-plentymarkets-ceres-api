@@ -82,8 +82,7 @@ class Middleware extends PlentyMiddleware
         }
 
         $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
-        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(
-                Plugin::CONFIG_NAVIGATION_ENABLED);
+        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
 
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
@@ -92,8 +91,10 @@ class Middleware extends PlentyMiddleware
                     'Findologic::content.scripts',
                     [
                         'shopkey' => strtoupper(md5($this->pluginConfig->getShopKey())),
+                        'searchResultContainer' => $this->pluginConfig->get(Plugin::CONFIG_SEARCH_RESULT_CONTAINER),
+                        'navigationContainer' => $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_CONTAINER),
                         'isSearchPage' => $this->isSearchPage,
-                        'activeOnCatPage' => $this->activeOnCatPage,
+                        'activeOnCatPage' => $this->activeOnCatPage
                     ]
                 );
 

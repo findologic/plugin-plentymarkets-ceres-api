@@ -8,13 +8,11 @@ namespace Findologic\Constants;
  */
 class Plugin
 {
-    const PLUGIN_VERSION = '1.1.1';
     const PLUGIN_NAMESPACE = 'Findologic';
     const PLUGIN_IDENTIFIER = 'findologic-plugin-api';
+    const PLUGIN_VERSION = '1.2.3';
 
-    const PLENTY_PARAMETER_SORT_ORDER = 'sorting';
     const PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'items';
-    const PLENTY_PARAMETER_PAGINATION_START = 'first';
 
     const API_OUTPUT_ADAPTER = 'XML_2.0';
     const API_PARAMETER_ATTRIBUTES = 'attrib';
@@ -44,6 +42,8 @@ class Plugin
 
     const CONFIG_SHOPKEY = 'Findologic.shopkey';
     const CONFIG_NAVIGATION_ENABLED = 'Findologic.nav_enabled';
+    const CONFIG_SEARCH_RESULT_CONTAINER = 'Findologic.search_result_container';
+    const CONFIG_NAVIGATION_CONTAINER = 'Findologic.navigation_container';
 
     const FILTER_TYPE_RANGE_SLIDER = 'range-slider';
     const FILTER_TYPE_COLOR = 'color';
