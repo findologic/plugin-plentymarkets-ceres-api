@@ -24,7 +24,7 @@ class SearchFilterContainer
             'Findologic::Category.Item.Partials.SearchFilters',
             [
                 'resultsCount' => $searchResults->getResultsCount(),
-                'facets' => $searchResults->getData(Response::DATA_MAIN_FILTERS)
+                'facets' => $searchResults->getData(Response::DATA_FILTERS)
             ]
         );
     }

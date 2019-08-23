@@ -58,7 +58,7 @@ gulp.task("js", () => {
 sass.compiler = require('node-sass');
 
 gulp.task('sass', function () {
-    return gulp.src('resources/scss/**/*.scss')
+    return gulp.src('resources/scss/findologic.scss')
         .pipe(sass())
         .pipe(concat('findologic.min.css'))
         .pipe(cleanCss())

@@ -50,7 +50,7 @@ class ResponseParser
             $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data));
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
-            $response->setData(Response::DATA_MAIN_FILTERS, $this->filtersParser->parse($data->filters->main));
+            $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->filters));
         } catch (Exception $e) {
             $this->logger->warning('Could not parse response from server.');
             $this->logger->logException($e);
