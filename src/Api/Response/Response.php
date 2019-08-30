@@ -17,7 +17,6 @@ class Response
     const DATA_RESULTS = 'results';
     const DATA_PRODUCTS = 'products';
     const DATA_FILTERS = 'filters';
-    const DATA_MAIN_FILTERS = 'main_filters';
 
     protected $data = [];
 
