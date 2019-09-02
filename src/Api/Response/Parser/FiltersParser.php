@@ -81,10 +81,15 @@ class FiltersParser
             $filterItem['count'] = $data->frequency->__toString();
             $filterItem['image'] = $data->image->__toString();
             $filterItem['id'] = ++$this->valueId;
+            $filterItem['selected'] = false;
 
             if ($filterType === 'price') {
                 $filterItem['priceMin'] = $data->parameters->min;
                 $filterItem['priceMax'] = $data->parameters->max;
+            }
+
+            if (isset($data->attributes()->selected) && $data->attributes()->selected->__toString() === '1') {
+                $filterItem['selected'] = true;
             }
 
             if ($filterType === Plugin::FILTER_TYPE_IMAGE) {

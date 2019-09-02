@@ -374,30 +374,6 @@ Vue.component("item-filter", {
         updateFacet: function updateFacet(facetValue) {
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
-        isSelected: function isSelected(facetValueId) {
-            var facetValue = this.facet.values.filter(function (value) {
-                return value.id === facetValueId;
-            });
-
-            // Only the category filter can have nested values.
-            if (facetValue.length === 0 && this.facet.id === 'cat') {
-                for (var i in this.facet.values) {
-                    if (this.facet.values[i].hasOwnProperty('items') === false) {
-                        continue;
-                    }
-
-                    facetValue = this.facet.values[i].items.filter(function (value) {
-                        return value.id === facetValueId;
-                    });
-
-                    if (facetValue.length > 0) {
-                        break;
-                    }
-                }
-            }
-
-            return facetValue.length && this.isValueSelected(this.facet.id, facetValue[0].name);
-        },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return {
                 id: subCategory.id,
