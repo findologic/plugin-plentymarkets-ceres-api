@@ -257,6 +257,7 @@ class FiltersParserTest extends TestCase
                                         'count' => '17',
                                         'image' => '',
                                         'id' => 2,
+                                        'selected' => false,
                                         'items' => []
                                     ],
                                     [
@@ -265,6 +266,7 @@ class FiltersParserTest extends TestCase
                                         'position' => 'item',
                                         'count' => '11',
                                         'image' => '',
+                                        'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
@@ -272,7 +274,8 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => "28",
                                 'image' => '',
-                                'id' => 1
+                                'id' => 1,
+                                'selected' => false,
                             ],
                             [
                                 'items' => [
@@ -282,6 +285,7 @@ class FiltersParserTest extends TestCase
                                         'position' => 'item',
                                         'count' => '6',
                                         'image' => '',
+                                        'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
@@ -289,6 +293,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '6',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 4
                             ]
                         ]
@@ -307,6 +312,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '10',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 6
                             ],
                             [
@@ -315,6 +321,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '19',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 7
                             ],
                             [
@@ -323,6 +330,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '21',
                                 'image' => '/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
                                 'id' => 8
                             ],
                             [
@@ -331,6 +339,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '25',
                                 'image' => 'https://test.com/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
                                 'id' => 9
                             ]
                         ]
@@ -353,6 +362,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 10
                             ],
                             [
@@ -361,6 +371,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 11
                             ],
                             [
@@ -369,6 +380,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 12
                             ],
                             [
@@ -377,6 +389,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 13
                             ]
                         ]
@@ -395,6 +408,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 14
                             ]
                         ]
@@ -414,7 +428,8 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 15,
-                                'hexValue' => '#BA55D3'
+                                'hexValue' => '#BA55D3',
+                                'selected' => false,
                             ],
                             [
                                 'items' => [],
@@ -423,7 +438,8 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 16,
-                                'hexValue' => '#FF0000'
+                                'hexValue' => '#FF0000',
+                                'selected' => false,
                             ],
                             [
                                 'items' => [],
@@ -432,7 +448,8 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 17,
-                                'hexValue' => '#000000'
+                                'hexValue' => '#000000',
+                                'selected' => false,
                             ],
                             [
                                 'items' => [],
@@ -441,7 +458,8 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 18,
-                                'hexValue' => '#FFFFFF'
+                                'hexValue' => '#FFFFFF',
+                                'selected' => false
                             ]
                         ]
                     ]
@@ -481,6 +499,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => "10",
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 1
                             ]
                         ]
@@ -519,6 +538,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => "10",
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 1
                             ]
                         ]
@@ -557,10 +577,93 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => "10",
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 1
                             ]
                         ]
                     ]
+                ]
+            ],
+            'Filter values are marked as selected' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                                <item selected="1">
+                                    <name>HUNDE design</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>19</frequency>
+                                </item>
+                                <item selected="0">
+                                    <name>A &amp; C Design</name>
+                                    <weight>0.72727274894714</weight>
+                                    <frequency>21</frequency>
+                                    <image>/vendor/a_amp_c_design.jpg</image>
+                                </item>
+                                <item>
+                                    <name>H Manufacturer</name>
+                                    <weight>0.52727274894714</weight>
+                                    <frequency>25</frequency>
+                                    <image>https://test.com/vendor/a_amp_c_design.jpg</image>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'cssClass' => '',
+                        'isMain' => true,
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => '10',
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ],
+                            [
+                                'items' => [],
+                                'name' => 'HUNDE design',
+                                'position' => 'item',
+                                'count' => '19',
+                                'image' => '',
+                                'selected' => true,
+                                'id' => 2
+                            ],
+                            [
+                                'items' => [],
+                                'name' => 'A & C Design',
+                                'position' => 'item',
+                                'count' => '21',
+                                'image' => '/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
+                                'id' => 3
+                            ],
+                            [
+                                'items' => [],
+                                'name' => 'H Manufacturer',
+                                'position' => 'item',
+                                'count' => '25',
+                                'image' => 'https://test.com/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
+                                'id' => 4
+                            ]
+                        ]
+                    ],
                 ]
             ]
         ];
