@@ -60,9 +60,11 @@ sass.compiler = require('node-sass');
 
 gulp.task('sass', function () {
     return gulp.src('resources/scss/findologic.scss')
+        .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(concat('findologic.min.css'))
         .pipe(cleanCss())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('resources/css'));
 });
 
