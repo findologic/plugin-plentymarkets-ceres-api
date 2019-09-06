@@ -71,6 +71,36 @@ class ParametersBuilderTest extends TestCase
                     'first' => 0
                 ]
             ],
+            'Category page request with same price slider min and max values' => [
+                [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'price' => [
+                            'min' => 77,
+                            'max' => 77
+                        ]
+                    ],
+                ],
+                [
+                    'parentCategoryId' => null,
+                    'name' => 'Category'
+                ],
+                [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'price' => [
+                            'min' => 77,
+                            'max' => 77
+                        ]
+                    ],
+                    'selected' => ['cat' => ['Category']],
+                    'order' => 'price ASC',
+                    'count' => 0,
+                    'first' => 0
+                ]
+            ],
             'Search page request' => [
                 [
                     Plugin::API_PARAMETER_ATTRIBUTES => [
@@ -87,6 +117,31 @@ class ParametersBuilderTest extends TestCase
                     'attrib' => [
                         'size' => ['l', 'xl'],
                         'cat' => 'Category'
+                    ],
+                    'order' => 'price ASC',
+                    'count' => 10
+                ]
+            ],
+            'Search page request with same price slider min and max values' => [
+                [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'price' => [
+                            'min' => 77,
+                            'max' => 77
+                        ]
+                    ],
+                ],
+                false,
+                [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'price' => [
+                            'min' => 77,
+                            'max' => 77
+                        ]
                     ],
                     'order' => 'price ASC',
                     'count' => 10

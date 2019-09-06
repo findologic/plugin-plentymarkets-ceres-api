@@ -1,5 +1,12 @@
 # Release Notes für FINDOLOGIC
 
+## 1.2.3 (2019-08-21)
+
+### Behoben
+
+* Die Standard Container-Verknüpfungen in der Pluginkonfiguration sind nicht länger inaktiv.
+* Filter vom Typ Bereichsslider erlauben nun die selben Min-/Maxwerte.
+
 ## 1.2.2 (2019-08-06)
 
 ### Behoben

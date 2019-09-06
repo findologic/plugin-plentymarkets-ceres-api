@@ -40,6 +40,9 @@
                 </div>
             </div>
         </div>
+        <div v-else-if="facet.type === 'select'">
+            <item-dropdown :facet="facet"></item-dropdown>
+        </div>
         <div v-else>
             <div class="form-check" v-for="value in facets" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">

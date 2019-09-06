@@ -1,0 +1,44 @@
+.fl-dropdown-container {
+    cursor: pointer;
+    position: relative;
+    padding-left: 0;
+    border: 2px solid $gray-lighter2;
+    margin-bottom: 2rem;
+
+    .fl-dropdown-label {
+        padding-left: 1rem;
+    }
+
+    .fl-dropdown-content {
+        list-style-type: none;
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+        background-color: $white;
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+        border-right: 1px solid;
+        margin-top: 13px;
+        padding-bottom: 1rem;
+
+        .fl-dropdown-item {
+            cursor: pointer;
+
+            &:first-child {
+                margin-top: 1rem;
+            }
+
+            label {
+                cursor: pointer;
+                margin-bottom: 0;
+                padding-left: 1rem;
+            }
+        }
+    }
+}
+
+.list-controls #filterCollapse .page-content .card .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item.form-check-label .filter-badge {
+  position: relative;
+  top: 7px;
+  float: right;
+}
