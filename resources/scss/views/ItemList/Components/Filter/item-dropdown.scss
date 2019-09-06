@@ -33,18 +33,17 @@
                 margin-bottom: 0;
                 padding-left: 1rem;
             }
-
-            .filter-badge {
-                position: relative;
-                top: 7px;
-                float: right;
-            }
         }
     }
 }
 
-.list-controls #filterCollapse .page-content .card .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item.form-check-label .filter-badge {
-  position: relative;
-  top: 7px;
-  float: right;
+#filterCollapse,
+.main-filters {
+    .list-controls & {
+        .page-content .card .fl-dropdown-container .fl-dropdown-content .fl-dropdown-item.form-check-label .filter-badge {
+            position: relative;
+            top: 7px;
+            float: right;
+        }
+    }
 }
