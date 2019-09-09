@@ -155,7 +155,7 @@ export default {
                     min: facetValue.min,
                     max: facetValue.max
                 };
-            } else if (this.facet.select === 'single' && facetId !== 'cat') {
+            } else if (this.facet.select === 'single') {
                 if (facetId in attributes) {
                     if (attributes[facetId] === facetValue) {
                         delete attributes[facetId];
