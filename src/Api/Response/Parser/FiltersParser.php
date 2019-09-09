@@ -123,7 +123,7 @@ class FiltersParser
     }
 
     /**
-     * @param array $filter
+     * @param \SimpleXMLElement $filter
      * @param bool $isMainFilter
      * @return array
      */
