@@ -344,15 +344,12 @@ Vue.component("item-dropdown", {
 
     data: function data() {
         return {
-            isShowDropdown: false,
-            selectedValue: null
+            isShowDropdown: false
         };
     },
 
     created: function created() {
         this.$options.template = this.template || "#vue-item-dropdown";
-
-        this.selectedValue = this.getSelectedValue();
     },
 
 
@@ -363,14 +360,6 @@ Vue.component("item-dropdown", {
     })),
 
     methods: {
-        getSelectedValue: function getSelectedValue() {
-            var selected = this.getSelectedFilterValue(this.facet.id);
-
-            if (selected != null) {
-                return selected[0];
-            }
-        },
-
         selected: function selected(value) {
             this.updateSelectedFilters(this.facet.id, value);
         },
