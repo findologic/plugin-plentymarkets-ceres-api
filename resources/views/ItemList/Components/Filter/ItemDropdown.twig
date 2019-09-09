@@ -4,7 +4,7 @@
         <ul v-show="isShowDropdown" class="fl-dropdown-content form-check">
             <li v-for="value in facet.values" @click="selected(value.name)" class="fl-dropdown-item form-check-label">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" :disabled="isLoading">
-                <label :for="'option-' + value.id">${ value.name }</label>
+                <label :for="'option-' + value.id" :class="{'form-check-label': value.selected}">${ value.name }</label>
                 <div class="filter-badge" v-if="value.count">${ value.count }</div>
             </li>
         </ul>
