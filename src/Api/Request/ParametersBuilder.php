@@ -65,7 +65,7 @@ class ParametersBuilder
     ) {
         $parameters = (array) $httpRequest->all();
 
-        $this->logger->error('all params (casted)', $parameters);
+        $this->logger->error('all params (casted)', $parameters[Plugin::API_PARAMETER_ATTRIBUTES]);
 
         $request->setParam('query', $externalSearch->searchString);
         $request->setPropertyParam(Plugin::API_PROPERTY_VARIATION_ID);
