@@ -76,6 +76,8 @@ class ParametersBuilder
                 }
 
                 $request->setAttributeParam($key, $value);
+
+                $this->logger->error($key, $value);
             }
         }
 
