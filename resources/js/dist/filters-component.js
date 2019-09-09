@@ -855,13 +855,13 @@ exports.default = {
                 };
             } else if (this.facet.select === 'single') {
                 if (facetId in attributes) {
-                    if (attributes[facetId] === facetValue) {
+                    if (attributes[facetId].includes(facetValue)) {
                         delete attributes[facetId];
                     } else {
-                        attributes[facetId] = facetValue;
+                        attributes[facetId] = [facetValue];
                     }
                 } else {
-                    attributes[facetId] = facetValue;
+                    attributes[facetId] = [facetValue];
                 }
             } else {
                 if (!(facetId in attributes)) {
