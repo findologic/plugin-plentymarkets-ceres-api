@@ -15,15 +15,13 @@ class SearchFilterContainer
     public function call(Twig $twig, SearchService $searchService):string
     {
         if (!$searchService->getResults()) {
-            return $twig->render(
-                'Ceres::ItemList.Components.Filter.ItemFilterList'
-            );
+            return '';
         }
 
         $searchResults = $searchService->getResults();
 
         return $twig->render(
-            'Findologic::ItemList.Components.Filter.FiltersContainer',
+            'Findologic::Category.Item.Partials.SearchFilters',
             [
                 'resultsCount' => $searchResults->getResultsCount(),
                 'facets' => $searchResults->getData(Response::DATA_FILTERS)

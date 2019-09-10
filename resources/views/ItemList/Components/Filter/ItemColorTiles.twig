@@ -10,7 +10,7 @@
                         <img class="fl-color-tile-image"
                              v-show="!colorValue.colorImageUrl && !colorValue.hexValue"
                              src="{{ plugin_path("Findologic") }}/images/no-picture.jpg"/>
-                        <div class="fl-color-tile-selected-image" v-show="isSelected(colorValue.name)">
+                        <div class="fl-color-tile-selected-image" v-show="colorValue.selected">
                             <img class="fl-svg"
                                  data-src="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.svg"
                                  data-fallback="https://cdn.findologic.com/login.symfony/web/autocomplete/img/selected.png"/>
