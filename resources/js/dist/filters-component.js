@@ -818,16 +818,8 @@ exports.default = {
                     min: facetValue.min,
                     max: facetValue.max
                 };
-            } else if (this.facet.select === 'single' && facetId !== 'cat') {
-                if (facetId in attributes) {
-                    if (attributes[facetId] === facetValue) {
-                        delete attributes[facetId];
-                    } else {
-                        attributes[facetId] = facetValue;
-                    }
-                } else {
-                    attributes[facetId] = facetValue;
-                }
+            } else if (this.facet.select === 'single') {
+                attributes[facetId] = [facetValue];
             } else {
                 if (!(facetId in attributes)) {
                     attributes[facetId] = [facetValue];
