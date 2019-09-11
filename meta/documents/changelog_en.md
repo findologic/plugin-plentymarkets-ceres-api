@@ -1,5 +1,17 @@
 # Release Notes for FINDOLOGIC
 
+## 2.0.0 (2019-09-11)
+
+### Added
+
+* Support for response type `XML_2.1`. Be aware that this caused some CSS style
+ changes which may affect filters. **Make sure to check your filter styles before upgrading.**
+* Support for dropdown filters when configured in FINDOLOGC's backend.
+
+### Fixed
+
+* Only allow a single value to be selected for category filter.
+
 ## 1.2.3 (2019-08-21)
 
 ### Fixed

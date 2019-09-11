@@ -1,5 +1,18 @@
 # Release Notes für FINDOLOGIC
 
+## 2.0.0 (2019-09-11)
+
+### Hinzugefügt
+
+* Unterstüzung für den Rückgabetyp `XML_2.1`. Bitte beachten Sie dass einige CSS-Style
+Änderungen beinhaltet, welche das Styling von Filtern beeinflussen könnte. **Überprüfen Sie
+Ihre Filter-Styles bevor Sie upgraden.**
+* Unterstützung für den Filtertyp Dropdown, sofern diese bei FINDOLOGIC konfiguriert sind.
+
+### Behoben
+
+* Nur ein Kategoriefilter kann gleichzeitig ausgewählt werden.
+
 ## 1.2.3 (2019-08-21)
 
 ### Behoben
