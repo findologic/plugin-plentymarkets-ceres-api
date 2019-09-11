@@ -30,10 +30,14 @@ $ npm install
 
 ### Development
 
-Run following command if JS changes were made:
+Run following commands if JS or CSS changes were made respectively:
 
 ```
-$ npm run-script build
+$ gulp js
+```
+
+```
+$ gulp sass
 ```
 
 Commit and push any local changes.

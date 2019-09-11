@@ -344,15 +344,12 @@ Vue.component("item-dropdown", {
 
     data: function data() {
         return {
-            isShowDropdown: false,
-            selectedValue: null
+            isShowDropdown: false
         };
     },
 
     created: function created() {
         this.$options.template = this.template || "#vue-item-dropdown";
-
-        this.selectedValue = this.getSelectedValue();
     },
 
 
@@ -363,14 +360,6 @@ Vue.component("item-dropdown", {
     })),
 
     methods: {
-        getSelectedValue: function getSelectedValue() {
-            var selected = this.getSelectedFilterValue(this.facet.id);
-
-            if (selected != null) {
-                return selected[0];
-            }
-        },
-
         selected: function selected(value) {
             this.updateSelectedFilters(this.facet.id, value);
         },
@@ -432,30 +421,6 @@ Vue.component("item-filter", {
     methods: {
         updateFacet: function updateFacet(facetValue) {
             this.updateSelectedFilters(this.facet.id, facetValue.name);
-        },
-        isSelected: function isSelected(facetValueId) {
-            var facetValue = this.facet.values.filter(function (value) {
-                return value.id === facetValueId;
-            });
-
-            // Only the category filter can have nested values.
-            if (facetValue.length === 0 && this.facet.id === 'cat') {
-                for (var i in this.facet.values) {
-                    if (this.facet.values[i].hasOwnProperty('items') === false) {
-                        continue;
-                    }
-
-                    facetValue = this.facet.values[i].items.filter(function (value) {
-                        return value.id === facetValueId;
-                    });
-
-                    if (facetValue.length > 0) {
-                        break;
-                    }
-                }
-            }
-
-            return facetValue.length && this.isValueSelected(this.facet.id, facetValue[0].name);
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
             return {
