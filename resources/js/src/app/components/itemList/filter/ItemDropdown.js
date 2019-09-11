@@ -10,15 +10,12 @@ Vue.component("item-dropdown", {
 
     data: function () {
         return {
-            isShowDropdown: false,
-            selectedValue: null
+            isShowDropdown: false
         }
     },
 
     created() {
         this.$options.template = this.template || "#vue-item-dropdown";
-
-        this.selectedValue = this.getSelectedValue();
     },
 
     computed: {
@@ -28,14 +25,6 @@ Vue.component("item-dropdown", {
     },
 
     methods: {
-        getSelectedValue: function () {
-            let selected = this.getSelectedFilterValue(this.facet.id);
-
-            if (selected != null) {
-                return selected[0];
-            }
-        },
-
         selected: function (value) {
             this.updateSelectedFilters(this.facet.id, value);
         },

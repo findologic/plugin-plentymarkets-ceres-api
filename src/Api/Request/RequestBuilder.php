@@ -6,9 +6,11 @@ use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
 use Plenty\Log\Contracts\LoggerContract;
+use Plenty\Modules\System\Models\WebstoreConfiguration;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Components\PluginConfig;
+use IO\Services\WebstoreConfigurationService;
 
 /**
  * Class RequestBuilder
@@ -19,7 +21,7 @@ class RequestBuilder
     const DEFAULT_REQUEST_TYPE = 'request';
     const ALIVE_REQUEST_TYPE = 'alive';
     const CATEGORY_REQUEST_TYPE = 'category';
-    const SEARCH_SERVER_URL = 'https://service.findologic.com/ps/xml_2.0/';
+    const SEARCH_SERVER_URL = 'https://service.findologic.com/ps/';
 
     /**
      * @var ParametersBuilder
@@ -41,14 +43,21 @@ class RequestBuilder
      */
     protected $request;
 
+    /**
+     * @var WebstoreConfiguration
+     */
+    private $webstoreConfig;
+
     public function __construct(
         ParametersBuilder $parametersBuilder,
         PluginConfig $pluginConfig,
-        LoggerFactory $loggerFactory
+        LoggerFactory $loggerFactory,
+        WebstoreConfigurationService $webstoreConfigurationService
     ) {
         $this->parametersBuilder = $parametersBuilder;
         $this->pluginConfig = $pluginConfig;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+        $this->webstoreConfig = $webstoreConfigurationService->getWebstoreConfig();
     }
 
     /**
@@ -76,7 +85,7 @@ class RequestBuilder
         $request = $this->createRequestObject();
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT, 1);
         $request->setUrl(
-            $this->getCleanShopUrl(self::ALIVE_REQUEST_TYPE))->setParam('shopkey', $this->pluginConfig->getShopKey()
+            $this->getUrl(self::ALIVE_REQUEST_TYPE))->setParam('shopkey', $this->pluginConfig->getShopKey()
         );
 
         return $request;
@@ -94,9 +103,9 @@ class RequestBuilder
      * @param string $type
      * @return string
      */
-    public function getCleanShopUrl($type = self::DEFAULT_REQUEST_TYPE)
+    public function getUrl($type = self::DEFAULT_REQUEST_TYPE)
     {
-        $url = self::SEARCH_SERVER_URL;
+        $url = self::SEARCH_SERVER_URL . $this->getShopUrl() . '/';
 
         if ($type == self::ALIVE_REQUEST_TYPE) {
             $url .= 'alivetest.php';
@@ -148,7 +157,7 @@ class RequestBuilder
      */
     protected function setDefaultValues($request, $requestType)
     {
-        $request->setUrl($this->getCleanShopUrl($requestType));
+        $request->setUrl($this->getUrl($requestType));
         $request->setParam('revision', $this->getPluginVersion());
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
         $request->setParam('shopkey', $this->pluginConfig->getShopKey());
@@ -159,5 +168,21 @@ class RequestBuilder
         }
 
         return $request;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getShopUrl()
+    {
+        if (!empty($this->webstoreConfig->domainSsl)) {
+            return preg_replace('(^https?://)', '', $this->webstoreConfig->domainSsl);
+        }
+
+        if (!empty($this->webstoreConfig->domain)) {
+            return preg_replace('(^https?://)', '', $this->webstoreConfig->domain);
+        }
+
+        return strtolower(Plugin::API_OUTPUT_ADAPTER);
     }
 }
