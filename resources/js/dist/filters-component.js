@@ -819,12 +819,7 @@ exports.default = {
                     max: facetValue.max
                 };
             } else if (this.facet.select === 'single') {
-                if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetValue)) {
-                    var index = Object.values(attributes[facetId]).indexOf(facetValue);
-                    delete attributes[facetId][index];
-                } else {
-                    attributes[facetId] = [facetValue];
-                }
+                attributes[facetId] = [facetValue];
             } else {
                 if (!(facetId in attributes)) {
                     attributes[facetId] = [facetValue];
@@ -832,8 +827,8 @@ exports.default = {
                     var valueId = this.getKeyByValue(attributes[facetId], facetValue);
 
                     if (valueId === -1) {
-                        var _index = Object.keys(attributes[facetId]).length;
-                        attributes[facetId][_index] = facetValue;
+                        var index = Object.keys(attributes[facetId]).length;
+                        attributes[facetId][index] = facetValue;
                     } else {
                         delete attributes[facetId][valueId];
                     }
