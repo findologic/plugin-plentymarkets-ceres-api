@@ -156,7 +156,12 @@ export default {
                     max: facetValue.max
                 };
             } else if (this.facet.select === 'single') {
-                attributes[facetId] = [facetValue];
+                if (attributes[facetId] && attributes[facetId].includes(facetValue)) {
+                    let index = Object.values(attributes[facetId]).indexOf(facetValue);
+                    delete attributes[facetId][index];
+                } else {
+                    attributes[facetId] = [facetValue];
+                }
             } else {
                 if (!(facetId in attributes)) {
                     attributes[facetId] = [facetValue];
