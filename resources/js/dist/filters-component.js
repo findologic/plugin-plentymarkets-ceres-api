@@ -819,7 +819,7 @@ exports.default = {
                     max: facetValue.max
                 };
             } else if (this.facet.select === 'single') {
-                if (attributes[facetId] && attributes[facetId].includes(facetValue)) {
+                if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetValue)) {
                     var index = Object.values(attributes[facetId]).indexOf(facetValue);
                     delete attributes[facetId][index];
                 } else {
