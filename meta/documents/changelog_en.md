@@ -1,5 +1,11 @@
 # Release Notes for FINDOLOGIC
 
+## 2.0.1 (2019-09-13)
+
+### Fixed
+
+* Deselection of already selected category filter works as expected.
+
 ## 2.0.0 (2019-09-11)
 
 ### Added
