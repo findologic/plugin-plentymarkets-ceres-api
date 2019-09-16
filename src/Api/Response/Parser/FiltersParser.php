@@ -135,7 +135,8 @@ class FiltersParser
             'name' => $filter->display->__toString(),
             'select' => $filter->select->__toString(),
             'type' => '',
-            'isMain' => $isMainFilter
+            'isMain' => $isMainFilter,
+            'noAvailableFiltersText' => $filter->noAvailableFiltersText ? $filter->noAvailableFiltersText->__toString() : ''
         ];
 
         $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';

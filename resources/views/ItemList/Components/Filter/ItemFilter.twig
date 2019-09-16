@@ -8,7 +8,7 @@
             <item-range-slider :facet="facet"></item-range-slider>
         </div>
         <div v-else-if="facet.type === 'image'">
-            <div class="form-check" v-for="value in facets" :key="value.id">
+            <div class="form-check" v-for="value in facet.values" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
                 <label :for="'option-' + value.id" class="form-check-label">
                     <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
@@ -21,7 +21,7 @@
             <item-color-tiles :facet="facet"></item-color-tiles>
         </div>
         <div v-else-if="facet.id === 'cat'">
-            <div class="form-check" v-for="value in facets" :key="value.id">
+            <div v-if="!facet.noAvailableFiltersText" class="form-check" v-for="value in facet.values" :key="value.id">
                 <div class="category-container">
                     <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
                     <label :for="'option-' + value.id" class="form-check-label">
@@ -39,12 +39,13 @@
                     </div>
                 </div>
             </div>
+            <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else-if="facet.type === 'select'">
             <item-dropdown :facet="facet"></item-dropdown>
         </div>
         <div v-else>
-            <div class="form-check" v-for="value in facets" :key="value.id">
+            <div class="form-check" v-for="value in facet.values" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
                 <label :for="'option-' + value.id" class="form-check-label">
                     ${ value.name }
