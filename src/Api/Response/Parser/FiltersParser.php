@@ -116,6 +116,9 @@ class FiltersParser
                 foreach ($data->items->item as $key => $item) {
                     $newItem = [];
                     $this->parseFilterItem($filterType, $newItem, $item, $key);
+                    if ($newItem['selected']) {
+                        $filterItem['selected'] = true;
+                    }
                     $filterItem['items'][] = $newItem;
                 }
             }
