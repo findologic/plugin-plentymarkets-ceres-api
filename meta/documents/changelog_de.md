@@ -1,5 +1,22 @@
 # Release Notes für FINDOLOGIC
 
+## 2.1.0 (2019-09-23)
+
+### Hinzugefügt
+
+* Untertützung für fixierte Filterwerte für den Filtertyp "Dropdown", sofern diese bei FINDOLOGIC konfiguriert sind.
+
+### Behoben
+
+* Der gesamte Kategoriebaum wird nun als selektiert makiert. Zuvor wurde nur der letzte
+selektierte Kategoriefilter als selektiert makiert.
+* Es werden nicht länger Vue Fehler ausgegeben, sobald das Ceres Plugin auf den Performance
+level "Development" gesetzt wurde.
+
+## Geändert
+
+* Die Installationsanleitung leitet nun auf unsere Dokumentation unter https://docs.findologic.com weiter.
+
 ## 2.0.1 (2019-09-13)
 
 ### Behoben

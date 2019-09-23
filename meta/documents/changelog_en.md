@@ -1,5 +1,23 @@
 # Release Notes for FINDOLOGIC
 
+## 2.1.0 (2019-09-23)
+
+### Added
+
+* Support for fixed filter values for dropdown filters, if set in the FINDOLOGIC
+backend.
+
+### Fixed
+
+* The whole category tree is marked as selected. Before this change only the
+latest category was marked as selected.
+* Vue errors will no longer be thrown if the ceres plugins performance level was
+set to "Development".
+
+### Changed
+
+* The installation guide now links to our documentation at https://docs.findologic.com.
+
 ## 2.0.1 (2019-09-13)
 
 ### Fixed
