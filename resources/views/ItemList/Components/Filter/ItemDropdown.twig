@@ -1,12 +1,19 @@
 <script type="x/template" id="vue-item-dropdown">
-    <div class="fl-dropdown-container custom-select" tabindex="0" @click="toggleDropdown()" @blur="hideDropdown()">
-        <span class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span>
-        <ul v-show="isShowDropdown" class="fl-dropdown-content form-check">
-            <li v-for="value in facet.values" @click="selected(value.name)" class="fl-dropdown-item" :class="{'form-check-label': !value.selected}">
-                <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" :disabled="isLoading">
-                <label :for="'option-' + value.id" :class="{'form-check-label': value.selected}">${ value.name }</label>
-                <div class="filter-badge" v-if="value.count">${ value.count }</div>
-            </li>
-        </ul>
+    <div class="fl-dropdown">
+        <div v-for="value in facet.values.slice(0, facet.itemCount)" class="form-check">
+            <input :id="'option-' + value.id" :disabled="isLoading" :checked="value.selected"  @change="selected(value.name)" class="form-check-input hidden-xs-up" type="checkbox"/>
+            <label :for="'option-' + value.id" class="form-check-label">${ value.name }</label>
+            <div class="filter-badge" v-if="value.count">${ value.count }</div>
+        </div>
+        <div v-if="facet.values.slice(facet.itemCount, facet.values.length).length" class="fl-dropdown-container custom-select" tabindex="0" @click="toggleDropdown()" @blur="hideDropdown()">
+            <span class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span>
+            <ul v-show="isShowDropdown" class="fl-dropdown-content form-check">
+                <li v-for="value in facet.values.slice(facet.itemCount, facet.values.length)" @click="selected(value.name)" class="fl-dropdown-item" :class="{'form-check-label': !value.selected}">
+                    <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" :disabled="isLoading">
+                    <label :for="'option-' + value.id" :class="{'form-check-label': value.selected}">${ value.name }</label>
+                    <div class="filter-badge" v-if="value.count">${ value.count }</div>
+                </li>
+            </ul>
+        </div>
     </div>
 </script>

@@ -248,6 +248,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'single',
                         'type' => 'select',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [
@@ -305,6 +306,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -352,6 +354,7 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'unit' => '€',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'minValue' => '59',
                         'maxValue' => '2300',
                         'step' => '0.1',
@@ -401,6 +404,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'text',
                         'cssClass' => '',
                         'isMain' => false,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -420,6 +424,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'color',
                         'cssClass' => '',
                         'isMain' => false,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -492,6 +497,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiple',
                         'type' => 'image',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -531,6 +537,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiple',
                         'type' => 'image',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -570,6 +577,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiple',
                         'type' => 'image',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -625,6 +633,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -665,7 +674,292 @@ class FiltersParserTest extends TestCase
                         ]
                     ],
                 ]
-            ]
+            ],
+            'itemCount is not set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <cssClass>test-css-class</cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => 'test-css-class',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'itemCount is set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <itemCount>42</itemCount>
+                            <cssClass>test-css-class</cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => 'test-css-class',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 42,
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'Child category is selected' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>cat</name>
+                            <display>Kategorie</display>
+                            <select>single</select>
+                            <type>select</type>
+                            <items>
+                                <item>
+                                    <name>Wohnzimmer</name>
+                                    <weight>0.30303025245667</weight>
+                                    <frequency>28</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Sessel &amp; Hocker</name>
+                                            <weight>0.96969699859619</weight>
+                                            <frequency>17</frequency>
+                                        </item>
+                                        <item selected="1">
+                                            <name>Sofas</name>
+                                            <weight>0.66666668653488</weight>
+                                            <frequency>11</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                                <item>
+                                    <name>Arbeitszimmer &amp; Büro</name>
+                                    <weight>0.36363637447357</weight>
+                                    <frequency>6</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Bürostühle</name>
+                                            <weight>0.36363637447357</weight>
+                                            <frequency>6</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'cat',
+                        'cssClass' => '',
+                        'name' => 'Kategorie',
+                        'select' => 'single',
+                        'type' => 'select',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'values' => [
+                            [
+                                'items' => [
+                                    [
+                                        'name' => 'Sessel & Hocker',
+                                        'position' => 'item',
+                                        'count' => '17',
+                                        'image' => '',
+                                        'id' => 2,
+                                        'selected' => false,
+                                        'items' => []
+                                    ],
+                                    [
+                                        'items' => [],
+                                        'name' => 'Sofas',
+                                        'position' => 'item',
+                                        'count' => '11',
+                                        'image' => '',
+                                        'selected' => true,
+                                        'id' => 3
+                                    ]
+                                ],
+                                'name' => 'Wohnzimmer',
+                                'position' => 'item',
+                                'count' => "28",
+                                'image' => '',
+                                'id' => 1,
+                                'selected' => true,
+                            ],
+                            [
+                                'items' => [
+                                    [
+                                        'items' => [],
+                                        'name' => 'Bürostühle',
+                                        'position' => 'item',
+                                        'count' => '6',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 5
+                                    ]
+                                ],
+                                'name' => 'Arbeitszimmer & Büro',
+                                'position' => 'item',
+                                'count' => '6',
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 4
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            'Parent category is selected' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>cat</name>
+                            <display>Kategorie</display>
+                            <select>single</select>
+                            <type>select</type>
+                            <items>
+                                <item selected="1">
+                                    <name>Wohnzimmer</name>
+                                    <weight>0.30303025245667</weight>
+                                    <frequency>28</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Sessel &amp; Hocker</name>
+                                            <weight>0.96969699859619</weight>
+                                            <frequency>17</frequency>
+                                        </item>
+                                        <item>
+                                            <name>Sofas</name>
+                                            <weight>0.66666668653488</weight>
+                                            <frequency>11</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                                <item>
+                                    <name>Arbeitszimmer &amp; Büro</name>
+                                    <weight>0.36363637447357</weight>
+                                    <frequency>6</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Bürostühle</name>
+                                            <weight>0.36363637447357</weight>
+                                            <frequency>6</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'cat',
+                        'cssClass' => '',
+                        'name' => 'Kategorie',
+                        'select' => 'single',
+                        'type' => 'select',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'values' => [
+                            [
+                                'items' => [
+                                    [
+                                        'name' => 'Sessel & Hocker',
+                                        'position' => 'item',
+                                        'count' => '17',
+                                        'image' => '',
+                                        'id' => 2,
+                                        'selected' => false,
+                                        'items' => []
+                                    ],
+                                    [
+                                        'items' => [],
+                                        'name' => 'Sofas',
+                                        'position' => 'item',
+                                        'count' => '11',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 3
+                                    ]
+                                ],
+                                'name' => 'Wohnzimmer',
+                                'position' => 'item',
+                                'count' => "28",
+                                'image' => '',
+                                'id' => 1,
+                                'selected' => true,
+                            ],
+                            [
+                                'items' => [
+                                    [
+                                        'items' => [],
+                                        'name' => 'Bürostühle',
+                                        'position' => 'item',
+                                        'count' => '6',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 5
+                                    ]
+                                ],
+                                'name' => 'Arbeitszimmer & Büro',
+                                'position' => 'item',
+                                'count' => '6',
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 4
+                            ]
+                        ]
+                    ],
+                ]
+            ],
         ];
     }
 }
