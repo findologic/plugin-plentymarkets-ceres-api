@@ -3,6 +3,10 @@
 * Ceres >= 4.0.0 is required for the installation of the FINDOLOGIC plugin.
   * If it's not possible to upgrade your Ceres version to >= 4.0.0, an alternative installation must be performed. For more information please contact [support@findologic.com](mailto:support@findologic.com)
 
+### Installation and configuration
+
+* Please find the step-by-step guide in the **SUPPORT** tab.
+
 ## OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
 Get the fully integrated shopping experience in your online store!
 Our open and modular platform with intelligent search, navigation, merchandising, shopping guide, analytics, as well as our high-performance user interface, offers everything via lean integration. Put your users in focus and separate yourself from the competition with us.

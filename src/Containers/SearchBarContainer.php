@@ -17,7 +17,7 @@ class SearchBarContainer
     public function call(Twig $twig):string
     {
         return $twig->render(
-            'Findologic::Category.Item.Partials.ItemSearch'
+            'Findologic::ItemList.Components.ItemSearch'
         );
     }
 }
