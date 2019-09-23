@@ -116,9 +116,6 @@ class FiltersParser
                 foreach ($data->items->item as $key => $item) {
                     $newItem = [];
                     $this->parseFilterItem($filterType, $newItem, $item, $key);
-                    if ($newItem['selected']) {
-                        $filterItem['selected'] = true;
-                    }
                     $filterItem['items'][] = $newItem;
                 }
             }
@@ -138,8 +135,7 @@ class FiltersParser
             'name' => $filter->display->__toString(),
             'select' => $filter->select->__toString(),
             'type' => '',
-            'isMain' => $isMainFilter,
-            'itemCount' => $filter->itemCount ? $filter->itemCount->__toString() : 0
+            'isMain' => $isMainFilter
         ];
 
         $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';
