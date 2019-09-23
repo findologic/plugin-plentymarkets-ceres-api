@@ -248,6 +248,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'single',
                         'type' => 'select',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [
@@ -305,6 +306,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -352,6 +354,7 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'unit' => '€',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'minValue' => '59',
                         'maxValue' => '2300',
                         'step' => '0.1',
@@ -401,6 +404,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'text',
                         'cssClass' => '',
                         'isMain' => false,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -420,6 +424,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'color',
                         'cssClass' => '',
                         'isMain' => false,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -492,6 +497,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiple',
                         'type' => 'image',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -531,6 +537,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiple',
                         'type' => 'image',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -570,6 +577,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiple',
                         'type' => 'image',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -625,6 +633,7 @@ class FiltersParserTest extends TestCase
                         'type' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -664,6 +673,87 @@ class FiltersParserTest extends TestCase
                             ]
                         ]
                     ],
+                ]
+            ],
+            'itemCount is not set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <cssClass>test-css-class</cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => 'test-css-class',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'itemCount is set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <itemCount>42</itemCount>
+                            <cssClass>test-css-class</cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => 'test-css-class',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 42,
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ]
+                        ]
+                    ]
                 ]
             ],
             'Child category is selected' => [
@@ -715,6 +805,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'single',
                         'type' => 'select',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [
@@ -816,6 +907,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'single',
                         'type' => 'select',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [

@@ -138,7 +138,8 @@ class FiltersParser
             'name' => $filter->display->__toString(),
             'select' => $filter->select->__toString(),
             'type' => '',
-            'isMain' => $isMainFilter
+            'isMain' => $isMainFilter,
+            'itemCount' => $filter->itemCount ? $filter->itemCount->__toString() : 0
         ];
 
         $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';
