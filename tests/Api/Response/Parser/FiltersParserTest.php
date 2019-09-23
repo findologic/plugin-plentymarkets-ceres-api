@@ -805,6 +805,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'single',
                         'type' => 'select',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [
@@ -906,6 +907,7 @@ class FiltersParserTest extends TestCase
                         'select' => 'single',
                         'type' => 'select',
                         'isMain' => true,
+                        'itemCount' => 0,
                         'values' => [
                             [
                                 'items' => [
