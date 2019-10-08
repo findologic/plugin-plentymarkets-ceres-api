@@ -11,6 +11,8 @@ install:
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar --version
   - php composer.phar install
+  - php spec/buildVueComponents.php
 
 script:
   - php vendor/bin/phpunit -c tests/phpunit.xml
+  - jest

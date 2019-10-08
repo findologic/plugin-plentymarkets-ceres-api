@@ -9,8 +9,7 @@ module.exports = {
     },
     transformIgnorePatterns: [
         '/node_modules/'
-    ],
-    globals: {
+    ],    globals: {
         App: {
             config: {
                 search: {

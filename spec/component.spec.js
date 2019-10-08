@@ -1,8 +1,6 @@
-import { shallowMount , config} from '@vue/test-utils';
-import ItemSearch from "./components/ItemSearch";
-
-//App mock is in global jetzt config
-//import {App} from "./mocks/mocks";
+import Vue from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import ItemSearch from "./components/ItemSearch.vue";
 
 describe('ItemSearch.vue', () => {
     const wrapper = shallowMount(ItemSearch, {
