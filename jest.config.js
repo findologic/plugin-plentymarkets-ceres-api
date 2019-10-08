@@ -9,7 +9,11 @@ module.exports = {
     },
     transformIgnorePatterns: [
         '/node_modules/'
-    ],    globals: {
+    ],
+    setupFiles: [
+        './jest.setup.js'
+    ],
+    globals: {
         App: {
             config: {
                 search: {
@@ -19,8 +23,8 @@ module.exports = {
             defaultLanguage: 'de',
             language: 'en',
         },
-        $store: {
-            commit: (state, parameters) => {}
+        Vuex: {
+            mapState: function(options) {}
         }
     },
 };

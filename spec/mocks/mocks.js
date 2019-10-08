@@ -1,9 +1,7 @@
-export const App = {
-    defaultLanguage: 'en',
-    language: 'en',
-    config: {
-        search: {
-            forwardToSingleItem: true
-        }
-    }
+export const FACET = {
+    id: '1',
+    values: [
+        {name: 'cat'},
+        {name: 'price'},
+    ]
 };

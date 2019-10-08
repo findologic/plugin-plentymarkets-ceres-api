@@ -42,6 +42,8 @@ foreach($components as $component) {
 
     $script = preg_replace('/(Vue.component){1}(\(")(.)*(,){1}/', 'export default', $script);
     $script = preg_replace('/(\);)$/', '', $script);
+
+    //TODO: mock import statements (if possible)
     $script = str_replace('../../../mixins/url', '../../resources/js/src/app/mixins/url', $script);
     $script = str_replace('../../mixins/url', '../../resources/js/src/app/mixins/url', $script);
 
