@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Findologic integration for plentymarkets system",
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",

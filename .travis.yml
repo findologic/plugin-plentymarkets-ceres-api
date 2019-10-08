@@ -19,4 +19,4 @@ install:
 
 script:
   - php vendor/bin/phpunit -c tests/phpunit.xml
-  - jest
+  - npm test
