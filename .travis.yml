@@ -7,11 +7,15 @@ cache:
   directories:
     - ${HOME}/.composer/cache/files
 
+before_install:
+  - nvm install 6.10
+
 install:
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar --version
   - php composer.phar install
   - php spec/buildVueComponents.php
+  - npm install
 
 script:
   - php vendor/bin/phpunit -c tests/phpunit.xml
