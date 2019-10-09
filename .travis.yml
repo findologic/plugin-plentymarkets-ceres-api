@@ -16,7 +16,7 @@ cache:
 before_install:
   - nvm install 6.10
   - npm install
-  - npm run build
+  - sudo npm run build
 
 install:
   - curl -sS https://getcomposer.org/installer | php
