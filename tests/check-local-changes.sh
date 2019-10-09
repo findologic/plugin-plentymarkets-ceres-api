@@ -1,7 +1,6 @@
 #!/bin/bash
 
-npm install --global gulp-cli
-gulp
+npm run build
 
 if [[ `git status --porcelain` ]]; then
   echo 'Local changes found. Ensure to build your JS and CSS files by running "gulp".'
