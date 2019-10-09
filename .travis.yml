@@ -15,9 +15,10 @@ cache:
 
 before_install:
   - nvm install 6.10
+  - npm install
+  - npm run build
 
 install:
-  - npm install
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar --version
   - php composer.phar install
@@ -28,6 +29,6 @@ script:
 jobs:
   include:
     - stage: check-local-changes
-      before_install: skip
+      install: skip
       before_script: skip
       script: sudo ./tests/check-local-changes.sh
