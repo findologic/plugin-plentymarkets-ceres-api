@@ -4,6 +4,8 @@ php:
   - '7.1'
   - '7.2'
 
+sudo: required
+
 stages:
   - check-local-changes
 
@@ -27,5 +29,5 @@ jobs:
   include:
     - stage: check-local-changes
       before_install: nvm install 6.10
-      before_script: npm install ; gulp
+      before_script: sudo npm i -g gulp ; npm install ; gulp
       script: ./tests/check-local-changes.sh
