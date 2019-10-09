@@ -3,14 +3,28 @@ language: php
 php:
   - 7.1
 
+stages:
+  - check-local-changes
+
 cache:
   directories:
     - ${HOME}/.composer/cache/files
 
+before_install:
+  - nvm install 6.10
+
 install:
+  - npm install
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar --version
   - php composer.phar install
 
 script:
   - php vendor/bin/phpunit -c tests/phpunit.xml
+
+jobs:
+  include:
+    - stage: check-local-changes
+      before_install: nvm install 6.10
+      before_script: npm install ; gulp
+      script: ./tests/check-local-changes.sh
