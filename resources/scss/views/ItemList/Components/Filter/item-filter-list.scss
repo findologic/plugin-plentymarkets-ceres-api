@@ -1,4 +1,7 @@
 .list-controls {
+    .card-columns {
+        column-gap: 0;
+    }
     #filterCollapse {
         position: relative;
         z-index: 0;
