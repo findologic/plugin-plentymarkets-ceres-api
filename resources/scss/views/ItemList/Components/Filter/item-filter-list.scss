@@ -95,3 +95,10 @@
         }
     }
 }
+
+@media (min-width: 576px) {
+    .list-controls .no-main-filters-filter-toggle {
+        transform: translateY(-120%);
+        -webkit-transform: translateY(-120%);
+    }
+}
