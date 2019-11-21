@@ -1,10 +1,25 @@
 # Release Notes für FINDOLOGIC
 
+## 2.2.0 (2019-11-21)
+
+### Hinzugefügt
+
+* Unterstützung für den "keine weitere Filter" text, sofern dieser bei FINDOLOGIC konfiguriert ist.
+
+### Behoben
+
+* Filter vom Typ Bereichsslider welche nicht Preisslider sind, funktionieren wieder.
+* Es werden nicht länger Vue Fehler ausgegeben, sobald man mithilfe des ShopBuilders
+ eine Checkout Seite erstellt.
+* Bei Firefox werden nun drei anstatt zwei Filter pro Reihe ausgegeben.
+* Wenn alle Filter als "Weitere Filter" kofiguriert sind, wird der "Weitere Filter"
+ Knopf nicht länger über die gesamte Breite einer Reihe angezeigt.
+
 ## 2.1.0 (2019-09-23)
 
 ### Hinzugefügt
 
-* Untertützung für fixierte Filterwerte für den Filtertyp "Dropdown", sofern diese bei FINDOLOGIC konfiguriert sind.
+* Unterstützung für fixierte Filterwerte für den Filtertyp "Dropdown", sofern diese bei FINDOLOGIC konfiguriert sind.
 
 ### Behoben
 

@@ -1,5 +1,19 @@
 # Release Notes for FINDOLOGIC
 
+## 2.2.0 (2019-11-21)
+
+### Added
+
+* Support for the "no available filters" text, if set in the FINDOLOGIC backend.
+
+### Fixed
+
+* Range slider filters that are no price slider filters work again.
+* Vue errors will no longer be thrown when using the ShopBuilder checkout.
+* For Firefox three filters are now being shown per row instead of two.
+* When all filters are configured as "other filter", the filter button will no longer
+ use the full width of the current row.
+
 ## 2.1.0 (2019-09-23)
 
 ### Added
