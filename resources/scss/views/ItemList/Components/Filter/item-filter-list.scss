@@ -1,4 +1,7 @@
 .list-controls {
+    .card-columns {
+        column-gap: 0;
+    }
     #filterCollapse {
         position: relative;
         z-index: 0;
@@ -93,5 +96,12 @@
                 }
             }
         }
+    }
+}
+
+@media (min-width: 576px) {
+    .list-controls .no-main-filters-filter-toggle {
+        transform: translateY(-120%);
+        -webkit-transform: translateY(-120%);
     }
 }

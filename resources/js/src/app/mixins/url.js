@@ -150,7 +150,7 @@ export default {
 
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            if (facetId === 'price') {
+            if (facetId === 'price' || this.facet.type === 'range-slider') {
                 attributes[facetId] = {
                     min: facetValue.min,
                     max: facetValue.max
@@ -228,9 +228,9 @@ export default {
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
             for (var filter in attributes) {
-                if (filter === 'price') {
+                if (filter === 'price' || this.isRangeSliderFilter(attributes[filter])) {
                     selectedFilters.push({
-                        id: 'price',
+                        id: filter,
                         name: attributes[filter].min + ' - ' + attributes[filter].max
                     });
 
@@ -257,6 +257,14 @@ export default {
             return selectedFilters;
         },
 
+        /**
+         * @param attributeValue
+         * @returns {boolean}
+         */
+        isRangeSliderFilter(attributeValue) {
+            return (typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined')
+        },
+
         /*
          * Remove selected filter from url
          *
@@ -268,7 +276,10 @@ export default {
             let params = this.getSearchParams();
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            if (typeof attributes[facetId] !== 'object' || facetId === 'price') {
+            if (typeof attributes[facetId] !== 'object'
+                || facetId === 'price'
+                || this.isRangeSliderFilter(attributes[facetId])
+            ) {
                 delete attributes[facetId];
             } else {
                 var values = attributes[facetId];
