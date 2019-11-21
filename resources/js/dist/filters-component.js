@@ -813,7 +813,7 @@ exports.default = {
 
             var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
 
-            if (facetId === 'price') {
+            if (facetId === 'price' || this.facet.type === 'range-slider') {
                 attributes[facetId] = {
                     min: facetValue.min,
                     max: facetValue.max
@@ -893,9 +893,9 @@ exports.default = {
             var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
 
             for (var filter in attributes) {
-                if (filter === 'price') {
+                if (filter === 'price' || this.isRangeSliderFilter(attributes[filter])) {
                     selectedFilters.push({
-                        id: 'price',
+                        id: filter,
                         name: attributes[filter].min + ' - ' + attributes[filter].max
                     });
 
@@ -923,6 +923,15 @@ exports.default = {
         },
 
 
+        /**
+         * @param attributeValue
+         * @returns {boolean}
+         */
+        isRangeSliderFilter: function isRangeSliderFilter(attributeValue) {
+            return typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined';
+        },
+
+
         /*
          * Remove selected filter from url
          *
@@ -934,7 +943,7 @@ exports.default = {
             var params = this.getSearchParams();
             var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
 
-            if (_typeof(attributes[facetId]) !== 'object' || facetId === 'price') {
+            if (_typeof(attributes[facetId]) !== 'object' || facetId === 'price' || this.isRangeSliderFilter(attributes[facetId])) {
                 delete attributes[facetId];
             } else {
                 var values = attributes[facetId];
