@@ -21,7 +21,7 @@
             <item-color-tiles :facet="facet"></item-color-tiles>
         </div>
         <div v-else-if="facet.id === 'cat'">
-            <div class="form-check" v-for="value in facet.values" :key="value.id">
+            <div v-if="!facet.noAvailableFiltersText" class="form-check" v-for="value in facet.values" :key="value.id">
                 <div class="category-container">
                     <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
                     <label :for="'option-' + value.id" class="form-check-label">
@@ -39,6 +39,7 @@
                     </div>
                 </div>
             </div>
+            <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else-if="facet.type === 'select'">
             <item-dropdown :facet="facet"></item-dropdown>
