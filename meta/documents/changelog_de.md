@@ -1,5 +1,63 @@
 # Release Notes für FINDOLOGIC
 
+## 2.2.0 (2019-11-21)
+
+### Hinzugefügt
+
+* Unterstützung für den "keine weitere Filter" text, sofern dieser bei FINDOLOGIC konfiguriert ist.
+
+### Behoben
+
+* Filter vom Typ Bereichsslider welche nicht Preisslider sind, funktionieren wieder.
+* Es werden nicht länger Vue Fehler ausgegeben, sobald man mithilfe des ShopBuilders
+ eine Checkout Seite erstellt.
+* Bei Firefox werden nun drei anstatt zwei Filter pro Reihe ausgegeben.
+* Wenn alle Filter als "Weitere Filter" kofiguriert sind, wird der "Weitere Filter"
+ Knopf nicht länger über die gesamte Breite einer Reihe angezeigt.
+
+## 2.1.0 (2019-09-23)
+
+### Hinzugefügt
+
+* Unterstützung für fixierte Filterwerte für den Filtertyp "Dropdown", sofern diese bei FINDOLOGIC konfiguriert sind.
+
+### Behoben
+
+* Der gesamte Kategoriebaum wird nun als selektiert makiert. Zuvor wurde nur der letzte
+selektierte Kategoriefilter als selektiert makiert.
+* Es werden nicht länger Vue Fehler ausgegeben, sobald das Ceres Plugin auf den Performance
+level "Development" gesetzt wurde.
+
+## Geändert
+
+* Die Installationsanleitung leitet nun auf unsere Dokumentation unter https://docs.findologic.com weiter.
+
+## 2.0.1 (2019-09-13)
+
+### Behoben
+
+* Deselektieren von bereits selektierten Kategoriefiltern funktioniert wie erwartet.
+
+## 2.0.0 (2019-09-11)
+
+### Hinzugefügt
+
+* Unterstüzung für den Rückgabetyp `XML_2.1`. Bitte beachten Sie dass einige CSS-Style
+Änderungen beinhaltet, welche das Styling von Filtern beeinflussen könnte. **Überprüfen Sie
+Ihre Filter-Styles bevor Sie upgraden.**
+* Unterstützung für den Filtertyp Dropdown, sofern diese bei FINDOLOGIC konfiguriert sind.
+
+### Behoben
+
+* Nur ein Kategoriefilter kann gleichzeitig ausgewählt werden.
+
+## 1.2.3 (2019-08-21)
+
+### Behoben
+
+* Die Standard Container-Verknüpfungen in der Pluginkonfiguration sind nicht länger inaktiv.
+* Filter vom Typ Bereichsslider erlauben nun die selben Min-/Maxwerte.
+
 ## 1.2.2 (2019-08-06)
 
 ### Behoben

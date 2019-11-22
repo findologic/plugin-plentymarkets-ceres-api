@@ -1,5 +1,5 @@
 {
-  "version": "1.2.2",
+  "version": "2.2.0",
   "name": "Findologic",
   "marketplaceName": {
     "de": "FINDOLOGIC",
@@ -33,19 +33,19 @@
       "key": "Findologic\\Containers\\SearchFilterContainer",
       "name": "Filters",
       "description": "Display FINDOLOGIC filters",
-      "defaultLayoutContainer": "Search.Filter"
+      "defaultLayoutContainer": "Ceres::Search.Filter"
     },
     {
       "key": "Findologic\\Containers\\SearchBarContainer",
       "name": "Search Bar",
       "description": "Display search bar customized for FINDOLOGIC",
-      "defaultLayoutContainer": "Search.SearchBar"
+      "defaultLayoutContainer": "Ceres::Search.SearchBar"
     },
     {
       "key": "Findologic\\Containers\\PromotionContainer",
       "name": "Promotion",
       "description": "Display promotion banner",
-      "defaultLayoutContainer": "CategoryItem.Promotion"
+      "defaultLayoutContainer": "Findologic::CategoryItem.Promotion"
     },
     {
       "key": "Findologic\\Containers\\SmartDidYouMeanContainer",

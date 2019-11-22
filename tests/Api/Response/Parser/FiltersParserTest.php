@@ -78,29 +78,8 @@ class FiltersParserTest extends TestCase
     {
         return [
             'Filters and filter values are set in response' => [
-                '<?xml version="1.0"?>
-                    <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <landingPage link="http://www.example.com/imprint"/>
-                    <promotion image="http://www.example.com/special-offer.jpg" link="http://www.example.com/special-offer"/>
-                    <results>
-                        <count>3</count>
-                    </results>
-                    <products>
-                        <product id="17" relevance="5.5451774597168" direct="0"/>
-                        <product id="18" relevance="5.5451774597168" direct="0"/>
-                        <product id="19" relevance="5.5451774597168" direct="0"/>
-                    </products>
-                    <filters>
+                '<filters>
+                    <main>
                         <filter>
                             <name>cat</name>
                             <display>Kategorie</display>
@@ -219,6 +198,8 @@ class FiltersParserTest extends TestCase
                                 </item>
                             </items>
                         </filter>
+                    </main>
+                    <other>
                         <filter>
                             <name>price-text</name>
                             <display>Preis</display>
@@ -258,14 +239,17 @@ class FiltersParserTest extends TestCase
                                 </item>
                             </items>
                         </filter>
-                    </filters>
-                </searchResult>', [
+                    </other>
+                </filters>', [
                     [
                         'id' => 'cat',
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
                         'type' => 'select',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
                         'values' => [
                             [
                                 'items' => [
@@ -275,6 +259,7 @@ class FiltersParserTest extends TestCase
                                         'count' => '17',
                                         'image' => '',
                                         'id' => 2,
+                                        'selected' => false,
                                         'items' => []
                                     ],
                                     [
@@ -283,6 +268,7 @@ class FiltersParserTest extends TestCase
                                         'position' => 'item',
                                         'count' => '11',
                                         'image' => '',
+                                        'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
@@ -290,7 +276,8 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => "28",
                                 'image' => '',
-                                'id' => 1
+                                'id' => 1,
+                                'selected' => false,
                             ],
                             [
                                 'items' => [
@@ -300,6 +287,7 @@ class FiltersParserTest extends TestCase
                                         'position' => 'item',
                                         'count' => '6',
                                         'image' => '',
+                                        'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
@@ -307,6 +295,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '6',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 4
                             ]
                         ]
@@ -317,6 +306,9 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiple',
                         'type' => 'image',
                         'cssClass' => '',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
                         'values' => [
                             [
                                 'items' => [],
@@ -324,6 +316,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '10',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 6
                             ],
                             [
@@ -332,6 +325,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '19',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 7
                             ],
                             [
@@ -340,6 +334,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '21',
                                 'image' => '/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
                                 'id' => 8
                             ],
                             [
@@ -348,6 +343,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '25',
                                 'image' => 'https://test.com/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
                                 'id' => 9
                             ]
                         ]
@@ -359,6 +355,9 @@ class FiltersParserTest extends TestCase
                         'type' => 'range-slider',
                         'cssClass' => '',
                         'unit' => '€',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
                         'minValue' => '59',
                         'maxValue' => '2300',
                         'step' => '0.1',
@@ -369,6 +368,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 10
                             ],
                             [
@@ -377,6 +377,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 11
                             ],
                             [
@@ -385,6 +386,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 12
                             ],
                             [
@@ -393,6 +395,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 13
                             ]
                         ]
@@ -403,6 +406,9 @@ class FiltersParserTest extends TestCase
                         'select' => 'single',
                         'type' => 'text',
                         'cssClass' => '',
+                        'isMain' => false,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
                         'values' => [
                             [
                                 'items' => [],
@@ -410,6 +416,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '',
                                 'image' => '',
+                                'selected' => false,
                                 'id' => 14
                             ]
                         ]
@@ -420,6 +427,9 @@ class FiltersParserTest extends TestCase
                         'select' => 'multiselect',
                         'type' => 'color',
                         'cssClass' => '',
+                        'isMain' => false,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
                         'values' => [
                             [
                                 'items' => [],
@@ -428,7 +438,8 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 15,
-                                'hexValue' => '#BA55D3'
+                                'hexValue' => '#BA55D3',
+                                'selected' => false,
                             ],
                             [
                                 'items' => [],
@@ -437,7 +448,8 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 16,
-                                'hexValue' => '#FF0000'
+                                'hexValue' => '#FF0000',
+                                'selected' => false,
                             ],
                             [
                                 'items' => [],
@@ -446,7 +458,8 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 17,
-                                'hexValue' => '#000000'
+                                'hexValue' => '#000000',
+                                'selected' => false,
                             ],
                             [
                                 'items' => [],
@@ -455,136 +468,42 @@ class FiltersParserTest extends TestCase
                                 'count' => '',
                                 'image' => '',
                                 'id' => 18,
-                                'hexValue' => '#FFFFFF'
+                                'hexValue' => '#FFFFFF',
+                                'selected' => false
                             ]
                         ]
                     ]
                 ]
             ],
             'No filters are returned in response' => [
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <landingPage link="http://www.example.com/imprint"/>
-                    <promotion image="http://www.example.com/special-offer.jpg" link="http://www.example.com/special-offer"/>
-                    <results>
-                        <count>3</count>
-                    </results>
-                    <products>
-                        <product id="17" relevance="5.5451774597168" direct="0"/>
-                        <product id="18" relevance="5.5451774597168" direct="0"/>
-                        <product id="19" relevance="5.5451774597168" direct="0"/>
-                    </products>
-                    <filters></filters>
-                </searchResult>', []
+                null, []
             ],
             'Css class is not set in response' => [
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <landingPage link="http://www.example.com/imprint"/>
-                        <promotion image="http://www.example.com/special-offer.jpg" link="http://www.example.com/special-offer"/>
-                        <results>
-                            <count>3</count>
-                        </results>
-                        <products>
-                            <product id="17" relevance="5.5451774597168" direct="0"/>
-                        </products>
-                        <filters>
-                            <filter>
-                                <name>vendor</name>
-                                <select>multiple</select>
-                                <type>image</type>
-                                <items>
-                                    <item>
-                                        <name>Exclusive Leather</name>
-                                        <weight>0.68965518474579</weight>
-                                        <frequency>10</frequency>
-                                    </item>
-                                </items>
-                            </filter>
-                        </filters>
-                    </searchResult>', [
-                        [
-                            'id' => 'vendor',
-                            'cssClass' => '',
-                            'name' => '',
-                            'select' => 'multiple',
-                            'type' => 'image',
-                            'values' => [
-                                [
-                                    'items' => [],
-                                    'name' => 'Exclusive Leather',
-                                    'position' => 'item',
-                                    'count' => "10",
-                                    'image' => '',
-                                    'id' => 1
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-            'Css class exists in response, but has no value' => [
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <landingPage link="http://www.example.com/imprint"/>
-                        <promotion image="http://www.example.com/special-offer.jpg" link="http://www.example.com/special-offer"/>
-                        <results>
-                            <count>3</count>
-                        </results>
-                        <products>
-                            <product id="17" relevance="5.5451774597168" direct="0"/>
-                        </products>
-                        <filters>
-                            <filter>
-                                <cssClass></cssClass>
-                                <name>vendor</name>
-                                <select>multiple</select>
-                                <type>image</type>
-                                <items>
-                                    <item>
-                                        <name>Exclusive Leather</name>
-                                        <weight>0.68965518474579</weight>
-                                        <frequency>10</frequency>
-                                    </item>
-                                </items>
-                            </filter>
-                        </filters>
-                    </searchResult>', [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
                     [
                         'id' => 'vendor',
                         'cssClass' => '',
                         'name' => '',
                         'select' => 'multiple',
                         'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
                         'values' => [
                             [
                                 'items' => [],
@@ -592,6 +511,48 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => "10",
                                 'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'Css class exists in response, but has no value' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <cssClass></cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => '',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
                                 'id' => 1
                             ]
                         ]
@@ -599,61 +560,563 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'Css class exists in response and has a value' => [
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <landingPage link="http://www.example.com/imprint"/>
-                        <promotion image="http://www.example.com/special-offer.jpg" link="http://www.example.com/special-offer"/>
-                        <results>
-                            <count>3</count>
-                        </results>
-                        <products>
-                            <product id="17" relevance="5.5451774597168" direct="0"/>
-                        </products>
-                        <filters>
-                            <filter>
-                                <cssClass>test-css-class</cssClass>
-                                <name>vendor</name>
-                                <select>multiple</select>
-                                <type>image</type>
-                                <items>
-                                    <item>
-                                        <name>Exclusive Leather</name>
-                                        <weight>0.68965518474579</weight>
-                                        <frequency>10</frequency>
-                                    </item>
-                                </items>
-                            </filter>
-                        </filters>
-                    </searchResult>', [
-                        [
-                            'id' => 'vendor',
-                            'cssClass' => 'test-css-class',
-                            'name' => '',
-                            'select' => 'multiple',
-                            'type' => 'image',
-                            'values' => [
-                                [
-                                    'items' => [],
-                                    'name' => 'Exclusive Leather',
-                                    'position' => 'item',
-                                    'count' => "10",
-                                    'image' => '',
-                                    'id' => 1
-                                ]
+                '<filters>
+                    <main>
+                        <filter>
+                            <cssClass>test-css-class</cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => 'test-css-class',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
                             ]
                         ]
                     ]
                 ]
+            ],
+            'Filter values are marked as selected' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                                <item selected="1">
+                                    <name>HUNDE design</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>19</frequency>
+                                </item>
+                                <item selected="0">
+                                    <name>A &amp; C Design</name>
+                                    <weight>0.72727274894714</weight>
+                                    <frequency>21</frequency>
+                                    <image>/vendor/a_amp_c_design.jpg</image>
+                                </item>
+                                <item>
+                                    <name>H Manufacturer</name>
+                                    <weight>0.52727274894714</weight>
+                                    <frequency>25</frequency>
+                                    <image>https://test.com/vendor/a_amp_c_design.jpg</image>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'cssClass' => '',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => '10',
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ],
+                            [
+                                'items' => [],
+                                'name' => 'HUNDE design',
+                                'position' => 'item',
+                                'count' => '19',
+                                'image' => '',
+                                'selected' => true,
+                                'id' => 2
+                            ],
+                            [
+                                'items' => [],
+                                'name' => 'A & C Design',
+                                'position' => 'item',
+                                'count' => '21',
+                                'image' => '/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
+                                'id' => 3
+                            ],
+                            [
+                                'items' => [],
+                                'name' => 'H Manufacturer',
+                                'position' => 'item',
+                                'count' => '25',
+                                'image' => 'https://test.com/vendor/a_amp_c_design.jpg',
+                                'selected' => false,
+                                'id' => 4
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            'itemCount is not set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <cssClass>test-css-class</cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => 'test-css-class',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'itemCount is set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <itemCount>42</itemCount>
+                            <cssClass>test-css-class</cssClass>
+                            <name>vendor</name>
+                            <select>multiple</select>
+                            <type>image</type>
+                            <items>
+                                <item>
+                                    <name>Exclusive Leather</name>
+                                    <weight>0.68965518474579</weight>
+                                    <frequency>10</frequency>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'vendor',
+                        'cssClass' => 'test-css-class',
+                        'name' => '',
+                        'select' => 'multiple',
+                        'type' => 'image',
+                        'isMain' => true,
+                        'itemCount' => 42,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [],
+                                'name' => 'Exclusive Leather',
+                                'position' => 'item',
+                                'count' => "10",
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 1
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'Child category is selected' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>cat</name>
+                            <display>Kategorie</display>
+                            <select>single</select>
+                            <type>select</type>
+                            <items>
+                                <item>
+                                    <name>Wohnzimmer</name>
+                                    <weight>0.30303025245667</weight>
+                                    <frequency>28</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Sessel &amp; Hocker</name>
+                                            <weight>0.96969699859619</weight>
+                                            <frequency>17</frequency>
+                                        </item>
+                                        <item selected="1">
+                                            <name>Sofas</name>
+                                            <weight>0.66666668653488</weight>
+                                            <frequency>11</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                                <item>
+                                    <name>Arbeitszimmer &amp; Büro</name>
+                                    <weight>0.36363637447357</weight>
+                                    <frequency>6</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Bürostühle</name>
+                                            <weight>0.36363637447357</weight>
+                                            <frequency>6</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'cat',
+                        'cssClass' => '',
+                        'name' => 'Kategorie',
+                        'select' => 'single',
+                        'type' => 'select',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [
+                                    [
+                                        'name' => 'Sessel & Hocker',
+                                        'position' => 'item',
+                                        'count' => '17',
+                                        'image' => '',
+                                        'id' => 2,
+                                        'selected' => false,
+                                        'items' => []
+                                    ],
+                                    [
+                                        'items' => [],
+                                        'name' => 'Sofas',
+                                        'position' => 'item',
+                                        'count' => '11',
+                                        'image' => '',
+                                        'selected' => true,
+                                        'id' => 3
+                                    ]
+                                ],
+                                'name' => 'Wohnzimmer',
+                                'position' => 'item',
+                                'count' => "28",
+                                'image' => '',
+                                'id' => 1,
+                                'selected' => true,
+                            ],
+                            [
+                                'items' => [
+                                    [
+                                        'items' => [],
+                                        'name' => 'Bürostühle',
+                                        'position' => 'item',
+                                        'count' => '6',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 5
+                                    ]
+                                ],
+                                'name' => 'Arbeitszimmer & Büro',
+                                'position' => 'item',
+                                'count' => '6',
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 4
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            'Parent category is selected' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>cat</name>
+                            <display>Kategorie</display>
+                            <select>single</select>
+                            <type>select</type>
+                            <items>
+                                <item selected="1">
+                                    <name>Wohnzimmer</name>
+                                    <weight>0.30303025245667</weight>
+                                    <frequency>28</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Sessel &amp; Hocker</name>
+                                            <weight>0.96969699859619</weight>
+                                            <frequency>17</frequency>
+                                        </item>
+                                        <item>
+                                            <name>Sofas</name>
+                                            <weight>0.66666668653488</weight>
+                                            <frequency>11</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                                <item>
+                                    <name>Arbeitszimmer &amp; Büro</name>
+                                    <weight>0.36363637447357</weight>
+                                    <frequency>6</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Bürostühle</name>
+                                            <weight>0.36363637447357</weight>
+                                            <frequency>6</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'cat',
+                        'cssClass' => '',
+                        'name' => 'Kategorie',
+                        'select' => 'single',
+                        'type' => 'select',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [
+                                    [
+                                        'name' => 'Sessel & Hocker',
+                                        'position' => 'item',
+                                        'count' => '17',
+                                        'image' => '',
+                                        'id' => 2,
+                                        'selected' => false,
+                                        'items' => []
+                                    ],
+                                    [
+                                        'items' => [],
+                                        'name' => 'Sofas',
+                                        'position' => 'item',
+                                        'count' => '11',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 3
+                                    ]
+                                ],
+                                'name' => 'Wohnzimmer',
+                                'position' => 'item',
+                                'count' => "28",
+                                'image' => '',
+                                'id' => 1,
+                                'selected' => true,
+                            ],
+                            [
+                                'items' => [
+                                    [
+                                        'items' => [],
+                                        'name' => 'Bürostühle',
+                                        'position' => 'item',
+                                        'count' => '6',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 5
+                                    ]
+                                ],
+                                'name' => 'Arbeitszimmer & Büro',
+                                'position' => 'item',
+                                'count' => '6',
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 4
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            'noAvailableFiltersText is not set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <name>cat</name>
+                            <display>Kategorie</display>
+                            <select>single</select>
+                            <type>select</type>
+                            <items>
+                                <item>
+                                    <name>Wohnzimmer</name>
+                                    <weight>0.30303025245667</weight>
+                                    <frequency>28</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Sessel &amp; Hocker</name>
+                                            <weight>0.96969699859619</weight>
+                                            <frequency>17</frequency>
+                                        </item>
+                                        <item>
+                                            <name>Sofas</name>
+                                            <weight>0.66666668653488</weight>
+                                            <frequency>11</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                                <item>
+                                    <name>Arbeitszimmer &amp; Büro</name>
+                                    <weight>0.36363637447357</weight>
+                                    <frequency>6</frequency>
+                                    <items>
+                                        <item>
+                                            <name>Bürostühle</name>
+                                            <weight>0.36363637447357</weight>
+                                            <frequency>6</frequency>
+                                        </item>
+                                    </items>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'cat',
+                        'cssClass' => '',
+                        'name' => 'Kategorie',
+                        'select' => 'single',
+                        'type' => 'select',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'values' => [
+                            [
+                                'items' => [
+                                    [
+                                        'name' => 'Sessel & Hocker',
+                                        'position' => 'item',
+                                        'count' => '17',
+                                        'image' => '',
+                                        'id' => 2,
+                                        'selected' => false,
+                                        'items' => []
+                                    ],
+                                    [
+                                        'items' => [],
+                                        'name' => 'Sofas',
+                                        'position' => 'item',
+                                        'count' => '11',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 3
+                                    ]
+                                ],
+                                'name' => 'Wohnzimmer',
+                                'position' => 'item',
+                                'count' => "28",
+                                'image' => '',
+                                'id' => 1,
+                                'selected' => false,
+                            ],
+                            [
+                                'items' => [
+                                    [
+                                        'items' => [],
+                                        'name' => 'Bürostühle',
+                                        'position' => 'item',
+                                        'count' => '6',
+                                        'image' => '',
+                                        'selected' => false,
+                                        'id' => 5
+                                    ]
+                                ],
+                                'name' => 'Arbeitszimmer & Büro',
+                                'position' => 'item',
+                                'count' => '6',
+                                'image' => '',
+                                'selected' => false,
+                                'id' => 4
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'noAvailableFiltersText is set in the response' => [
+                '<filters>
+                    <main>
+                        <filter>
+                            <itemCount>6</itemCount>
+                            <noAvailableFiltersText>Nothing left to show</noAvailableFiltersText>
+                            <name>cat</name>
+                            <display>Kategorie</display>
+                            <select>single</select>
+                            <type>select</type>
+                            <items>
+                                <item selected="1">
+                                    <name>Sofas</name>
+                                </item>
+                            </items>
+                        </filter>
+                    </main>
+                </filters>', [
+                    [
+                        'id' => 'cat',
+                        'cssClass' => '',
+                        'name' => 'Kategorie',
+                        'select' => 'single',
+                        'type' => 'select',
+                        'isMain' => true,
+                        'itemCount' => 6,
+                        'noAvailableFiltersText' => 'Nothing left to show',
+                        'values' => [
+                            [
+                                'name' => 'Sofas',
+                                'position' => 'item',
+                                'count' => '',
+                                'image' => '',
+                                'id' => 1,
+                                'selected' => true,
+                                'items' => []
+                            ]
+                        ]
+                    ]
+                ]
+            ],
         ];
     }
 }

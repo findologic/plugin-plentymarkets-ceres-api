@@ -1,5 +1,62 @@
 # Release Notes for FINDOLOGIC
 
+## 2.2.0 (2019-11-21)
+
+### Added
+
+* Support for the "no available filters" text, if set in the FINDOLOGIC backend.
+
+### Fixed
+
+* Range slider filters that are no price slider filters work again.
+* Vue errors will no longer be thrown when using the ShopBuilder checkout.
+* For Firefox three filters are now being shown per row instead of two.
+* When all filters are configured as "other filter", the filter button will no longer
+ use the full width of the current row.
+
+## 2.1.0 (2019-09-23)
+
+### Added
+
+* Support for fixed filter values for dropdown filters, if set in the FINDOLOGIC
+backend.
+
+### Fixed
+
+* The whole category tree is marked as selected. Before this change only the
+latest category was marked as selected.
+* Vue errors will no longer be thrown if the ceres plugins performance level was
+set to "Development".
+
+### Changed
+
+* The installation guide now links to our documentation at https://docs.findologic.com.
+
+## 2.0.1 (2019-09-13)
+
+### Fixed
+
+* Deselection of already selected category filter works as expected.
+
+## 2.0.0 (2019-09-11)
+
+### Added
+
+* Support for response type `XML_2.1`. Be aware that this caused some CSS style
+ changes which may affect filters. **Make sure to check your filter styles before upgrading.**
+* Support for dropdown filters when configured in FINDOLOGC's backend.
+
+### Fixed
+
+* Only allow a single value to be selected for category filter.
+
+## 1.2.3 (2019-08-21)
+
+### Fixed
+
+* Default layout container definitions can be selected and saved in the backend.
+* Filters of type range-slider allow min/max range to be the same.
+
 ## 1.2.2 (2019-08-06)
 
 ### Fixed

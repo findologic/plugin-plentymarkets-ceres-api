@@ -9,9 +9,11 @@ const browserify = require("browserify");
 const buffer = require("vinyl-buffer");
 const concat = require("gulp-concat");
 const gulp = require("gulp");
+const sass = require("gulp-sass");
 const minify = require("gulp-minify");
 const source = require("vinyl-source-stream");
 const sourcemaps = require("gulp-sourcemaps");
+const cleanCss = require("gulp-clean-css");
 
 gulp.task("js", () => {
     var builder = browserify({
@@ -21,6 +23,7 @@ gulp.task("js", () => {
             "app/components/itemList/filter/ItemFilterTagList.js",
             "app/components/itemList/filter/ItemRangeSlider.js",
             "app/components/itemList/filter/ItemColorTiles.js",
+            "app/components/itemList/filter/ItemDropdown.js",
             "app/components/itemList/ItemListSorting.js",
             "app/components/itemList/ItemsPerPage.js",
             "app/components/itemList/Pagination.js",
@@ -53,4 +56,16 @@ gulp.task("js", () => {
         .pipe(gulp.dest(DIST))
 });
 
-gulp.task("default", gulp.series("js"));
+sass.compiler = require('node-sass');
+
+gulp.task('sass', function () {
+    return gulp.src('resources/scss/findologic.scss')
+        .pipe(sourcemaps.init())
+        .pipe(sass())
+        .pipe(concat('findologic.min.css'))
+        .pipe(cleanCss())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('resources/css'));
+});
+
+gulp.task("default", gulp.series("js", "sass"));

@@ -1,0 +1,11 @@
+{{ component( "Findologic::ItemList.Components.Filter.ItemFilterList") }}
+
+<div class="list-controls">
+    <div class="row">
+        <div class="col-12">
+            <div class="list-wrapper">
+                <item-filter-list :facet-data="{{ facets | json_encode }}"></item-filter-list>
+            </div>
+        </div>
+    </div>
+</div>

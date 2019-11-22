@@ -1,0 +1,35 @@
+.fl-range-slider-container {
+    display: inline-block;
+
+    .fl-range-slider {
+        margin-top: 20px;
+    }
+    .fl-range-input {
+        width: 50%;
+        height: 35px;
+        padding: 5px;
+        display: inline;
+    }
+    .fl-range-slider-row {
+        margin-left: -7px;
+        margin-right: -23px;
+    }
+    .fl-unit {
+        margin-left: 5px;
+    }
+    .fl-range-slider-submit-btn {
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 543px) {
+    .fl-range-slider-container {
+        .fl-range-slider-submit-btn {
+            width: 100%;
+
+            & > .fa {
+                float: none;
+            }
+        }
+    }
+}

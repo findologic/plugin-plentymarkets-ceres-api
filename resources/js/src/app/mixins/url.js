@@ -150,20 +150,17 @@ export default {
 
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            if (facetId === 'price') {
+            if (facetId === 'price' || this.facet.type === 'range-slider') {
                 attributes[facetId] = {
                     min: facetValue.min,
                     max: facetValue.max
                 };
-            } else if (this.facet.select === 'single' && facetId !== 'cat') {
-                if (facetId in attributes) {
-                    if (attributes[facetId] === facetValue) {
-                        delete attributes[facetId];
-                    } else {
-                        attributes[facetId] = facetValue;
-                    }
+            } else if (this.facet.select === 'single') {
+                if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetValue)) {
+                    let index = Object.values(attributes[facetId]).indexOf(facetValue);
+                    delete attributes[facetId][index];
                 } else {
-                    attributes[facetId] = facetValue;
+                    attributes[facetId] = [facetValue];
                 }
             } else {
                 if (!(facetId in attributes)) {
@@ -231,9 +228,9 @@ export default {
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
             for (var filter in attributes) {
-                if (filter === 'price') {
+                if (filter === 'price' || this.isRangeSliderFilter(attributes[filter])) {
                     selectedFilters.push({
-                        id: 'price',
+                        id: filter,
                         name: attributes[filter].min + ' - ' + attributes[filter].max
                     });
 
@@ -260,6 +257,14 @@ export default {
             return selectedFilters;
         },
 
+        /**
+         * @param attributeValue
+         * @returns {boolean}
+         */
+        isRangeSliderFilter(attributeValue) {
+            return (typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined')
+        },
+
         /*
          * Remove selected filter from url
          *
@@ -271,7 +276,10 @@ export default {
             let params = this.getSearchParams();
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-            if (typeof attributes[facetId] !== 'object' || facetId === 'price') {
+            if (typeof attributes[facetId] !== 'object'
+                || facetId === 'price'
+                || this.isRangeSliderFilter(attributes[facetId])
+            ) {
                 delete attributes[facetId];
             } else {
                 var values = attributes[facetId];
