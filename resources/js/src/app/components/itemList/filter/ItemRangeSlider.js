@@ -20,6 +20,16 @@ Vue.component("item-range-slider", {
 
         this.$options.template = this.template || "#vue-item-range-slider";
 
+        var slider = document.getElementById('slider');
+        window.noUiSlider.create(slider, {
+            start: [20, 80],
+            connect: true,
+            range: {
+                'min': 0,
+                'max': 100
+            }
+        });
+
         const values = this.getSelectedFilterValue(this.facet.id);
 
         this.valueFrom = values ? values.min : this.facet.minValue;

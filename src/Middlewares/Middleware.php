@@ -101,6 +101,9 @@ class Middleware extends PlentyMiddleware
                     $container->addStyleTemplate('Findologic::content.jqueryui.jqueryui-theme-css');
                 }
 
+                $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
+                $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
+
                 $container->addScriptTemplate(
                     'Findologic::content.scripts',
                     [
