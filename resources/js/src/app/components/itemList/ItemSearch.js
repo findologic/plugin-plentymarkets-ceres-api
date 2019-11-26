@@ -51,6 +51,8 @@ Vue.component("item-search", {
             this.$store.commit("setItemListSearchString", urlParams.query);
 
             let rawQuery = urlParams.query ? urlParams.query : '';
+            // Manually regex out all "+" signs as decodeURIComponent does not take care of that.
+            // If we wouldn't replace them with spaces, "+" signs would be displayed in the search field.
             this.$refs.searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
         });
     },

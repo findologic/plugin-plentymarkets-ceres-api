@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d79fe5f69a49926ac13d33c8b030f1d0",
+    "content-hash": "78f69ad94a27d78dd3f0ffe22d04d44e",
     "packages": [
         {
             "name": "findologic/http_request2",
@@ -183,26 +183,6 @@
                 "exception"
             ],
             "time": "2015-02-10T20:07:52+00:00"
-        },
-        {
-            "name": "plentymarkets/plugin-ceres",
-            "version": "4.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-ceres",
-                "reference": "4.4.2"
-            },
-            "type": "library"
-        },
-        {
-            "name": "plentymarkets/plugin-io",
-            "version": "4.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "4.4.1"
-            },
-            "type": "library"
         }
     ],
     "packages-dev": [
@@ -1812,6 +1792,16 @@
             "time": "2018-08-09T05:50:03+00:00"
         },
         {
+            "name": "plentymarkets/plugin-ceres",
+            "version": "4.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-ceres",
+                "reference": "4.4.2"
+            },
+            "type": "library"
+        },
+        {
             "name": "plentymarkets/plugin-interface",
             "version": "dev-fixed-return-types",
             "source": {
@@ -1829,6 +1819,16 @@
             ],
             "description": "Interface for plentymarkets plugin development with PHP 7",
             "time": "2019-03-27T15:57:44+00:00"
+        },
+        {
+            "name": "plentymarkets/plugin-io",
+            "version": "4.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-io",
+                "reference": "4.4.1"
+            },
+            "type": "library"
         },
         {
             "name": "psr/log",
