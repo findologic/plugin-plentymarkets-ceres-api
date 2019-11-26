@@ -560,6 +560,39 @@ Vue.component("item-range-slider", {
 
         this.$options.template = this.template || "#vue-item-range-slider";
 
+        var sliders = document.getElementById('slider');
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = sliders[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var slider = _step.value;
+
+                window.noUiSlider.create(slider, {
+                    start: [20, 80],
+                    connect: true,
+                    range: {
+                        'min': 0,
+                        'max': 100
+                    }
+                });
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+
         var values = this.getSelectedFilterValue(this.facet.id);
 
         this.valueFrom = values ? values.min : this.facet.minValue;
