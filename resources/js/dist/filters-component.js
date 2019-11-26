@@ -112,7 +112,8 @@ Vue.component("item-search", {
 
             _this.$store.commit("setItemListSearchString", urlParams.query);
 
-            _this.$refs.searchInput.value = urlParams.query ? urlParams.query : '';
+            var rawQuery = urlParams.query ? urlParams.query : '';
+            _this.$refs.searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
         });
     },
 
