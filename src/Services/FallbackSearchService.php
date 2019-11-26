@@ -79,6 +79,7 @@ class FallbackSearchService implements SearchServiceInterface
             'facets'   => Facets::getSearchFactory($itemListOptions)
         ];
 
+        /** @var ItemSearchService $itemSearchService */
         $itemSearchService = pluginApp(ItemSearchService::class);
         return $itemSearchService->getResults($defaultSearchFactory);
     }

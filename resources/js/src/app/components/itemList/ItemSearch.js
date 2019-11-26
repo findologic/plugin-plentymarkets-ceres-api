@@ -50,7 +50,8 @@ Vue.component("item-search", {
 
             this.$store.commit("setItemListSearchString", urlParams.query);
 
-            this.$refs.searchInput.value = urlParams.query ? urlParams.query : '';
+            let rawQuery = urlParams.query ? urlParams.query : '';
+            this.$refs.searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
         });
     },
 
