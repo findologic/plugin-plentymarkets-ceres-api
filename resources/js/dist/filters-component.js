@@ -560,56 +560,39 @@ Vue.component("item-range-slider", {
 
         this.$options.template = this.template || "#vue-item-range-slider";
 
-        var sliders = document.getElementById('slider');
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-            for (var _iterator = sliders[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var slider = _step.value;
-
-                window.noUiSlider.create(slider, {
-                    start: [20, 80],
-                    connect: true,
-                    range: {
-                        'min': 0,
-                        'max': 100
-                    }
-                });
-            }
-        } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                    _iterator.return();
-                }
-            } finally {
-                if (_didIteratorError) {
-                    throw _iteratorError;
-                }
-            }
-        }
-
         var values = this.getSelectedFilterValue(this.facet.id);
 
         this.valueFrom = values ? values.min : this.facet.minValue;
         this.valueTo = values ? values.max : this.facet.maxValue;
 
-        $(function () {
-            $("#" + self.sanitizedFacetId).slider({
-                step: self.facet.step,
-                range: true,
-                min: self.facet.minValue,
-                max: self.facet.maxValue,
-                values: [self.valueFrom, self.valueTo],
-                slide: function slide(event, ui) {
-                    self.valueFrom = ui.values[0];
-                    self.valueTo = ui.values[1];
-                }
-            });
+        // $(function() {
+        //     $("#" + self.sanitizedFacetId).slider({
+        //         step: self.facet.step,
+        //         range: true,
+        //         min: self.facet.minValue,
+        //         max: self.facet.maxValue,
+        //         values: [ self.valueFrom, self.valueTo ],
+        //         slide: function( event, ui ) {
+        //             self.valueFrom = ui.values[0];
+        //             self.valueTo = ui.values[1];
+        //         }
+        //     });
+        // });
+
+        var element = document.getElementById(self.sanitizedFacetId);
+        var slider = window.noUiSlider.create(element, {
+            step: self.facet.step,
+            start: [self.valueFrom, self.valueTo],
+            connect: true,
+            range: {
+                'min': self.facet.minValue,
+                'max': self.facet.maxValue
+            }
+        });
+
+        slider.on('update', function (ui) {
+            self.valueFrom = ui[0];
+            self.valueTo = ui[1];
         });
     },
 
