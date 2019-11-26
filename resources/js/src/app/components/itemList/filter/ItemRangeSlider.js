@@ -39,20 +39,22 @@ Vue.component("item-range-slider", {
         //     });
         // });
 
-        var element = document.getElementById(self.sanitizedFacetId);
-        var slider = window.noUiSlider.create(element, {
-            step: self.facet.step,
-            start: [self.valueFrom, self.valueTo],
-            connect: true,
-            range: {
-                'min': self.facet.minValue,
-                'max': self.facet.maxValue
-            }
-        });
+        $(document).ready(function () {
+            var element = document.getElementById(self.sanitizedFacetId);
+            var slider = window.noUiSlider.create(element, {
+                step: self.facet.step,
+                start: [self.valueFrom, self.valueTo],
+                connect: true,
+                range: {
+                    'min': self.facet.minValue,
+                    'max': self.facet.maxValue
+                }
+            });
 
-        slider.on('update', function (ui) {
-            self.valueFrom = ui[0];
-            self.valueTo = ui[1];
+            slider.on('update', function (ui) {
+                self.valueFrom = ui[0];
+                self.valueTo = ui[1];
+            });
         });
     },
 
