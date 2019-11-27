@@ -33,3 +33,12 @@
         }
     }
 }
+
+.fl-range-slider-container .fl-range-slider {
+    margin-left: 1em;
+    margin-right: 1em;
+
+    .noUi-connect {
+        background: #eee;
+    }
+}
