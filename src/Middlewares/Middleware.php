@@ -26,8 +26,6 @@ class Middleware extends PlentyMiddleware
 {
     use Loggable;
 
-    const BLACK_LIST = ['/checkout'];
-
     /**
      * @var LoggerContract
      */
@@ -86,21 +84,9 @@ class Middleware extends PlentyMiddleware
         $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
         $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
 
-        $isBlacklisted = $this->isBlacklistedUri($request->getUri());
-
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
-            function (ResourceContainer $container) use ($isBlacklisted) {
-                if (!$isBlacklisted) {
-                    $container->addScriptTemplate(
-                        'Findologic::content.jqueryui.jqueryui-js'
-                    );
-
-                    $container->addStyleTemplate('Findologic::content.jqueryui.jqueryui-css');
-                    $container->addStyleTemplate('Findologic::content.jqueryui.jqueryui-structure-css');
-                    $container->addStyleTemplate('Findologic::content.jqueryui.jqueryui-theme-css');
-                }
-
+            function (ResourceContainer $container) {
                 $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
                 $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
 
@@ -150,17 +136,6 @@ class Middleware extends PlentyMiddleware
     public function after(Request $request, Response $response): Response
     {
         return $response;
-    }
-    
-    protected function isBlacklistedUri(string $uri): bool
-    {
-        foreach (self::BLACK_LIST as $blacklistedUri) {
-            if (strpos($uri, $blacklistedUri) !== false) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
