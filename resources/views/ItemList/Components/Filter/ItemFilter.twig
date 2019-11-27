@@ -43,7 +43,10 @@
             <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else-if="facet.type === 'select'">
-            <item-dropdown :facet="facet"></item-dropdown>
+            <div v-if="!facet.noAvailableFiltersText">
+                <item-dropdown :facet="facet"></item-dropdown>
+            </div>
+            <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else>
             <div class="form-check" v-for="value in facet.values" :key="value.id">
