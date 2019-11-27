@@ -1,13 +1,12 @@
 <script type="x/template" id="vue-item-filter">
-    <div v-if="facet.name" class="card col-md-4" :class="facet.cssClass">
+    {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
+    <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-4" :class="facet.cssClass">
         <div class="h3">${facet.name}</div>
         <div v-if="facet.type === 'price'">
-            {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
-            <item-filter-price v-if="facet.minValue !== facet.maxValue" :facet="facet"></item-filter-price>
+            <item-filter-price :facet="facet"></item-filter-price>
         </div>
         <div v-else-if="facet.type === 'range-slider'">
-            {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
-            <item-range-slider v-if="facet.minValue !== facet.maxValue" :facet="facet"></item-range-slider>
+            <item-range-slider :facet="facet"></item-range-slider>
         </div>
         <div v-else-if="facet.type === 'image'">
             <div class="form-check" v-for="value in facet.values" :key="value.id">
