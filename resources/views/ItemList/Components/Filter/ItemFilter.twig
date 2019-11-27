@@ -2,14 +2,14 @@
     <div v-if="facet.name" class="card col-md-4" :class="facet.cssClass">
         <div class="h3">${facet.name}</div>
         <div v-if="facet.type === 'price'">
-            <item-filter-price :facet="facet"></item-filter-price>
+            {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
+            <item-filter-price v-if="facet.minValue !== facet.maxValue" :facet="facet"></item-filter-price>
         </div>
-        {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
-        <div v-else-if="facet.type === 'range-slider' && facet.minValue !== facet.maxValue">
-            <item-range-slider :facet="facet"></item-range-slider>
+        <div v-else-if="facet.type === 'range-slider'">
+            {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
+            <item-range-slider v-if="facet.minValue !== facet.maxValue" :facet="facet"></item-range-slider>
         </div>
-        {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
-        <div v-else-if="facet.type === 'image' && facet.minValue !== facet.maxValue">
+        <div v-else-if="facet.type === 'image'">
             <div class="form-check" v-for="value in facet.values" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
                 <label :for="'option-' + value.id" class="form-check-label">
