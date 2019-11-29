@@ -1,5 +1,18 @@
 # Release Notes für FINDOLOGIC
 
+## 2.3.0 (2019-11-29)
+
+## Behoben
+
+* Das Abschicken einer Suche mit mehreren Wörtern wird nicht länger
+ Leerzeichen durch "+" Zeichen ersetzen.
+
+## Geändert
+
+* jQuery-UI wurde komplett entfernt und durch noUiSlider ersetzt, da es
+ Fehler in der Browser Konsole verursachte. Falls es Anpassungen am Styling des
+ Bereichsslider gibt, müssten diese überarbeitet werden.
+
 ## 2.2.0 (2019-11-21)
 
 ### Hinzugefügt
