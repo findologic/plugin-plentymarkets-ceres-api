@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9056416c535248245ee13c09e6fea5cc",
+    "content-hash": "f1ba9c6b457f45bcaee10eae54881863",
     "packages": [
         {
             "name": "findologic/http_request2",
@@ -183,16 +183,6 @@
                 "exception"
             ],
             "time": "2015-02-10T20:07:52+00:00"
-        },
-        {
-            "name": "plentymarkets/plugin-io",
-            "version": "4.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "4.4.2"
-            },
-            "type": "library"
         }
     ],
     "packages-dev": [
@@ -1829,6 +1819,16 @@
             ],
             "description": "Interface for plentymarkets plugin development with PHP 7",
             "time": "2019-03-27T15:57:44+00:00"
+        },
+        {
+            "name": "plentymarkets/plugin-io",
+            "version": "4.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-io",
+                "reference": "4.4.2"
+            },
+            "type": "library"
         },
         {
             "name": "psr/log",
