@@ -1,5 +1,18 @@
 # Release Notes for FINDOLOGIC
 
+## 2.3.0 (2019-11-29)
+
+### Fixed
+
+* Submitting a search with multiple words separated by a space character will
+ no longer cause the spaces to be replaced with a "+" sign.
+
+### Changed
+
+* jQuery-UI was completely removed and was replaced by noUiSlider, as it caused
+ errors in the browser console. If you have custom slider styles, they
+ may need to be adapted.
+
 ## 2.2.0 (2019-11-21)
 
 ### Added
