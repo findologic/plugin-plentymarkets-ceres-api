@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78f69ad94a27d78dd3f0ffe22d04d44e",
+    "content-hash": "f1ba9c6b457f45bcaee10eae54881863",
     "packages": [
         {
             "name": "findologic/http_request2",
@@ -1822,11 +1822,11 @@
         },
         {
             "name": "plentymarkets/plugin-io",
-            "version": "4.4.1",
+            "version": "4.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "4.4.1"
+                "reference": "4.4.2"
             },
             "type": "library"
         },

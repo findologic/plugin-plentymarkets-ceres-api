@@ -10,7 +10,7 @@
     "phpunit/phpunit": "^6",
     "plentymarkets/plugin-interface": "dev-fixed-return-types",
     "plentymarkets/plugin-ceres": "4.4.2",
-    "plentymarkets/plugin-io": "4.4.1"
+    "plentymarkets/plugin-io": "4.4.2"
   },
   "repositories": [
     {
@@ -18,11 +18,11 @@
       "package": [
         {
           "name": "plentymarkets/plugin-io",
-          "version": "4.4.1",
+          "version": "4.4.2",
           "source": {
             "type": "git",
             "url": "https://github.com/plentymarkets/plugin-io",
-            "reference": "4.4.1"
+            "reference": "4.4.2"
           }
         },
         {

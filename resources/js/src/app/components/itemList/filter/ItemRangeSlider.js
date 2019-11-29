@@ -25,17 +25,21 @@ Vue.component("item-range-slider", {
         this.valueFrom = values ? values.min : this.facet.minValue;
         this.valueTo = values ? values.max : this.facet.maxValue;
 
-        $(function() {
-            $("#" + self.sanitizedFacetId).slider({
+        $(document).ready(function () {
+            var element = document.getElementById(self.sanitizedFacetId);
+            var slider = window.noUiSlider.create(element, {
                 step: self.facet.step,
-                range: true,
-                min: self.facet.minValue,
-                max: self.facet.maxValue,
-                values: [ self.valueFrom, self.valueTo ],
-                slide: function( event, ui ) {
-                    self.valueFrom = ui.values[0];
-                    self.valueTo = ui.values[1];
+                start: [self.valueFrom, self.valueTo],
+                connect: true,
+                range: {
+                    'min': self.facet.minValue,
+                    'max': self.facet.maxValue
                 }
+            });
+
+            slider.on('update', function (ui) {
+                self.valueFrom = ui[0];
+                self.valueTo = ui[1];
             });
         });
     },
