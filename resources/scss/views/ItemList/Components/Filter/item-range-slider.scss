@@ -2,7 +2,10 @@
     display: inline-block;
 
     .fl-range-slider {
-        margin-top: 20px;
+        margin: 20px 0.7em 0 0.6em;
+    }
+    .noUi-connect {
+        background: #eee;
     }
     .fl-range-input {
         width: 50%;
@@ -38,14 +41,5 @@
             padding-left: 0.7em;
             padding-right: 2em;
         }
-    }
-}
-
-.fl-range-slider-container .fl-range-slider {
-    margin-left: 0.6em;
-    margin-right: 0.7em;
-
-    .noUi-connect {
-        background: #eee;
     }
 }
