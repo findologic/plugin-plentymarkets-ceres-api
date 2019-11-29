@@ -1,5 +1,6 @@
 <script type="x/template" id="vue-item-filter">
-    <div v-if="facet.name" class="card col-md-4" :class="facet.cssClass">
+    {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
+    <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-4" :class="facet.cssClass">
         <div class="h3">${facet.name}</div>
         <div v-if="facet.type === 'price'">
             <item-filter-price :facet="facet"></item-filter-price>
@@ -42,7 +43,10 @@
             <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else-if="facet.type === 'select'">
-            <item-dropdown :facet="facet"></item-dropdown>
+            <div v-if="!facet.noAvailableFiltersText">
+                <item-dropdown :facet="facet"></item-dropdown>
+            </div>
+            <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else>
             <div class="form-check" v-for="value in facet.values" :key="value.id">

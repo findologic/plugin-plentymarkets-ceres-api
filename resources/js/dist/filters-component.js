@@ -112,7 +112,10 @@ Vue.component("item-search", {
 
             _this.$store.commit("setItemListSearchString", urlParams.query);
 
-            _this.$refs.searchInput.value = urlParams.query ? urlParams.query : '';
+            var rawQuery = urlParams.query ? urlParams.query : '';
+            // Manually regex out all "+" signs as decodeURIComponent does not take care of that.
+            // If we wouldn't replace them with spaces, "+" signs would be displayed in the search field.
+            _this.$refs.searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
         });
     },
 
@@ -562,17 +565,21 @@ Vue.component("item-range-slider", {
         this.valueFrom = values ? values.min : this.facet.minValue;
         this.valueTo = values ? values.max : this.facet.maxValue;
 
-        $(function () {
-            $("#" + self.sanitizedFacetId).slider({
+        $(document).ready(function () {
+            var element = document.getElementById(self.sanitizedFacetId);
+            var slider = window.noUiSlider.create(element, {
                 step: self.facet.step,
-                range: true,
-                min: self.facet.minValue,
-                max: self.facet.maxValue,
-                values: [self.valueFrom, self.valueTo],
-                slide: function slide(event, ui) {
-                    self.valueFrom = ui.values[0];
-                    self.valueTo = ui.values[1];
+                start: [self.valueFrom, self.valueTo],
+                connect: true,
+                range: {
+                    'min': self.facet.minValue,
+                    'max': self.facet.maxValue
                 }
+            });
+
+            slider.on('update', function (ui) {
+                self.valueFrom = ui[0];
+                self.valueTo = ui[1];
             });
         });
     },

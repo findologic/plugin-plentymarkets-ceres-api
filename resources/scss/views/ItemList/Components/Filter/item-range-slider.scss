@@ -2,7 +2,10 @@
     display: inline-block;
 
     .fl-range-slider {
-        margin-top: 20px;
+        margin: 20px 0.7em 0 0.6em;
+    }
+    .noUi-connect {
+        background: #eee;
     }
     .fl-range-input {
         width: 50%;
@@ -18,18 +21,25 @@
         margin-left: 5px;
     }
     .fl-range-slider-submit-btn {
-        margin-top: 10px;
+        margin-top: 15px;
     }
 }
 
 @media screen and (max-width: 543px) {
-    .fl-range-slider-container {
+    .row .fl-range-slider-container {
         .fl-range-slider-submit-btn {
             width: 100%;
 
             & > .fa {
                 float: none;
             }
+        }
+        .fl-range-slider {
+            margin-right: 2em;
+        }
+        .fl-range-slider-submit-btn-container {
+            padding-left: 0.7em;
+            padding-right: 2em;
         }
     }
 }
