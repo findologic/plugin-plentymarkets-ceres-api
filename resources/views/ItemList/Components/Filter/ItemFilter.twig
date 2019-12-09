@@ -30,13 +30,15 @@
                     </label>
                     <div class="filter-badge">${ value.count }</div>
                 </div>
-                <div class="sub-category-container" v-if="value.items.length > 0">
-                    <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
-                        <input :id="'option-' + subCategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="subCategory.selected" @change="updateFacet(getSubCategoryValue(value, subCategory))" :disabled="isLoading">
-                        <label :for="'option-' + subCategory.id" class="form-check-label">
-                            ${ subCategory.name }
-                        </label>
-                        <div class="filter-badge">${ subCategory.count }</div>
+                <div v-if="value.selected">
+                    <div class="sub-category-container" v-if="value.items.length > 0">
+                        <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
+                            <input :id="'option-' + subCategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="subCategory.selected" @change="updateFacet(getSubCategoryValue(value, subCategory))" :disabled="isLoading">
+                            <label :for="'option-' + subCategory.id" class="form-check-label">
+                                ${ subCategory.name }
+                            </label>
+                            <div class="filter-badge">${ subCategory.count }</div>
+                        </div>
                     </div>
                 </div>
             </div>
