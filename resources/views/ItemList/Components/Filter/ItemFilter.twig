@@ -9,17 +9,23 @@
             <item-range-slider :facet="facet"></item-range-slider>
         </div>
         <div v-else-if="facet.type === 'image'">
-            <div class="form-check" v-for="value in facet.values" :key="value.id">
-                <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                <label :for="'option-' + value.id" class="form-check-label">
-                    <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
-                    <span v-show="!value.imageUrl">${ value.name }</span>
-                </label>
-                <div class="filter-badge">${ value.count }</div>
+            <div v-if="!facet.noAvailableFiltersText">
+                <div class="form-check" v-for="value in facet.values" :key="value.id">
+                    <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
+                    <label :for="'option-' + value.id" class="form-check-label">
+                        <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
+                        <span v-show="!value.imageUrl">${ value.name }</span>
+                    </label>
+                    <div class="filter-badge">${ value.count }</div>
+                </div>
             </div>
+            <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else-if="facet.type === 'color'">
-            <item-color-tiles :facet="facet"></item-color-tiles>
+            <div v-if="!facet.noAvailableFiltersText">
+                <item-color-tiles :facet="facet"></item-color-tiles>
+            </div>
+            <p v-if="facet.noAvailableFiltersText">${ facet.noAvailableFiltersText }</p>
         </div>
         <div v-else-if="facet.id === 'cat'">
             <div v-if="!facet.noAvailableFiltersText" class="form-check" v-for="value in facet.values" :key="value.id">
@@ -30,13 +36,15 @@
                     </label>
                     <div class="filter-badge">${ value.count }</div>
                 </div>
-                <div class="sub-category-container" v-if="value.items.length > 0">
-                    <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
-                        <input :id="'option-' + subCategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="subCategory.selected" @change="updateFacet(getSubCategoryValue(value, subCategory))" :disabled="isLoading">
-                        <label :for="'option-' + subCategory.id" class="form-check-label">
-                            ${ subCategory.name }
-                        </label>
-                        <div class="filter-badge">${ subCategory.count }</div>
+                <div v-if="value.selected">
+                    <div class="sub-category-container" v-if="value.items.length > 0">
+                        <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
+                            <input :id="'option-' + subCategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="subCategory.selected" @change="updateFacet(getSubCategoryValue(value, subCategory))" :disabled="isLoading">
+                            <label :for="'option-' + subCategory.id" class="form-check-label">
+                                ${ subCategory.name }
+                            </label>
+                            <div class="filter-badge">${ subCategory.count }</div>
+                        </div>
                     </div>
                 </div>
             </div>
