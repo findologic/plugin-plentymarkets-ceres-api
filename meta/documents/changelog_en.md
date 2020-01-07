@@ -1,5 +1,20 @@
 # Release Notes for FINDOLOGIC
 
+## 2.4.0 (2020-01-07)
+
+### Added
+
+* [PLENTY-179] Added a config option to disable CSS added by FINDOLOGIC for the
+ filter styles.
+
+### Fixed
+
+* [PLENTY-184] Fixed a bug that caused multi-language shops to always redirect
+ to the main shop.
+* [PLENTY-180] The plugin will no longer try to load a non-existing CSS file.
+* [PLENTY-176] The "no-filters-available" text will now be displayed for all filter types.
+* [PLENTY-183] Only categories for the current tree will be displayed.
+
 ## 2.3.0 (2019-11-29)
 
 ### Fixed
