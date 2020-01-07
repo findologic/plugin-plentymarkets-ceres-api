@@ -87,8 +87,10 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) {
-                $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
-                $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
+                if ($this->pluginConfig->get(Plugin::CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED)) {
+                    $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
+                    $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
+                }
 
                 $container->addScriptTemplate(
                     'Findologic::content.scripts',
@@ -101,7 +103,9 @@ class Middleware extends PlentyMiddleware
                     ]
                 );
 
-                $container->addStyleTemplate('Findologic::content.styles');
+                if ($this->pluginConfig->get(Plugin::CONFIG_FILTERS_STYLING_CSS_ENABLED)) {
+                    $container->addStyleTemplate('Findologic::content.styles');
+                }
             }, 0
         );
 

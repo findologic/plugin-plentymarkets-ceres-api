@@ -48,6 +48,47 @@
           }
         }
       }
+    },
+    "Config.FINDOLOGICStylingCSS": {
+      "label": "Config.FINDOLOGICStylingCSS",
+      "formFields": {
+        "filters_styling_css_enabled": {
+          "type": "selectBox",
+          "required": false,
+          "label": "Config.filtersStylingCSSEnabledLabel",
+          "options": {
+            "defaultValue": "1",
+            "selectBoxValues": [
+              {
+                "value": "0",
+                "caption": "Config.filtersStylingCSSDisabled"
+              },
+              {
+                "value": "1",
+                "caption": "Config.filtersStylingCSSEnabled"
+              }
+            ]
+          }
+        },
+        "load_no_ui_slider_styles_enabled": {
+          "type": "selectBox",
+          "required": false,
+          "label": "Config.loadNoUiSliderStylesEnabledLabel",
+          "options": {
+            "defaultValue": "1",
+            "selectBoxValues": [
+              {
+                "value": "0",
+                "caption": "Config.loadNoUiSliderStylesDisabled"
+              },
+              {
+                "value": "1",
+                "caption": "Config.loadNoUiSliderStylesEnabled"
+              }
+            ]
+          }
+        }
+      }
     }
   }
 }
