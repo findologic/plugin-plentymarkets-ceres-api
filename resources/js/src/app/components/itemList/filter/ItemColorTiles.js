@@ -14,7 +14,7 @@ Vue.component("item-color-tiles", {
 
     computed: {
         ...Vuex.mapState({
-            isLoading: state => state.itemList.isLoading
+            isLoading: state => state.itemList.isLoading,
         })
     },
 
