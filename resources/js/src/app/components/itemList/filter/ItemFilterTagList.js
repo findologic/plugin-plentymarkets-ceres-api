@@ -5,9 +5,24 @@ Vue.component("item-filter-tag-list", {
 
     delimiters: ["${", "}"],
 
-    props: [
-        "template"
-    ],
+    props:
+    {
+        template:
+            {
+                type: String,
+                default: "#vue-item-filter-tag-list"
+            },
+        marginClasses:
+            {
+                type: String,
+                default: null
+            },
+        marginInlineStyles:
+            {
+                type: String,
+                default: null
+            }
+    },
 
     computed: {
         tagList() {
