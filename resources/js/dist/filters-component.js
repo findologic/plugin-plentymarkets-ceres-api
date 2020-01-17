@@ -925,9 +925,11 @@ exports.default = {
                 if (_typeof(attributes[filter]) === 'object') {
                     var values = attributes[filter];
                     for (var value in values) {
+                        var filterValue = values[value].replace(/_/g, " > ").split('+'.replace(' '));
+
                         selectedFilters.push({
                             id: filter,
-                            name: values[value].replace(/_/g, " > ")
+                            name: filterValue
                         });
                     }
                     continue;
