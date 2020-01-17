@@ -743,7 +743,7 @@ exports.default = {
             for (i = 0; i < sal; i++) {
                 tmp = strArr[i].split('=');
                 key = fixStr(tmp[0]);
-                value = tmp.length < 2 ? '' : fixStr(tmp[1]);
+                value = tmp.length < 2 ? '' : fixStr(tmp[1]).replace(/\+/g, '%20');
 
                 while (key.charAt(0) === ' ') {
                     key = key.slice(1);
@@ -925,11 +925,9 @@ exports.default = {
                 if (_typeof(attributes[filter]) === 'object') {
                     var values = attributes[filter];
                     for (var value in values) {
-                        var filterValue = values[value].replace(/_/g, " > ").split('+').replace(' ');
-
                         selectedFilters.push({
                             id: filter,
-                            name: filterValue
+                            name: values[value].replace(/_/g, " > ")
                         });
                     }
                     continue;
