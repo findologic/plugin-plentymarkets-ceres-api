@@ -61,7 +61,7 @@ export default {
             for (i = 0; i < sal; i++) {
                 tmp = strArr[i].split('=');
                 key = fixStr(tmp[0]);
-                value = (tmp.length < 2) ? '' : fixStr(tmp[1]);
+                value = (tmp.length < 2) ? '' : fixStr(tmp[1]).replace(/\+/g, ' ');
 
                 while (key.charAt(0) === ' ') {
                     key = key.slice(1);
