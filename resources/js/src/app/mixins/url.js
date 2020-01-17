@@ -240,7 +240,7 @@ export default {
                 if (typeof attributes[filter] === 'object') {
                     let values = attributes[filter];
                     for (var value in values) {
-                        let filterValue = values[value].replace(/_/g, " > ").split('+'.replace(' '));
+                        let filterValue = values[value].replace(/_/g, " > ").split('+').replace(' ');
 
                         selectedFilters.push({
                             id: filter,
