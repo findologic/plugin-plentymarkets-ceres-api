@@ -1,5 +1,11 @@
 # Release Notes for FINDOLOGIC
 
+## 2.4.1 (2020-01-17)
+
+### Fixed
+
+* [PLENTY-186] Restore compatibility with Ceres version v4.5.0.
+
 ## 2.4.0 (2020-01-07)
 
 ### Added

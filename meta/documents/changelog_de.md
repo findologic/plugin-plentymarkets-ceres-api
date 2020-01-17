@@ -1,13 +1,19 @@
 # Release Notes für FINDOLOGIC
 
+## 2.4.1 (2020-01-17)
+
+### Behoben
+
+* [PLENTY-186] Kompatibilität mit der Ceres Version v4.5.0 wurde wiederhergestellt.
+
 ## 2.4.0 (2020-01-07)
 
-### Added
+### Hinzugefügt
 
 * [PLENTY-179] Es gibt nun eine Konfigurationsoption, um CSS von FINDOLOGIC
  für das Filter-Styling, zu deaktivieren.
 
-### Fixed
+### Behoben
 
 * [PLENTY-184] Ein Fehler wurde behoben welcher verursachte, dass das Abschicken
  einer Suche immer auf den Hauptshop verwies.
