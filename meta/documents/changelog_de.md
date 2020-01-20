@@ -1,5 +1,40 @@
 # Release Notes für FINDOLOGIC
 
+## 2.4.1 (2020-01-17)
+
+### Behoben
+
+* [PLENTY-186] Kompatibilität mit der Ceres Version v4.5.0 wurde wiederhergestellt.
+
+## 2.4.0 (2020-01-07)
+
+### Hinzugefügt
+
+* [PLENTY-179] Es gibt nun eine Konfigurationsoption, um CSS von FINDOLOGIC
+ für das Filter-Styling, zu deaktivieren.
+
+### Behoben
+
+* [PLENTY-184] Ein Fehler wurde behoben welcher verursachte, dass das Abschicken
+ einer Suche immer auf den Hauptshop verwies.
+* [PLENTY-180] Das Plugin wird nicht länger versuchen eine nicht existierende
+ CSS Datei zu laden.
+* [PLENTY-176] Der "keine weiteren Filter" Text wird nun für alle Filter Typen angezeigt.
+* [PLENTY-183] Nur Kategorien des aktuellen Kategoriebaums werden angezeigt.
+
+## 2.3.0 (2019-11-29)
+
+## Behoben
+
+* Das Abschicken einer Suche mit mehreren Wörtern wird nicht länger
+ Leerzeichen durch "+" Zeichen ersetzen.
+
+## Geändert
+
+* jQuery-UI wurde komplett entfernt und durch noUiSlider ersetzt, da es
+ Fehler in der Browser Konsole verursachte. Falls es Anpassungen am Styling des
+ Bereichsslider gibt, müssten diese überarbeitet werden.
+
 ## 2.2.0 (2019-11-21)
 
 ### Hinzugefügt
