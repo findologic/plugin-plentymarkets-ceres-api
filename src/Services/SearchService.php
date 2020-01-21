@@ -219,7 +219,7 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $category ? $category->getCurrentCategory() : null
         );
-        $this->results = $this->responseParser->parse($this->client->call($apiRequest));
+        $this->results = $this->responseParser->parse($request, $this->client->call($apiRequest));
 
         return $this->results;
     }
