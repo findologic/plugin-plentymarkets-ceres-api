@@ -16,7 +16,7 @@
     }, false);
 
     window.flSearchSubmit = false;
-    window.flSearchSubmitEvent = document.createEvent('fl-search-submit');
+    window.flSearchSubmitEvent = document.createEvent('Event');
     window.flSearchSubmitEvent.initEvent('fl-search-submit', true, true);
     document.addEventListener('fl-search-submit', function (e) {
         e.stopImmediatePropagation();
