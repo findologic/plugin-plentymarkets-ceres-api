@@ -1,5 +1,13 @@
 # Release Notes for FINDOLOGIC
 
+## 2.4.2 (2020-02-03)
+
+### Fixed
+
+* [PLENTY-190] Clicking on mobile Smart Suggest suggestions will no longer
+ hide the mobile Smart Suggest without submitting the search. This includes
+ clicks on "Show all results" for the regular Smart Suggest.
+
 ## 2.4.1 (2020-01-17)
 
 ### Fixed
