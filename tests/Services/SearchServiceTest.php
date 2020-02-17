@@ -103,6 +103,57 @@ class SearchServiceTest extends TestCase
     }
 
     /**
+     * @dataProvider redirectToProductPageOnDoSearchProvider
+     * @runInSeparateProcess
+     */
+    public function testRedirectToProductPageOnDoSearch(
+        $itemSearchServiceResultsAll,
+        $itemSearchResultsOneProduct,
+        $shopUrl,
+        $dataQueryInfoMessage,
+        $redirectUrl
+    ) {
+        /** @var Request|HttpRequest|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
+        if ($redirectUrl) {
+            $this->requestBuilder->expects($this->once())->method('getShopUrl')->willReturn($shopUrl);
+        } else {
+            $this->requestBuilder->expects($this->never())->method('getShopUrl');
+        }
+        $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
+
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $responseMock->expects($this->once())->method('getVariationIds')->willReturn([1, 2, 3]);
+        if ($redirectUrl) {
+            $responseMock->expects($this->once())->method('getData')->with(Response::DATA_QUERY_INFO_MESSAGE)->willReturn($dataQueryInfoMessage);
+        }
+        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
+
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods(['getResults'])->getMock();
+        $itemSearchServiceMock->expects($this->at(0))->method('getResults')->willReturn($itemSearchServiceResultsAll);
+        if ($redirectUrl) {
+            $itemSearchServiceMock->expects($this->at(1))->method('getResults')->willReturn($itemSearchResultsOneProduct);
+        }
+
+        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'handleProductRedirectUrl']);
+        $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
+        if ($redirectUrl) {
+            $searchServiceMock->expects($this->once())->method('handleProductRedirectUrl')->with($redirectUrl);
+        } else {
+            $searchServiceMock->expects($this->never())->method('handleProductRedirectUrl');
+        }
+
+        /** @var ExternalSearch|MockObject $searchQueryMock */
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
+        $searchQueryMock->categoryId = null;
+
+        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+
+        $searchServiceMock->doSearch($requestMock, $searchQueryMock);
+    }
+
+    /**
      * @param array|null $methods
      * @return SearchService|MockObject
      * @throws ReflectionException
@@ -122,5 +173,126 @@ class SearchServiceTest extends TestCase
             ->setMethods($methods);
 
         return $searchServiceMock->getMock();
+    }
+
+    public function redirectToProductPageOnDoSearchProvider(): array
+    {
+        return [
+            'One product found' => [
+                [
+                    1011 => [
+                        'total' => 1
+                    ]
+                ],
+                [
+                    1011 => [
+                        'documents' => [
+                            [
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'https://www.test.com',
+                [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'https://www.test.com/test-product_11_1011'
+            ],
+            'Multiple products found' => [
+                [
+                    1011 => [
+                        'total' => 1
+                    ],
+                    1022 => [
+                        'total' => 2
+                    ]
+                ],
+                [
+                    1011 => [
+                        'documents' => [
+                            [
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'https://www.test.com',
+                [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                null
+            ],
+            'One product found and query string type is corrected' => [
+                [
+                    1011 => [
+                        'total' => 1
+                    ]
+                ],
+                [
+                    1011 => [
+                        'documents' => [
+                            [
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'https://www.test.com',
+                [
+                    'queryStringType' => 'corrected'
+                ],
+                null
+            ],
+            'One product found and query string type is improved' => [
+                [
+                    1011 => [
+                        'total' => 1
+                    ]
+                ],
+                [
+                    1011 => [
+                        'documents' => [
+                            [
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'https://www.test.com',
+                [
+                    'queryStringType' => 'improved'
+                ],
+                null
+            ],
+        ];
     }
 }
