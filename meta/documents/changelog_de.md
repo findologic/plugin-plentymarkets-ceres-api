@@ -1,5 +1,35 @@
 # Release Notes für FINDOLOGIC
 
+## 2.4.2 (2020-02-03)
+
+### Behoben
+
+* [PLENTY-190] Klicks auf Vorschläge in der Mobilen Smart Suggest, werden nicht länger
+ die mobile Smart Suggest ausblenden, ohne die Suche auszuführen. Dies inkludiert
+ auch Klicks auf "Alle Ergebnisse anzeigen" in der normalen Smart Suggest.
+
+## 2.4.1 (2020-01-17)
+
+### Behoben
+
+* [PLENTY-186] Kompatibilität mit der Ceres Version v4.5.0 wurde wiederhergestellt.
+
+## 2.4.0 (2020-01-07)
+
+### Hinzugefügt
+
+* [PLENTY-179] Es gibt nun eine Konfigurationsoption, um CSS von FINDOLOGIC
+ für das Filter-Styling, zu deaktivieren.
+
+### Behoben
+
+* [PLENTY-184] Ein Fehler wurde behoben welcher verursachte, dass das Abschicken
+ einer Suche immer auf den Hauptshop verwies.
+* [PLENTY-180] Das Plugin wird nicht länger versuchen eine nicht existierende
+ CSS Datei zu laden.
+* [PLENTY-176] Der "keine weiteren Filter" Text wird nun für alle Filter Typen angezeigt.
+* [PLENTY-183] Nur Kategorien des aktuellen Kategoriebaums werden angezeigt.
+
 ## 2.3.0 (2019-11-29)
 
 ## Behoben
