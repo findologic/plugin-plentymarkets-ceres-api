@@ -14,6 +14,7 @@ const minify = require("gulp-minify");
 const source = require("vinyl-source-stream");
 const sourcemaps = require("gulp-sourcemaps");
 const cleanCss = require("gulp-clean-css");
+const symlink = require('gulp-symlink');
 
 gulp.task("js", () => {
     var builder = browserify({
@@ -66,6 +67,11 @@ gulp.task('sass', function () {
         .pipe(cleanCss())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('resources/css'));
+});
+
+gulp.task('install-hooks', function () {
+    return gulp.src('.pre-commit')
+        .pipe(symlink('.git/hooks/pre-commit', {force: true}));
 });
 
 gulp.task("default", gulp.series("js", "sass"));
