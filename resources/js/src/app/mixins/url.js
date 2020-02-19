@@ -178,7 +178,7 @@ export default {
             }
 
             params[Constants.PARAMETER_ATTRIBUTES] = attributes;
-            params[Constants.PARAMETER_PAGE] = 1;
+            delete params[Constants.PARAMETER_PAGE];
 
             document.location.search = '?' + $.param(params);
         },
@@ -291,7 +291,7 @@ export default {
             }
 
             params[Constants.PARAMETER_ATTRIBUTES] = attributes;
-            params[Constants.PARAMETER_PAGE] = 1;
+            delete params[Constants.PARAMETER_PAGE];
 
             document.location.search = '?' + $.param(params);
         },
@@ -406,7 +406,7 @@ export default {
          */
         removeAllAttribsAndRefresh() {
             let params = this.getSearchParams();
-            params[Constants.PARAMETER_PAGE] = 1;
+            delete params[Constants.PARAMETER_PAGE];
             delete params[Constants.PARAMETER_ATTRIBUTES];
             document.location.search = '?' + $.param(params);
         }
