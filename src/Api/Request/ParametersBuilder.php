@@ -79,6 +79,11 @@ class ParametersBuilder
             }
         }
 
+        if (isset($parameters[Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY])
+            && $parameters[Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY] != false) {
+            $request->setParam(Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY, true);
+        }
+
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
             $request->setParam('selected', ['cat' => [$categoryFullName]]);
         }
