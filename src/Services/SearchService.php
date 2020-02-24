@@ -255,7 +255,6 @@ class SearchService implements SearchServiceInterface
             $externalSearchFactories[$id] = $this->getSearchFactory($id);
         }
 
-        $this->logger->critical(json_encode($itemSearchService->getResults($externalSearchFactories)));
         // Return only the variation IDs which actually yielded a result.
         return array_keys(array_filter($itemSearchService->getResults($externalSearchFactories), function ($result) {
             return $result['total'] > 0;
