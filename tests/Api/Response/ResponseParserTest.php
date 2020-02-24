@@ -5,6 +5,7 @@ namespace Findologic\Tests\Api\Response;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
+use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
@@ -53,7 +54,10 @@ class ResponseParserTest extends TestCase
             ->method('handleLandingPage')
             ->with('http://www.example.com/imprint');
 
-        $results = $responseParserMock->parse($this->getResponse());
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
+
+        $results = $responseParserMock->parse($requestMock, $this->getResponse());
         $this->assertEquals(3, $results->getResultsCount());
 
         $promotionsData = $results->getData(Response::DATA_PROMOTION);
@@ -64,27 +68,33 @@ class ResponseParserTest extends TestCase
     }
 
     /**
-     * @dataProvider smartDidYouMeanProvider
+     * @dataProvider queryInfoMessageProvider
      *
+     * @param array $requestParams
      * @param string $response
      * @param array|null $expectedResult
      */
-    public function testSmartDidYouMeanParsing(string $response, $expectedResult)
+    public function testQueryInfoMessageParsing(array $requestParams, string $response, $expectedResult)
     {
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods(null)->getMock();
         /** @var ResponseParser|MockObject $responseParserMock */
         $responseParserMock = $this->getResponseParserMock(['createResponseObject', 'handleLandingPage']);
         $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
 
-        $results = $responseParserMock->parse($response);
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $requestMock->expects($this->once())->method('all')->willReturn($requestParams);
 
-        $this->assertEquals($results->getData(Response::DATA_SMART_DID_YOU_MEAN), $expectedResult);
+        $results = $responseParserMock->parse($requestMock, $response);
+
+        $this->assertEquals($results->getData(Response::DATA_QUERY_INFO_MESSAGE), $expectedResult);
     }
 
-    public function smartDidYouMeanProvider()
+    public function queryInfoMessageProvider()
     {
         return [
             'No Smart Did-You-Mean data provided' => [
+                [],
                 '<?xml version="1.0"?>
                 <searchResult>
                     <servers>
@@ -101,9 +111,17 @@ class ResponseParserTest extends TestCase
                     <products/>
                     <filters/>
                 </searchResult>',
-                null
+                [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => null,
+                    'selectedVendorName' => null
+                ]
             ],
             'Did-You-Mean query present' => [
+                [],
                 '<?xml version="1.0"?>
                 <searchResult>
                     <servers>
@@ -122,12 +140,16 @@ class ResponseParserTest extends TestCase
                     <filters/>
                 </searchResult>',
                 [
-                    'type' => 'did-you-mean',
-                    'alternative_query' => 'TestDidYouMeanQuery',
-                    'original_query' => 'Test'
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => 'TestDidYouMeanQuery',
+                    'currentQuery' => 'Test',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => null,
+                    'selectedVendorName' => null
                 ]
             ],
             'Improved query present' => [
+                [],
                 '<?xml version="1.0"?>
                 <searchResult>
                     <servers>
@@ -146,12 +168,16 @@ class ResponseParserTest extends TestCase
                     <filters/>
                 </searchResult>',
                 [
-                    'type' => 'improved',
-                    'alternative_query' => 'Test',
-                    'original_query' => 'OriginalTest'
+                    'originalQuery' => 'OriginalTest',
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => 'improved',
+                    'selectedCategoryName' => null,
+                    'selectedVendorName' => null
                 ]
             ],
             'Corrected query present' => [
+                [],
                 '<?xml version="1.0"?>
                 <searchResult>
                     <servers>
@@ -170,9 +196,147 @@ class ResponseParserTest extends TestCase
                     <filters/>
                 </searchResult>',
                 [
-                    'type' => 'corrected',
-                    'alternative_query' => 'Test',
-                    'original_query' => 'OriginalTest'
+                    'originalQuery' => 'OriginalTest',
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => 'corrected',
+                    'selectedCategoryName' => null,
+                    'selectedVendorName' => null
+                ]
+            ],
+            'Category selected' => [
+                [
+                    'attrib' => [
+                        'cat' => [
+                            'TestCat'
+                        ]
+                    ]
+                ],
+                '<?xml version="1.0"?>
+                <searchResult>
+                    <servers>
+                        <frontend>frontend.findologic.com</frontend>
+                        <backend>backend.findologic.com</backend>
+                    </servers>
+                    <query>
+                        <limit first="0" count="10"/>
+                        <queryString>Test</queryString>
+                        <searchedWordCount>1</searchedWordCount>
+                        <foundWordCount>1</foundWordCount>
+                    </query>
+                    <results><count>0</count></results>
+                    <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => 'TestCat',
+                    'selectedVendorName' => null
+                ]
+            ],
+            'Child category selected' => [
+                [
+                    'attrib' => [
+                        'cat' => [
+                            'TestCat_TestChildCat'
+                        ]
+                    ]
+                ],
+                '<?xml version="1.0"?>
+                    <searchResult>
+                        <servers>
+                            <frontend>frontend.findologic.com</frontend>
+                            <backend>backend.findologic.com</backend>
+                        </servers>
+                        <query>
+                            <limit first="0" count="10"/>
+                            <queryString>Test</queryString>
+                            <searchedWordCount>1</searchedWordCount>
+                            <foundWordCount>1</foundWordCount>
+                        </query>
+                        <results><count>0</count></results>
+                        <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => 'TestChildCat',
+                    'selectedVendorName' => null
+                ]
+            ],
+            'Vendor selected' => [
+                [
+                    'attrib' => [
+                        'vendor' => [
+                            'TestVendor'
+                        ]
+                    ]
+                ],
+                '<?xml version="1.0"?>
+                    <searchResult>
+                        <servers>
+                            <frontend>frontend.findologic.com</frontend>
+                            <backend>backend.findologic.com</backend>
+                        </servers>
+                        <query>
+                            <limit first="0" count="10"/>
+                            <queryString>Test</queryString>
+                            <searchedWordCount>1</searchedWordCount>
+                            <foundWordCount>1</foundWordCount>
+                        </query>
+                        <results><count>0</count></results>
+                        <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => null,
+                    'selectedVendorName' => 'TestVendor'
+                ]
+            ],
+            'Category and vendor selected' => [
+                [
+                    'attrib' => [
+                        'cat' => [
+                            'TestCat_TestChildCat'
+                        ],
+                        'vendor' => [
+                            'TestVendor'
+                        ]
+                    ]
+                ],
+                '<?xml version="1.0"?>
+                    <searchResult>
+                        <servers>
+                            <frontend>frontend.findologic.com</frontend>
+                            <backend>backend.findologic.com</backend>
+                        </servers>
+                        <query>
+                            <limit first="0" count="10"/>
+                            <queryString>Test</queryString>
+                            <searchedWordCount>1</searchedWordCount>
+                            <foundWordCount>1</foundWordCount>
+                        </query>
+                        <results><count>0</count></results>
+                        <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => 'TestChildCat',
+                    'selectedVendorName' => 'TestVendor'
                 ]
             ]
         ];

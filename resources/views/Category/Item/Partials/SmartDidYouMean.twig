@@ -1,22 +1,5 @@
 <div class="row mt-3">
     <div class="col-12">
-        {% if not sdym or sdym.type == 'did-you-mean' %}
-            <h1 class="h2" id="searchPageTitle">{{ trans("Ceres::Template.itemSearchResults") }} {{ searchString }}</h1>
-        {% else %}
-            <h1 class="h2" id="searchPageTitle">{{ trans("Ceres::Template.itemSearchResults") }} {{ sdym.alternative_query }}</h1>
-        {% endif %}
+        <h1 class="h2" id="searchPageTitle">{{ query_info_message | raw }}</h1>
     </div>
-    {% if sdym %}
-        <div class="col-12">
-            <p>
-                {% if sdym.type == 'did-you-mean' %}
-                    {{ trans("Findologic::Template.didYouMeanQuery", {"alternativeQuery": sdym.alternative_query}) | raw }}
-                {% elseif sdym.type == 'improved' %}
-                    {{ trans("Findologic::Template.improvedQuery", {"alternativeQuery": sdym.alternative_query, "originalQuery": sdym.original_query}) | raw }}
-                {% elseif sdym.type == 'corrected' %}
-                    {{ trans("Findologic::Template.correctedQuery", {"alternativeQuery": sdym.alternative_query, "originalQuery": sdym.original_query}) }}
-                {% endif %}
-            </p>
-        </div>
-    {% endif %}
 </div>

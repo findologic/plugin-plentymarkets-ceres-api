@@ -3,6 +3,7 @@
 namespace Findologic\Api\Response;
 
 use Findologic\Constants\Plugin;
+use Plenty\Plugin\Translation\Translator;
 
 /**
  * Class Response
@@ -17,9 +18,19 @@ class Response
     const DATA_RESULTS = 'results';
     const DATA_PRODUCTS = 'products';
     const DATA_FILTERS = 'filters';
-    const DATA_SMART_DID_YOU_MEAN = 'smart_did_you_mean';
+    const DATA_QUERY_INFO_MESSAGE = 'query_info_message';
 
     protected $data = [];
+
+    /**
+     * @var Translator
+     */
+    protected $translator;
+
+    public function __construct(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * @param $key
@@ -89,5 +100,111 @@ class Response
         }
 
         return $this->data[self::DATA_RESULTS]['count'];
+    }
+
+    public function getQueryInfoMessage(): string
+    {
+        $dataQueryInfoMessage = $this->getData(self::DATA_QUERY_INFO_MESSAGE);
+
+        if (empty($dataQueryInfoMessage)) {
+            return '';
+        }
+
+        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
+        $alternativeQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? $dataQueryInfoMessage['didYouMeanQuery']
+            : $dataQueryInfoMessage['currentQuery'];
+        $originalQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? $dataQueryInfoMessage['currentQuery']
+            : $dataQueryInfoMessage['originalQuery'];
+
+        if ($type === 'corrected') {
+            return $this->translator->trans(
+                'Findologic::Template.correctedQuery',
+                [
+                    'originalQuery' => $originalQuery,
+                    'alternativeQuery' => $alternativeQuery
+                ]
+            );
+        } else if ($type === 'improved') {
+            return $this->translator->trans(
+                'Findologic::Template.improvedQuery',
+                [
+                    'originalQuery' => $originalQuery,
+                    'alternativeQuery' => $alternativeQuery
+                ]
+            );
+        } else if ($dataQueryInfoMessage['currentQuery']
+            && !empty($dataQueryInfoMessage['currentQuery'])) {
+            return $this->translator->trans(
+                'Findologic::Template.queryInfoMessageQuery',
+                [
+                    'query' => $dataQueryInfoMessage['currentQuery'],
+                    'hits' => $this->getResultsCount()
+                ]
+            );
+        } else if ($dataQueryInfoMessage['selectedCategoryName']) {
+            return $this->translator->trans(
+                'Findologic::Template.queryInfoMessageCat',
+                [
+                    'filterName' => $this->getCategoryFilterName(),
+                    'cat' => $dataQueryInfoMessage['selectedCategoryName'],
+                    'hits' => $this->getResultsCount()
+                ]
+            );
+        } else if ($dataQueryInfoMessage['selectedVendorName']) {
+            return $this->translator->trans(
+                'Findologic::Template.queryInfoMessageVendor',
+                [
+                    'filterName' => $this->getVendorFilterName(),
+                    'vendor' => $dataQueryInfoMessage['selectedVendorName'],
+                    'hits' => $this->getResultsCount()
+                ]
+            );
+        } else {
+            return $this->translator->trans(
+                'Findologic::Template.queryInfoMessageDefault',
+                [
+                    'hits' => $this->getResultsCount()
+                ]
+            );
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getCategoryFilterName()
+    {
+        if (empty($filters = $this->getData(Response::DATA_FILTERS))) {
+            return null;
+        }
+
+        foreach ($filters as $filter) {
+            if ($filter['id'] === 'cat') {
+                return $filter['name'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getVendorFilterName()
+    {
+        if (empty($filters = $this->getData(Response::DATA_FILTERS))) {
+            return null;
+        }
+
+        foreach ($filters as $filter) {
+            if ($filter['id'] === 'vendor') {
+                return $filter['name'];
+            }
+        }
+
+        return null;
     }
 }
