@@ -2,16 +2,21 @@
 
 namespace Findologic\Containers;
 
+use Plenty\Plugin\Templates\Twig;
 use Findologic\Services\SearchService;
 use Findologic\Api\Response\Response;
-use Plenty\Plugin\Templates\Twig;
 
 /**
- * Class SearchFilterContainer
+ * Class SmartDidYouMeanContainer
  * @package Findologic\Containers
  */
-class SearchFilterContainer
+class SmartDidYouMeanContainer
 {
+    /**
+     * @param Twig $twig
+     * @param SearchService $searchService
+     * @return string
+     */
     public function call(Twig $twig, SearchService $searchService):string
     {
         if (!$searchService->getResults()) {
@@ -21,10 +26,9 @@ class SearchFilterContainer
         $searchResults = $searchService->getResults();
 
         return $twig->render(
-            'Findologic::Category.Item.Partials.SearchFilters',
+            'Findologic::Category.Item.Partials.SmartDidYouMean',
             [
-                'resultsCount' => $searchResults->getResultsCount(),
-                'facets' => $searchResults->getData(Response::DATA_FILTERS)
+                'query_info_message' => $searchResults->getQueryInfoMessage()
             ]
         );
     }

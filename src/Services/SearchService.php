@@ -141,6 +141,12 @@ class SearchService implements SearchServiceInterface
         $results = $this->search($request, $externalSearch);
         $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
+        if ($this->shouldRedirectToProductDetailPage($productsIds)) {
+            if ($redirectUrl = $this->getProductDetailUrl($productsIds[0])) {
+                $this->handleProductRedirectUrl($redirectUrl);
+            }
+        }
+
         /** @var ExternalSearch $searchQuery */
         $externalSearch->setResults($productsIds, $results->getResultsCount());
     }
@@ -219,7 +225,7 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $category ? $category->getCurrentCategory() : null
         );
-        $this->results = $this->responseParser->parse($this->client->call($apiRequest));
+        $this->results = $this->responseParser->parse($request, $this->client->call($apiRequest));
 
         return $this->results;
     }
@@ -235,6 +241,11 @@ class SearchService implements SearchServiceInterface
         return $response === Plugin::API_ALIVE_RESPONSE_BODY;
     }
 
+    public function handleProductRedirectUrl(string $url): void
+    {
+        header('Location: ' . $url);
+    }
+
     private function filterInvalidVariationIds(array $ids)
     {
         $externalSearchFactories = [];
@@ -248,5 +259,44 @@ class SearchService implements SearchServiceInterface
         return array_keys(array_filter($itemSearchService->getResults($externalSearchFactories), function ($result) {
             return $result['total'] > 0;
         }));
+    }
+
+    private function shouldRedirectToProductDetailPage(array $productsIds): bool
+    {
+        if (count($productsIds) !== 1) {
+            return false;
+        }
+
+        $dataQueryInfoMessage = $this->getResults()->getData(Response::DATA_QUERY_INFO_MESSAGE);
+
+        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
+
+        return $type !== 'corrected' && $type !== 'improved';
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getProductDetailUrl(int $productId)
+    {
+        /** @var ItemSearchService $itemSearchService */
+        $itemSearchService = $this->getItemSearchService();
+
+        $externalSearchFactories[$productId] = $this->getSearchFactory($productId);
+
+        $result = $itemSearchService->getResults($externalSearchFactories);
+
+        if (empty($result[$productId]['documents'])) {
+            return null;
+        }
+
+        $productData = $result[$productId]['documents'][0]['data'];
+
+        $urlPath = $productData['texts']['urlPath'];
+        $itemId = $productData['item']['id'];
+        $variationId = $productId;
+
+        return sprintf('%s/%s_%s_%s', $this->requestBuilder->getShopUrl(), $urlPath, $itemId, $variationId);
     }
 }

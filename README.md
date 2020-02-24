@@ -29,6 +29,12 @@ Install node dependencies:
 $ npm install
 ```
 
+Install git hooks:
+
+```
+$ gulp install-hooks
+```
+
 ### Development
 
 Run following commands if JS or CSS changes were made respectively:
