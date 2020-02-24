@@ -46,6 +46,12 @@
       "name": "Promotion",
       "description": "Display promotion banner",
       "defaultLayoutContainer": "Findologic::CategoryItem.Promotion"
+    },
+    {
+      "key": "Findologic\\Containers\\SmartDidYouMeanContainer",
+      "name": "Smart Did-You-Mean",
+      "description": "Display Smart Did-You-Mean info for the current search",
+      "defaultLayoutContainer": "Findologic::CategoryItem.SmartDidYouMean"
     }
   ],
   "dependencies": {
@@ -56,6 +62,12 @@
       "key": "CategoryItem.Promotion",
       "name": "Category item list: Add content to main container",
       "description": "Provides content for promotion banners (search and category pages only)",
+      "multiple": false
+    },
+    {
+      "key": "CategoryItem.SmartDidYouMean",
+      "name": "Category item list: Add alternative searchwords to the search page title",
+      "description": "Adds the Smart Did-You-Mean data right beneath the search page title",
       "multiple": false
     }
   ]

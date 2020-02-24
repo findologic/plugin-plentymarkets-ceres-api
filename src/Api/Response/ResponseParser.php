@@ -7,6 +7,8 @@ use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Constants\Plugin;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
+use SimpleXMLElement;
+use Plenty\Plugin\Http\Request as HttpRequest;
 
 /**
  * Class ResponseParser
@@ -24,17 +26,15 @@ class ResponseParser
      */
     protected $logger;
 
-    public function __construct(FiltersParser $filtersParser, LoggerFactory $loggerFactory)
-    {
+    public function __construct(
+        FiltersParser $filtersParser,
+        LoggerFactory $loggerFactory
+    ) {
         $this->filtersParser = $filtersParser;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
-    /**
-     * @param string $responseData
-     * @return Response
-     */
-    public function parse($responseData)
+    public function parse(HttpRequest $request, string $responseData): Response
     {
         /** @var Response $response */
         $response = $this->createResponseObject();
@@ -51,6 +51,7 @@ class ResponseParser
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->filters));
+            $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
         } catch (Exception $e) {
             $this->logger->warning('Could not parse response from server.');
             $this->logger->logException($e);
@@ -61,7 +62,7 @@ class ResponseParser
 
     /**
      * @param string $xmlString
-     * @return \SimpleXMLElement
+     * @return SimpleXMLElement
      * @throws Exception
      */
     public function loadXml($xmlString = '')
@@ -91,10 +92,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseServers(\SimpleXMLElement $data)
+    protected function parseServers(SimpleXMLElement $data)
     {
         $servers = [];
 
@@ -107,10 +108,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseQuery(\SimpleXMLElement $data)
+    protected function parseQuery(SimpleXMLElement $data)
     {
         $query = [];
 
@@ -127,10 +128,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return string|null
      */
-    protected function parseLandingPage(\SimpleXMLElement $data)
+    protected function parseLandingPage(SimpleXMLElement $data)
     {
         if (!isset($data->landingPage)
             || empty($data->landingPage->attributes())
@@ -143,10 +144,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parsePromotion(\SimpleXMLElement $data)
+    protected function parsePromotion(SimpleXMLElement $data)
     {
         $promotion = [];
 
@@ -159,10 +160,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseResults(\SimpleXMLElement $data)
+    protected function parseResults(SimpleXMLElement $data)
     {
         $results = [];
 
@@ -174,10 +175,10 @@ class ResponseParser
     }
 
     /**
-     * @param \SimpleXMLElement $data
+     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseProducts(\SimpleXMLElement $data)
+    protected function parseProducts(SimpleXMLElement $data)
     {
         $products = [];
 
@@ -197,5 +198,56 @@ class ResponseParser
         }
 
         return $products;
+    }
+
+    protected function parseQueryInfoMessage(HttpRequest $request, SimpleXMLElement $data): array
+    {
+        if (empty($data->query)) {
+            return [];
+        }
+
+        $originalQuery = isset($data->query->originalQuery) ? $data->query->originalQuery->__toString() : null;
+        $didYouMeanQuery = isset($data->query->didYouMeanQuery) ? $data->query->didYouMeanQuery->__toString() : null;
+        $currentQuery = isset($data->query->queryString) ? $data->query->queryString->__toString() : null;
+        $queryStringType = isset($data->query->queryString->attributes()->type)
+            ? $data->query->queryString->attributes()->type->__toString()
+            : null;
+
+        $requestParams = (array) $request->all();
+
+        return [
+            'originalQuery' => $originalQuery,
+            'didYouMeanQuery' => $didYouMeanQuery,
+            'currentQuery' => $currentQuery,
+            'queryStringType' => $queryStringType,
+            'selectedCategoryName' => $this->getSelectedCategoryName($requestParams),
+            'selectedVendorName' => $this->getSelectedVendorName($requestParams)
+        ];
+    }
+
+    /**
+     * @param array $requestParams
+     * @return string|null
+     */
+    private function getSelectedCategoryName(array $requestParams)
+    {
+        $selectedCategory = $requestParams['attrib']['cat'][0] ?? null;
+
+        if (strpos($selectedCategory, '_') !== false) {
+            $categories = explode('_', $selectedCategory);
+
+            $selectedCategory = end($categories);
+        }
+
+        return $selectedCategory;
+    }
+
+    /**
+     * @param array $requestParams
+     * @return string|null
+     */
+    private function getSelectedVendorName(array $requestParams)
+    {
+        return $requestParams['attrib']['vendor'][0] ?? null;
     }
 }

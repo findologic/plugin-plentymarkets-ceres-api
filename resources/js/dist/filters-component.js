@@ -861,7 +861,7 @@ exports.default = {
             }
 
             params[_constants2.default.PARAMETER_ATTRIBUTES] = attributes;
-            params[_constants2.default.PARAMETER_PAGE] = 1;
+            delete params[_constants2.default.PARAMETER_PAGE];
 
             document.location.search = '?' + $.param(params);
         },
@@ -975,7 +975,7 @@ exports.default = {
             }
 
             params[_constants2.default.PARAMETER_ATTRIBUTES] = attributes;
-            params[_constants2.default.PARAMETER_PAGE] = 1;
+            delete params[_constants2.default.PARAMETER_PAGE];
 
             document.location.search = '?' + $.param(params);
         },
@@ -1097,7 +1097,7 @@ exports.default = {
          */
         removeAllAttribsAndRefresh: function removeAllAttribsAndRefresh() {
             var params = this.getSearchParams();
-            params[_constants2.default.PARAMETER_PAGE] = 1;
+            delete params[_constants2.default.PARAMETER_PAGE];
             delete params[_constants2.default.PARAMETER_ATTRIBUTES];
             document.location.search = '?' + $.param(params);
         }

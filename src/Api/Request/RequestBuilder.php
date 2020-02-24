@@ -173,7 +173,7 @@ class RequestBuilder
     /**
      * @return string
      */
-    protected function getShopUrl()
+    public function getShopUrl()
     {
         if (!empty($this->webstoreConfig->domainSsl)) {
             return preg_replace('(^https?://)', '', $this->webstoreConfig->domainSsl);
