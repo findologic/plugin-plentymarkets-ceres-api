@@ -1,5 +1,13 @@
 # Release Notes für FINDOLOGIC
 
+## 2.4.2 (2020-02-03)
+
+### Behoben
+
+* [PLENTY-190] Klicks auf Vorschläge in der Mobilen Smart Suggest, werden nicht länger
+ die mobile Smart Suggest ausblenden, ohne die Suche auszuführen. Dies inkludiert
+ auch Klicks auf "Alle Ergebnisse anzeigen" in der normalen Smart Suggest.
+
 ## 2.4.1 (2020-01-17)
 
 ### Behoben
