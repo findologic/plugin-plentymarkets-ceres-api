@@ -1,5 +1,22 @@
 # Release Notes for FINDOLOGIC
 
+## 2.5.0 (2020-02-25)
+
+### Added
+
+* [PLENTY-125] Smart Did-You-Mean is now supported. Find more information
+ [in our documentation](https://docs.findologic.com/doku.php?id=integration_documentation:plentymarkets_ceres_en:ceres_sdym_en).
+* [PLENTY-185] Using Smart Did-You-Mean will now show a user-friendly text after
+ selecting a category or a vendor from the Smart Suggest.
+* [PLENTY-188] If there is only one search result, you will be redirected
+ to the product detail page.
+
+### Changed
+
+* The "page" parameter will no longer be appended after deselecting a filter.
+* [PLENTY-197] Documentation for Smart Did-You-Mean was added.
+* Internal: JavaScript is now automatically compiled before committing.
+
 ## 2.4.2 (2020-02-03)
 
 ### Fixed
