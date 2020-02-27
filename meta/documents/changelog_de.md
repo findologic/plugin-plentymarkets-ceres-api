@@ -1,5 +1,12 @@
 # Release Notes für FINDOLOGIC
 
+## 2.5.1 (2020-02-27)
+
+### Behoben
+
+* [PLENTY-203] Ein Fehler wurde behoben durch den Benutzer auf die Produktdetailseite
+ weitergeleitet wurden, nachdem ein Filter gewählt wurde, der nur ein Resultat liefert.
+
 ## 2.5.0 (2020-02-24)
 
 ### Hinzugefügt

@@ -1,5 +1,12 @@
 # Release Notes for FINDOLOGIC
 
+## 2.5.1 (2020-02-27)
+
+### Fixed
+
+* [PLENTY-203] Fixed a bug that caused users to be redirected to the product
+detail page, after a filter was selected, that would only lead to one result.
+
 ## 2.5.0 (2020-02-25)
 
 ### Added
