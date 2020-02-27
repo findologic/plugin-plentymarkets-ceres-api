@@ -149,5 +149,10 @@
     "psr-4": {
       "Findologic\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Findologic\\Tests\\": "tests/"
+    }
   }
 }

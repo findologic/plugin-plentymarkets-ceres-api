@@ -141,7 +141,7 @@ class SearchService implements SearchServiceInterface
         $results = $this->search($request, $externalSearch);
         $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
-        if ($this->shouldRedirectToProductDetailPage($productsIds)) {
+        if ($this->shouldRedirectToProductDetailPage($productsIds, $request)) {
             if ($redirectUrl = $this->getProductDetailUrl($productsIds[0])) {
                 $this->handleProductRedirectUrl($redirectUrl);
             }
@@ -241,7 +241,7 @@ class SearchService implements SearchServiceInterface
         return $response === Plugin::API_ALIVE_RESPONSE_BODY;
     }
 
-    public function handleProductRedirectUrl(string $url): void
+    public function handleProductRedirectUrl(string $url)
     {
         header('Location: ' . $url);
     }
@@ -261,9 +261,14 @@ class SearchService implements SearchServiceInterface
         }));
     }
 
-    private function shouldRedirectToProductDetailPage(array $productsIds): bool
+    private function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
     {
         if (count($productsIds) !== 1) {
+            return false;
+        }
+
+        $parameters = $request->all();
+        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             return false;
         }
 

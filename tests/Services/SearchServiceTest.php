@@ -12,6 +12,7 @@ use Findologic\Services\FallbackSearchService;
 use Findologic\Services\SearchService;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
+use Findologic\Tests\Mocks\PlentyRequestMock;
 use IO\Services\ItemSearch\Services\ItemSearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\ConfigRepository;
@@ -111,7 +112,8 @@ class SearchServiceTest extends TestCase
         $itemSearchResultsOneProduct,
         $shopUrl,
         $dataQueryInfoMessage,
-        $redirectUrl
+        $redirectUrl,
+        $attributes
     ) {
         /** @var Request|HttpRequest|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -148,7 +150,10 @@ class SearchServiceTest extends TestCase
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
         $searchQueryMock->categoryId = null;
 
-        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $requestMock = $this->getMockBuilder(PlentyRequestMock::class)->disableOriginalConstructor()->setMethods(['all'])->getMock();
+        $requestMock->expects($this->any())
+            ->method('all')
+            ->willReturn($attributes);
 
         $searchServiceMock->doSearch($requestMock, $searchQueryMock);
     }
@@ -204,7 +209,8 @@ class SearchServiceTest extends TestCase
                 [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'https://www.test.com/test-product_11_1011'
+                'https://www.test.com/test-product_11_1011',
+                []
             ],
             'Multiple products found' => [
                 [
@@ -235,7 +241,8 @@ class SearchServiceTest extends TestCase
                 [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                null
+                null,
+                []
             ],
             'One product found and query string type is corrected' => [
                 [
@@ -263,7 +270,8 @@ class SearchServiceTest extends TestCase
                 [
                     'queryStringType' => 'corrected'
                 ],
-                null
+                null,
+                []
             ],
             'One product found and query string type is improved' => [
                 [
@@ -291,7 +299,41 @@ class SearchServiceTest extends TestCase
                 [
                     'queryStringType' => 'improved'
                 ],
-                null
+                null,
+                []
+            ],
+            'One product found but filters are set' => [
+                [
+                    1011 => [
+                        'total' => 1
+                    ]
+                ],
+                [
+                    1011 => [
+                        'documents' => [
+                            [
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'https://www.test.com',
+                [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                null,
+                [
+                    'attrib' => [
+                        'cat' => 'Blubbergurken'
+                    ]
+                ]
             ],
         ];
     }
