@@ -6,6 +6,7 @@ use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
 use Ceres\Helper\ExternalSearch;
+use Findologic\Helpers\Tags;
 use IO\Services\CategoryService;
 use IO\Services\WebstoreConfigurationService;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
@@ -48,6 +49,11 @@ class RequestBuilderTest extends TestCase
      */
     protected $webstoreConfigurationService;
 
+    /**
+     * @var Tags
+     */
+    protected $tagsHelper;
+
     public function setUp()
     {
         $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -56,6 +62,7 @@ class RequestBuilderTest extends TestCase
         $this->webstoreConfigurationService = $this->getMockBuilder(WebstoreConfigurationService::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
+        $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->setMethods()->getMock();
     }
 
     public function buildAliveRequestProvider()
@@ -224,7 +231,8 @@ class RequestBuilderTest extends TestCase
                 'parametersBuilder' => $this->parametersBuilder,
                 'pluginConfig' => $this->pluginConfig,
                 'loggerFactory' => $this->loggerFactory,
-                'webstoreConfigurationService' => $this->webstoreConfigurationService
+                'webstoreConfigurationService' => $this->webstoreConfigurationService,
+                'tagsHelper' => $this->tagsHelper
             ])
             ->setMethods($methods)
             ->getMock();

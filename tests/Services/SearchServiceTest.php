@@ -150,7 +150,7 @@ class SearchServiceTest extends TestCase
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
         $searchQueryMock->categoryId = null;
 
-        $requestMock = $this->getMockBuilder(PlentyRequestMock::class)->disableOriginalConstructor()->setMethods(['all'])->getMock();
+        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $requestMock->expects($this->any())
             ->method('all')
             ->willReturn($attributes);
