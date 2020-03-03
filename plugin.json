@@ -22,8 +22,8 @@
   ],
   "type": "template",
   "require": {
-    "Ceres": "~4.0",
-    "IO": ">=4.0.0"
+    "Ceres": "~5.0",
+    "IO": "~5.0"
   },
   "namespace": "Findologic",
   "serviceProvider": "Findologic\\Providers\\FindologicServiceProvider",
