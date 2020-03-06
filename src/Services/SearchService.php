@@ -18,7 +18,6 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Services\ItemSearchService;
-use IO\Services\ItemSearch\SearchPresets\VariationList;
 
 /**
  * Class SearchService
@@ -102,13 +101,13 @@ class SearchService implements SearchServiceInterface
         return pluginApp(ItemSearchService::class);
     }
 
-    /**
-     * @param int $id
-     * @return VariationSearchFactory
-     */
-    public function getSearchFactory($id)
+    public function getSearchFactory(array $ids): VariationSearchFactory
     {
-        return VariationList::getSearchFactory(['variationIds' => [$id], 'excludeFromCache' => true]);
+        $searchFactory = pluginApp( VariationSearchFactory::class);
+
+        $searchFactory->hasVariationIds($ids);
+
+        return $searchFactory;
     }
 
     /**
@@ -246,19 +245,21 @@ class SearchService implements SearchServiceInterface
         header('Location: ' . $url);
     }
 
-    private function filterInvalidVariationIds(array $ids)
+    private function filterInvalidVariationIds(array $ids): array
     {
-        $externalSearchFactories = [];
-        $itemSearchService = $this->getItemSearchService();
+        $results = $this->getItemSearchService()->getResult(
+            $this->getSearchFactory($ids)
+        );
 
-        foreach ($ids as $id) {
-            $externalSearchFactories[$id] = $this->getSearchFactory($id);
+        $variationIds = [];
+
+        if ($results['success'] && $results['total'] > 0) {
+            foreach ($results['documents'] as $document) {
+                $variationIds[] = $document['id'];
+            }
         }
 
-        // Return only the variation IDs which actually yielded a result.
-        return array_keys(array_filter($itemSearchService->getResults($externalSearchFactories), function ($result) {
-            return $result['total'] > 0;
-        }));
+        return $variationIds;
     }
 
     private function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
@@ -288,15 +289,15 @@ class SearchService implements SearchServiceInterface
         /** @var ItemSearchService $itemSearchService */
         $itemSearchService = $this->getItemSearchService();
 
-        $externalSearchFactories[$productId] = $this->getSearchFactory($productId);
+        $result = $itemSearchService->getResult(
+            $this->getSearchFactory([$productId])
+        );
 
-        $result = $itemSearchService->getResults($externalSearchFactories);
-
-        if (empty($result[$productId]['documents'])) {
+        if (!$result['success'] || empty($result['documents'][0])) {
             return null;
         }
 
-        $productData = $result[$productId]['documents'][0]['data'];
+        $productData = $result['documents'][0]['data'];
 
         $urlPath = $productData['texts']['urlPath'];
         $itemId = $productData['item']['id'];

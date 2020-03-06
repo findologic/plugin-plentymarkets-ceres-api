@@ -2,11 +2,7 @@
     .card-columns {
         column-gap: 0;
     }
-    #filterCollapse {
-        position: relative;
-        z-index: 0;
-    }
-    .main-filters {
+    .main-filters, #filterCollapse {
         position: relative;
         z-index: 0;
         width: 100%;
@@ -42,6 +38,10 @@
                     padding-left: 0;
 
                     .form-check-input {
+                        &.hidden-xs-up {
+                            display:none;
+                        }
+
                         &:checked + label {
                             background: $gray-lighter2;
                             color: $gray-darker;
