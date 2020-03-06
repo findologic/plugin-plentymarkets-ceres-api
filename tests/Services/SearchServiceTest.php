@@ -118,11 +118,6 @@ class SearchServiceTest extends TestCase
         /** @var Request|HttpRequest|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
-        if ($redirectUrl) {
-            $this->requestBuilder->expects($this->once())->method('getShopUrl')->willReturn($shopUrl);
-        } else {
-            $this->requestBuilder->expects($this->never())->method('getShopUrl');
-        }
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
