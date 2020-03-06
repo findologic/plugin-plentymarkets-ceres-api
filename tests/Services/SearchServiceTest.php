@@ -209,7 +209,7 @@ class SearchServiceTest extends TestCase
                 [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'https://www.test.com/test-product_11_1011',
+                '/test-product/a-11',
                 []
             ],
             'Multiple products found' => [
