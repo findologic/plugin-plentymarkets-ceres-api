@@ -36,6 +36,7 @@
             var wrapper = document.createElement('div');
             wrapper.className = 'always-visible-search';
             searchForm.parentNode.insertBefore(wrapper, searchForm);
+            wrapper.appendChild(searchForm);
         }
     });
 </script>
