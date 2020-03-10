@@ -3,3 +3,10 @@
         display: none !important;
     }
 }
+
+@media (min-width: 768px) {
+    // FINDOLOGIC search bar loads later then the one from Plentymarkets, which causes issues on mobile.
+    nav.widget-fw.navbar.megamenu {
+        top: calc(100% + 90px) !important;
+    }
+}
