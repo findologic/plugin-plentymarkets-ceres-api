@@ -28,5 +28,14 @@
 <script>
     $(function() {
         SVGInjector($('img.fl-svg'));
+
+        var searchForm = document.getElementById('search-form');
+        var parent = searchForm.parentElement;
+
+        if (parent.classList.contains('search-shown')) {
+            var wrapper = document.createElement('div');
+            wrapper.className = 'always-visible-search';
+            searchForm.parentNode.insertBefore(wrapper, searchForm);
+        }
     });
 </script>

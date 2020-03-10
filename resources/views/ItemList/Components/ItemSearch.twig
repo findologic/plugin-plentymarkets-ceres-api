@@ -1,16 +1,4 @@
-{% import "Ceres::Widgets.Helper.TwigBuilder" as Twig %}
-{% import "Ceres::Widgets.Helper.WidgetHelper" as WidgetHelper %}
-
-{% set searchStyle                  = widget.settings.searchStyle.mobile %}
-
 <script type="x/template" id="vue-findologic-item-search">
-    <ol>
-        {% for key, value in ceresConfig  %}
-            <li>{{ key }}</li>
-        {% endfor %}
-        {{ isShopBuilder }}
-        {{ widget }}
-    </ol>
     {% if searchStyle == "permanent" %} <div class="always-visible-search"> {% endif %}
     <form id="search-form" method="GET" action="/search" onsubmit="return document.dispatchEvent(window.flSearchSubmitEvent);">
         <div class="search-box-inner">
