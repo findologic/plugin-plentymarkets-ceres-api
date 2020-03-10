@@ -1,5 +1,4 @@
 <script type="x/template" id="vue-findologic-item-search">
-    {% if searchStyle == "permanent" %} <div class="always-visible-search"> {% endif %}
     <form id="search-form" method="GET" action="/search" onsubmit="return document.dispatchEvent(window.flSearchSubmitEvent);">
         <div class="search-box-inner">
             <div class="search-box-shadow-frame">
@@ -19,5 +18,15 @@
             </div>
         </div>
     </form>
-    {% if searchStyle == "permanent" %} </div> {% endif %}
+</script>
+<script type="text/javascript">
+    var searchForm = document.getElementById('search-form');
+    var parent = searchForm.parentElement;
+
+    if (parent.classList.contains('search-shown')) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'always-visible-search';
+        searchForm.parentNode.insertBefore(wrapper, searchForm);
+        wrapper.appendChild(searchForm);
+    }
 </script>
