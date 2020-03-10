@@ -5,15 +5,8 @@
 
 <script type="x/template" id="vue-findologic-item-search">
     <ol>
-        {% for key, value in _context  %}
+        {% for key, value in webstoreConfig  %}
             <li>{{ key }}</li>
-            {% if key is 'WidgetHelper' %}
-                <ul>
-                {% for k, v in value  %}
-                <li>{{ k }}</li>
-                {% endif %}
-                </ul>
-            {% endif %}
         {% endfor %}
     </ol>
     {% if searchStyle == "permanent" %} <div class="always-visible-search"> {% endif %}
