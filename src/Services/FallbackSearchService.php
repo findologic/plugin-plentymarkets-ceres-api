@@ -6,15 +6,14 @@ use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Api\Response\ResponseParser;
 use Findologic\Constants\Plugin;
-use IO\Services\ItemSearch\SearchPresets\CategoryItems;
-use IO\Services\ItemSearch\SearchPresets\Facets;
-use IO\Services\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\ItemSearch\SearchPresets\CategoryItems;
+use Plenty\Modules\Webshop\ItemSearch\SearchPresets\Facets;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use Plenty\Plugin\Http\Request;
 use Findologic\Api\Response\Response;
 
 class FallbackSearchService implements SearchServiceInterface
 {
-
     /**
      * @var ResponseParser
      */
@@ -50,7 +49,7 @@ class FallbackSearchService implements SearchServiceInterface
 
         $response = $this->responseParser->createResponseObject();
         $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
-        $this->setSearchDataResults($searchResults['itemList']['total'], $response);
+        $this->setSearchDataResults(count($searchResults['itemList']['documents']), $response);
         $this->setFilters($searchResults['facets'], $response);
 
         return $response;
@@ -81,6 +80,7 @@ class FallbackSearchService implements SearchServiceInterface
 
         /** @var ItemSearchService $itemSearchService */
         $itemSearchService = pluginApp(ItemSearchService::class);
+
         return $itemSearchService->getResults($defaultSearchFactory);
     }
 
