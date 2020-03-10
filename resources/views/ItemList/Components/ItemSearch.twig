@@ -1,5 +1,5 @@
 <script type="x/template" id="vue-findologic-item-search">
-    <div style="display: none;">{{ dump() }}</div>
+    <div style="display: none;">{{ searchStyle }}</div>
     {% if searchStyle == "permanent" %} <div class="always-visible-search"> {% endif %}
     <form id="search-form" method="GET" action="/search" onsubmit="return document.dispatchEvent(window.flSearchSubmitEvent);">
         <div class="search-box-inner">
