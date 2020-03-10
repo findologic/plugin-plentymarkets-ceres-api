@@ -8,6 +8,7 @@
         {% for key, value in ceresConfig  %}
             <li>{{ key }}</li>
         {% endfor %}
+        {{ isShopBuilder }}
     </ol>
     {% if searchStyle == "permanent" %} <div class="always-visible-search"> {% endif %}
     <form id="search-form" method="GET" action="/search" onsubmit="return document.dispatchEvent(window.flSearchSubmitEvent);">
