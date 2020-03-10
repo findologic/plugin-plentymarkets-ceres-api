@@ -1,20 +1,22 @@
 <script type="x/template" id="vue-findologic-item-search">
     <form id="search-form" method="GET" action="/search" onsubmit="return document.dispatchEvent(window.flSearchSubmitEvent);">
-        <div class="search-box-inner">
-            <div class="search-box-shadow-frame">
-                <input name="query"
-                       type="search"
-                       class="search-input"
-                       ref="searchInput"
-                       @keyup.enter="prepareSearch()"
-                       @keyup.down="keydown()"
-                       @keyup.up="keyup()"
-                       @focus="isSearchFocused = true"
-                       @blur="setIsSearchFocused(false)"
-                       autofocus>
-                <button class="search-submit" type="submit" @click="search()">
-                    <i class="fa fa-search sm-up"></i>
-                </button>
+        <div class="container-max">
+            <div class="position-relative">
+                <div class="d-flex flex-grow-1 position-relative my-2">
+                    <input name="query"
+                           type="search"
+                           class="search-input flex-grow-1 px-3 py-2"
+                           ref="searchInput"
+                           @keyup.enter="prepareSearch()"
+                           @keyup.down="keydown()"
+                           @keyup.up="keyup()"
+                           @focus="isSearchFocused = true"
+                           @blur="setIsSearchFocused(false)"
+                           autofocus>
+                    <button class="search-submit px-3" type="submit" @click="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </form>
