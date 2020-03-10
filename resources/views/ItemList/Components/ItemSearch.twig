@@ -1,3 +1,8 @@
+{% import "Ceres::Widgets.Helper.TwigBuilder" as Twig %}
+{% import "Ceres::Widgets.Helper.WidgetHelper" as WidgetHelper %}
+
+{% set searchStyle                  = widget.settings.searchStyle.mobile %}
+
 <script type="x/template" id="vue-findologic-item-search">
     <div style="display: none;">{{ searchStyle }}</div>
     {% if searchStyle == "permanent" %} <div class="always-visible-search"> {% endif %}
