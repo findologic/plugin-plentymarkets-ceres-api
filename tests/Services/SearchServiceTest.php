@@ -132,10 +132,10 @@ class SearchServiceTest extends TestCase
         }
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods(['getResults'])->getMock();
-        $itemSearchServiceMock->expects($this->at(0))->method('getResults')->willReturn($itemSearchServiceResultsAll);
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods(['getResult'])->getMock();
+        $itemSearchServiceMock->expects($this->at(0))->method('getResult')->willReturn($itemSearchServiceResultsAll);
         if ($redirectUrl) {
-            $itemSearchServiceMock->expects($this->at(1))->method('getResults')->willReturn($itemSearchResultsOneProduct);
+            $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($itemSearchResultsOneProduct);
         }
 
         $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'handleProductRedirectUrl']);
@@ -184,152 +184,188 @@ class SearchServiceTest extends TestCase
     {
         return [
             'One product found' => [
-                [
-                    1011 => [
-                        'total' => 1
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
                     ]
                 ],
-                [
-                    1011 => [
-                        'documents' => [
-                            [
-                                'data' => [
-                                    'texts' => [
-                                        'urlPath' => 'test-product'
-                                    ],
-                                    'item' => [
-                                        'id' => 11
-                                    ]
+                'itemSearchResultsOneProduct' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    'urlPath' => 'test-product'
+                                ],
+                                'item' => [
+                                    'id' => 11
                                 ]
                             ]
                         ]
                     ]
                 ],
-                'https://www.test.com',
-                [
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'https://www.test.com/test-product_11_1011',
-                []
+                'redirectUrl' => 'https://www.test.com/test-product_11_1011',
+                'attributes' => []
             ],
             'Multiple products found' => [
-                [
-                    1011 => [
-                        'total' => 1
-                    ],
-                    1022 => [
-                        'total' => 2
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ],
+                        [
+                            'id' => 1022
+                        ]
                     ]
                 ],
-                [
-                    1011 => [
-                        'documents' => [
-                            [
-                                'data' => [
-                                    'texts' => [
-                                        'urlPath' => 'test-product'
-                                    ],
-                                    'item' => [
-                                        'id' => 11
-                                    ]
+                'itemSearchResultsOneProduct' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    'urlPath' => 'test-product'
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1022,
+                            'data' => [
+                                'texts' => [
+                                    'urlPath' => 'test-product'
+                                ],
+                                'item' => [
+                                    'id' => 11
                                 ]
                             ]
                         ]
                     ]
                 ],
-                'https://www.test.com',
-                [
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                null,
-                []
+                'redirectUrl' => null,
+                'attributes' => []
             ],
             'One product found and query string type is corrected' => [
-                [
-                    1011 => [
-                        'total' => 1
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
                     ]
                 ],
-                [
-                    1011 => [
-                        'documents' => [
-                            [
-                                'data' => [
-                                    'texts' => [
-                                        'urlPath' => 'test-product'
-                                    ],
-                                    'item' => [
-                                        'id' => 11
-                                    ]
+                'itemSearchResultsOneProduct' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    'urlPath' => 'test-product'
+                                ],
+                                'item' => [
+                                    'id' => 11
                                 ]
                             ]
                         ]
                     ]
                 ],
-                'https://www.test.com',
-                [
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
                     'queryStringType' => 'corrected'
                 ],
-                null,
-                []
+                'redirectUrl' => null,
+                'attributes' => []
             ],
             'One product found and query string type is improved' => [
-                [
-                    1011 => [
-                        'total' => 1
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
                     ]
                 ],
-                [
-                    1011 => [
-                        'documents' => [
-                            [
-                                'data' => [
-                                    'texts' => [
-                                        'urlPath' => 'test-product'
-                                    ],
-                                    'item' => [
-                                        'id' => 11
-                                    ]
+                'itemSearchResultsOneProduct' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    'urlPath' => 'test-product'
+                                ],
+                                'item' => [
+                                    'id' => 11
                                 ]
                             ]
                         ]
                     ]
                 ],
-                'https://www.test.com',
-                [
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
                     'queryStringType' => 'improved'
                 ],
-                null,
-                []
+                'redirectUrl' => null,
+                'attributes' => []
             ],
             'One product found but filters are set' => [
-                [
-                    1011 => [
-                        'total' => 1
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
                     ]
                 ],
-                [
-                    1011 => [
-                        'documents' => [
-                            [
-                                'data' => [
-                                    'texts' => [
-                                        'urlPath' => 'test-product'
-                                    ],
-                                    'item' => [
-                                        'id' => 11
-                                    ]
+                'itemSearchResultsOneProduct' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    'urlPath' => 'test-product'
+                                ],
+                                'item' => [
+                                    'id' => 11
                                 ]
                             ]
                         ]
                     ]
                 ],
-                'https://www.test.com',
-                [
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                null,
-                [
+                'redirectUrl' => null,
+                'attributes' => [
                     'attrib' => [
                         'cat' => 'Blubbergurken'
                     ]

@@ -1,6 +1,6 @@
 import url from '../../../mixins/url'
 
-Vue.component("item-filter", {
+Vue.component("findologic-item-filter", {
     mixins: [url],
 
     delimiters: ["${", "}"],
