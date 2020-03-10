@@ -4,12 +4,18 @@
 {% set searchStyle                  = widget.settings.searchStyle.mobile %}
 
 <script type="x/template" id="vue-findologic-item-search">
-    {% debug _context %}
-{#    <ol>#}
-{#        {% for key, value in _context  %}#}
-{#            <li>{{ key }}</li>#}
-{#        {% endfor %}#}
-{#    </ol>#}
+    <ol>
+        {% for key, value in _context  %}
+            <li>{{ key }}</li>
+            {% if key is 'WidgetHelper' %}
+                <ul>
+                {% for k, v in value  %}
+                <li>{{ k }}</li>
+                {% endif %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    </ol>
     {% if searchStyle == "permanent" %} <div class="always-visible-search"> {% endif %}
     <form id="search-form" method="GET" action="/search" onsubmit="return document.dispatchEvent(window.flSearchSubmitEvent);">
         <div class="search-box-inner">
