@@ -1,4 +1,4 @@
-## Voraussetzungen
+### Voraussetzungen
 
 * Für die Installation des FINDOLOGIC Plugin ist die Verwendung von Ceres >= 4.5.0 notwendig.
 
