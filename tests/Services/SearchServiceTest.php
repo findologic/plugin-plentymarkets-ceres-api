@@ -108,12 +108,13 @@ class SearchServiceTest extends TestCase
      * @runInSeparateProcess
      */
     public function testRedirectToProductPageOnDoSearch(
-        $itemSearchServiceResultsAll,
-        $itemSearchResultsOneProduct,
-        $shopUrl,
-        $dataQueryInfoMessage,
+        array $responseVariationIds,
+        array $itemSearchServiceResultsAll,
+        array $itemSearchResultsOneProduct,
+        string $shopUrl,
+        array $dataQueryInfoMessage,
         $redirectUrl,
-        $attributes
+        array $attributes
     ) {
         /** @var Request|HttpRequest|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -126,7 +127,7 @@ class SearchServiceTest extends TestCase
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $responseMock->expects($this->once())->method('getVariationIds')->willReturn([1, 2, 3]);
+        $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
         if ($redirectUrl) {
             $responseMock->expects($this->once())->method('getData')->with(Response::DATA_QUERY_INFO_MESSAGE)->willReturn($dataQueryInfoMessage);
         }
@@ -184,6 +185,9 @@ class SearchServiceTest extends TestCase
     {
         return [
             'One product found' => [
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -218,6 +222,9 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'Multiple products found' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 2,
@@ -266,6 +273,9 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found and query string type is corrected' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -300,6 +310,9 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found and query string type is improved' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -334,6 +347,9 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found but filters are set' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
