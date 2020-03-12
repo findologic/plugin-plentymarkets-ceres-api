@@ -1,3 +1,7 @@
+## Voraussetzungen
+
+* Für die Installation des FINDOLOGIC Plugin ist die Verwendung von Ceres >= 4.5.0 notwendig.
+
 ## UNSERE SHOPPING EXPERIENCE PLATFORM FÜR IHRE USER
 
 Holen Sie sich Ihr ganzheitliches Einkaufserlebnis in Ihren Shop!
