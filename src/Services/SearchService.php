@@ -259,7 +259,23 @@ class SearchService implements SearchServiceInterface
             }
         }
 
-        return $variationIds;
+        return $this->removeInvalidVariationIds($ids, $variationIds);
+    }
+
+    private function removeInvalidVariationIds(array $findologicIds, array $plentymarketsIds): array
+    {
+        if (empty($findologicIds) || empty($plentymarketsIds)) {
+            return [];
+        }
+
+        foreach ($findologicIds as $key => $value) {
+            if (!in_array($value, $plentymarketsIds)) {
+                unset($findologicIds[$key]);
+                array_values($findologicIds);
+            }
+        }
+
+        return $findologicIds;
     }
 
     private function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
