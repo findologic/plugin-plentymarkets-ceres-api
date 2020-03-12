@@ -159,18 +159,17 @@ class SearchService implements SearchServiceInterface
     {
         $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
 
-        $externalSearch->setResults(
-            $response->getVariationIds(),
-            $response->getResultsCount()
-        );
-
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
-            $this->results->setData(Response::DATA_RESULTS, $response->getData(Response::DATA_RESULTS));
             $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
         } else {
             $this->results = $response;
         }
+
+        $externalSearch->setResults(
+            $response->getVariationIds(),
+            $this->results->getData(Response::DATA_RESULTS)['count']
+        );
     }
 
     /**
