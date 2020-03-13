@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1ba9c6b457f45bcaee10eae54881863",
+    "content-hash": "349c13c1222eb48b9577e7f03f304e03",
     "packages": [
         {
             "name": "findologic/http_request2",
@@ -483,7 +483,7 @@
             "time": "2015-04-20T18:58:01+00:00"
         },
         {
-            "name": "jeremeamia/SuperClosure",
+            "name": "jeremeamia/superclosure",
             "version": "2.4.0",
             "source": {
                 "type": "git",
@@ -874,6 +874,7 @@
                 "cron",
                 "schedule"
             ],
+            "abandoned": "dragonmantank/cron-expression",
             "time": "2017-01-23T04:29:33+00:00"
         },
         {
@@ -1793,11 +1794,11 @@
         },
         {
             "name": "plentymarkets/plugin-ceres",
-            "version": "4.4.2",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-ceres",
-                "reference": "4.4.2"
+                "reference": "4.6.0"
             },
             "type": "library"
         },
@@ -1822,11 +1823,11 @@
         },
         {
             "name": "plentymarkets/plugin-io",
-            "version": "4.4.2",
+            "version": "4.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "4.4.2"
+                "reference": "4.6.4"
             },
             "type": "library"
         },
@@ -2971,7 +2972,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
