@@ -1,5 +1,28 @@
 # Release Notes für FINDOLOGIC
 
+## 2.6.0 (2020-03-13)
+
+### Hinzugefügt
+
+* [PLENTY-192] Plentymarkets Tags werden nun unterstützt. FINDOLOGIC wird nun automatisch nach Tags auf Tagseiten
+ filtern.
+
+### Geändert
+
+* [PLENTY-199] Dropdown Filter haben nun eine fixierte Höhe. Das vermeidet, dass Dropdowns größer als die gesamte
+ Seite sind, wenn ein Filter viele Filtermöglichkeiten bietet.
+* [PLENTY-209] Die weiterleitungs URL zu der Produktdetailseite ist nun die Selbe, die auch exportiert wird.
+* [PLENTY-204] Links zu unserer Dokumentation wurden aktualisiert.
+* [PLENTY-216] Ceres und IO 4.5 sind nun als Minimalanforderungen im Plugin versehen.
+
+### Behoben
+
+* [PLENTY-210] Ein Fehler wurde behoben welcher einen Konsolenfehler verursachte, wenn alle Filter als
+ "Weitere Filter" konfiguriert waren.
+* [PLENTY-200] Ein Fehler wurde behoben welcher Sortieroptionen verschwinden lies, obwohl FINDOLOGIC noch keine
+ Resultate ausgespielt hatte. Einige Sortiermöglichkeiten werden dennoch verschwinden, wenn ein Filter selektiert wird,
+ da manche Sortiermöglichkeiten nicht mit FINDOLOGIC kompatibel sind.
+
 ## 2.5.1 (2020-02-27)
 
 ### Behoben
