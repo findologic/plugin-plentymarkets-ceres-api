@@ -1,6 +1,6 @@
 ### Prerequisites
 
-* Ceres >= 4.5.0 is required for the installation of the FINDOLOGIC plugin.
+Plugin [Ceres](https://marketplace.plentymarkets.com/plugins/sales/online-shops/ceres_4697) and [IO](https://marketplace.plentymarkets.com/plugins/sales/online-shops/io_4696) version >= 4.5.0 are required for the installation of the FINDOLOGIC plugin.
 
 ## OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
 Get the fully integrated shopping experience in your online store!
