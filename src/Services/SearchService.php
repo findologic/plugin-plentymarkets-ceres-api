@@ -300,8 +300,7 @@ class SearchService implements SearchServiceInterface
 
         $urlPath = $productData['texts']['urlPath'];
         $itemId = $productData['item']['id'];
-        $variationId = $productId;
 
-        return sprintf('%s/%s_%s_%s', $this->requestBuilder->getShopUrl(), $urlPath, $itemId, $variationId);
+        return sprintf('/%s/a-%s', $urlPath, $itemId);
     }
 }

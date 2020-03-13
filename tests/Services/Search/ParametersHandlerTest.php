@@ -18,8 +18,9 @@ class ParametersHandlerTest extends TestCase
     {
         return [
             'Sorting options for category page' => [
-                false,
-                [
+                'isSearch' => false,
+                'hasFilters' => false,
+                'ceresConfigData' => [
                     'default.recommended_sorting',
                     'texts.name1_asc',
                     'texts.name1_desc',
@@ -40,7 +41,53 @@ class ParametersHandlerTest extends TestCase
                     'item.score',
                     'item.random'
                 ],
-                [
+                'expectedResult' => [
+                    'default.recommended_sorting' => 'Ceres::Template.itemRecommendedSorting',
+                    'texts.name1_asc' => 'Ceres::Template.itemName_asc',
+                    'texts.name1_desc' => 'Ceres::Template.itemName_desc',
+                    'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
+                    'sorting.price.avg_desc' => 'Ceres::Template.itemPrice_desc',
+                    'variation.createdAt_desc' => 'Ceres::Template.itemVariationCreateTimestamp_desc',
+                    'variation.createdAt_asc' => 'Ceres::Template.itemVariationCreateTimestamp_asc',
+                    'variation.availability.averageDays_asc' => 'Ceres::Template.itemAvailabilityAverageDays_asc',
+                    'variation.availability.averageDays_desc' => 'Ceres::Template.itemAvailabilityAverageDays_desc',
+                    'variation.number_asc' => 'Ceres::Template.itemVariationCustomNumber_asc',
+                    'variation.number_desc' => 'Ceres::Template.itemVariationCustomNumber_desc',
+                    'variation.updatedAt_asc' => 'Ceres::Template.itemVariationLastUpdateTimestamp_asc',
+                    'variation.updatedAt_desc' => 'Ceres::Template.itemVariationLastUpdateTimestamp_desc',
+                    'item.manufacturer.externalName_asc' => 'Ceres::Template.itemProducerName_asc',
+                    'item.manufacturer.externalName_desc' => 'Ceres::Template.itemProducerName_desc',
+                    'variation.position_asc' => 'Ceres::Template.itemVariationTopseller_asc',
+                    'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc',
+                    'item.score' => 'Ceres::Template.itemRelevance',
+                    'item.random' => 'Ceres::Template.itemRandom'
+                ]
+            ],
+            'Sorting options for category page with filter selected' => [
+                'isSearch' => false,
+                'hasFilters' => true,
+                'ceresConfigData' => [
+                    'default.recommended_sorting',
+                    'texts.name1_asc',
+                    'texts.name1_desc',
+                    'sorting.price.avg_asc',
+                    'sorting.price.avg_desc',
+                    'variation.createdAt_desc',
+                    'variation.createdAt_asc',
+                    'variation.availability.averageDays_asc',
+                    'variation.availability.averageDays_desc',
+                    'variation.number_asc',
+                    'variation.number_desc',
+                    'variation.updatedAt_asc',
+                    'variation.updatedAt_desc',
+                    'item.manufacturer.externalName_asc',
+                    'item.manufacturer.externalName_desc',
+                    'variation.position_asc',
+                    'variation.position_desc',
+                    'item.score',
+                    'item.random'
+                ],
+                'expectedResult' => [
                     'texts.name1_asc' => 'Ceres::Template.itemName_asc',
                     'texts.name1_desc' => 'Ceres::Template.itemName_desc',
                     'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
@@ -53,8 +100,9 @@ class ParametersHandlerTest extends TestCase
                 ]
             ],
             'Sorting options for search page' => [
-                true,
-                [
+                'isSearch' => true,
+                'hasFilters' => false,
+                'ceresConfigData' => [
                     'default.recommended_sorting',
                     'texts.name1_asc',
                     'texts.name1_desc',
@@ -75,7 +123,7 @@ class ParametersHandlerTest extends TestCase
                     'item.score',
                     'item.random'
                 ],
-                [
+                'expectedResult' => [
                     'texts.name1_asc' => 'Ceres::Template.itemName_asc',
                     'texts.name1_desc' => 'Ceres::Template.itemName_desc',
                     'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
@@ -88,8 +136,9 @@ class ParametersHandlerTest extends TestCase
                 ]
             ],
             'Force option "Relevance" for search page' => [
-                true,
-                [
+                'isSearch' => true,
+                'hasFilters' => false,
+                'ceresConfigData' => [
                     'default.recommended_sorting',
                     'texts.name1_asc',
                     'texts.name1_desc',
@@ -109,7 +158,7 @@ class ParametersHandlerTest extends TestCase
                     'variation.position_desc',
                     'item.random'
                 ],
-                [
+                'expectedResult' => [
                     'texts.name1_asc' => 'Ceres::Template.itemName_asc',
                     'texts.name1_desc' => 'Ceres::Template.itemName_desc',
                     'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
@@ -126,13 +175,13 @@ class ParametersHandlerTest extends TestCase
 
     /**
      * @dataProvider getSortingOptionsProvider
-     *
-     * @param bool $isSearch
-     * @param array $ceresConfigData
-     * @param array $expectedResult
      */
-    public function testGetSortingOptions(bool $isSearch, array $ceresConfigData, array $expectedResult)
-    {
+    public function testGetSortingOptions(
+        bool $isSearch,
+        bool $isFiltersSet,
+        array $ceresConfigData,
+        array $expectedResult
+    ) {
         $config = $this->createCeresConfigObject($ceresConfigData);
 
         /** @var ParametersHandler|MockObject $parametersHandlerMock */
@@ -141,16 +190,17 @@ class ParametersHandlerTest extends TestCase
             ->getMock();
         $parametersHandlerMock->expects($this->once())->method('getConfig')->willReturn($config);
 
-        $this->assertEquals($parametersHandlerMock->getSortingOptions($isSearch), $expectedResult);
+        $this->assertEquals($parametersHandlerMock->getSortingOptions($isSearch, $isFiltersSet), $expectedResult);
     }
 
     public function handlePaginationAndSortingProvider()
     {
         return [
             'Sorting options for search page with supported default' => [
-                true,
-                'texts.name1_asc',
-                [
+                'isSearch' => true,
+                'hasFilters' => false,
+                'defaultSorting' => 'texts.name1_asc',
+                'configData' => [
                     'default.recommended_sorting',
                     'texts.name1_asc',
                     'texts.name1_desc',
@@ -170,7 +220,7 @@ class ParametersHandlerTest extends TestCase
                     'variation.position_desc',
                     'item.random'
                 ],
-                [
+                'sortingOptions' => [
                     'texts.name1_asc' => 'Ceres::Template.itemName_asc',
                     'texts.name1_desc' => 'Ceres::Template.itemName_desc',
                     'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
@@ -181,12 +231,13 @@ class ParametersHandlerTest extends TestCase
                     'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc',
                     'item.score' => 'Ceres::Template.itemRelevance'
                 ],
-                'texts.name1_asc'
+                'defaultOption' => 'texts.name1_asc'
             ],
             'Sorting options for category page with supported default' => [
-                false,
-                'texts.name1_asc',
-                [
+                'isSearch' => false,
+                'hasFilters' => false,
+                'defaultSorting' => 'texts.name1_asc',
+                'configData' => [
                     'default.recommended_sorting',
                     'texts.name1_asc',
                     'texts.name1_desc',
@@ -206,22 +257,33 @@ class ParametersHandlerTest extends TestCase
                     'variation.position_desc',
                     'item.random'
                 ],
-                [
+                'sortingOptions' => [
+                    'default.recommended_sorting' => 'Ceres::Template.itemRecommendedSorting',
                     'texts.name1_asc' => 'Ceres::Template.itemName_asc',
                     'texts.name1_desc' => 'Ceres::Template.itemName_desc',
                     'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
                     'sorting.price.avg_desc' => 'Ceres::Template.itemPrice_desc',
                     'variation.createdAt_desc' => 'Ceres::Template.itemVariationCreateTimestamp_desc',
                     'variation.createdAt_asc' => 'Ceres::Template.itemVariationCreateTimestamp_asc',
+                    'variation.availability.averageDays_asc' => 'Ceres::Template.itemAvailabilityAverageDays_asc',
+                    'variation.availability.averageDays_desc' => 'Ceres::Template.itemAvailabilityAverageDays_desc',
+                    'variation.number_asc' => 'Ceres::Template.itemVariationCustomNumber_asc',
+                    'variation.number_desc' => 'Ceres::Template.itemVariationCustomNumber_desc',
+                    'variation.updatedAt_asc' => 'Ceres::Template.itemVariationLastUpdateTimestamp_asc',
+                    'variation.updatedAt_desc' => 'Ceres::Template.itemVariationLastUpdateTimestamp_desc',
+                    'item.manufacturer.externalName_asc' => 'Ceres::Template.itemProducerName_asc',
+                    'item.manufacturer.externalName_desc' => 'Ceres::Template.itemProducerName_desc',
                     'variation.position_asc' => 'Ceres::Template.itemVariationTopseller_asc',
-                    'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc'
+                    'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc',
+                    'item.random' => 'Ceres::Template.itemRandom'
                 ],
-                'texts.name1_asc'
+                'defaultOption' => 'texts.name1_asc'
             ],
             'Sorting options for category page with unsupported default' => [
-                false,
-                'item.random',
-                [
+                'isSearch' => false,
+                'hasFilters' => false,
+                'defaultSorting' => 'item.random',
+                'configData' => [
                     'default.recommended_sorting',
                     'texts.name1_asc',
                     'texts.name1_desc',
@@ -241,7 +303,53 @@ class ParametersHandlerTest extends TestCase
                     'variation.position_desc',
                     'item.random'
                 ],
-                [
+                'sortingOptions' => [
+                    'default.recommended_sorting' => 'Ceres::Template.itemRecommendedSorting',
+                    'texts.name1_asc' => 'Ceres::Template.itemName_asc',
+                    'texts.name1_desc' => 'Ceres::Template.itemName_desc',
+                    'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
+                    'sorting.price.avg_desc' => 'Ceres::Template.itemPrice_desc',
+                    'variation.createdAt_desc' => 'Ceres::Template.itemVariationCreateTimestamp_desc',
+                    'variation.createdAt_asc' => 'Ceres::Template.itemVariationCreateTimestamp_asc',
+                    'variation.availability.averageDays_asc' => 'Ceres::Template.itemAvailabilityAverageDays_asc',
+                    'variation.availability.averageDays_desc' => 'Ceres::Template.itemAvailabilityAverageDays_desc',
+                    'variation.number_asc' => 'Ceres::Template.itemVariationCustomNumber_asc',
+                    'variation.number_desc' => 'Ceres::Template.itemVariationCustomNumber_desc',
+                    'variation.updatedAt_asc' => 'Ceres::Template.itemVariationLastUpdateTimestamp_asc',
+                    'variation.updatedAt_desc' => 'Ceres::Template.itemVariationLastUpdateTimestamp_desc',
+                    'item.manufacturer.externalName_asc' => 'Ceres::Template.itemProducerName_asc',
+                    'item.manufacturer.externalName_desc' => 'Ceres::Template.itemProducerName_desc',
+                    'variation.position_asc' => 'Ceres::Template.itemVariationTopseller_asc',
+                    'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc',
+                    'item.random' => 'Ceres::Template.itemRandom'
+                ],
+                'defaultOption' => 'item.score'
+            ],
+            'Sorting options for category page with a filter selected' => [
+                'isSearch' => false,
+                'hasFilters' => true,
+                'defaultSorting' => 'texts.name1_asc',
+                'configData' => [
+                    'default.recommended_sorting',
+                    'texts.name1_asc',
+                    'texts.name1_desc',
+                    'sorting.price.avg_asc',
+                    'sorting.price.avg_desc',
+                    'variation.createdAt_desc',
+                    'variation.createdAt_asc',
+                    'variation.availability.averageDays_asc',
+                    'variation.availability.averageDays_desc',
+                    'variation.number_asc',
+                    'variation.number_desc',
+                    'variation.updatedAt_asc',
+                    'variation.updatedAt_desc',
+                    'item.manufacturer.externalName_asc',
+                    'item.manufacturer.externalName_desc',
+                    'variation.position_asc',
+                    'variation.position_desc',
+                    'item.random'
+                ],
+                'sortingOptions' => [
                     'texts.name1_asc' => 'Ceres::Template.itemName_asc',
                     'texts.name1_desc' => 'Ceres::Template.itemName_desc',
                     'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
@@ -249,24 +357,19 @@ class ParametersHandlerTest extends TestCase
                     'variation.createdAt_desc' => 'Ceres::Template.itemVariationCreateTimestamp_desc',
                     'variation.createdAt_asc' => 'Ceres::Template.itemVariationCreateTimestamp_asc',
                     'variation.position_asc' => 'Ceres::Template.itemVariationTopseller_asc',
-                    'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc'
+                    'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc',
                 ],
-                'item.score'
-            ]
+                'defaultOption' => 'texts.name1_asc'
+            ],
         ];
     }
 
     /**
      * @dataProvider handlePaginationAndSortingProvider
-     *
-     * @param bool $isSearch
-     * @param string $defaultSorting
-     * @param array $configData
-     * @param array $sortingOptions
-     * @param string $defaultOption
      */
     public function testHandlePaginationAndSorting(
         bool $isSearch,
+        bool $isFiltersSet,
         string $defaultSorting,
         array $configData,
         array $sortingOptions,
@@ -280,9 +383,23 @@ class ParametersHandlerTest extends TestCase
             ->setMethods([])
             ->getMock();
 
+        $returnedUri = 'test.com';
+
         if ($isSearch) {
-            $requestMock->expects($this->once())->method('getUri')->willReturn('test.com/search');
+            $returnedUri .= '/search';
         }
+
+        if ($isFiltersSet) {
+            $requestMock->expects($this->once())->method('all')->willReturn([
+                'attrib' => [
+                    'vendor' => [
+                        'Test_Manufacturer'
+                    ]
+                ]
+            ]);
+        }
+
+        $requestMock->expects($this->any())->method('getUri')->willReturn($returnedUri);
 
         $config = $this->createCeresConfigObject(
             $configData,
