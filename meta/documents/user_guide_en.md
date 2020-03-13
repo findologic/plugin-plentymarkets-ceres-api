@@ -1,3 +1,7 @@
+### Prerequisites
+
+Plugin [Ceres](https://marketplace.plentymarkets.com/en/plugins/sales/online-shops/ceres_4697) and [IO](https://marketplace.plentymarkets.com/en/plugins/sales/online-shops/io_4696) version >= 4.5.0 are required for the installation of the FINDOLOGIC plugin.
+
 ## OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
 Get the fully integrated shopping experience in your online store!
 Our open and modular platform with intelligent search, navigation, merchandising, shopping guide, analytics, as well as our high-performance user interface, offers everything via lean integration. Put your users in focus and separate yourself from the competition with us.
