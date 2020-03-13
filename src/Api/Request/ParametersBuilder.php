@@ -3,6 +3,7 @@
 namespace Findologic\Api\Request;
 
 use Findologic\Constants\Plugin;
+use Findologic\Helpers\Tags;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -33,9 +34,20 @@ class ParametersBuilder
      */
     protected $logger;
 
-    public function __construct( LoggerFactory $loggerFactory)
-    {
-        $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+    /**
+     * @var Tags
+     */
+    protected $tagsHelper;
+
+    public function __construct(
+        LoggerFactory $loggerFactory,
+        Tags $tagsHelper
+    ) {
+        $this->logger = $loggerFactory->getLogger(
+            Plugin::PLUGIN_NAMESPACE,
+            Plugin::PLUGIN_IDENTIFIER
+        );
+        $this->tagsHelper = $tagsHelper;
     }
 
     /**
@@ -82,6 +94,10 @@ class ParametersBuilder
         if (isset($parameters[Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY])
             && $parameters[Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY] != false) {
             $request->setParam(Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY, true);
+        }
+
+        if ($this->tagsHelper->isTagPage($httpRequest)) {
+            $request->setParam('selected', ['cat_id' => [$this->tagsHelper->getTagIdFromUri($httpRequest)]]);
         }
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
