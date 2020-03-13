@@ -65,6 +65,7 @@ class ParametersHandler
         $config = $this->getConfig();
 
         $isSearch = strpos($request->getUri(), '/search') !== false;
+        $isFiltersSet = array_key_exists('attrib', $request->all());
 
         $defaultSort = $isSearch ? $config->sorting->defaultSortingSearch : $config->sorting->defaultSorting;
 
@@ -72,34 +73,53 @@ class ParametersHandler
             $defaultSort = 'item.score';
         }
 
-        $search->setSortingOptions($this->getSortingOptions($isSearch), $defaultSort);
+        $search->setSortingOptions($this->getSortingOptions($isSearch, $isFiltersSet), $defaultSort);
         $search->setItemsPerPage($this->getItemsPerPage($search), $this->getCurrentItemsPerPage($request, $search));
 
         return $search;
     }
 
-    /**
-     * @param boolean $isSearch
-     * @return array
-     */
-    public function getSortingOptions($isSearch)
+    public function getSortingOptions(bool $isSearch, bool $isFiltersSet): array
+    {
+        if (!$isSearch && !$isFiltersSet) {
+            return $this->getPlentymarketsSortingOptions();
+        }
+
+        return $this->getFindologicSortingOptions($isSearch);
+    }
+
+    public function getPlentymarketsSortingOptions(): array
     {
         /** @var CeresConfig $config */
         $config = $this->getConfig();
 
-        $returnArray = [];
+        $sortingOptions = [];
+
+        foreach ($config->sorting->data as $data) {
+            $sortingOptions[$data] = 'Ceres::Template.' . SearchOptions::TRANSLATION_MAP[$data];
+        }
+
+        return $sortingOptions;
+    }
+
+    public function getFindologicSortingOptions(bool $isSearch): array
+    {
+        /** @var CeresConfig $config */
+        $config = $this->getConfig();
+
+        $sortingOptions = [];
 
         foreach ($config->sorting->data as $data) {
             if (in_array($data, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
-                $returnArray[$data] = 'Ceres::Template.' . SearchOptions::TRANSLATION_MAP[$data];
+                $sortingOptions[$data] = 'Ceres::Template.' . SearchOptions::TRANSLATION_MAP[$data];
             }
         }
 
-        if ($isSearch && !array_key_exists('item.score', $returnArray)) {
-            $returnArray['item.score'] = 'Ceres::Template.' . SearchOptions::TRANSLATION_MAP['item.score'];
+        if ($isSearch && !array_key_exists('item.score', $sortingOptions)) {
+            $sortingOptions['item.score'] = 'Ceres::Template.' . SearchOptions::TRANSLATION_MAP['item.score'];
         }
 
-        return $returnArray;
+        return $sortingOptions;
     }
 
     /**

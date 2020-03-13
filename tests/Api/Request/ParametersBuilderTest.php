@@ -6,6 +6,7 @@ use Ceres\Helper\ExternalSearch;
 use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
 use Findologic\Constants\Plugin;
+use Findologic\Helpers\Tags;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
@@ -35,29 +36,36 @@ class ParametersBuilderTest extends TestCase
      */
     protected $logger;
 
+    /**
+     * @var Tags|MockObject
+     */
+    protected $tagsHelper;
+
     public function setUp()
     {
         $this->categoryService = $this->getMockBuilder(CategoryService::class)->disableOriginalConstructor()->setMethods(['get'])->getMock();
         $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
+        $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->setMethods()->getMock();
     }
 
     public function setSearchParamsProvider()
     {
         return [
             'Category page request' => [
-                [
+                'parameters' => [
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'color' => ['red', 'blue'],
                         'cat' => ['Category 2'],
                     ],
                 ],
-                [
+                'requestUri' => 'https://www.test.com/testCategory',
+                'category' => [
                     'parentCategoryId' => null,
                     'name' => 'Category'
                 ],
-                [
+                'expectedParameters' => [
                     'query' => 'Test',
                     'properties' => [
                         0 => 'variation_id'
@@ -72,7 +80,7 @@ class ParametersBuilderTest extends TestCase
                 ]
             ],
             'Category page request with same price slider min and max values' => [
-                [
+                'parameters' => [
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'price' => [
                             'min' => 77,
@@ -80,11 +88,12 @@ class ParametersBuilderTest extends TestCase
                         ]
                     ],
                 ],
-                [
+                'requestUri' => 'https://www.test.com/testCategory',
+                'category' => [
                     'parentCategoryId' => null,
                     'name' => 'Category'
                 ],
-                [
+                'expectedParameters' => [
                     'query' => 'Test',
                     'properties' => [
                         0 => 'variation_id'
@@ -102,14 +111,15 @@ class ParametersBuilderTest extends TestCase
                 ]
             ],
             'Search page request' => [
-                [
+                'parameters' => [
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'size' => ['l', 'xl'],
                         'cat' => 'Category'
                     ],
                 ],
-                false,
-                [
+                'requestUri' => 'https://www.test.com/search?query=Test',
+                'category' => false,
+                'expectedParameters' => [
                     'query' => 'Test',
                     'properties' => [
                         0 => 'variation_id'
@@ -123,7 +133,7 @@ class ParametersBuilderTest extends TestCase
                 ]
             ],
             'Search page request with same price slider min and max values' => [
-                [
+                'parameters' => [
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'price' => [
                             'min' => 77,
@@ -131,8 +141,9 @@ class ParametersBuilderTest extends TestCase
                         ]
                     ],
                 ],
-                false,
-                [
+                'requestUri' => 'https://www.test.com/search?query=Test',
+                'category' => false,
+                'expectedParameters' => [
                     'query' => 'Test',
                     'properties' => [
                         0 => 'variation_id'
@@ -148,15 +159,16 @@ class ParametersBuilderTest extends TestCase
                 ]
             ],
             'Force original query enabled' => [
-                [
+                'parameters' => [
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'size' => ['l', 'xl'],
                         'cat' => 'Category'
                     ],
                     Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => 1
                 ],
-                false,
-                [
+                'requestUri' => 'https://www.test.com/search?query=Test',
+                'category' => false,
+                'expectedParameters' => [
                     'query' => 'Test',
                     'properties' => [
                         0 => 'variation_id'
@@ -171,15 +183,16 @@ class ParametersBuilderTest extends TestCase
                 ]
             ],
             'Force original query disabled' => [
-                [
+                'parameters' => [
                     Plugin::API_PARAMETER_ATTRIBUTES => [
                         'size' => ['l', 'xl'],
                         'cat' => 'Category'
                     ],
                     Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => 0
                 ],
-                false,
-                [
+                'requestUri' => 'https://www.test.com/search?query=Test',
+                'category' => false,
+                'expectedParameters' => [
                     'query' => 'Test',
                     'properties' => [
                         0 => 'variation_id'
@@ -191,6 +204,32 @@ class ParametersBuilderTest extends TestCase
                     'order' => 'price ASC',
                     'count' => 10
                 ]
+            ],
+            'Tag page request' => [
+                'parameters' => [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'size' => ['l', 'xl'],
+                        'cat' => 'Category'
+                    ],
+                    Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => 0
+                ],
+                'requestUri' => 'https://www.test.com/aaaaa_t125',
+                'category' => false,
+                'expectedParameters' => [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'size' => ['l', 'xl'],
+                        'cat' => 'Category'
+                    ],
+                    'order' => 'price ASC',
+                    'count' => 10,
+                    'selected' => [
+                        'cat_id' => [125]
+                    ]
+                ]
             ]
         ];
     }
@@ -199,15 +238,17 @@ class ParametersBuilderTest extends TestCase
      * @dataProvider setSearchParamsProvider
      *
      * @param array $parameters
+     * @param string $requestUri
      * @param array|bool $category
      * @param array $expectedParameters
      */
-    public function testSetSearchParams(array $parameters, $category, array $expectedParameters)
+    public function testSetSearchParams(array $parameters, string $requestUri, $category, array $expectedParameters)
     {
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods(null)->getMock();
 
         $httpRequestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $httpRequestMock->expects($this->once())->method('all')->willReturn($parameters);
+        $httpRequestMock->expects($this->any())->method('getUri')->willReturn($requestUri);
 
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $searchQueryMock->searchString = 'Test';
@@ -271,7 +312,8 @@ class ParametersBuilderTest extends TestCase
 
         $parametersBuilderMock = $this->getMockBuilder(ParametersBuilder::class)
             ->setConstructorArgs([
-                'loggerFactory' => $this->loggerFactory
+                'loggerFactory' => $this->loggerFactory,
+                'tagsHelper' => $this->tagsHelper
             ])
             ->setMethods($methods)
             ->getMock();

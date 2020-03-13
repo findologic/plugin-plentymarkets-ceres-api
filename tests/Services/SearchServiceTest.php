@@ -118,11 +118,6 @@ class SearchServiceTest extends TestCase
         /** @var Request|HttpRequest|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
-        if ($redirectUrl) {
-            $this->requestBuilder->expects($this->once())->method('getShopUrl')->willReturn($shopUrl);
-        } else {
-            $this->requestBuilder->expects($this->never())->method('getShopUrl');
-        }
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -150,7 +145,8 @@ class SearchServiceTest extends TestCase
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
         $searchQueryMock->categoryId = null;
 
-        $requestMock = $this->getMockBuilder(PlentyRequestMock::class)->disableOriginalConstructor()->setMethods(['all'])->getMock();
+        /** @var HttpRequest|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $requestMock->expects($this->any())
             ->method('all')
             ->willReturn($attributes);
@@ -209,7 +205,7 @@ class SearchServiceTest extends TestCase
                 [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'https://www.test.com/test-product_11_1011',
+                '/test-product/a-11',
                 []
             ],
             'Multiple products found' => [
