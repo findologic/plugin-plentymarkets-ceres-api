@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f1ba9c6b457f45bcaee10eae54881863",
+    "content-hash": "2963f94a8b0753230e6d275d180746fa",
     "packages": [
         {
             "name": "findologic/http_request2",
@@ -183,6 +183,26 @@
                 "exception"
             ],
             "time": "2015-02-10T20:07:52+00:00"
+        },
+        {
+            "name": "plentymarkets/plugin-ceres",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-ceres",
+                "reference": "beta"
+            },
+            "type": "library"
+        },
+        {
+            "name": "plentymarkets/plugin-io",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plentymarkets/plugin-io",
+                "reference": "beta"
+            },
+            "type": "library"
         }
     ],
     "packages-dev": [
@@ -483,7 +503,7 @@
             "time": "2015-04-20T18:58:01+00:00"
         },
         {
-            "name": "jeremeamia/SuperClosure",
+            "name": "jeremeamia/superclosure",
             "version": "2.4.0",
             "source": {
                 "type": "git",
@@ -874,6 +894,7 @@
                 "cron",
                 "schedule"
             ],
+            "abandoned": "dragonmantank/cron-expression",
             "time": "2017-01-23T04:29:33+00:00"
         },
         {
@@ -1792,16 +1813,6 @@
             "time": "2018-08-09T05:50:03+00:00"
         },
         {
-            "name": "plentymarkets/plugin-ceres",
-            "version": "4.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-ceres",
-                "reference": "4.4.2"
-            },
-            "type": "library"
-        },
-        {
             "name": "plentymarkets/plugin-interface",
             "version": "dev-fixed-return-types",
             "source": {
@@ -1819,16 +1830,6 @@
             ],
             "description": "Interface for plentymarkets plugin development with PHP 7",
             "time": "2019-03-27T15:57:44+00:00"
-        },
-        {
-            "name": "plentymarkets/plugin-io",
-            "version": "4.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "4.4.2"
-            },
-            "type": "library"
         },
         {
             "name": "psr/log",
@@ -2971,7 +2972,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
