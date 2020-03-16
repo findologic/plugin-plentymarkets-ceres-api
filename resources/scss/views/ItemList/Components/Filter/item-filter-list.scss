@@ -53,10 +53,6 @@
                                 opacity: 1;
                                 padding-left: 0;
                             }
-
-                            span::before {
-                                display: none;
-                            }
                         }
 
                         &:disabled + label {
