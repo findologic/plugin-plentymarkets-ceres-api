@@ -2,7 +2,7 @@
     <div class="item-filter-price">
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">{{ currency }}</span>
+                <span class="input-group-text" v-text="facet.unit"></span>
             </div>
 
             <input type="number"
@@ -14,7 +14,7 @@
 
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">{{ currency }}</span>
+                <span class="input-group-text" v-text="facet.unit"></span>
             </div>
 
             <input type="number"
