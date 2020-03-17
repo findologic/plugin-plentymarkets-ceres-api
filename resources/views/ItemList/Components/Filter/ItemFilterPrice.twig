@@ -1,0 +1,32 @@
+<script type="x/template" id="vue-findologic-item-price">
+    <div class="item-filter-price">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" v-text="currency"></span>
+            </div>
+
+            <input type="number"
+                   class="form-control"
+                   @focus="selectAll($event)"
+                   placeholder="Min"
+                   v-model="priceMin">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" v-text="currency"></span>
+            </div>
+
+            <input type="number"
+                   class="form-control"
+                   @focus="selectAll($event)"
+                   placeholder="Max"
+                   v-model="priceMax">
+        </div>
+
+        <button type="button" class="btn btn-primary btn-appearance" :class="{'disabled': isDisabled}" v-tooltip
+                data-toggle="tooltip" data-placement="top" @click="triggerFilter()" :title="$translate('Ceres::Template.itemApply')">
+            <icon icon="check" :loading="isLoading"></icon>
+        </button>
+    </div>
+</script>

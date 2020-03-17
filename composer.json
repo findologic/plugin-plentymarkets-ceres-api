@@ -8,14 +8,26 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^6",
-    "plentymarkets/plugin-interface": "dev-fixed-return-types",
-    "plentymarkets/plugin-io": "4.5.0",
-    "plentymarkets/plugin-ceres": "4.5.1"
+    "plentymarkets/plugin-ceres": "5.0.0",
+    "plentymarkets/plugin-io": "5.0.0",
+    "plentymarkets/plugin-interface": "dev-stable7"
+  },
+  "scripts": {
+    "test": "phpunit -c tests/phpunit.xml"
   },
   "repositories": [
     {
       "type": "package",
       "package": [
+        {
+          "name": "plentymarkets/plugin-io",
+          "version": "5.0.0",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-io",
+            "reference": "beta"
+          }
+        },
         {
           "name": "plentymarkets/plugin-io",
           "version": "4.5.0",
@@ -75,6 +87,15 @@
     {
       "type": "package",
       "package": [
+        {
+          "name": "plentymarkets/plugin-ceres",
+          "version": "5.0.0",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/plentymarkets/plugin-ceres",
+            "reference": "beta"
+          }
+        },
         {
           "name": "plentymarkets/plugin-ceres",
           "version": "4.5.1",
@@ -152,7 +173,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Findologic\\Tests\\": "tests/"
+      "Findologic\\Tests\\": "tests/",
+      "Plenty\\Modules\\Webshop\\ItemSearch\\": "vendor/plentymarkets/plugin-interface/ItemSearch/"
     }
   }
 }

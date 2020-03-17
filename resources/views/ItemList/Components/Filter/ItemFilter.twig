@@ -3,7 +3,7 @@
     <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-4" :class="facet.cssClass">
         <div class="h3" v-text="facet.name"></div>
         <div v-if="facet.type === 'price'">
-            <item-filter-price :facet="facet"></item-filter-price>
+            <item-filter-price template-override="#vue-findologic-item-price" :facet="facet"></item-filter-price>
         </div>
         <div v-else-if="facet.type === 'range-slider'">
             <item-range-slider template-override="#vue-findologic-item-range-slider" :facet="facet"></item-range-slider>
