@@ -46,13 +46,13 @@
                             background: $gray-lighter2;
                             color: $gray-darker;
                             padding-left: 1.75rem;
-                        }
 
-                        &:checked + label::before {
-                            font-family: "FontAwesome";
-                            content: "\f046";
-                            opacity: 1;
-                            padding-left: 0;
+                            &:first-child &::before {
+                                font-family: "FontAwesome";
+                                content: "\f046";
+                                opacity: 1;
+                                padding-left: 0;
+                            }
                         }
 
                         &:disabled + label {
