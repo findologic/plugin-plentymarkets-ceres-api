@@ -7,3 +7,7 @@
 @import 'views/ItemList/Components/Filter/item-range-slider';
 @import 'views/ItemList/Components/item-search';
 @import 'views/Category/Item/Partials/promotion';
+
+.list-controls-inner .d-sm-flex.p-2 {
+  display: block !important;
+}
