@@ -47,11 +47,15 @@
                             color: $gray-darker;
                             padding-left: 1.75rem;
 
-                            &:nth-child(2) &::before {
+                            &::before {
                                 font-family: "FontAwesome";
                                 content: "\f046";
                                 opacity: 1;
                                 padding-left: 0;
+                            }
+
+                            span::before {
+                                display: none;
                             }
                         }
 
