@@ -1,0 +1,6 @@
+// This file overwrites standard plenty shop builder styles. All styles found in this file only
+// have an effect when using the shop builder. The styles are always loaded, even if the shop builder is not used.
+
+.list-controls-inner .d-sm-flex.p-2 {
+  display: block !important;
+}
