@@ -47,7 +47,7 @@
                             color: $gray-darker;
                             padding-left: 1.75rem;
 
-                            &:first-child &::before {
+                            &:nth-child(2) &::before {
                                 font-family: "FontAwesome";
                                 content: "\f046";
                                 opacity: 1;
