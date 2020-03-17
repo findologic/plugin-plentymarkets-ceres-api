@@ -5,6 +5,7 @@ namespace Findologic\Api\Request;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
+use Findologic\Helpers\Tags;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -48,16 +49,23 @@ class RequestBuilder
      */
     private $webstoreConfig;
 
+    /**
+     * @var Tags
+     */
+    private $tagsHelper;
+
     public function __construct(
         ParametersBuilder $parametersBuilder,
         PluginConfig $pluginConfig,
         LoggerFactory $loggerFactory,
-        WebstoreConfigurationService $webstoreConfigurationService
+        WebstoreConfigurationService $webstoreConfigurationService,
+        Tags $tagsHelper
     ) {
         $this->parametersBuilder = $parametersBuilder;
         $this->pluginConfig = $pluginConfig;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
         $this->webstoreConfig = $webstoreConfigurationService->getWebstoreConfig();
+        $this->tagsHelper = $tagsHelper;
     }
 
     /**
@@ -68,10 +76,8 @@ class RequestBuilder
      */
     public function build(HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
     {
-        $requestType = $category ? self::CATEGORY_REQUEST_TYPE : self::DEFAULT_REQUEST_TYPE;
-
         $request = $this->createRequestObject();
-        $request = $this->setDefaultValues($request, $requestType);
+        $request = $this->setDefaultValues($request, $this->getRequestType($httpRequest, $category));
         $request = $this->parametersBuilder->setSearchParams($request, $httpRequest, $externalSearch, $category);
 
         return $request;
@@ -151,6 +157,22 @@ class RequestBuilder
     }
 
     /**
+     * @return string
+     */
+    public function getShopUrl()
+    {
+        if (!empty($this->webstoreConfig->domainSsl)) {
+            return preg_replace('(^https?://)', '', $this->webstoreConfig->domainSsl);
+        }
+
+        if (!empty($this->webstoreConfig->domain)) {
+            return preg_replace('(^https?://)', '', $this->webstoreConfig->domain);
+        }
+
+        return strtolower(Plugin::API_OUTPUT_ADAPTER);
+    }
+
+    /**
      * @param Request $request
      * @param string $requestType
      * @return Request
@@ -171,18 +193,18 @@ class RequestBuilder
     }
 
     /**
+     * @param HttpRequest $httpRequest
+     * @param int|null $category
      * @return string
      */
-    public function getShopUrl()
+    protected function getRequestType($httpRequest, $category = null)
     {
-        if (!empty($this->webstoreConfig->domainSsl)) {
-            return preg_replace('(^https?://)', '', $this->webstoreConfig->domainSsl);
+        $requestType = $category ? self::CATEGORY_REQUEST_TYPE : self::DEFAULT_REQUEST_TYPE;
+
+        if ($this->tagsHelper->isTagPage($httpRequest)) {
+            $requestType = self::CATEGORY_REQUEST_TYPE;
         }
 
-        if (!empty($this->webstoreConfig->domain)) {
-            return preg_replace('(^https?://)', '', $this->webstoreConfig->domain);
-        }
-
-        return strtolower(Plugin::API_OUTPUT_ADAPTER);
+        return $requestType;
     }
 }

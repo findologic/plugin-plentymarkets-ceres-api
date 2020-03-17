@@ -28,6 +28,8 @@
             border-top: transparent;
             margin-top: 13px;
             padding-bottom: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
 
             .fl-dropdown-item {
                 cursor: pointer;
@@ -53,6 +55,7 @@
             position: relative;
             top: 7px;
             float: right;
+            right: 10px;
         }
     }
 }
