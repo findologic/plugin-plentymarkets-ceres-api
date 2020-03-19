@@ -317,12 +317,6 @@ class SearchService implements SearchServiceInterface
         $urlPath = $productData['texts'][0]['urlPath'];
         $itemId = $productData['item']['id'];
 
-        $this->logger->critical(json_encode($productData));
-
-        $redirectUrl = sprintf('/%s/a-%s', $urlPath, $itemId);
-
-        $this->logger->critical($redirectUrl);
-
-        return $redirectUrl;
+        return sprintf('/%s/a-%s', $urlPath, $itemId);
     }
 }
