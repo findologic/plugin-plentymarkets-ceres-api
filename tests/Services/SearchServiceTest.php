@@ -201,7 +201,9 @@ class SearchServiceTest extends TestCase
                             'id' => 1011,
                             'data' => [
                                 'texts' => [
-                                    'urlPath' => 'test-product'
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
                                 ],
                                 'item' => [
                                     'id' => 11
