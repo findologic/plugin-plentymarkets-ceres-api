@@ -314,7 +314,7 @@ class SearchService implements SearchServiceInterface
 
         $productData = $result['documents'][0]['data'];
 
-        $urlPath = $productData['texts']['urlPath'];
+        $urlPath = $productData['texts'][0]->urlPath;
         $itemId = $productData['item']['id'];
 
         $this->logger->critical(json_encode($productData));
