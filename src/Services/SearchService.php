@@ -314,7 +314,7 @@ class SearchService implements SearchServiceInterface
 
         $productData = $result['documents'][0]['data'];
 
-        $urlPath = $productData['texts']['urlPath'];
+        $urlPath = $productData['texts'][0]['urlPath'];
         $itemId = $productData['item']['id'];
 
         return sprintf('/%s/a-%s', $urlPath, $itemId);
