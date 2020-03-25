@@ -25,7 +25,8 @@
         </div>
 
         <button type="button" class="btn btn-primary btn-appearance" :class="{'disabled': isDisabled}" v-tooltip
-                data-toggle="tooltip" data-placement="top" @click="triggerFilter()" :title="$translate('Ceres::Template.itemApply')">
+                data-toggle="tooltip" data-placement="top" @click="triggerFilter()" :title="$translate('Ceres::Template.itemApply')"
+                rel="nofollow">
             <icon icon="check" :loading="isLoading"></icon>
         </button>
     </div>

@@ -12,7 +12,7 @@
             <div v-if="!facet.noAvailableFiltersText">
                 <div class="form-check" v-for="value in facet.values" :key="value.id">
                     <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                    <label :for="'option-' + value.id" class="form-check-label">
+                    <label :for="'option-' + value.id" class="form-check-label" rel="nofollow">
                         <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
                         <span v-show="!value.imageUrl" v-text="value.name"></span>
                     </label>
@@ -37,7 +37,7 @@
                            @change="updateFacet(value)"
                            :disabled="isLoading"
                     >
-                    <label :for="'option-' + value.id" class="form-check-label" v-text="value.name"></label>
+                    <label :for="'option-' + value.id" class="form-check-label" v-text="value.name" rel="nofollow"></label>
                     <div class="filter-badge" v-text="value.count"></div>
                 </div>
                 <div v-if="value.selected">
@@ -50,7 +50,7 @@
                                    @change="updateFacet(getSubCategoryValue(value, subCategory))"
                                    :disabled="isLoading"
                             >
-                            <label :for="'option-' + subCategory.id" class="form-check-label" v-text="subCategory.name"></label>
+                            <label :for="'option-' + subCategory.id" class="form-check-label" v-text="subCategory.name" rel="nofollow"></label>
                             <div class="filter-badge" v-text="subCategory.count"></div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
         <div v-else>
             <div class="form-check" v-for="value in facet.values" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                <label :for="'option-' + value.id" class="form-check-label" v-text="value.name"></label>
+                <label :for="'option-' + value.id" class="form-check-label" v-text="value.name" rel="nofollow"></label>
                 <div class="filter-badge" v-text="value.count"></div>
             </div>
         </div>
