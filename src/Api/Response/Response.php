@@ -119,17 +119,9 @@ class Response
             ? $dataQueryInfoMessage['currentQuery']
             : $dataQueryInfoMessage['originalQuery'];
 
-        if ($type === 'corrected') {
+        if ($alternativeQuery) {
             return $this->translator->trans(
-                'Findologic::Template.correctedQuery',
-                [
-                    'originalQuery' => $originalQuery,
-                    'alternativeQuery' => $alternativeQuery
-                ]
-            );
-        } else if ($type === 'improved') {
-            return $this->translator->trans(
-                'Findologic::Template.improvedQuery',
+                'Findologic::Template.queryInfoMessageQuery',
                 [
                     'originalQuery' => $originalQuery,
                     'alternativeQuery' => $alternativeQuery
