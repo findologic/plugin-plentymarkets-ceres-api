@@ -123,8 +123,8 @@ class Response
             return $this->translator->trans(
                 'Findologic::Template.queryInfoMessageQuery',
                 [
-                    'originalQuery' => $originalQuery,
-                    'alternativeQuery' => $alternativeQuery
+                    'query' => $alternativeQuery,
+                    'hits' => $this->getResultsCount()
                 ]
             );
         } else if ($dataQueryInfoMessage['currentQuery']
