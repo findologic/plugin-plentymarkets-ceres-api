@@ -92,7 +92,7 @@ class ResponseTest extends TestCase
                 [],
                 'Findologic::Template.queryInfoMessageQuery',
                 [
-                    'query' => 'TestDidYouMeanQuery',
+                    'query' => 'Test',
                     'hits' => 0
                 ]
             ],
