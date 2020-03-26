@@ -110,14 +110,9 @@ class Response
             return '';
         }
 
-        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
         $alternativeQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
             ? $dataQueryInfoMessage['didYouMeanQuery']
             : $dataQueryInfoMessage['currentQuery'];
-        $originalQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? $dataQueryInfoMessage['currentQuery']
-            : $dataQueryInfoMessage['originalQuery'];
 
         if ($alternativeQuery) {
             return $this->translator->trans(
