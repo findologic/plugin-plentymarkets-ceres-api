@@ -92,7 +92,7 @@ class ResponseTest extends TestCase
                 [],
                 'Findologic::Template.queryInfoMessageQuery',
                 [
-                    'query' => 'Test',
+                    'query' => 'TestDidYouMeanQuery',
                     'hits' => 0
                 ]
             ],
@@ -106,10 +106,10 @@ class ResponseTest extends TestCase
                     'selectedVendorName' => null
                 ],
                 [],
-                'Findologic::Template.improvedQuery',
+                'Findologic::Template.queryInfoMessageQuery',
                 [
-                    'alternativeQuery' => 'Test',
-                    'originalQuery' => 'OriginalTest'
+                    'query' => 'Test',
+                    'hits' => 0
                 ]
             ],
             'Corrected query present' => [
@@ -122,10 +122,10 @@ class ResponseTest extends TestCase
                     'selectedVendorName' => null
                 ],
                 [],
-                'Findologic::Template.correctedQuery',
+                'Findologic::Template.queryInfoMessageQuery',
                 [
-                    'alternativeQuery' => 'Test',
-                    'originalQuery' => 'OriginalTest'
+                    'query' => 'Test',
+                    'hits' => 0
                 ]
             ],
             'Category selected' => [
