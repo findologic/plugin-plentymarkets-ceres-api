@@ -110,11 +110,13 @@ class Response
             return '';
         }
 
+        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
         $alternativeQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
             ? $dataQueryInfoMessage['didYouMeanQuery']
             : $dataQueryInfoMessage['currentQuery'];
 
-        if ($alternativeQuery) {
+        if ($alternativeQuery && ($type !== 'corrected' && $type !== 'improved')) {
             return $this->translator->trans(
                 'Findologic::Template.queryInfoMessageQuery',
                 [
