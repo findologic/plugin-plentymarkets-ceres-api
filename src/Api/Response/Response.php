@@ -172,6 +172,52 @@ class Response
         }
     }
 
+    public function getSmartDidYouMean(): string
+    {
+        $dataQueryInfoMessage = $this->getData(self::DATA_QUERY_INFO_MESSAGE);
+
+        if (empty($dataQueryInfoMessage)) {
+            return '';
+        }
+
+        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
+        $alternativeQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? $dataQueryInfoMessage['didYouMeanQuery']
+            : $dataQueryInfoMessage['currentQuery'];
+        $originalQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+            ? $dataQueryInfoMessage['currentQuery']
+            : $dataQueryInfoMessage['originalQuery'];
+
+        if ($type === 'corrected') {
+            return $this->translator->trans(
+                'Findologic::Template.correctedQuery',
+                [
+                    'originalQuery' => $originalQuery,
+                    'alternativeQuery' => $alternativeQuery
+                ]
+            );
+        } else if ($type === 'improved') {
+            return $this->translator->trans(
+                'Findologic::Template.improvedQuery',
+                [
+                    'originalQuery' => $originalQuery,
+                    'alternativeQuery' => $alternativeQuery
+                ]
+            );
+        } else if ($type === 'did-you-mean') {
+            return $this->translator->trans(
+                'Findologic::Template.didYouMeanQuery',
+                [
+                    'originalQuery' => $originalQuery,
+                    'alternativeQuery' => $alternativeQuery
+                ]
+            );
+        } else {
+            return '';
+        }
+    }
+
     /**
      * @return string|null
      */
