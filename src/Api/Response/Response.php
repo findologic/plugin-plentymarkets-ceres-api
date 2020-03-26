@@ -116,7 +116,7 @@ class Response
             ? $dataQueryInfoMessage['didYouMeanQuery']
             : $dataQueryInfoMessage['currentQuery'];
 
-        if ($alternativeQuery && ($type !== 'corrected' && $type !== 'improved')) {
+        if ($alternativeQuery && ($type === 'corrected' || $type === 'improved')) {
             return $this->translator->trans(
                 'Findologic::Template.queryInfoMessageQuery',
                 [
