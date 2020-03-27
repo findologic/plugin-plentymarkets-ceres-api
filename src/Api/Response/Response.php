@@ -110,11 +110,13 @@ class Response
             return '';
         }
 
-        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
-        $alternativeQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? $dataQueryInfoMessage['didYouMeanQuery']
-            : $dataQueryInfoMessage['currentQuery'];
+        $type = $dataQueryInfoMessage['queryStringType'];
+        $alternativeQuery = $dataQueryInfoMessage['currentQuery'];
+
+        if (!empty($dataQueryInfoMessage['didYouMeanQuery'])) {
+            $type = 'did-you-mean';
+            $alternativeQuery = $dataQueryInfoMessage['didYouMeanQuery'];
+        }
 
         if ($alternativeQuery && ($type === 'corrected' || $type === 'improved')) {
             return $this->translator->trans(
@@ -169,41 +171,43 @@ class Response
             return '';
         }
 
-        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
-        $alternativeQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? $dataQueryInfoMessage['didYouMeanQuery']
-            : $dataQueryInfoMessage['currentQuery'];
-        $originalQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? $dataQueryInfoMessage['currentQuery']
-            : $dataQueryInfoMessage['originalQuery'];
+        $type = $dataQueryInfoMessage['queryStringType'];
+        $alternativeQuery = $dataQueryInfoMessage['currentQuery'];
+        $originalQuery = $dataQueryInfoMessage['originalQuery'];
 
-        if ($type === 'corrected') {
-            return $this->translator->trans(
-                'Findologic::Template.correctedQuery',
-                [
-                    'originalQuery' => $originalQuery,
-                    'alternativeQuery' => $alternativeQuery
-                ]
-            );
-        } else if ($type === 'improved') {
-            return $this->translator->trans(
-                'Findologic::Template.improvedQuery',
-                [
-                    'originalQuery' => $originalQuery,
-                    'alternativeQuery' => $alternativeQuery
-                ]
-            );
-        } else if ($type === 'did-you-mean') {
-            return $this->translator->trans(
-                'Findologic::Template.didYouMeanQuery',
-                [
-                    'originalQuery' => $originalQuery,
-                    'alternativeQuery' => $alternativeQuery
-                ]
-            );
-        } else {
-            return '';
+        if (!empty($dataQueryInfoMessage['didYouMeanQuery'])) {
+            $type = 'did-you-mean';
+            $alternativeQuery = $dataQueryInfoMessage['didYouMeanQuery'];
+            $originalQuery = $dataQueryInfoMessage['currentQuery'];
+        }
+
+        switch ($type) {
+            case 'corrected':
+                return $this->translator->trans(
+                    'Findologic::Template.correctedQuery',
+                    [
+                        'originalQuery' => $originalQuery,
+                        'alternativeQuery' => $alternativeQuery
+                    ]
+                );
+            case 'improved':
+                return $this->translator->trans(
+                    'Findologic::Template.improvedQuery',
+                    [
+                        'originalQuery' => $originalQuery,
+                        'alternativeQuery' => $alternativeQuery
+                    ]
+                );
+            case 'did-you-mean':
+                return $this->translator->trans(
+                    'Findologic::Template.didYouMeanQuery',
+                    [
+                        'originalQuery' => $originalQuery,
+                        'alternativeQuery' => $alternativeQuery
+                    ]
+                );
+            default:
+                return '';
         }
     }
 
