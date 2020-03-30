@@ -20,6 +20,11 @@ class Response
     const DATA_FILTERS = 'filters';
     const DATA_QUERY_INFO_MESSAGE = 'query_info_message';
 
+    const
+        DID_YOU_MEAN_QUERY = 'did-you-mean',
+        CORRECTED_QUERY = 'corrected',
+        IMPROVED_QUERY = 'improved';
+
     protected $data = [];
 
     /**
@@ -114,11 +119,11 @@ class Response
         $alternativeQuery = $dataQueryInfoMessage['currentQuery'];
 
         if (!empty($dataQueryInfoMessage['didYouMeanQuery'])) {
-            $type = 'did-you-mean';
+            $type = self::DID_YOU_MEAN_QUERY;
             $alternativeQuery = $dataQueryInfoMessage['didYouMeanQuery'];
         }
 
-        if ($alternativeQuery && ($type === 'corrected' || $type === 'improved')) {
+        if ($alternativeQuery && ($type === self::CORRECTED_QUERY || $type === self::IMPROVED_QUERY)) {
             return $this->translator->trans(
                 'Findologic::Template.queryInfoMessageQuery',
                 [
@@ -182,7 +187,7 @@ class Response
         }
 
         switch ($type) {
-            case 'corrected':
+            case self::CORRECTED_QUERY:
                 return $this->translator->trans(
                     'Findologic::Template.correctedQuery',
                     [
@@ -190,7 +195,7 @@ class Response
                         'alternativeQuery' => $alternativeQuery
                     ]
                 );
-            case 'improved':
+            case self::IMPROVED_QUERY:
                 return $this->translator->trans(
                     'Findologic::Template.improvedQuery',
                     [
@@ -198,7 +203,7 @@ class Response
                         'alternativeQuery' => $alternativeQuery
                     ]
                 );
-            case 'did-you-mean':
+            case self::DID_YOU_MEAN_QUERY:
                 return $this->translator->trans(
                     'Findologic::Template.didYouMeanQuery',
                     [

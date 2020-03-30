@@ -277,41 +277,41 @@ class ResponseTest extends TestCase
             ],
             'Smart Did-You-Mean with did you mean query' => [
                 'queryInfoMessageData' => [
-                    'originalQuery' => 'blub',
-                    'didYouMeanQuery' => 'blubbergurken',
-                    'currentQuery' => 'blub',
+                    'originalQuery' => 'sesel',
+                    'didYouMeanQuery' => 'sessel',
+                    'currentQuery' => 'sesel',
                     'queryStringType' => null,
                 ],
                 'expectedTranslationKey' => 'Findologic::Template.didYouMeanQuery',
                 'expectedTranslationParams' => [
-                    'originalQuery' => 'blub',
-                    'alternativeQuery' => 'blubbergurken'
+                    'originalQuery' => 'sesel',
+                    'alternativeQuery' => 'sessel'
                 ],
             ],
             'Smart Did-You-Mean with improved query' => [
                 'queryInfoMessageData' => [
-                    'originalQuery' => 'blub',
+                    'originalQuery' => 'sesel',
                     'didYouMeanQuery' => null,
-                    'currentQuery' => 'blubbergurken',
+                    'currentQuery' => 'sessel',
                     'queryStringType' => 'improved',
                 ],
                 'expectedTranslationKey' => 'Findologic::Template.improvedQuery',
                 'expectedTranslationParams' => [
-                    'originalQuery' => 'blub',
-                    'alternativeQuery' => 'blubbergurken'
+                    'originalQuery' => 'sesel',
+                    'alternativeQuery' => 'sessel'
                 ],
             ],
             'Smart Did-You-Mean with corrected query' => [
                 'queryInfoMessageData' => [
-                    'originalQuery' => 'blub',
+                    'originalQuery' => 'sesel',
                     'didYouMeanQuery' => null,
-                    'currentQuery' => 'blubbergurken',
+                    'currentQuery' => 'sessel',
                     'queryStringType' => 'corrected',
                 ],
                 'expectedTranslationKey' => 'Findologic::Template.correctedQuery',
                 'expectedTranslationParams' => [
-                    'originalQuery' => 'blub',
-                    'alternativeQuery' => 'blubbergurken'
+                    'originalQuery' => 'sesel',
+                    'alternativeQuery' => 'sessel'
                 ],
             ],
         ];
