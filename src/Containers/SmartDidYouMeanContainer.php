@@ -28,7 +28,8 @@ class SmartDidYouMeanContainer
         return $twig->render(
             'Findologic::Category.Item.Partials.SmartDidYouMean',
             [
-                'query_info_message' => $searchResults->getQueryInfoMessage()
+                'query_info_message' => $searchResults->getQueryInfoMessage(),
+                'smart_did_you_mean' => $searchResults->getSmartDidYouMean()
             ]
         );
     }
