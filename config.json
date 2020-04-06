@@ -87,7 +87,32 @@
               }
             ]
           }
-        }
+        },
+        "filters_per_row": {
+          "type": "selectBox",
+          "required": false,
+          "label": "Config.filtersStylingFilterPerRowLabel",
+          "options": {
+            "defaultValue": "4",
+            "selectBoxValues": [
+              {
+                "value": "12",
+                "caption": "Config.filtersStylingFilterPerRow1"
+              },
+              {
+                "value": "6",
+                "caption": "Config.filtersStylingFilterPerRow2"
+              },
+              {
+                "value": "4",
+                "caption": "Config.filtersStylingFilterPerRow3"
+              },
+              {
+                "value": "3",
+                "caption": "Config.filtersStylingFilterPerRow4"
+              }
+            ]
+          },
       }
     }
   }
