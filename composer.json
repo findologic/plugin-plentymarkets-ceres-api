@@ -173,8 +173,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Findologic\\Tests\\": "tests/",
-      "Plenty\\Modules\\Webshop\\ItemSearch\\": "vendor/plentymarkets/plugin-interface/ItemSearch/"
+      "Findologic\\Tests\\": "tests/"
     }
   }
 }

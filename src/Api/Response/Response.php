@@ -20,6 +20,11 @@ class Response
     const DATA_FILTERS = 'filters';
     const DATA_QUERY_INFO_MESSAGE = 'query_info_message';
 
+    const
+        DID_YOU_MEAN_QUERY = 'did-you-mean',
+        CORRECTED_QUERY = 'corrected',
+        IMPROVED_QUERY = 'improved';
+
     protected $data = [];
 
     /**
@@ -110,29 +115,20 @@ class Response
             return '';
         }
 
-        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
-        $alternativeQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? $dataQueryInfoMessage['didYouMeanQuery']
-            : $dataQueryInfoMessage['currentQuery'];
-        $originalQuery = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? $dataQueryInfoMessage['currentQuery']
-            : $dataQueryInfoMessage['originalQuery'];
+        $type = $dataQueryInfoMessage['queryStringType'];
+        $alternativeQuery = $dataQueryInfoMessage['currentQuery'];
 
-        if ($type === 'corrected') {
+        if (!empty($dataQueryInfoMessage['didYouMeanQuery'])) {
+            $type = self::DID_YOU_MEAN_QUERY;
+            $alternativeQuery = $dataQueryInfoMessage['didYouMeanQuery'];
+        }
+
+        if ($alternativeQuery && ($type === self::CORRECTED_QUERY || $type === self::IMPROVED_QUERY)) {
             return $this->translator->trans(
-                'Findologic::Template.correctedQuery',
+                'Findologic::Template.queryInfoMessageQuery',
                 [
-                    'originalQuery' => $originalQuery,
-                    'alternativeQuery' => $alternativeQuery
-                ]
-            );
-        } else if ($type === 'improved') {
-            return $this->translator->trans(
-                'Findologic::Template.improvedQuery',
-                [
-                    'originalQuery' => $originalQuery,
-                    'alternativeQuery' => $alternativeQuery
+                    'query' => $alternativeQuery,
+                    'hits' => $this->getResultsCount()
                 ]
             );
         } else if ($dataQueryInfoMessage['currentQuery']
@@ -169,6 +165,54 @@ class Response
                     'hits' => $this->getResultsCount()
                 ]
             );
+        }
+    }
+
+    public function getSmartDidYouMean(): string
+    {
+        $dataQueryInfoMessage = $this->getData(self::DATA_QUERY_INFO_MESSAGE);
+
+        if (empty($dataQueryInfoMessage)) {
+            return '';
+        }
+
+        $type = $dataQueryInfoMessage['queryStringType'];
+        $alternativeQuery = $dataQueryInfoMessage['currentQuery'];
+        $originalQuery = $dataQueryInfoMessage['originalQuery'];
+
+        if (!empty($dataQueryInfoMessage['didYouMeanQuery'])) {
+            $type = 'did-you-mean';
+            $alternativeQuery = $dataQueryInfoMessage['didYouMeanQuery'];
+            $originalQuery = $dataQueryInfoMessage['currentQuery'];
+        }
+
+        switch ($type) {
+            case self::CORRECTED_QUERY:
+                return $this->translator->trans(
+                    'Findologic::Template.correctedQuery',
+                    [
+                        'originalQuery' => $originalQuery,
+                        'alternativeQuery' => $alternativeQuery
+                    ]
+                );
+            case self::IMPROVED_QUERY:
+                return $this->translator->trans(
+                    'Findologic::Template.improvedQuery',
+                    [
+                        'originalQuery' => $originalQuery,
+                        'alternativeQuery' => $alternativeQuery
+                    ]
+                );
+            case self::DID_YOU_MEAN_QUERY:
+                return $this->translator->trans(
+                    'Findologic::Template.didYouMeanQuery',
+                    [
+                        'originalQuery' => $originalQuery,
+                        'alternativeQuery' => $alternativeQuery
+                    ]
+                );
+            default:
+                return '';
         }
     }
 
