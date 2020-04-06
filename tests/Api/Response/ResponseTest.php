@@ -50,7 +50,7 @@ class ResponseTest extends TestCase
     {
         return [
             'No query set' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
                     'currentQuery' => '',
@@ -58,14 +58,14 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => null,
                     'selectedVendorName' => null
                 ],
-                [],
-                'Findologic::Template.queryInfoMessageDefault',
-                [
+                'filtersData' => [],
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageDefault',
+                'expectedTranslationParams' => [
                     'hits' => 0
                 ]
             ],
             'No Smart Did-You-Mean data provided' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
                     'currentQuery' => 'Test',
@@ -73,15 +73,15 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => null,
                     'selectedVendorName' => null
                 ],
-                [],
-                'Findologic::Template.queryInfoMessageQuery',
-                [
+                'filtersData' => [],
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
+                'expectedTranslationParams' => [
                     'query' => 'Test',
                     'hits' => 0
                 ]
             ],
             'Did-You-Mean query present' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => null,
                     'didYouMeanQuery' => 'TestDidYouMeanQuery',
                     'currentQuery' => 'Test',
@@ -89,15 +89,15 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => null,
                     'selectedVendorName' => null
                 ],
-                [],
-                'Findologic::Template.queryInfoMessageQuery',
-                [
+                'filtersData' => [],
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
+                'expectedTranslationParams' => [
                     'query' => 'Test',
                     'hits' => 0
                 ]
             ],
             'Improved query present' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => 'OriginalTest',
                     'didYouMeanQuery' => null,
                     'currentQuery' => 'Test',
@@ -105,15 +105,15 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => null,
                     'selectedVendorName' => null
                 ],
-                [],
-                'Findologic::Template.improvedQuery',
-                [
-                    'alternativeQuery' => 'Test',
-                    'originalQuery' => 'OriginalTest'
+                'filtersData' => [],
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
+                'expectedTranslationParams' => [
+                    'query' => 'Test',
+                    'hits' => 0
                 ]
             ],
             'Corrected query present' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => 'OriginalTest',
                     'didYouMeanQuery' => null,
                     'currentQuery' => 'Test',
@@ -121,15 +121,15 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => null,
                     'selectedVendorName' => null
                 ],
-                [],
-                'Findologic::Template.correctedQuery',
-                [
-                    'alternativeQuery' => 'Test',
-                    'originalQuery' => 'OriginalTest'
+                'filtersData' => [],
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
+                'expectedTranslationParams' => [
+                    'query' => 'Test',
+                    'hits' => 0
                 ]
             ],
             'Category selected' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
                     'currentQuery' => '',
@@ -137,7 +137,7 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => 'TestCat',
                     'selectedVendorName' => null
                 ],
-                [
+                'filtersData' => [
                     [
                         'id' => 'TestFilter',
                         'name' => 'TestFilterDisplayName',
@@ -154,15 +154,15 @@ class ResponseTest extends TestCase
                         'position' => 30
                     ]
                 ],
-                'Findologic::Template.queryInfoMessageCat',
-                [
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageCat',
+                'expectedTranslationParams' => [
                     'filterName' => 'CatDisplayName',
                     'cat' => 'TestCat',
                     'hits' => 0
                 ]
             ],
             'Vendor selected' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
                     'currentQuery' => '',
@@ -170,7 +170,7 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => null,
                     'selectedVendorName' => 'TestVendor'
                 ],
-                [
+                'filtersData' => [
                     [
                         'id' => 'TestFilter',
                         'name' => 'TestFilterDisplayName',
@@ -187,15 +187,15 @@ class ResponseTest extends TestCase
                         'position' => 30
                     ]
                 ],
-                'Findologic::Template.queryInfoMessageVendor',
-                [
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageVendor',
+                'expectedTranslationParams' => [
                     'filterName' => 'VendorDisplayName',
                     'vendor' => 'TestVendor',
                     'hits' => 0
                 ]
             ],
             'No search query present and category with vendor filter selected' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
                     'currentQuery' => '',
@@ -203,7 +203,7 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => 'TestChildCat',
                     'selectedVendorName' => 'TestVendor'
                 ],
-                [
+                'filtersData' => [
                     [
                         'id' => 'TestFilter',
                         'name' => 'TestFilterDisplayName',
@@ -220,15 +220,15 @@ class ResponseTest extends TestCase
                         'position' => 30
                     ]
                 ],
-                'Findologic::Template.queryInfoMessageCat',
-                [
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageCat',
+                'expectedTranslationParams' => [
                     'filterName' => 'CatDisplayName',
                     'cat' => 'TestChildCat',
                     'hits' => 0
                 ]
             ],
             'Search query present and category with vendor filter selected' => [
-                [
+                'queryInfoMessageData' => [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
                     'currentQuery' => 'TestQuery',
@@ -236,7 +236,7 @@ class ResponseTest extends TestCase
                     'selectedCategoryName' => 'TestChildCat',
                     'selectedVendorName' => 'TestVendor'
                 ],
-                [
+                'filtersData' => [
                     [
                         'id' => 'TestFilter',
                         'name' => 'TestFilterDisplayName',
@@ -253,13 +253,96 @@ class ResponseTest extends TestCase
                         'position' => 30
                     ]
                 ],
-                'Findologic::Template.queryInfoMessageQuery',
-                [
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
+                'expectedTranslationParams' => [
                     'query' => 'TestQuery',
                     'hits' => 0
                 ]
             ]
         ];
+    }
+
+    public function smartDidYouMeanQueryProvider(): array
+    {
+        return [
+            'Smart Did-You-Mean is not triggered if there is an empty query' => [
+                'queryInfoMessageData' => [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => '',
+                    'queryStringType' => null,
+                ],
+                'expectedTranslationKey' => '',
+                'expectedTranslationParams' => [],
+            ],
+            'Smart Did-You-Mean with did you mean query' => [
+                'queryInfoMessageData' => [
+                    'originalQuery' => 'bok',
+                    'didYouMeanQuery' => 'book',
+                    'currentQuery' => 'bok',
+                    'queryStringType' => null,
+                ],
+                'expectedTranslationKey' => 'Findologic::Template.didYouMeanQuery',
+                'expectedTranslationParams' => [
+                    'originalQuery' => 'bok',
+                    'alternativeQuery' => 'book'
+                ],
+            ],
+            'Smart Did-You-Mean with improved query' => [
+                'queryInfoMessageData' => [
+                    'originalQuery' => 'bok',
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'book',
+                    'queryStringType' => 'improved',
+                ],
+                'expectedTranslationKey' => 'Findologic::Template.improvedQuery',
+                'expectedTranslationParams' => [
+                    'originalQuery' => 'bok',
+                    'alternativeQuery' => 'book'
+                ],
+            ],
+            'Smart Did-You-Mean with corrected query' => [
+                'queryInfoMessageData' => [
+                    'originalQuery' => 'bok',
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'book',
+                    'queryStringType' => 'corrected',
+                ],
+                'expectedTranslationKey' => 'Findologic::Template.correctedQuery',
+                'expectedTranslationParams' => [
+                    'originalQuery' => 'bok',
+                    'alternativeQuery' => 'book'
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider smartDidYouMeanQueryProvider
+     */
+    public function testSmartDidYouMean(
+        array $queryInfoMessageData,
+        string $expectedTranslationKey,
+        array $expectedTranslationParams
+    ) {
+        if ($expectedTranslationKey && $expectedTranslationParams) {
+            $this->translator->expects($this->once())
+                ->method('trans')
+                ->with($expectedTranslationKey, $expectedTranslationParams)
+                ->willReturn('');
+        } else {
+            $this->translator
+                ->expects($this->never())
+                ->method('trans');
+        }
+
+        /** @var Response|MockObject $responseMock */
+        $responseMock = $this->getResponseMock(['getData']);
+        $responseMock->method('getData')
+            ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE])
+            ->willReturnOnConsecutiveCalls($queryInfoMessageData);
+
+        $responseMock->getSmartDidYouMean();
     }
 
     /**
