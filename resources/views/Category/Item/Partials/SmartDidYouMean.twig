@@ -1,5 +1,8 @@
 <div class="row mt-3">
     <div class="col-12">
         <h1 class="h2" id="searchPageTitle">{{ query_info_message | raw }}</h1>
+        {% if smart_did_you_mean and smart_did_you_mean|length > 0 %}
+            <p class="smart-did-you-mean">{{ smart_did_you_mean | raw }}</p>
+        {% endif %}
     </div>
 </div>

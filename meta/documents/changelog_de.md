@@ -1,5 +1,27 @@
 # Release Notes für FINDOLOGIC
 
+## 2.7.0 (2020-04-06)
+
+### Hinzugefügt
+
+* [PLENTY-193] Die Anzahl der Filter pro Spalte, kann nun konfiguriert werden.
+* [PLENTY-196] Filter haben nun ein no-follow Attribut, wodurch diese
+ nicht länger gecrawlt werden.
+
+### Geändert
+
+* [PLENTY-229] Die benutzerfreundliche Suchbegriff-Nachricht wurde angepasst, damit
+ diese sich dem Stil der Direct Integration anpasst.
+* [PLENTY-230] Die Smart Did-You-Mean Nachricht wird nun unter der Suchbegriff-Nachricht
+ angezeigt.
+* [PLENTY-231] Farbfilter Bilder werden nun als Hintergrund anstatt als separates
+ `<img>` Element gesetzt.
+
+### Behoben
+
+* [PLENTY-220] Ein Fehler wurde behoben, wodurch der Filter Button auf Kategorieseiten
+ an eine falsche Stelle gesetzt wurde, wenn der ShopBuilder verwendet wurde.
+
 ## 2.6.0 (2020-03-13)
 
 ### Hinzugefügt
