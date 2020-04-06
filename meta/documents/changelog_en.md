@@ -1,5 +1,27 @@
 # Release Notes for FINDOLOGIC
 
+## 2.7.0 (2020-04-06)
+
+### Added
+
+* [PLENTY-193] Filters per row can now be configured.
+* [PLENTY-196] Filters now contain a no-follow attribute which prevents them
+ from being crawled.
+
+### Changed
+
+* [PLENTY-229] The query info message translations were adapted to match
+ the style with our Direct Integration.
+* [PLENTY-230] The Smart Did-You-Mean message will now be displayed
+ below the query info message.
+* [PLENTY-231] Color filter images are now set as background instead of a
+ separate `<img>` tag.
+
+### Fixed
+
+* [PLENTY-220] Fixed a bug that caused the filter button on category pages
+ to be misplaced when using the ShopBuilder.
+
 ## 2.6.0 (2020-03-13)
 
 ### Added
