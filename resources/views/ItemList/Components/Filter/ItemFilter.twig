@@ -1,6 +1,6 @@
 <script type="x/template" id="vue-item-filter">
     {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
-    <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-4" :class="facet.cssClass">
+    <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-{{ config('Findologic.filters_per_row') }}" :class="facet.cssClass">
         <div class="h3">${facet.name}</div>
         <div v-if="facet.type === 'price'">
             <item-filter-price :facet="facet"></item-filter-price>
@@ -12,7 +12,7 @@
             <div v-if="!facet.noAvailableFiltersText">
                 <div class="form-check" v-for="value in facet.values" :key="value.id">
                     <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                    <label :for="'option-' + value.id" class="form-check-label">
+                    <label :for="'option-' + value.id" class="form-check-label" rel="nofollow">
                         <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
                         <span v-show="!value.imageUrl">${ value.name }</span>
                     </label>
@@ -31,16 +31,16 @@
             <div v-if="!facet.noAvailableFiltersText" class="form-check" v-for="value in facet.values" :key="value.id">
                 <div class="category-container">
                     <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                    <label :for="'option-' + value.id" class="form-check-label">
+                    <label :for="'option-' + value.id" class="form-check-label" rel="nofollow">
                         ${ value.name }
                     </label>
                     <div class="filter-badge">${ value.count }</div>
                 </div>
                 <div v-if="value.selected">
-                    <div class="sub-category-container" v-if="value.items.length > 0">
+                    <div class="sub-category-container" v-if="value.items.length > 0" rel="nofollow">
                         <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
                             <input :id="'option-' + subCategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="subCategory.selected" @change="updateFacet(getSubCategoryValue(value, subCategory))" :disabled="isLoading">
-                            <label :for="'option-' + subCategory.id" class="form-check-label">
+                            <label :for="'option-' + subCategory.id" class="form-check-label" rel="nofollow">
                                 ${ subCategory.name }
                             </label>
                             <div class="filter-badge">${ subCategory.count }</div>
@@ -59,7 +59,7 @@
         <div v-else>
             <div class="form-check" v-for="value in facet.values" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                <label :for="'option-' + value.id" class="form-check-label">
+                <label :for="'option-' + value.id" class="form-check-label" rel="nofollow">
                     ${ value.name }
                 </label>
                 <div class="filter-badge">${ value.count }</div>
