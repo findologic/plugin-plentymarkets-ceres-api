@@ -1,6 +1,6 @@
 <script type="x/template" id="vue-findologic-item-filter">
     {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
-    <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-4" :class="facet.cssClass">
+    <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-{{ config('Findologic.filters_per_row') }}" :class="facet.cssClass">
         <div class="h3" v-text="facet.name"></div>
         <div v-if="facet.type === 'price'">
             <item-filter-price template-override="#vue-findologic-item-price" :facet="facet"></item-filter-price>
@@ -12,7 +12,7 @@
             <div v-if="!facet.noAvailableFiltersText">
                 <div class="form-check" v-for="value in facet.values" :key="value.id">
                     <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                    <label :for="'option-' + value.id" class="form-check-label">
+                    <label :for="'option-' + value.id" class="form-check-label" rel="nofollow">
                         <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
                         <span v-show="!value.imageUrl" v-text="value.name"></span>
                     </label>
