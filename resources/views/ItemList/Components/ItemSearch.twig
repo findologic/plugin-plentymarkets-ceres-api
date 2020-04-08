@@ -1,5 +1,5 @@
 <script type="x/template" id="vue-findologic-item-search">
-    <form id="search-form" method="GET" action="/search" onsubmit="return document.dispatchEvent(window.flSearchSubmitEvent);">
+    <form method="GET" action="/search" onsubmit="return flSearchSubmitEventHandler(event, this);">
         <div class="container-max">
             <div class="position-relative">
                 <div class="d-flex flex-grow-1 position-relative my-2">
