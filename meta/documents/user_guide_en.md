@@ -1,24 +1,27 @@
-### Prerequisites
+## Prerequisites
 
 Plugin [Ceres](https://marketplace.plentymarkets.com/en/plugins/sales/online-shops/ceres_4697) and [IO](https://marketplace.plentymarkets.com/en/plugins/sales/online-shops/io_4696) **version >= 5.0.0** are required for the installation of the FINDOLOGIC plugin.
 
-## OUR SHOPPING EXPERIENCE PLATFORM FOR YOUR USERS
-Get the fully integrated shopping experience in your online store!
-Our open and modular platform with intelligent search, navigation, merchandising, shopping guide, analytics, as well as our high-performance user interface, offers everything via lean integration. Put your users in focus and separate yourself from the competition with us.
+## Features
 
-### Search
-The search function represents the most important sales tool in your online store. Our algorithm, which has been refined for over 10 years, lets your customers really find what they are looking for. At the outset of their search, our Smart Suggest offers an intelligent drop-down to give your users the fastest possible orientation. Especially for mobile users.
+* __Search:__ When it comes to generating sales, the search function is the most important tool in your online shop. Our ‘Smart Suggest’ feature is an intelligent dropdown option which provides users with the fastest, most relevant, most efficient results possible. It dynamically updates search results in real-time, as a user types. Slick and space-saving, this feature makes life easy for customers, even those on mobile devices.
+* __Navigation:__ As users navigate your website they will always see the products most relevant to them.
+* __Personalisation:__ Treat each of your customers personally by tailoring the shopping experience to them.
+* __User Interface:__ With the Findologic User Interface integrated directly into your frontend, we can revolutionise your customer interactions. Guaranteed.
+* __Merchandising:__ Findologic’s revolutionary backend controls and optimises onsite merchandising. This ensures the best possible search experience for your customers, leading to higher conversion rates.  
+* __Shopping Guide:__ With our Shopping Guide tool integrated into your website, you can ask a set of questions – supported with images – to help a user find exactly what they’re looking for.
 
-### Navigation
-Your users will see the most relevant products via your online store globally at any point during the customer journey. Provide a fully-integrated, high-performance, consistent and personalized user experience across all category pages.
+## About Findologic
 
-### Merchandising
-Use the intuitive FINDOLOGIC backend with our specially developed tools for compact and efficient sales and onsite marketing controls.
+[Findologic](https://www.findologic.com/) has been developing modern software solutions for online shops since 2008 and is one of the world’s leading providers today.
+ 
+Just as a helpful sales assistant completes the shopping experience for the in-store customer – so the digital shopping assistant supports and serves the online shopper. This is exactly where our unique approach helps ecommerce businesses. We keep our finger on the pulse with our technology partners, agencies, shop systems and customers -  with unparalleled results.
+We radically rethink processes and solutions, so that set up is simple and effortless.
+Our platform and products automatically adapt to the online shop, which drastically reduces maintenance and support, and at the same time significantly increases flexibility, usability and customer proximity.
+ 
+This also benefits customers in terms of quality and price.
+As part of a holistic customer journey intelligent technologies from Findologic greatly improve the user experience, leading to satisfied customers.
+ 
+We differ from other software in two key ways:
+Our disruptive approaches and our service first orientation.
 
-### Shopping Guide
-As part of a shopping advisor campaign, ask your users smart questions that a salesperson from a stationary branch store would also ask. Thus your users will find the right product quickly and easily.
-
-### Our references
-* *„Revenue increased by 46% in our Magento-shop with FINDOLOGIC!“* - **Shop4Runners**
-* *„FINDOLOGIC expanded the search to become a powerful on-site merchandising tool!“* - **Design Bestseller**
-* *„Conversion-Rate increased by 20% with FINDOLOGIC!“* - **Adler Mode**
