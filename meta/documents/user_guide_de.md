@@ -4,7 +4,7 @@ Für die Installation des FINDOLOGIC Plugin ist die Verwendung des [Ceres](https
 
 ## Features
 
-* __Personalisierung:__ Mit Personalisierung haben Sie ab sofort für jede Zielgruppe einen eigens optimierten Online-Shop. Mit der personalisierten Suche, Navigation und Shopping Guide ermöglichen wir es Ihnen, jeden einzelnen Ihrer User individuell und gezielt anzusprechen.
+* __Personalisierung:__ Mit Personalisierung haben Sie ab sofort für jede Zielgruppe einen eigens optimierten Online-Shop. Mit der personalisierten Suche und Navigation ermöglichen wir es Ihnen, jeden einzelnen Ihrer User individuell und gezielt anzusprechen.
 * __Suche:__ Die Suchfunktion entspricht dem wichtigsten Verkaufstool in Ihrem Online-Shop. Über 12 Jahre Wissen sind in über 1.000 verschiedene Szenarien in einer Wissensdatenbank eingeflossen, welche das algorithmische Verhalten der Suche für jeden User und Webshop optimal steuert.
 * __Navigation:__ Ihren Usern werden global über Ihren Online-Shop zu jedem Zeitpunkt der Customer Journey die relevantesten Produkte angezeigt.
 * __User Interface:__ Eine Einbindung direkt in Ihr Frontend, revolutioniert Ihre Kundeninteraktionen. Garantiert.
