@@ -14,14 +14,13 @@ Plugin [Ceres](https://marketplace.plentymarkets.com/en/plugins/sales/online-sho
 ## About Findologic
 
 [Findologic](https://www.findologic.com/) has been developing modern software solutions for online shops since 2008 and is one of the world’s leading providers today.
- 
+
 Just as a helpful sales assistant completes the shopping experience for the in-store customer – so the digital shopping assistant supports and serves the online shopper. This is exactly where our unique approach helps ecommerce businesses. We keep our finger on the pulse with our technology partners, agencies, shop systems and customers -  with unparalleled results.
 We radically rethink processes and solutions, so that set up is simple and effortless.
 Our platform and products automatically adapt to the online shop, which drastically reduces maintenance and support, and at the same time significantly increases flexibility, usability and customer proximity.
- 
+
 This also benefits customers in terms of quality and price.
 As part of a holistic customer journey intelligent technologies from Findologic greatly improve the user experience, leading to satisfied customers.
- 
+
 We differ from other software in two key ways:
 Our disruptive approaches and our service first orientation.
-
