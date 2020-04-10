@@ -9,7 +9,6 @@ Plugin [Ceres](https://marketplace.plentymarkets.com/en/plugins/sales/online-sho
 * __Personalisation:__ Treat each of your customers personally by tailoring the shopping experience to them.
 * __User Interface:__ With the Findologic User Interface integrated directly into your frontend, we can revolutionise your customer interactions. Guaranteed.
 * __Merchandising:__ Findologic’s revolutionary backend controls and optimises onsite merchandising. This ensures the best possible search experience for your customers, leading to higher conversion rates.  
-* __Shopping Guide:__ With our Shopping Guide tool integrated into your website, you can ask a set of questions – supported with images – to help a user find exactly what they’re looking for.
 
 ## About Findologic
 

@@ -9,7 +9,6 @@ Für die Installation des FINDOLOGIC Plugin ist die Verwendung des [Ceres](https
 * __Navigation:__ Ihren Usern werden global über Ihren Online-Shop zu jedem Zeitpunkt der Customer Journey die relevantesten Produkte angezeigt.
 * __User Interface:__ Eine Einbindung direkt in Ihr Frontend, revolutioniert Ihre Kundeninteraktionen. Garantiert.
 * __Merchandising:__ Das revolutionäre Backend mit unseren speziell entwickelten Tools zur effizienten Marketing Steuerung. Mit unserern Rankingmöglichkeiten lassen sich Ihre Produkte nach Kriterien wie Verfügbarkeit, Marge oder Neuheiten nach Ihren Wünschen pushen.
-* __Shopping Guide:__ Stellen Sie Ihren Usern im Rahmen einer Berater-Kampagne smarte Fragen, welche auch ein Verkäufer einer stationären Filiale stellen würde. Diese Guides werden automatisch in Ihrem Backend über bestehende Filterwerte verknüpft und individuell zu Ihrem Beraterkonzept erstellt.
 
 ## Über Findologic
 
