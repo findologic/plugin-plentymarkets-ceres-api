@@ -2,9 +2,9 @@
 
 ## 3.0.0 (2020-04-14)
 
-### Support of Ceres 5
+### Support Ceres 5
 
-![Ceres 5](https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg)
+<img width="9999" height="150" alt="Ceres 5" src="https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg">
 
 ### Changed
 
