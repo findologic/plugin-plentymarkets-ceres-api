@@ -1,5 +1,16 @@
 # Release Notes for FINDOLOGIC
 
+## 3.0.0 (2020-04-14)
+
+### Support Ceres 5
+
+<p align="center"><a href="https://marketplace.plentymarkets.com/en/plugins/sales/online-shops/ceres_4697" target="_blank"><img height="150" alt="Ceres 5" src="https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg"></a></p>
+
+### Fixed
+
+* [PLENTY-227] Fixed a bug that caused the first search form to be submitted,
+ instead of the actual submitted form.
+
 ## 2.7.0 (2020-04-06)
 
 ### Added

@@ -1,5 +1,5 @@
 {
-  "version": "2.7.0",
+  "version": "3.0.0",
   "name": "Findologic",
   "marketplaceName": {
     "de": "FINDOLOGIC",
@@ -18,12 +18,12 @@
   "email": "plugins@findologic.com",
   "phone": "+43 662 45 67 08",
   "categories": [
-    "3885"
+    "4090"
   ],
   "type": "template",
   "require": {
-    "Ceres": "~4.5",
-    "IO": "~4.5"
+    "Ceres": "~5.0",
+    "IO": "~5.0"
   },
   "namespace": "Findologic",
   "serviceProvider": "Findologic\\Providers\\FindologicServiceProvider",

@@ -13,4 +13,4 @@ install:
   - php composer.phar install
 
 script:
-  - php vendor/bin/phpunit -c tests/phpunit.xml
+  - composer test

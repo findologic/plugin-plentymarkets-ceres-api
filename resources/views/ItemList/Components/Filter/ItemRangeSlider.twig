@@ -1,13 +1,13 @@
-<script type="x/template" id="vue-item-range-slider">
+<script type="x/template" id="vue-findologic-item-range-slider">
     <div class="fl-range-slider-container">
         <div class="row">
             <div class="col-md-6 col-xs-6">
                 <input class="fl-range-input" v-model="valueFrom">
-                <span class="fl-unit">${facet.unit}</span>
+                <span class="fl-unit" v-text="facet.unit"></span>
             </div>
             <div class="col-md-6 col-xs-6">
                 <input class="fl-range-input" v-model="valueTo">
-                <span class="fl-unit">${facet.unit}</span>
+                <span class="fl-unit" v-text="facet.unit"></span>
             </div>
         </div>
         <div class="row fl-range-slider-row">
@@ -15,8 +15,15 @@
                 <div class="fl-range-slider" :id="sanitizedFacetId"></div>
             </div>
             <div class="col-md-3 col-sm-3 col-xs-12 fl-range-slider-submit-btn-container">
-                <button type="button" class="btn btn-primary fl-range-slider-submit-btn" :class="{'disabled': isDisabled}" v-tooltip
-                        data-toggle="tooltip" data-placement="top" @click="triggerFilter()" title="{{ trans("Ceres::Template.itemApply") }}" rel="nofollow">
+                <button type="button"
+                        class="btn btn-primary fl-range-slider-submit-btn"
+                        :class="{'disabled': isDisabled}"
+                        v-tooltip
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        @click="triggerFilter()"
+                        title="{{ trans("Ceres::Template.itemApply") }}"
+                        rel="nofollow">
                     <i v-waiting-animation="isLoading" class="fa fa-check" aria-hidden="true"></i>
                 </button>
             </div>
