@@ -1,5 +1,20 @@
 # Release Notes for FINDOLOGIC
 
+## 3.0.0 (2020-04-14)
+
+### Added
+
+* [PLENTY-205] The plugin is now compatible with Ceres 5!
+
+### Changed🎉🎉
+
+* [PLENTY-234] The marketplace images were updated to reflect our new branding.
+
+### Fixed
+
+* [PLENTY-227] Fixed a bug that caused the first search form to be submitted,
+ instead of the actual submitted form.
+
 ## 2.7.0 (2020-04-06)
 
 ### Added
