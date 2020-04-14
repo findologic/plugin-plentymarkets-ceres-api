@@ -4,7 +4,7 @@
 
 ### Support Ceres 5
 
-<img width="9999" height="150" alt="Ceres 5" src="https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg">
+<p align="center"><a href="https://marketplace.plentymarkets.com/plugins/sales/online-shops/ceres_4697" target="_blank"><img height="150" alt="Ceres 5" src="https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg"></a></p>
 
 ### Changed
 
