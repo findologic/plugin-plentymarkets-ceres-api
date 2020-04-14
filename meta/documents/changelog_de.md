@@ -4,7 +4,8 @@
 
 ### Hinzugefügt
 
-* [PLENTY-205] Das Plugin ist nun kompatibel mit Ceres 5🎉!
+
+* [PLENTY-205] Das Plugin ist nun kompatibel mit <img src="https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg" height="20" align="center"/>
 
 ### Geändert
 
