@@ -6,11 +6,6 @@
 
 <p align="center"><a href="https://marketplace.plentymarkets.com/plugins/sales/online-shops/ceres_4697" target="_blank"><img height="150" alt="Ceres 5" src="https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg"></a></p>
 
-### Geändert
-
-* [PLENTY-234] Die Marketplace Bilder wurden aktualisiert, um unser neues
- Branding zu reflektieren.
-
 ### Behoben
 
 * [PLENTY-227] Ein Fehler wurde behoben, welcher immer das erste Suchformular,
