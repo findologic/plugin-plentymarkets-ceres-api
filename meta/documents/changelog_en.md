@@ -4,9 +4,9 @@
 
 ### Added
 
-* [PLENTY-205] The plugin is now compatible with Ceres 5!
+* [PLENTY-205] The plugin is now compatible with Ceres 5🎉!
 
-### Changed🎉🎉
+### Changed
 
 * [PLENTY-234] The marketplace images were updated to reflect our new branding.
 

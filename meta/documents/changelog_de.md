@@ -4,7 +4,7 @@
 
 ### Hinzugefügt
 
-* [PLENTY-205] Das Plugin ist nun kompatibel mit Ceres 5!
+* [PLENTY-205] Das Plugin ist nun kompatibel mit Ceres 5🎉!
 
 ### Geändert
 
