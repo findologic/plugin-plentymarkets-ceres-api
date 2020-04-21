@@ -198,4 +198,11 @@ class PlentyRequestMock extends Request
     public function getMethod(): string
     {
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLocale(): string
+    {
+    }
 }

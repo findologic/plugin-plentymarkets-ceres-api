@@ -1,12 +1,9 @@
-<script type="x/template" id="vue-item-color-tiles">
+<script type="x/template" id="vue-findologic-item-color-tiles">
     <div class="fl-item-color-tiles-container">
         <ul class="fl-item-color-tiles-list">
             <li class="fl-item-color-tiles-list-item" v-for="colorValue in facet.values">
-                <label class="fl-color-tile-label" @click="tileClicked(colorValue.name)">
-                    <div class="fl-color-tile-background" v-bind:style="{background: colorValue.hexValue}">
-                        <img class="fl-color-tile-image"
-                             v-show="colorValue.colorImageUrl"
-                             :src="colorValue.colorImageUrl"/>
+                <label class="fl-color-tile-label" @click="tileClicked(colorValue.name)" rel="nofollow">
+                    <div class="fl-color-tile-background" v-bind:style="{backgroundColor: colorValue.hexValue, backgroundImage: 'url(' + colorValue.colorImageUrl + ')'}">
                         <img class="fl-color-tile-image"
                              v-show="!colorValue.colorImageUrl && !colorValue.hexValue"
                              src="{{ plugin_path("Findologic") }}/images/no-picture.jpg"/>

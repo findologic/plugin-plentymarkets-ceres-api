@@ -388,7 +388,7 @@ var _url2 = _interopRequireDefault(_url);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-Vue.component("item-filter", {
+Vue.component("findologic-item-filter", {
     mixins: [_url2.default],
 
     delimiters: ["${", "}"],

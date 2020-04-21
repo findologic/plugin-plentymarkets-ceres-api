@@ -1,5 +1,38 @@
 # Release Notes für FINDOLOGIC
 
+## 3.0.0 (2020-04-14)
+
+### Support Ceres 5
+
+<p align="center"><a href="https://marketplace.plentymarkets.com/plugins/sales/online-shops/ceres_4697" target="_blank"><img height="150" alt="Ceres 5" src="https://plentymarkets-assistant.s3.eu-central-1.amazonaws.com/ceres-5.svg"></a></p>
+
+### Behoben
+
+* [PLENTY-227] Ein Fehler wurde behoben, welcher immer das erste Suchformular,
+ anstatt das abgeschickte Formular abschickte.
+
+## 2.7.0 (2020-04-06)
+
+### Hinzugefügt
+
+* [PLENTY-193] Die Anzahl der Filter pro Spalte, kann nun konfiguriert werden.
+* [PLENTY-196] Filter haben nun ein no-follow Attribut, wodurch diese
+ nicht länger gecrawlt werden.
+
+### Geändert
+
+* [PLENTY-229] Die benutzerfreundliche Suchbegriff-Nachricht wurde angepasst, damit
+ diese sich dem Stil der Direct Integration anpasst.
+* [PLENTY-230] Die Smart Did-You-Mean Nachricht wird nun unter der Suchbegriff-Nachricht
+ angezeigt.
+* [PLENTY-231] Farbfilter Bilder werden nun als Hintergrund anstatt als separates
+ `<img>` Element gesetzt.
+
+### Behoben
+
+* [PLENTY-220] Ein Fehler wurde behoben, wodurch der Filter Button auf Kategorieseiten
+ an eine falsche Stelle gesetzt wurde, wenn der ShopBuilder verwendet wurde.
+
 ## 2.6.0 (2020-03-13)
 
 ### Hinzugefügt
