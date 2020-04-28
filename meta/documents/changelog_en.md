@@ -1,4 +1,4 @@
-# Release Notes for FINDOLOGIC
+# Release Notes for Findologic
 
 ## 3.0.0 (2020-04-14)
 
@@ -37,7 +37,7 @@
 
 ### Added
 
-* [PLENTY-192] Plentymarkets tags are now supported. FINDOLOGIC will automatically filter by the given tag on tag pages.
+* [PLENTY-192] Plentymarkets tags are now supported. Findologic will automatically filter by the given tag on tag pages.
 
 ### Changed
 
@@ -51,8 +51,8 @@
 
 * [PLENTY-210] Fixed a bug that caused a console error when configuring all filters as "other filter" and clicking on the filter
  button.
-* [PLENTY-200] Fixed a bug that caused sorting options to disappear, even if FINDOLOGIC hasn't provided product results
- yet. Some sorting options will still disappear when selecting a filter, as they may not be compatible with FINDOLOGIC.
+* [PLENTY-200] Fixed a bug that caused sorting options to disappear, even if Findologic hasn't provided product results
+ yet. Some sorting options will still disappear when selecting a filter, as they may not be compatible with Findologic.
 
 ## 2.5.1 (2020-02-27)
 
@@ -96,7 +96,7 @@ detail page, after a filter was selected, that would only lead to one result.
 
 ### Added
 
-* [PLENTY-179] Added a config option to disable CSS added by FINDOLOGIC for the
+* [PLENTY-179] Added a config option to disable CSS added by Findologic for the
  filter styles.
 
 ### Fixed
@@ -124,7 +124,7 @@ detail page, after a filter was selected, that would only lead to one result.
 
 ### Added
 
-* Support for the "no available filters" text, if set in the FINDOLOGIC backend.
+* Support for the "no available filters" text, if set in the Findologic backend.
 
 ### Fixed
 
@@ -138,7 +138,7 @@ detail page, after a filter was selected, that would only lead to one result.
 
 ### Added
 
-* Support for fixed filter values for dropdown filters, if set in the FINDOLOGIC
+* Support for fixed filter values for dropdown filters, if set in the Findologic
 backend.
 
 ### Fixed
@@ -188,7 +188,7 @@ set to "Development".
 
 ### Fixed
 
-* Navigating to the second search result page would cause an error since Plentymarkets couldn't load metadata for FINDOLOGIC's plugin.
+* Navigating to the second search result page would cause an error since Plentymarkets couldn't load metadata for Findologic's plugin.
 
 ### Changed
 
@@ -198,7 +198,7 @@ set to "Development".
 
 ### Added
 
-* Support for landing pages that are configured in FINDOLOGIC's backend.
+* Support for landing pages that are configured in Findologic's backend.
 * Support for promotion banners (incl. a respective data provider).
 
 ## 1.1.2 (2019-07-19)
@@ -207,10 +207,10 @@ set to "Development".
 
 * Added constraints for the latest supported versions for required plugins Ceres (4.0.2) and IO (4.1.2).
 * Updated user guide and images.
-* Currently used plugin version, which is sent to FINDOLOGIC with each request, is loaded dynamically via Plentymarkets.
+* Currently used plugin version, which is sent to Findologic with each request, is loaded dynamically via Plentymarkets.
 * Third party JS libraries are loaded via a CDN.
 * A minified version of this plugin's JS files are used.
-* Updated the FINDOLOGIC snippet and added new configuration options for it.
+* Updated the Findologic snippet and added new configuration options for it.
 
 ## 1.1.1 (2019-07-03)
 
@@ -247,11 +247,11 @@ set to "Development".
 
 * Multilingualism
 
-  At the moment only one of the available shop languages is supported. The actively used language can be configured in consultation with FINDOLOGIC.
+  At the moment only one of the available shop languages is supported. The actively used language can be configured in consultation with Findologic.
 
 * Personalization
 
-  With FINDOLOGIC Personalization you now have a specifically optimized store for every target group.
+  With Findologic Personalization you now have a specifically optimized store for every target group.
 
 * Search
 
@@ -263,7 +263,7 @@ set to "Development".
 
 * Merchandising
 
-  Use the intuitive FINDOLOGIC backend with our specially developed tools for compact and efficient sales and onsite marketing controls.
+  Use the intuitive Findologic backend with our specially developed tools for compact and efficient sales and onsite marketing controls.
 
 * Shopping Guide
 

@@ -76,7 +76,7 @@ class Middleware extends PlentyMiddleware
         }
 
         if (!$this->searchService->aliveTest()) {
-            $this->getLoggerObject()->error('FINDOLOGIC search is not available!');
+            $this->getLoggerObject()->error('Findologic search is not available!');
 
             return;
         }
