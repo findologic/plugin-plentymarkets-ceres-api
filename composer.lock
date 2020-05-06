@@ -1841,11 +1841,11 @@
         },
         {
             "name": "plentymarkets/plugin-ceres",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-ceres",
-                "reference": "beta"
+                "reference": "5.0.1"
             },
             "type": "library"
         },
@@ -1870,11 +1870,11 @@
         },
         {
             "name": "plentymarkets/plugin-io",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "beta"
+                "reference": "5.0.1"
             },
             "type": "library"
         },

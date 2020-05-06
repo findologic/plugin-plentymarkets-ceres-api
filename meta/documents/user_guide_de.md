@@ -1,6 +1,6 @@
 ## Voraussetzungen
 
-Für die Installation des FINDOLOGIC Plugin ist die Verwendung des [Ceres](https://marketplace.plentymarkets.com/plugins/sales/online-shops/ceres_4697) und [IO](https://marketplace.plentymarkets.com/plugins/sales/online-shops/io_4696) Plugin in **Version >= 5.0.0** notwendig.
+Für die Installation des Findologic Plugin ist die Verwendung des [Ceres](https://marketplace.plentymarkets.com/plugins/sales/online-shops/ceres_4697) und [IO](https://marketplace.plentymarkets.com/plugins/sales/online-shops/io_4696) Plugin in **Version >= 5.0.0** notwendig.
 
 ## Features
 

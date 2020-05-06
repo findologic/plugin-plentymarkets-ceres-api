@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "menu": {
-    "Config.FINDOLOGICSearchTab": {
-      "label": "Config.FINDOLOGICSearchTab",
+    "Config.FindologicSearchTab": {
+      "label": "Config.FindologicSearchTab",
       "formFields": {
         "shopkey": {
           "type": "inputTextArea",
@@ -30,8 +30,8 @@
         }
       }
     },
-    "Config.FINDOLOGICSmartSuggest": {
-      "label": "Config.FINDOLOGICSmartSuggest",
+    "Config.FindologicSmartSuggest": {
+      "label": "Config.FindologicSmartSuggest",
       "formFields": {
         "search_result_container": {
           "type": "inputText",
@@ -49,8 +49,8 @@
         }
       }
     },
-    "Config.FINDOLOGICStylingCSS": {
-      "label": "Config.FINDOLOGICStylingCSS",
+    "Config.FindologicStylingCSS": {
+      "label": "Config.FindologicStylingCSS",
       "formFields": {
         "filters_styling_css_enabled": {
           "type": "selectBox",
