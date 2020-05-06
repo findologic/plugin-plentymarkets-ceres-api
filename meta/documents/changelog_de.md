@@ -1,5 +1,13 @@
 # Release Notes für Findologic
 
+## 3.0.1 (2020-05-06)
+
+### Geändert
+
+* [PLENTY-232] Das Bild welches angezeigt wird, wenn kein Farbbild/Farbton konfiguriert ist, wurde geändert.
+* [PLENTY-241] Alle Vorkommnisse von FINDOLOGIC wurden durch Findologic ersetzt.
+* [PLENTY-243] & [PLENTY-239] Die Bilder für den Plenty Marketplace wurden aktualisiert.
+
 ## 3.0.0 (2020-04-14)
 
 ### Support Ceres 5
