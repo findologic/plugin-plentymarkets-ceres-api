@@ -25,7 +25,7 @@
           "source": {
             "type": "git",
             "url": "https://github.com/plentymarkets/plugin-io",
-            "reference": "beta"
+            "reference": "5.0.0"
           }
         },
         {
@@ -93,7 +93,7 @@
           "source": {
             "type": "git",
             "url": "https://github.com/plentymarkets/plugin-ceres",
-            "reference": "5.0.1"
+            "reference": "5.0.0"
           }
         },
         {
