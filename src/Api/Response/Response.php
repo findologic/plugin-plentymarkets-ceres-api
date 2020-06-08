@@ -115,6 +115,16 @@ class Response
             return '';
         }
 
+        if (!empty($dataQueryInfoMessage['shoppingGuide'])) {
+            return $this->translator->trans(
+                'Findologic::Template.queryInfoMessageShoppingGuide',
+                [
+                    'shoppingGuide' => $dataQueryInfoMessage['shoppingGuide'],
+                    'hits' => $this->getResultsCount()
+                ]
+            );
+        }
+
         $type = $dataQueryInfoMessage['queryStringType'];
         $alternativeQuery = $dataQueryInfoMessage['currentQuery'];
 

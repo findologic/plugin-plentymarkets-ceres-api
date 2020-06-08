@@ -56,7 +56,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => '',
                     'queryStringType' => null,
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [],
                 'expectedTranslation' => 'Findologic::Template.queryInfoMessageDefault',
@@ -71,7 +72,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [],
                 'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
@@ -87,7 +89,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [],
                 'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
@@ -103,7 +106,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => 'improved',
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [],
                 'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
@@ -119,12 +123,46 @@ class ResponseTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => 'corrected',
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [],
                 'expectedTranslation' => 'Findologic::Template.queryInfoMessageQuery',
                 'expectedTranslationParams' => [
                     'query' => 'Test',
+                    'hits' => 0
+                ]
+            ],
+            'Uses shopping guide' => [
+                'queryInfoMessageData' => [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => '',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => null,
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => 'testShoppingGuide'
+                ],
+                'filtersData' => [
+                    [
+                        'id' => 'TestFilter',
+                        'name' => 'TestFilterDisplayName',
+                        'position' => 10
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'CatDisplayName',
+                        'position' => 20
+                    ],
+                    [
+                        'id' => 'vendor',
+                        'name' => 'VendorDisplayName',
+                        'position' => 30
+                    ]
+                ],
+                'expectedTranslation' => 'Findologic::Template.queryInfoMessageShoppingGuide',
+                'expectedTranslationParams' => [
+                    'shoppingGuide' => 'testShoppingGuide',
                     'hits' => 0
                 ]
             ],
@@ -135,7 +173,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => '',
                     'queryStringType' => null,
                     'selectedCategoryName' => 'TestCat',
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [
                     [
@@ -168,7 +207,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => '',
                     'queryStringType' => null,
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => 'TestVendor'
+                    'selectedVendorName' => 'TestVendor',
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [
                     [
@@ -201,7 +241,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => '',
                     'queryStringType' => null,
                     'selectedCategoryName' => 'TestChildCat',
-                    'selectedVendorName' => 'TestVendor'
+                    'selectedVendorName' => 'TestVendor',
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [
                     [
@@ -234,7 +275,8 @@ class ResponseTest extends TestCase
                     'currentQuery' => 'TestQuery',
                     'queryStringType' => null,
                     'selectedCategoryName' => 'TestChildCat',
-                    'selectedVendorName' => 'TestVendor'
+                    'selectedVendorName' => 'TestVendor',
+                    'shoppingGuide' => null
                 ],
                 'filtersData' => [
                     [
