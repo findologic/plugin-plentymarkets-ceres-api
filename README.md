@@ -1,7 +1,7 @@
 # API plugin for Plentymarkets Ceres
 [![Build Status](https://travis-ci.org/findologic/plugin-plentymarkets-ceres-api.svg?branch=development)](https://travis-ci.org/findologic/plugin-plentymarkets-ceres-api)
 
-Needs to be installed in Plentymarkets Ceres to utilize FINDOLOGIC's search API.
+Needs to be installed in Plentymarkets Ceres to utilize Findologic's search API.
 
 ## Getting started
 
@@ -63,7 +63,7 @@ $ php vendor/bin/phpunit -c tests/phpunit.xml
 1. Update the German and English changelogs in folder `meta/documents`.
 1. Bump the plugin version in files `plugin.json` and `src/Constants/Plugin.php`.
 1. Open the backend from our Plentymarkets test shop and login. 
-1. Go to *Plugins > Plugin overview > Ceres 4.2 > FINDOLOGIC > Git* and fetch & pull the master branch.
+1. Go to *Plugins > Plugin overview > Ceres 4.2 > Findologic > Git* and fetch & pull the master branch.
 1. Go back to *Plugin overview* and click *Save & deploy plugin set*.
 1. Open the plugin again and click on *Upload to plentyMarketplace*.
 1. The plugin may not be available yet, Plentymarkets has to do a review on their side. But once that is

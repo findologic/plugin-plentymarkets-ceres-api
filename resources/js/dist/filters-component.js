@@ -700,7 +700,7 @@ exports.default = {
 
 
         /*
-         * FINDOLOGIC method for parsing url params into a parameter map from current url
+         * Findologic method for parsing url params into a parameter map from current url
          * Taken from direct integration flUtils class
          *
          * @returns {{}} The parameter map

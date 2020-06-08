@@ -1,4 +1,12 @@
-# Release Notes für FINDOLOGIC
+# Release Notes für Findologic
+
+## 3.0.1 (2020-05-06)
+
+### Geändert
+
+* [PLENTY-232] Das Bild welches angezeigt wird, wenn kein Farbbild/Farbton konfiguriert ist, wurde geändert.
+* [PLENTY-241] Alle Vorkommnisse von FINDOLOGIC wurden durch Findologic ersetzt.
+* [PLENTY-243] & [PLENTY-239] Die Bilder für den Plenty Marketplace wurden aktualisiert.
 
 ## 3.0.0 (2020-04-14)
 
@@ -37,7 +45,7 @@
 
 ### Hinzugefügt
 
-* [PLENTY-192] Plentymarkets Tags werden nun unterstützt. FINDOLOGIC wird nun automatisch nach Tags auf Tagseiten
+* [PLENTY-192] Plentymarkets Tags werden nun unterstützt. Findologic wird nun automatisch nach Tags auf Tagseiten
  filtern.
 
 ### Geändert
@@ -52,9 +60,9 @@
 
 * [PLENTY-210] Ein Fehler wurde behoben welcher einen Konsolenfehler verursachte, wenn alle Filter als
  "Weitere Filter" konfiguriert waren.
-* [PLENTY-200] Ein Fehler wurde behoben welcher Sortieroptionen verschwinden lies, obwohl FINDOLOGIC noch keine
+* [PLENTY-200] Ein Fehler wurde behoben welcher Sortieroptionen verschwinden lies, obwohl Findologic noch keine
  Resultate ausgespielt hatte. Einige Sortiermöglichkeiten werden dennoch verschwinden, wenn ein Filter selektiert wird,
- da manche Sortiermöglichkeiten nicht mit FINDOLOGIC kompatibel sind.
+ da manche Sortiermöglichkeiten nicht mit Findologic kompatibel sind.
 
 ## 2.5.1 (2020-02-27)
 
@@ -100,7 +108,7 @@
 
 ### Hinzugefügt
 
-* [PLENTY-179] Es gibt nun eine Konfigurationsoption, um CSS von FINDOLOGIC
+* [PLENTY-179] Es gibt nun eine Konfigurationsoption, um CSS von Findologic
  für das Filter-Styling, zu deaktivieren.
 
 ### Behoben
@@ -129,7 +137,7 @@
 
 ### Hinzugefügt
 
-* Unterstützung für den "keine weitere Filter" text, sofern dieser bei FINDOLOGIC konfiguriert ist.
+* Unterstützung für den "keine weitere Filter" text, sofern dieser bei Findologic konfiguriert ist.
 
 ### Behoben
 
@@ -144,7 +152,7 @@
 
 ### Hinzugefügt
 
-* Unterstützung für fixierte Filterwerte für den Filtertyp "Dropdown", sofern diese bei FINDOLOGIC konfiguriert sind.
+* Unterstützung für fixierte Filterwerte für den Filtertyp "Dropdown", sofern diese bei Findologic konfiguriert sind.
 
 ### Behoben
 
@@ -170,7 +178,7 @@ level "Development" gesetzt wurde.
 * Unterstüzung für den Rückgabetyp `XML_2.1`. Bitte beachten Sie dass einige CSS-Style
 Änderungen beinhaltet, welche das Styling von Filtern beeinflussen könnte. **Überprüfen Sie
 Ihre Filter-Styles bevor Sie upgraden.**
-* Unterstützung für den Filtertyp Dropdown, sofern diese bei FINDOLOGIC konfiguriert sind.
+* Unterstützung für den Filtertyp Dropdown, sofern diese bei Findologic konfiguriert sind.
 
 ### Behoben
 
@@ -194,7 +202,7 @@ Ihre Filter-Styles bevor Sie upgraden.**
 
 ### Behoben
 
-* Der Aufruf der zweiten Suchergebnisseite führte zu einem Fehler, da Plentymarkets keine Metainformationen über das FINDOLOGIC Plugin laden konnte.
+* Der Aufruf der zweiten Suchergebnisseite führte zu einem Fehler, da Plentymarkets keine Metainformationen über das Findologic Plugin laden konnte.
 
 ### Geändert
 
@@ -204,7 +212,7 @@ Ihre Filter-Styles bevor Sie upgraden.**
 
 ### Hinzugefügt
 
-* Unterstützung für Landingpages die bei FINDOLOGIC konfiguriert sind.
+* Unterstützung für Landingpages die bei Findologic konfiguriert sind.
 * Unterstützung für Promotionsbanner (inklusive Dataprovider).
 
 ## 1.1.2 (2019-07-19)
@@ -213,10 +221,10 @@ Ihre Filter-Styles bevor Sie upgraden.**
 
 * Es wurde eine Schranke für die höchste unterstütze Version der Plugins Ceres (4.0.2) und IO (4.1.2) eingeführt.
 * Beschreibungstext und Bilder wurden aktualisiert.
-* Die aktuell verwendete Version des Plugins, die bei jeder Anfrage an FINDOLOGIC mitgeschickt wird, wird dynamisch über Plentymarkets ermittelt.
+* Die aktuell verwendete Version des Plugins, die bei jeder Anfrage an Findologic mitgeschickt wird, wird dynamisch über Plentymarkets ermittelt.
 * Javascript Dateien von Drittanbietern werden von dem entsprechenden CDN geladen.
 * Javascript Dateien des Plugins werden in einer minifizierten Version geladen.
-* Das Plugin benutzt die aktuelle Version des FINDOLOGIC Snippets. Hierfür wurden weitere Einstellungsmöglichkeiten hinzugefügt.
+* Das Plugin benutzt die aktuelle Version des Findologic Snippets. Hierfür wurden weitere Einstellungsmöglichkeiten hinzugefügt.
 
 ## 1.1.1 (2019-07-03)
 
@@ -253,11 +261,11 @@ Ihre Filter-Styles bevor Sie upgraden.**
 
 * Mehrsprachigkeit
 
-  Zur Zeit wird nur eine der verfügbaren Sprachen des Shops unterstützt. Welche das ist, kann per Absprache mit FINDOLOGIC konfiguriert werden.
+  Zur Zeit wird nur eine der verfügbaren Sprachen des Shops unterstützt. Welche das ist, kann per Absprache mit Findologic konfiguriert werden.
 
 * Personalisierung
 
-  Mit FINDOLOGIC Personalisierung haben Sie ab sofort für jede Zielgruppe einen eigens optimierten Shop.
+  Mit Findologic Personalisierung haben Sie ab sofort für jede Zielgruppe einen eigens optimierten Shop.
   
 * Search
 
@@ -269,7 +277,7 @@ Ihre Filter-Styles bevor Sie upgraden.**
   
 * Merchandising
 
-  Nutzen Sie das intuitive FINDOLOGIC Backend mit unseren speziell entwickelten Tools zur kompakten und effizienten Verkaufs- und Onsite-Marketing Steuerung.
+  Nutzen Sie das intuitive Findologic Backend mit unseren speziell entwickelten Tools zur kompakten und effizienten Verkaufs- und Onsite-Marketing Steuerung.
   
 * Shopping Guide
 

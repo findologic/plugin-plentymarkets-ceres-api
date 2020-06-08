@@ -34,7 +34,7 @@ class FallbackSearchService implements SearchServiceInterface
         Request $request,
         ExternalSearchOptions $searchOptions
     ) {
-        // Search options are always provided by FINDOLOGIC,
+        // Search options are always provided by Findologic,
         // therefore no actual implementation is needed.
     }
 
