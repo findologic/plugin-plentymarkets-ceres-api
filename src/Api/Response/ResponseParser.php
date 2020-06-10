@@ -221,7 +221,8 @@ class ResponseParser
             'currentQuery' => $currentQuery,
             'queryStringType' => $queryStringType,
             'selectedCategoryName' => $this->getSelectedCategoryName($requestParams),
-            'selectedVendorName' => $this->getSelectedVendorName($requestParams)
+            'selectedVendorName' => $this->getSelectedVendorName($requestParams),
+            'shoppingGuide' => $this->getShoppingGuide($requestParams)
         ];
     }
 
@@ -249,5 +250,14 @@ class ResponseParser
     private function getSelectedVendorName(array $requestParams)
     {
         return $requestParams['attrib']['vendor'][0] ?? null;
+    }
+
+    /**
+     * @param array $requestParams
+     * @return string|null
+     */
+    private function getShoppingGuide(array $requestParams)
+    {
+        return $requestParams['attrib']['wizard'][0] ?? null;
     }
 }

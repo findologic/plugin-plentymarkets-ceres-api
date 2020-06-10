@@ -117,7 +117,8 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null,
                 ]
             ],
             'Did-You-Mean query present' => [
@@ -145,7 +146,8 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ]
             ],
             'Improved query present' => [
@@ -173,7 +175,8 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => 'improved',
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ]
             ],
             'Corrected query present' => [
@@ -201,7 +204,42 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => 'corrected',
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
+                ]
+            ],
+            'Uses shopping guide' => [
+                [
+                    'attrib' => [
+                        'wizard' => [
+                            'TestShoppingGuide'
+                        ]
+                    ]
+                ],
+                '<?xml version="1.0"?>
+                <searchResult>
+                    <servers>
+                        <frontend>frontend.findologic.com</frontend>
+                        <backend>backend.findologic.com</backend>
+                    </servers>
+                    <query>
+                        <limit first="0" count="10"/>
+                        <queryString>Test</queryString>
+                        <searchedWordCount>1</searchedWordCount>
+                        <foundWordCount>1</foundWordCount>
+                    </query>
+                    <results><count>0</count></results>
+                    <products/>
+                    <filters/>
+                </searchResult>',
+                [
+                    'originalQuery' => null,
+                    'didYouMeanQuery' => null,
+                    'currentQuery' => 'Test',
+                    'queryStringType' => null,
+                    'selectedCategoryName' => null,
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => 'TestShoppingGuide'
                 ]
             ],
             'Category selected' => [
@@ -234,7 +272,8 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => 'TestCat',
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ]
             ],
             'Child category selected' => [
@@ -267,7 +306,8 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => 'TestChildCat',
-                    'selectedVendorName' => null
+                    'selectedVendorName' => null,
+                    'shoppingGuide' => null
                 ]
             ],
             'Vendor selected' => [
@@ -300,7 +340,8 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => null,
-                    'selectedVendorName' => 'TestVendor'
+                    'selectedVendorName' => 'TestVendor',
+                    'shoppingGuide' => null
                 ]
             ],
             'Category and vendor selected' => [
@@ -336,7 +377,8 @@ class ResponseParserTest extends TestCase
                     'currentQuery' => 'Test',
                     'queryStringType' => null,
                     'selectedCategoryName' => 'TestChildCat',
-                    'selectedVendorName' => 'TestVendor'
+                    'selectedVendorName' => 'TestVendor',
+                    'shoppingGuide' => null
                 ]
             ]
         ];

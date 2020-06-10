@@ -228,6 +228,10 @@ export default {
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
             for (var filter in attributes) {
+                if (filter === 'wizard') {
+                    continue;
+                }
+
                 if (filter === 'price' || this.isRangeSliderFilter(attributes[filter])) {
                     selectedFilters.push({
                         id: filter,
