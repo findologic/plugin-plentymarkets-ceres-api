@@ -13,7 +13,7 @@
         .page-content {
             background: $white;
             padding: 2em !important;
-            border: 1px solid $gray-lighter2;
+            border: 1px solid $gray-200;
             margin: 0 7.5px;
 
             .filter-toggle {
@@ -29,10 +29,10 @@
                 h3 {
                     text-transform: uppercase;
                     font-size: 1.2rem;
-                    border-bottom: 1px solid $gray-light;
+                    border-bottom: 1px solid $gray-500;
                     padding-bottom: 0.5rem;
                     font-weight: bold;
-                    color: $gray-dark;
+                    color: $gray-700;
                 }
                 .form-check {
                     padding-left: 0;
@@ -43,8 +43,8 @@
                         }
 
                         &:checked + label {
-                            background: $gray-lighter2;
-                            color: $gray-darker;
+                            background: $gray-200;
+                            color: $gray-900;
                             padding-left: 1.75rem;
 
                             &::before {
@@ -66,13 +66,13 @@
 
                     .form-check-label {
                         padding: 0.5rem 0;
-                        color: $gray-dark;
+                        color: $gray-700;
                         display: block;
                         transition: all 0.1s ease;
 
                         &:hover {
-                            background: $gray-lightest;
-                            color: $gray-dark;
+                            background: $gray-100;
+                            color: $gray-700;
                             transition: all 0.1s ease;
                             padding-left: 0.5rem;
                         }
@@ -88,7 +88,7 @@
                         position: absolute;
                         display: inline-block;
                         font-size: 0.85rem;
-                        background: $gray-lighter2;
+                        background: $gray-200;
                         padding: 0.1rem 0;
                         color: gray;
                         right: 0.5rem;
