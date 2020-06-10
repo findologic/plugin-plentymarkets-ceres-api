@@ -1,5 +1,15 @@
 # Release Notes für Findologic
 
+## 3.1.0 (2020-06-10)
+
+### Hinzugefügt
+
+* [PLENTY-187] Guided Shopping wird nun unterstützt.
+
+### Geändert
+
+* [PLENTY-244] Die Plugin Icons für den marketplace wurden überarbeitet.
+
 ## 3.0.1 (2020-05-06)
 
 ### Geändert
