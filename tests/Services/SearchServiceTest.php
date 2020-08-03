@@ -97,10 +97,13 @@ class SearchServiceTest extends TestCase
 
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
         $searchQueryMock->categoryId = null;
+        $searchQueryMock->searchString = 'words+separated+by+plus+signs';
 
         $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
         $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
+
+        $this->assertEquals('words separated by plus signs', $searchQueryMock->searchString);
     }
 
     /**
