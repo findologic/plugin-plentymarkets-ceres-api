@@ -1,5 +1,15 @@
 # Release Notes for Findologic
 
+## 3.1.1 (2020-08-03)
+
+### Fixed
+
+* [PLENTY-254] When refreshing the search result page, spaces in the search term should not be interpreted as plus sign.
+
+### Changed
+
+* [PLENTY-256] Updated text in marketplace to make it clear that an integration with Ceres < 5 is still possible.
+
 ## 3.1.0 (2020-06-10)
 
 ### Added

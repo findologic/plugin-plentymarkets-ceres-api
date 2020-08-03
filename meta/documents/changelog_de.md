@@ -1,5 +1,15 @@
 # Release Notes für Findologic
 
+## 3.1.1 (2020-08-03)
+
+### Behoben
+
+* [PLENTY-254] Beim Neuladen der Suchresultat-Seite wurde ein Leerzeichen im Suchbegriff als Plus-Zeichen interpretiert.
+
+### Geändert
+
+* [PLENTY-256] Text im Marketplace wurde aktualisisert damit klar hervorgeht das eine Integration mit Ceres < 5 möglich ist.
+
 ## 3.1.0 (2020-06-10)
 
 ### Hinzugefügt
