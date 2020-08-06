@@ -2,8 +2,8 @@
   "version": "3.1.1",
   "name": "Findologic",
   "marketplaceName": {
-    "de": "Findologic",
-    "en": "Findologic"
+    "de": "Findologic - Search & Navigation Platform",
+    "en": "Findologic - Search & Navigation Platform"
   },
   "description" : "The official Findologic plugin for plentymarkets Ceres.",
   "author": "FINDOLOGIC GmbH",
