@@ -123,6 +123,7 @@ Vue.component("item-search", {
     methods: {
         prepareSearch: function prepareSearch() {
             $('#searchBox').collapse('hide');
+            $('ul.fl-autocomplete').hide();
         },
         search: function search() {
             var searchBaseURL = '/search?query=';

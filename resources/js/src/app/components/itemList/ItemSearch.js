@@ -62,6 +62,7 @@ Vue.component("item-search", {
         prepareSearch()
         {
             $('#searchBox').collapse('hide');
+            $('ul.fl-autocomplete').hide();
         },
 
         search()
