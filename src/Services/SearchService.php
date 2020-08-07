@@ -179,7 +179,6 @@ class SearchService implements SearchServiceInterface
     {
         $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
-        $externalSearch->searchString = str_replace('+', ' ', $externalSearch->searchString);
 
         try {
             if ($isCategoryPage && (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))) {
