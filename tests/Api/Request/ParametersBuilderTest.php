@@ -230,7 +230,32 @@ class ParametersBuilderTest extends TestCase
                         'cat_id' => [125]
                     ]
                 ]
-            ]
+            ],
+            'Request with same attributes' => [
+                'parameters' => [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'vendor' => [
+                            'A & C Design',
+                            'A & C Design',
+                        ]
+                    ],
+                ],
+                'requestUri' => 'https://www.test.com/search?query=Test',
+                'category' => false,
+                'expectedParameters' => [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'vendor' => [
+                            'A & C Design',
+                        ]
+                    ],
+                    'order' => 'price ASC',
+                    'count' => 10
+                ]
+            ],
         ];
     }
 
