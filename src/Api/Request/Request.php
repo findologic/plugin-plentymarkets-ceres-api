@@ -144,7 +144,7 @@ class Request
         }
 
         foreach (array_unique($value) as $filterValue) {
-            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = $filterValue;
+            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key][] = $filterValue;
         }
 
         return $this;
