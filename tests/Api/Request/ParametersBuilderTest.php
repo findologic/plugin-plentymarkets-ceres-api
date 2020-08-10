@@ -230,7 +230,65 @@ class ParametersBuilderTest extends TestCase
                         'cat_id' => [125]
                     ]
                 ]
-            ]
+            ],
+            'Request with same attributes' => [
+                'parameters' => [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'vendor' => [
+                            'A & C Design',
+                            'A & C Design',
+                        ]
+                    ],
+                ],
+                'requestUri' => 'https://www.test.com/search?query=Test',
+                'category' => false,
+                'expectedParameters' => [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'vendor' => [
+                            'A & C Design',
+                        ]
+                    ],
+                    'order' => 'price ASC',
+                    'count' => 10
+                ]
+            ],
+            'Request with same attributes and range slider filter with same min and max' => [
+                'parameters' => [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'vendor' => [
+                            'A & C Design',
+                            'A & C Design',
+                        ],
+                        'price' => [
+                            'min' => 77,
+                            'max' => 77
+                        ]
+                    ],
+                ],
+                'requestUri' => 'https://www.test.com/search?query=Test',
+                'category' => false,
+                'expectedParameters' => [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'vendor' => [
+                            'A & C Design',
+                        ],
+                        'price' => [
+                            'min' => 77,
+                            'max' => 77
+                        ],
+                    ],
+                    'order' => 'price ASC',
+                    'count' => 10
+                ]
+            ],
         ];
     }
 

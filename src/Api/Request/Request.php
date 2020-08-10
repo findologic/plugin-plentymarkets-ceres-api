@@ -143,7 +143,13 @@ class Request
             $this->params[Plugin::API_PARAMETER_ATTRIBUTES] = [];
         }
 
-        $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = $value;
+        // Remove duplicate entries, since the plenty request may give them as duplicates. Additionally
+        // check that min/max is not set, because the range-slider may have the same min and max value.
+        if (is_array($value) && (!isset($value['min']) && !isset($value['max']))) {
+            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = array_unique($value);
+        } else {
+            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = $value;
+        }
 
         return $this;
     }
