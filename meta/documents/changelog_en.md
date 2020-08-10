@@ -5,10 +5,12 @@
 ### Fixed
 
 * [PLENTY-254] When refreshing the search result page, spaces in the search term should not be interpreted as plus sign.
+* [PLENTY-225] Internally filter values were sent twice. This has been fixed.
 
 ### Changed
 
 * [PLENTY-256] Updated text in marketplace to make it clear that an integration with Ceres < 5 is still possible.
+* [PLENTY-259] Plugin name has been updated.
 
 ## 3.1.0 (2020-06-10)
 
