@@ -185,6 +185,7 @@ class SearchService implements SearchServiceInterface
 
         $categoryId = $this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH);
         $isConfiguredSearchCategory = $this->getCategoryService()->getCurrentCategory()->id === $categoryId;
+        $this->logger->critical(sprintf('%d === %d equals %s', $categoryId, $this->getCategoryService()->getCurrentCategory()->id, $isConfiguredSearchCategory ? 'ye' : 'nah'));
 
         try {
             if ($isCategoryPage && !$isConfiguredSearchCategory && (!$hasSelectedFilters || !$navEnabled)) {
