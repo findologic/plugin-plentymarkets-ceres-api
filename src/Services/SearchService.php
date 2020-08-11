@@ -11,7 +11,9 @@ use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Category\Contracts\CategoryRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -180,7 +182,16 @@ class SearchService implements SearchServiceInterface
         $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
         $navEnabled = $this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED);
-        $this->logger->critical($this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH));
+        $categoryId = $this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH);
+
+        // TODO: Add a check if the category is not filled out, we do not need to get it.
+        /**
+         * @var CategoryRepositoryContract $categoryRepo
+         */
+        $categoryRepo = pluginApp(CategoryRepositoryContract::class);
+        $currentCategory = $categoryRepo->get($categoryId, Utils::getLang());
+
+        $this->logger->critical(json_encode($currentCategory->toArray()));
 
         try {
             if ($isCategoryPage && (!$hasSelectedFilters || !$navEnabled)) {
