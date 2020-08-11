@@ -11,9 +11,7 @@ use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
-use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
-use Plenty\Modules\Category\Contracts\CategoryRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -181,10 +179,9 @@ class SearchService implements SearchServiceInterface
     {
         $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
-        $navEnabled = $this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED);
 
         try {
-            if ($isCategoryPage && (!$hasSelectedFilters || !$navEnabled)) {
+            if ($isCategoryPage && (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
