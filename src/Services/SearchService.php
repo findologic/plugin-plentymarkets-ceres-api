@@ -187,6 +187,13 @@ class SearchService implements SearchServiceInterface
         $isConfiguredSearchCategory = $this->getCategoryService()->getCurrentCategory()->id == $categoryId;
 
         try {
+            $this->logger->critical(json_encode([
+                'isCategoryPage' => $isCategoryPage,
+                'isConfiguredSearchCategory' => $isConfiguredSearchCategory,
+                'hasSelectedFilters' => $hasSelectedFilters,
+                'navigationEnabled' => $navEnabled,
+                'doingNavigation' => $isCategoryPage && !$isConfiguredSearchCategory && (!$hasSelectedFilters || !$navEnabled)
+            ]));
             if ($isCategoryPage && !$isConfiguredSearchCategory && (!$hasSelectedFilters || !$navEnabled)) {
                 $this->doNavigation($request, $externalSearch);
             } else {
