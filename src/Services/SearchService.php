@@ -182,19 +182,12 @@ class SearchService implements SearchServiceInterface
         $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
         $navEnabled = $this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED);
+
         $categoryId = $this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH);
-
-        // TODO: Add a check if the category is not filled out, we do not need to get it.
-        /**
-         * @var CategoryRepositoryContract $categoryRepo
-         */
-        $categoryRepo = pluginApp(CategoryRepositoryContract::class);
-        $currentCategory = $categoryRepo->get($categoryId, Utils::getLang());
-
-        $this->logger->critical(json_encode($currentCategory->toArray()));
+        $isConfiguredSearchCategory = $this->getCategoryService()->getCurrentCategory()->id === $categoryId;
 
         try {
-            if ($isCategoryPage && (!$hasSelectedFilters || !$navEnabled)) {
+            if ($isCategoryPage && !$isConfiguredSearchCategory && (!$hasSelectedFilters || !$navEnabled)) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
