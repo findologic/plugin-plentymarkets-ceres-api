@@ -179,9 +179,11 @@ class SearchService implements SearchServiceInterface
     {
         $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
+        $navEnabled = $this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED);
+        $this->logger->critical($this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH));
 
         try {
-            if ($isCategoryPage && (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))) {
+            if ($isCategoryPage && (!$hasSelectedFilters || !$navEnabled)) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
