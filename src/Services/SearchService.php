@@ -183,18 +183,8 @@ class SearchService implements SearchServiceInterface
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
         $navEnabled = $this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED);
 
-        $categoryId = $this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH);
-        $isConfiguredSearchCategory = $this->getCategoryService()->getCurrentCategory()->id == $categoryId;
-
         try {
-            $this->logger->critical(json_encode([
-                'isCategoryPage' => $isCategoryPage,
-                'isConfiguredSearchCategory' => $isConfiguredSearchCategory,
-                'hasSelectedFilters' => $hasSelectedFilters,
-                'navigationEnabled' => $navEnabled,
-                'doingNavigation' => $isCategoryPage && !$isConfiguredSearchCategory && (!$hasSelectedFilters || !$navEnabled)
-            ]));
-            if ($isCategoryPage && !$isConfiguredSearchCategory && (!$hasSelectedFilters || !$navEnabled)) {
+            if ($isCategoryPage && (!$hasSelectedFilters || !$navEnabled)) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
@@ -228,8 +218,11 @@ class SearchService implements SearchServiceInterface
      */
     public function search(HttpRequest $request, ExternalSearch $externalSearch)
     {
+        $categoryId = $this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH);
+        $isConfiguredSearchCategory = $this->getCategoryService()->getCurrentCategory()->id == $categoryId;
+
         /** @var CategoryService $category */
-        $category = $this->getCategoryService() ?? null;
+        $category = !$isConfiguredSearchCategory ? $this->getCategoryService() : null;
 
         $apiRequest = $this->requestBuilder->build(
             $request,
