@@ -12,9 +12,10 @@ use Findologic\Services\FallbackSearchService;
 use Findologic\Services\SearchService;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
-use Findologic\Tests\Mocks\PlentyRequestMock;
+use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Services\ItemSearchService;
 use Plenty\Log\Contracts\LoggerContract;
+use Plenty\Modules\Category\Models\Category;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -153,6 +154,177 @@ class SearchServiceTest extends TestCase
             ->willReturn($attributes);
 
         $searchServiceMock->doSearch($requestMock, $searchQueryMock);
+    }
+
+    public function productProvider(): array
+    {
+        return [
+            'One product found' => [
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'attributes' => []
+            ],
+            'Multiple products found' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ],
+                        [
+                            'id' => 1022
+                        ]
+                    ]
+                ],
+                'attributes' => []
+            ],
+            'One product found and query string type is corrected' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'attributes' => []
+            ],
+            'One product found and query string type is improved' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'attributes' => []
+            ],
+            'One product found but filters are set' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'attributes' => [
+                    'attrib' => [
+                        'cat' => 'Blubbergurken'
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider productProvider
+     * @runInSeparateProcess
+     */
+    public function testSearchEndpointIsUsedInCaseCategoryIsTheCeresIoSearchCategory(
+        array $responseVariationIds,
+        array $itemSearchServiceResultsAll,
+        array $attributes
+    ) {
+        $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
+
+        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
+        $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
+
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemSearchServiceMock->expects($this->at(0))
+            ->method('getResult')
+            ->willReturn($itemSearchServiceResultsAll);
+
+        $searchServiceMock = $this->getSearchServiceMock([
+            'getCategoryService',
+            'getItemSearchService',
+            'getSearchFactory',
+            'handleProductRedirectUrl'
+        ]);
+        $searchServiceMock->expects($this->any())
+            ->method('getItemSearchService')
+            ->willReturn($itemSearchServiceMock);
+
+        $expectedCategoryId = 1234;
+        $this->configRepository->expects($this->once())->method('get')
+            ->with('IO.routing.category_search')
+            ->willReturn($expectedCategoryId);
+
+        $categoryMock = $this->getMockBuilder(Category::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categoryMock->id = $expectedCategoryId;
+
+        $categoryServiceMock = $this->getMockBuilder(CategoryService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $categoryServiceMock->expects($this->any())
+            ->method('getCurrentCategory')
+            ->willReturn($categoryMock);
+
+        $searchServiceMock->expects($this->any())
+            ->method('getCategoryService')
+            ->willReturn($categoryServiceMock);
+
+        /** @var ExternalSearch|MockObject $externalSearchMock */
+        $externalSearchMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setResults'])
+            ->getMock();
+        $externalSearchMock->categoryId = $expectedCategoryId;
+
+        $externalSearchMock->expects($this->once())->method('setResults');
+
+        /** @var HttpRequest|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $requestMock->expects($this->any())
+            ->method('all')
+            ->willReturn($attributes);
+
+        /** @var Request|HttpRequest|MockObject $searchRequestMock */
+        $searchRequestMock = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Ensure that the given category is null. This way we are sure that the category is being ignored.
+        $this->requestBuilder->expects($this->any())->method('build')
+            ->with($requestMock, $externalSearchMock, null)
+            ->willReturn($searchRequestMock);
+
+        $searchServiceMock->doSearch($requestMock, $externalSearchMock);
     }
 
     /**
