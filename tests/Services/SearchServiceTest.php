@@ -156,10 +156,10 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->doSearch($requestMock, $searchQueryMock);
     }
 
-    public function productProvider(): array
+    public function categorySearchProvider(): array
     {
         return [
-            'One product found' => [
+            'Category is ignored when searched and configured category are the same' => [
                 'responseVariationIds' => [
                     1011, 1012
                 ],
@@ -172,57 +172,12 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'attributes' => []
+                'attributes' => [],
+                'configuredSearchCategory' => 1234,
+                'searchedCategory' => 1234,
+                'expectedCategory' => null
             ],
-            'Multiple products found' => [
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ],
-                        [
-                            'id' => 1022
-                        ]
-                    ]
-                ],
-                'attributes' => []
-            ],
-            'One product found and query string type is corrected' => [
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
-                'attributes' => []
-            ],
-            'One product found and query string type is improved' => [
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
-                'attributes' => []
-            ],
-            'One product found but filters are set' => [
+            'Category is used if no category is configured' => [
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
@@ -239,19 +194,47 @@ class SearchServiceTest extends TestCase
                     'attrib' => [
                         'cat' => 'Blubbergurken'
                     ]
-                ]
+                ],
+                'configuredSearchCategory' => null,
+                'searchedCategory' => 1234,
+                'expectedCategory' => 1234
+            ],
+            'Category is used when another category is configured' => [
+                'responseVariationIds' => [
+                    1011, 1022, 1023
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'attributes' => [
+                    'attrib' => [
+                        'cat' => 'Blubbergurken'
+                    ]
+                ],
+                'configuredSearchCategory' => 4321,
+                'searchedCategory' => 1234,
+                'expectedCategory' => 1234
             ],
         ];
     }
 
     /**
-     * @dataProvider productProvider
+     * @dataProvider categorySearchProvider
      * @runInSeparateProcess
      */
     public function testSearchEndpointIsUsedInCaseCategoryIsTheCeresIoSearchCategory(
         array $responseVariationIds,
         array $itemSearchServiceResultsAll,
-        array $attributes
+        array $attributes,
+        int $configuredSearchCategory = null,
+        int $searchedCategory = null,
+        int $expectedCategory = null
     ) {
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
@@ -276,15 +259,14 @@ class SearchServiceTest extends TestCase
             ->method('getItemSearchService')
             ->willReturn($itemSearchServiceMock);
 
-        $expectedCategoryId = 1234;
         $this->configRepository->expects($this->once())->method('get')
             ->with('IO.routing.category_search')
-            ->willReturn($expectedCategoryId);
+            ->willReturn($configuredSearchCategory);
 
         $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $categoryMock->id = $expectedCategoryId;
+        $categoryMock->id = $searchedCategory;
 
         $categoryServiceMock = $this->getMockBuilder(CategoryService::class)
             ->disableOriginalConstructor()
@@ -302,7 +284,7 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setResults'])
             ->getMock();
-        $externalSearchMock->categoryId = $expectedCategoryId;
+        $externalSearchMock->categoryId = $searchedCategory;
 
         $externalSearchMock->expects($this->once())->method('setResults');
 
@@ -321,7 +303,7 @@ class SearchServiceTest extends TestCase
 
         // Ensure that the given category is null. This way we are sure that the category is being ignored.
         $this->requestBuilder->expects($this->any())->method('build')
-            ->with($requestMock, $externalSearchMock, null)
+            ->with($requestMock, $externalSearchMock, $expectedCategory ? $categoryMock : null)
             ->willReturn($searchRequestMock);
 
         $searchServiceMock->doSearch($requestMock, $externalSearchMock);
