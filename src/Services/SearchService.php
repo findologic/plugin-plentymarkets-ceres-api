@@ -215,13 +215,19 @@ class SearchService implements SearchServiceInterface
      */
     public function search(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        /** @var CategoryService $category */
-        $category = $this->getCategoryService() ?? null;
+        $categoryService = null;
+        if ($this->getCategoryService()) {
+            $categoryId = $this->configRepository->get(Plugin::CONFIG_IO_CATEGORY_SEARCH);
+            $isConfiguredSearchCategory = $this->getCategoryService()->getCurrentCategory()->id == $categoryId;
+
+            /** @var CategoryService|null $categoryService */
+            $categoryService = !$isConfiguredSearchCategory ? $this->getCategoryService() : null;
+        }
 
         $apiRequest = $this->requestBuilder->build(
             $request,
             $externalSearch,
-            $category ? $category->getCurrentCategory() : null
+            $categoryService ? $categoryService->getCurrentCategory() : null
         );
         $this->results = $this->responseParser->parse($request, $this->client->call($apiRequest));
 
