@@ -290,7 +290,8 @@ class SearchService implements SearchServiceInterface
         }
 
         $parameters = $request->all();
-        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
+        $attributesSet = isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES]);
+        if ($attributesSet || (isset($parameters['page']) && $parameters['page'] > 1)) {
             return false;
         }
 
