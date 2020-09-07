@@ -1,5 +1,14 @@
 # Release Notes für Findologic
 
+## 3.1.2 (2020-09-07)
+
+### Behoben
+
+* [PLENTY-260] Ein Fehler wurde behoben, wodurch keine Ergebnisse ausgespielt wurden, wenn eine Kategorieseite als
+ Suchergebnisseite im IO Plugin konfiguriert wurde.
+* [PLENTY-262] Ein Fehler wurde behoben, wodurch man auf die Produktdetailseite weitergeleitet wurde, wenn die letzte
+ Paginationsseite nur ein Resultat enthielt.
+
 ## 3.1.1 (2020-08-03)
 
 ### Behoben

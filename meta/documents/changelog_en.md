@@ -1,5 +1,12 @@
 # Release Notes for Findologic
 
+## 3.1.2 (2020-09-07)
+
+### Fixed
+
+* [PLENTY-260] Fixed a bug that caused no-results on any search term, when a category page was configured as search result page in the IO plugin.
+* [PLENTY-262] Fixed a bug that caused a redirect to the product detail page, when the last pagination page had only one result.
+
 ## 3.1.1 (2020-08-03)
 
 ### Fixed
