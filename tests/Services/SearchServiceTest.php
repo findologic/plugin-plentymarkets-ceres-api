@@ -219,7 +219,48 @@ class SearchServiceTest extends TestCase
                 'redirectUrl' => '/test-product/a-11',
                 'attributes' => []
             ],
-            'One product found on second page' => [
+            'One product found on first page should redirect to product detail' => [
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'itemSearchResultsOneProduct' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product/a-11',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product found on second page should not redirect to product detail' => [
                 'responseVariationIds' => [
                     1011, 1012
                 ],
