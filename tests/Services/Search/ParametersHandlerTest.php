@@ -279,7 +279,7 @@ class ParametersHandlerTest extends TestCase
                 ],
                 'defaultOption' => 'texts.name1_asc'
             ],
-            'Sorting options for category page with unsupported default' => [
+            'Sorting options for category page with unsupported default but no filters uses configured default' => [
                 'isSearch' => false,
                 'hasFilters' => false,
                 'defaultSorting' => 'item.random',
@@ -322,6 +322,42 @@ class ParametersHandlerTest extends TestCase
                     'variation.position_asc' => 'Ceres::Template.itemVariationTopseller_asc',
                     'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc',
                     'item.random' => 'Ceres::Template.itemRandom'
+                ],
+                'defaultOption' => 'item.random'
+            ],
+            'Sorting options for category page with unsupported default but with filter uses default fallback' => [
+                'isSearch' => false,
+                'hasFilters' => true,
+                'defaultSorting' => 'item.random',
+                'configData' => [
+                    'default.recommended_sorting',
+                    'texts.name1_asc',
+                    'texts.name1_desc',
+                    'sorting.price.avg_asc',
+                    'sorting.price.avg_desc',
+                    'variation.createdAt_desc',
+                    'variation.createdAt_asc',
+                    'variation.availability.averageDays_asc',
+                    'variation.availability.averageDays_desc',
+                    'variation.number_asc',
+                    'variation.number_desc',
+                    'variation.updatedAt_asc',
+                    'variation.updatedAt_desc',
+                    'item.manufacturer.externalName_asc',
+                    'item.manufacturer.externalName_desc',
+                    'variation.position_asc',
+                    'variation.position_desc',
+                    'item.random'
+                ],
+                'sortingOptions' => [
+                    'texts.name1_asc' => 'Ceres::Template.itemName_asc',
+                    'texts.name1_desc' => 'Ceres::Template.itemName_desc',
+                    'sorting.price.avg_asc' => 'Ceres::Template.itemPrice_asc',
+                    'sorting.price.avg_desc' => 'Ceres::Template.itemPrice_desc',
+                    'variation.createdAt_desc' => 'Ceres::Template.itemVariationCreateTimestamp_desc',
+                    'variation.createdAt_asc' => 'Ceres::Template.itemVariationCreateTimestamp_asc',
+                    'variation.position_asc' => 'Ceres::Template.itemVariationTopseller_asc',
+                    'variation.position_desc' => 'Ceres::Template.itemVariationTopseller_desc',
                 ],
                 'defaultOption' => 'item.score'
             ],
@@ -415,8 +451,8 @@ class ParametersHandlerTest extends TestCase
 
         $parametersHandlerMock->handlePaginationAndSorting($externalSearchOptions, $requestMock);
 
-        $this->assertEquals($externalSearchOptions->getSortingOptions(), $sortingOptions);
-        $this->assertEquals($externalSearchOptions->getDefaultSortingOption(), $defaultOption);
+        $this->assertEquals($sortingOptions, $externalSearchOptions->getSortingOptions());
+        $this->assertEquals($defaultOption, $externalSearchOptions->getDefaultSortingOption());
     }
 
     /**
