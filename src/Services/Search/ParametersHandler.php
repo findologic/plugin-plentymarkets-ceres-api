@@ -68,9 +68,7 @@ class ParametersHandler
         $isFiltersSet = array_key_exists('attrib', $request->all());
 
         $defaultSort = $isSearch ? $config->sorting->defaultSortingSearch : $config->sorting->defaultSorting;
-        if (!$isSearch && !$isFiltersSet) {
-            $defaultSort = $config->sorting->defaultSorting;
-        } elseif (!in_array($defaultSort, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)) {
+        if (!in_array($defaultSort, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS) && ($isSearch || $isFiltersSet)) {
             $defaultSort = 'item.score';
         }
 
