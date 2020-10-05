@@ -1,5 +1,12 @@
 # Release Notes for Findologic
 
+## 3.1.3 (2020-10-05)
+
+### Fixed
+
+* [PLENTY-267] Fixed a bug, that caused the submit of the wrong search form, in case there are multiple search forms available in the DOM.
+* [PLENTY-272] Fixed a bug, that caused the default sort of category pages to not work properly, when a Findologic unknown order has been configured as default.
+
 ## 3.1.2 (2020-09-07)
 
 ### Fixed
