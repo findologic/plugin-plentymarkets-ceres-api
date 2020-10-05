@@ -1,5 +1,15 @@
 # Release Notes für Findologic
 
+## 3.1.3 (2020-10-05)
+
+### Behoben
+
+* [PLENTY-267] Ein Fehler wurde behoben, welcher bei mehreren Suchformularen dazu geführt hatte, dass immer das erste
+ abgeschickt wurde.
+* [PLENTY-272] Ein Fehler wurde behoben, welcher auf Kategorieseiten dazu geführt hatte, dass die Standardsortierung
+ nicht funktionierte, wenn eine Sortieroption in Ceres konfiguriert war, welche durch Findologic nicht unterstützt
+ wird.
+
 ## 3.1.2 (2020-09-07)
 
 ### Behoben
