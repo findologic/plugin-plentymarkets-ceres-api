@@ -92,7 +92,7 @@ class PluginConfigTest extends TestCase
         $this->assertSame($this->getPluginConfig()->getShopKey(), 'ABC123');
     }
 
-    public function testGetShopKeyReturnsGermanLanguageKeyIfNoKeyIsSetForCurrentLanguageInSession()
+    public function testGetShopKeyReturnsNullWhenLanguageIsNotConfiguredForShop()
     {
         $this->configRepository->expects($this->once())
             ->method('get')
@@ -101,7 +101,7 @@ class PluginConfigTest extends TestCase
 
         $this->sessionStorageService->expects($this->once())->method('getLang')->willReturn('jp');
 
-        $this->assertSame($this->getPluginConfig()->getShopKey(), 'ABC123');
+        $this->assertNull($this->getPluginConfig()->getShopKey());
     }
 
     public function testGetShopKeyReturnsNullIfShopKeyIsEmpty()
