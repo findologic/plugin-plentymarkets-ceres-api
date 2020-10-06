@@ -110,10 +110,6 @@ class PluginConfig
 
         if (array_key_exists($currentLanguage, $this->shopkeys)) {
             return $this->shopkeys[$currentLanguage];
-        } elseif ($this->shopkeys) {
-            $keys = array_keys($this->shopkeys);
-
-            return $this->shopkeys[$keys[0]];
         } else {
             return null;
         }
