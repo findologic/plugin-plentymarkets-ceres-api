@@ -1,5 +1,14 @@
 # Release Notes für Findologic
 
+## 3.1.4 (2020-10-07)
+
+### Behoben
+
+* [PLENTY-274] Ein Fehler wurde behoben, wodurch Kategorie/Hersteller Klicks in der Smart Suggest nicht
+ korrekt funktionierten.
+* [PLENTY-275] Ein Fehler wurde behoben, wodurch Findologic bei Sprachen aktiviert wurde, obwohl diese keinen
+ Shopkey konfiguriert hatten.
+
 ## 3.1.3 (2020-10-05)
 
 ### Behoben

@@ -1,5 +1,12 @@
 # Release Notes for Findologic
 
+## 3.1.4 (2020-10-05)
+
+### Fixed
+
+* [PLENTY-274] Fixed a bug that caused category/vendor clicks in the Smart Suggest not to work properly.
+* [PLENTY-275] Fixed a bug that caused Findologic to be active for a language, even if that language has not been set in the configuration.
+
 ## 3.1.3 (2020-10-05)
 
 ### Fixed
