@@ -18,6 +18,8 @@
 * [PLENTY-272] Ein Fehler wurde behoben, welcher auf Kategorieseiten dazu geführt hatte, dass die Standardsortierung
  nicht funktionierte, wenn eine Sortieroption in Ceres konfiguriert war, welche durch Findologic nicht unterstützt
  wird.
+* Dieser Release enthält Änderungen des letzten Releases, da es einen Fehler beim Erstellen des letzten Releases gab.
+ Wir entschuldigen uns für etwaige Komplikationen und werden in Zukunft darauf achten, dass dies nicht erneut geschieht.
 
 ## 3.1.2 (2020-09-07)
 

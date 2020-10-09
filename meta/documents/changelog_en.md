@@ -13,6 +13,8 @@
 
 * [PLENTY-267] Fixed a bug, that caused the submit of the wrong search form, in case there are multiple search forms available in the DOM.
 * [PLENTY-272] Fixed a bug, that caused the default sort of category pages to not work properly, when a Findologic unknown order has been configured as default.
+* This release contains changes of the last release, as there was an issue while creating the release, which caused some
+ changes not to be applied correctly. We apologize for any inconveniences this caused and try to prevent such issues in the future.
 
 ## 3.1.2 (2020-09-07)
 
