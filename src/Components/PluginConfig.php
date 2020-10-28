@@ -12,6 +12,8 @@ use Findologic\Constants\Plugin;
  */
 class PluginConfig
 {
+    const NO_LANG_KEY = 'no_lang';
+
     /**
      * @var ConfigRepository
      */
@@ -110,6 +112,8 @@ class PluginConfig
 
         if (array_key_exists($currentLanguage, $this->shopkeys)) {
             return $this->shopkeys[$currentLanguage];
+        } elseif (isset($this->shopkeys[self::NO_LANG_KEY])) {
+            return $this->shopkeys[self::NO_LANG_KEY];
         } else {
             return null;
         }
@@ -134,7 +138,7 @@ class PluginConfig
             if (count($item) > 1) {
                 $this->shopkeys[strtolower($item[0])] = $item[1];
             } else {
-                array_push($this->shopkeys, $item[0]);
+                $this->shopkeys[self::NO_LANG_KEY] = $item[0];
             }
         }
     }
