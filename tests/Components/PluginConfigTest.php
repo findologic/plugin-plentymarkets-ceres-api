@@ -106,7 +106,7 @@ class PluginConfigTest extends TestCase
                 null
             ],
             'It returns null when no generic shopkey and no shopkey for current language are configured 2' => [
-                "en:ABC123",
+                'en:ABC123',
                 'de',
                 null
             ],
@@ -126,20 +126,20 @@ class PluginConfigTest extends TestCase
     /**
      * @dataProvider getShopKeyProvider
      *
-     * @param string $configRepositoryGetReturnValue
+     * @param string $rawConfiguredShopkeys
      * @param string $currentLang
-     * @param string|null $returnValue
+     * @param string|null $expectedShopkey
      */
-    public function testGetShopKey($configRepositoryGetReturnValue, $currentLang, $returnValue)
+    public function testGetShopKey($rawConfiguredShopkeys, $currentLang, $expectedShopkey)
     {
         $this->configRepository->expects($this->once())
             ->method('get')
             ->with(Plugin::CONFIG_SHOPKEY, '')
-            ->willReturn($configRepositoryGetReturnValue);
+            ->willReturn($rawConfiguredShopkeys);
 
         $this->sessionStorageService->expects($this->once())->method('getLang')->willReturn($currentLang);
 
-        $this->assertSame($this->getPluginConfig()->getShopKey(), $returnValue);
+        $this->assertSame($this->getPluginConfig()->getShopKey(), $expectedShopkey);
     }
 
     public function parseShopKeysProvider()
