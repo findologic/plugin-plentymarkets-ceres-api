@@ -101,13 +101,9 @@ class SearchService implements SearchServiceInterface
         return pluginApp(ItemSearchService::class);
     }
 
-    public function getSearchFactory(array $ids): VariationSearchFactory
+    public function getSearchFactory(): VariationSearchFactory
     {
-        $searchFactory = pluginApp( VariationSearchFactory::class);
-
-        $searchFactory->hasVariationIds($ids);
-
-        return $searchFactory;
+        return pluginApp( VariationSearchFactory::class);
     }
 
     /**
@@ -138,16 +134,17 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $results = $this->search($request, $externalSearch);
-        $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
-        if ($this->shouldRedirectToProductDetailPage($productsIds, $request)) {
-            if ($redirectUrl = $this->getProductDetailUrl($productsIds[0])) {
+        $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
+
+        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
+            if ($redirectUrl = $this->getProductDetailUrl($results)) {
                 $this->handleProductRedirectUrl($redirectUrl);
             }
         }
 
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults($productsIds, $results->getResultsCount());
+        $externalSearch->setResults($variationIds, $results->getResultsCount());
     }
 
     /**
@@ -210,7 +207,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
-     * @return \Findologic\Api\Response\Response
+     * @return Response
      * @throws AliveException
      */
     public function search(HttpRequest $request, ExternalSearch $externalSearch)
@@ -253,7 +250,7 @@ class SearchService implements SearchServiceInterface
     private function filterInvalidVariationIds(array $ids): array
     {
         $results = $this->getItemSearchService()->getResult(
-            $this->getSearchFactory($ids)
+            $this->getSearchFactory()->hasVariationIds($ids)
         );
 
         $variationIds = [];
@@ -306,24 +303,57 @@ class SearchService implements SearchServiceInterface
     /**
      * @return string|null
      */
-    private function getProductDetailUrl(int $productId)
+    private function getProductDetailUrl(Response $response)
     {
         /** @var ItemSearchService $itemSearchService */
         $itemSearchService = $this->getItemSearchService();
 
+        $productId = $response->getProductsIds()[0];
         $result = $itemSearchService->getResult(
-            $this->getSearchFactory([$productId])
+            $this->getSearchFactory()->hasItemId($productId)
         );
 
         if (!$result['success'] || empty($result['documents'][0])) {
             return null;
         }
 
-        $productData = $result['documents'][0]['data'];
+        $query = $response->getData(Response::DATA_QUERY)['query'];
 
+        $productData = $result['documents'][0]['data'];
         $urlPath = $productData['texts'][0]['urlPath'];
         $itemId = $productData['item']['id'];
+        $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
 
-        return sprintf('/%s/a-%s', $urlPath, $itemId);
+        return sprintf('/%s_%s_%s', $urlPath, $itemId, $variationId);
+    }
+
+    private function getVariationIdForRedirect(string $query, array $documents)
+    {
+        $query = strtolower($query);
+        $mainVariationId = null;
+        foreach ($documents as $document) {
+            $variation = $document['data']['variation'];
+            $barcodes = $document['data']['barcodes'] ?? [];
+
+            if (
+                strtolower($variation['number']) == $query ||
+                strtolower($variation['model']) == $query ||
+                strtolower($variation['order']) == $query
+            ) {
+                return $variation['id'];
+            }
+
+            foreach ($barcodes as $barcode) {
+                if (strtolower($barcode['code']) == $query) {
+                    return $variation['id'];
+                }
+            }
+
+            if ($variation['isMain'] === true) {
+                $mainVariationId = $variation['id'];
+            }
+        }
+
+        return $mainVariationId;
     }
 }

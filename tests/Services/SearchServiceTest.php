@@ -106,12 +106,12 @@ class SearchServiceTest extends TestCase
 
     /**
      * @dataProvider redirectToProductPageOnDoSearchProvider
-     * @runInSeparateProcess
      */
     public function testRedirectToProductPageOnDoSearch(
+        array $query,
         array $responseVariationIds,
         array $itemSearchServiceResultsAll,
-        array $itemSearchResultsOneProduct,
+        array $variationSearchByItemIdResult,
         string $shopUrl,
         array $dataQueryInfoMessage,
         $redirectUrl,
@@ -125,14 +125,16 @@ class SearchServiceTest extends TestCase
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
         if ($redirectUrl) {
-            $responseMock->expects($this->once())->method('getData')->with(Response::DATA_QUERY_INFO_MESSAGE)->willReturn($dataQueryInfoMessage);
+            $responseMock->expects($this->exactly(2))->method('getData')
+                ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
+                ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
         }
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods(['getResult'])->getMock();
         $itemSearchServiceMock->expects($this->at(0))->method('getResult')->willReturn($itemSearchServiceResultsAll);
         if ($redirectUrl) {
-            $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($itemSearchResultsOneProduct);
+            $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($variationSearchByItemIdResult);
         }
 
         $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'handleProductRedirectUrl']);
@@ -226,7 +228,6 @@ class SearchServiceTest extends TestCase
 
     /**
      * @dataProvider categorySearchProvider
-     * @runInSeparateProcess
      */
     public function testSearchEndpointIsUsedInCaseCategoryIsTheCeresIoSearchCategory(
         array $responseVariationIds,
@@ -335,6 +336,7 @@ class SearchServiceTest extends TestCase
     {
         return [
             'One product found' => [
+                'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [
                     1011, 1012
                 ],
@@ -347,7 +349,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -361,6 +363,13 @@ class SearchServiceTest extends TestCase
                                 ],
                                 'item' => [
                                     'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
                                 ]
                             ]
                         ]
@@ -370,10 +379,11 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product/a-11',
+                'redirectUrl' => '/test-product_11_1011',
                 'attributes' => []
             ],
             'One product found on first page should redirect to product detail' => [
+                'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [
                     1011, 1012
                 ],
@@ -386,7 +396,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -400,6 +410,13 @@ class SearchServiceTest extends TestCase
                                 ],
                                 'item' => [
                                     'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
                                 ]
                             ]
                         ]
@@ -409,12 +426,367 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product/a-11',
+                'redirectUrl' => '/test-product_11_1011',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with a model matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'this is the text that was searched for',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1012',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with a number matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'THIS IS THE TEXT THAT WAS SEARCHED FOR',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1011',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with an order matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'this is the text that was searched for'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1012',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with a barcode matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ],
+                                'barcodes' => [
+                                    ['code' => '123123123'],
+                                    ['code' => 'this is the text that was searched for'],
+                                    ['code' => '321321321']
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1012',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to main variation when no identifiers match query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [
+                    1011, 1012
+                ],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ],
+                                'barcodes' => [
+                                    ['code' => '123123123'],
+                                    ['code' => '321321321']
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1011',
                 'attributes' => [
                     'page' => 1
                 ]
             ],
             'One product found on second page should not redirect to product detail' => [
+                'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [
                     1011, 1012
                 ],
@@ -427,7 +799,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -456,6 +828,7 @@ class SearchServiceTest extends TestCase
                 ]
             ],
             'Multiple products found' => [
+                'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
@@ -471,7 +844,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
                     'documents' => [
@@ -507,6 +880,7 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found and query string type is corrected' => [
+                'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
@@ -519,7 +893,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -544,6 +918,7 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found and query string type is improved' => [
+                'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
@@ -556,7 +931,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -581,6 +956,7 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found but filters are set' => [
+                'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
@@ -593,7 +969,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
