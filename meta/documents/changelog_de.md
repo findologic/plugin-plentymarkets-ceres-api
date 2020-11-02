@@ -1,5 +1,12 @@
 # Release Notes für Findologic
 
+## 3.1.5 (2020-11-02)
+
+### Behoben
+
+* [PLENTY-277] Ein Fehler wurde behoben, wodurch Findologic nicht aktiv war, wenn keine explizite Sprache beim Shopkey
+ gesetzt wurde.
+
 ## 3.1.4 (2020-10-07)
 
 ### Behoben
