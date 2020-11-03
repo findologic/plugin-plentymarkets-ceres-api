@@ -103,7 +103,7 @@ class SearchService implements SearchServiceInterface
 
     public function getSearchFactory(): VariationSearchFactory
     {
-        return pluginApp( VariationSearchFactory::class);
+        return pluginApp(VariationSearchFactory::class);
     }
 
     /**
@@ -327,24 +327,32 @@ class SearchService implements SearchServiceInterface
         return sprintf('/%s_%s_%s', $urlPath, $itemId, $variationId);
     }
 
+    /**
+     * Returns a variation id to be used for redirecting in searches with single result.
+     * If a variation has an identifier matching the query, its id is returned. Otherwise the main variation is used.
+     *
+     * @param string $query
+     * @param array $documents
+     * @return string
+     */
     private function getVariationIdForRedirect(string $query, array $documents)
     {
-        $query = strtolower($query);
+        $lowercasedQuery = strtolower($query);
         $mainVariationId = null;
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
 
             if (
-                strtolower($variation['number']) == $query ||
-                strtolower($variation['model']) == $query ||
-                strtolower($variation['order']) == $query
+                strtolower($variation['number']) == $lowercasedQuery ||
+                strtolower($variation['model']) == $lowercasedQuery ||
+                strtolower($variation['order']) == $lowercasedQuery
             ) {
                 return $variation['id'];
             }
 
             foreach ($barcodes as $barcode) {
-                if (strtolower($barcode['code']) == $query) {
+                if (strtolower($barcode['code']) == $lowercasedQuery) {
                     return $variation['id'];
                 }
             }

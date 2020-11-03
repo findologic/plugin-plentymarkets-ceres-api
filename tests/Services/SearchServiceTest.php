@@ -110,6 +110,7 @@ class SearchServiceTest extends TestCase
     public function testRedirectToProductPageOnDoSearch(
         array $query,
         array $responseVariationIds,
+        array $responseProductIds,
         array $itemSearchServiceResultsAll,
         array $variationSearchByItemIdResult,
         string $shopUrl,
@@ -128,6 +129,11 @@ class SearchServiceTest extends TestCase
             $responseMock->expects($this->exactly(2))->method('getData')
                 ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
                 ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
+            $responseMock->expects($this->once())->method('getProductsIds')->willReturn($responseProductIds);
+        } elseif ($dataQueryInfoMessage['queryStringType'] != 'notImprovedOrCorrected') {
+            $responseMock->expects($this->once())->method('getData')
+                ->with(Response::DATA_QUERY_INFO_MESSAGE)
+                ->willReturn($dataQueryInfoMessage);
         }
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
@@ -337,9 +343,8 @@ class SearchServiceTest extends TestCase
         return [
             'One product found' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -384,9 +389,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product found on first page should redirect to product detail' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -433,9 +437,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product with multiple variations redirects to variation with a model matching the query' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -502,9 +505,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product with multiple variations redirects to variation with a number matching the query' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -571,9 +573,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product with multiple variations redirects to variation with an order matching the query' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -640,9 +641,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product with multiple variations redirects to variation with a barcode matching the query' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -714,9 +714,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product with multiple variations redirects to main variation when no identifiers match query' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -787,9 +786,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product found on second page should not redirect to product detail' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -829,9 +827,8 @@ class SearchServiceTest extends TestCase
             ],
             'Multiple products found' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 2,
@@ -881,9 +878,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product found and query string type is corrected' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -919,9 +915,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product found and query string type is improved' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -957,9 +952,8 @@ class SearchServiceTest extends TestCase
             ],
             'One product found but filters are set' => [
                 'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
