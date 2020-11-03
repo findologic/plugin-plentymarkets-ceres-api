@@ -119,6 +119,11 @@ class PluginConfigTest extends TestCase
                 "en:ABC123\nDEF456",
                 'de',
                 'DEF456'
+            ],
+            'It returns generic shopkey if it is the only one that is configured' => [
+                'DEF456',
+                'de',
+                'DEF456'
             ]
         ];
     }
