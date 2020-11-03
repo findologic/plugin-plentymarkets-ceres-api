@@ -51,6 +51,7 @@ class ResponseParser
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->filters));
+            $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->filters));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
         } catch (Exception $e) {
             $this->logger->warning('Could not parse response from server.');

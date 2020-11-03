@@ -5,6 +5,7 @@ namespace Findologic\Api\Response\Parser;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Services\Image;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
+use SimpleXMLElement;
 
 /**
  * Class FiltersParser
@@ -38,11 +39,7 @@ class FiltersParser
         $this->imageService = $colorImageService;
     }
 
-    /**
-     * @param \SimpleXMLElement $data
-     * @return array
-     */
-    public function parse($data)
+    public function parse(SimpleXMLElement $data): array
     {
         if (!$data) {
             return [];
@@ -61,6 +58,19 @@ class FiltersParser
                 $filters[] = $this->parseFilter($filter);
             }
         }
+
+        return $filters;
+    }
+
+    public function parseForWidgets(SimpleXMLElement $data): array
+    {
+        $filters = $this->parse($data);
+
+        if (empty($filters)) {
+            return [];
+        }
+
+        // Your implementation.
 
         return $filters;
     }
