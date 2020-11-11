@@ -16,11 +16,13 @@ use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Services\ItemSearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
+use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Plenty\Repositories\Models\PaginatedResult;
 use ReflectionException;
 
 /**
@@ -93,7 +95,7 @@ class SearchServiceTest extends TestCase
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory']);
+        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']);
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
 
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
@@ -143,7 +145,13 @@ class SearchServiceTest extends TestCase
             $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($variationSearchByItemIdResult);
         }
 
-        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'handleProductRedirectUrl']);
+        $searchServiceMock = $this->getSearchServiceMock([
+            'getCategoryService',
+            'getItemSearchService',
+            'getSearchFactory',
+            'handleProductRedirectUrl',
+            'getPluginRepository'
+        ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
         if ($redirectUrl) {
             $searchServiceMock->expects($this->once())->method('handleProductRedirectUrl')->with($redirectUrl);
@@ -260,7 +268,8 @@ class SearchServiceTest extends TestCase
             'getCategoryService',
             'getItemSearchService',
             'getSearchFactory',
-            'handleProductRedirectUrl'
+            'handleProductRedirectUrl',
+            'getPluginRepository'
         ]);
         $searchServiceMock->expects($this->any())
             ->method('getItemSearchService')
@@ -991,6 +1000,56 @@ class SearchServiceTest extends TestCase
                     ]
                 ]
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider versionFilterCheckProvider
+     * @param string|int $version
+     */
+    public function testFilterInvalidProductOnlyPriorToCertainVersion($version, bool $shouldFilter)
+    {
+        $searchServiceMock = $this->getSearchServiceMock(['getPluginRepository']);
+        $pluginRepositoryMock = $this->getMockBuilder(PluginRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $pluginSearchResultMock = $this->getMockBuilder(PaginatedResult::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $pluginMock = $this->getMockBuilder(\Plenty\Modules\Plugin\Models\Plugin::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $searchServiceMock->method('getPluginRepository')->willReturn($pluginRepositoryMock);
+        $pluginRepositoryMock->method('searchPlugins')->willReturn($pluginSearchResultMock);
+        $pluginSearchResultMock->method('getResult')->willReturn([$pluginMock]);
+        $pluginRepositoryMock->method('decoratePlugin')->willReturn($pluginMock);
+        $pluginMock->versionProductive = $version;
+
+        $this->assertEquals($shouldFilter, $searchServiceMock->shouldFilterInvalidProducts());
+    }
+
+    public function versionFilterCheckProvider(): array
+    {
+        return [
+            'Does not need to filter for Ceres version 5.0.3' => [
+                'version' => '5.0.3',
+                'shouldFilter' => false
+            ],
+            'Needs to filter when no Ceres version is returned' => [
+                'version' => null,
+                'shouldFilter' => true
+            ],
+            'Needs to filter for Ceres versions below 5.0.3' => [
+                'version' => '5.0.2',
+                'shouldFilter' => true
+            ],
+            'Does not need to filter for Ceres versions above 5.0.3' => [
+                'version' => '5.0.15',
+                'shouldFilter' => false
+            ]
         ];
     }
 }
