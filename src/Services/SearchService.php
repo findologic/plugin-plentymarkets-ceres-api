@@ -11,7 +11,9 @@ use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -324,7 +326,7 @@ class SearchService implements SearchServiceInterface
         $itemId = $productData['item']['id'];
         $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
 
-        return sprintf('/%s_%s_%s', $urlPath, $itemId, $variationId);
+        return $this->buildItemURL($result);
     }
 
     /**
@@ -363,5 +365,32 @@ class SearchService implements SearchServiceInterface
         }
 
         return $mainVariationId;
+    }
+
+    /**
+     * @see \IO\Extensions\Filters\URLFilter::buildItemURL (source)
+     */
+    private function buildItemURL($itemData, $withVariationId = true): string
+    {
+        $itemId = $itemData['item']['id'];
+        $variationId = $itemData['variation']['id'];
+
+        if ($itemId === null || $itemId <= 0) {
+            return "";
+        }
+
+        /** @var UrlBuilderRepositoryContract $urlBuilderRepository */
+        $urlBuilderRepository = pluginApp(UrlBuilderRepositoryContract::class);
+
+        $includeLanguage = Utils::getLang() !== Utils::getDefaultLang();
+        if ($variationId === null || $variationId <= 0) {
+            return $urlBuilderRepository->buildItemUrl($itemId)->toRelativeUrl($includeLanguage);
+        } else {
+            $url = $urlBuilderRepository->buildVariationUrl($itemId, $variationId);
+
+            return $url->append(
+                $urlBuilderRepository->getSuffix($itemId, $variationId, $withVariationId)
+            )->toRelativeUrl($includeLanguage);
+        }
     }
 }
