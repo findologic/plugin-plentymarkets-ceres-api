@@ -326,7 +326,10 @@ class SearchService implements SearchServiceInterface
         $itemId = $productData['item']['id'];
         $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
 
-        return $this->buildItemURL($result);
+        $url = $this->buildItemURL($result);
+        $this->logger->critical($url);
+
+        return $url
     }
 
     /**
