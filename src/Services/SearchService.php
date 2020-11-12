@@ -329,7 +329,7 @@ class SearchService implements SearchServiceInterface
         $url = $this->buildItemURL($result);
         $this->logger->critical($url);
 
-        return $url
+        return $url;
     }
 
     /**
