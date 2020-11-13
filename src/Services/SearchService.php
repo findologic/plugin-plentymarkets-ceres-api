@@ -322,14 +322,12 @@ class SearchService implements SearchServiceInterface
         $query = $response->getData(Response::DATA_QUERY)['query'];
 
         $productData = $result['documents'][0]['data'];
-        $urlPath = $productData['texts'][0]['urlPath'];
-        $itemId = $productData['item']['id'];
         $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
+        if ($variationId !== $productId) {
+            $productData['variation']['id'] = $variationId;
+        }
 
-        $url = $this->buildItemURL($productData);
-        $this->logger->critical($url);
-
-        return $url;
+        return $this->buildItemURL($productData);
     }
 
     /**
