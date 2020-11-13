@@ -10,4 +10,22 @@ $classLoader->addPsr4("Ceres\\", __DIR__ . '/../vendor/plentymarkets/plugin-cere
 $classLoader->addPsr4("IO\\", __DIR__ . '/../vendor/plentymarkets/plugin-io/src', true);
 $classLoader->add('Findologic\Tests', __DIR__);
 
+/**
+ * Add class instances that may be defined in tests. In production this is defined by Plentymarkets.
+ *
+ * @var array<string, object> $classInstances
+ */
+global $classInstances;
+$classInstances = [];
+if (!function_exists('pluginApp')) {
+    function pluginApp(string $class) {
+        global $classInstances;
+        if (!isset($classInstances[$class])) {
+            return null;
+        }
+
+        return $classInstances[$class];
+    }
+}
+
 $classLoader->register();

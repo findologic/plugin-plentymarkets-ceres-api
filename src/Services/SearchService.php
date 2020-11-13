@@ -327,7 +327,7 @@ class SearchService implements SearchServiceInterface
             $productData['variation']['id'] = $variationId;
         }
 
-        return $this->buildItemURL($productData);
+        return $this->buildItemURL($productData, $variationId !== $productId);
     }
 
     /**
@@ -377,7 +377,7 @@ class SearchService implements SearchServiceInterface
         $variationId = $itemData['variation']['id'];
 
         if ($itemId === null || $itemId <= 0) {
-            return "";
+            return '';
         }
 
         /** @var UrlBuilderRepositoryContract $urlBuilderRepository */
