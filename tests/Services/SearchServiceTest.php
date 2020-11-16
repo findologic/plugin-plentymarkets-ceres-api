@@ -1094,11 +1094,12 @@ class SearchServiceTest extends TestCase
 
         $urlQueryMock->expects($this->any())->method('toRelativeUrl')
             ->willReturnCallback(function ($includeLanguage) use ($urlQueryMock, $defaultLanguage, $language) {
+                $path = parse_url($urlQueryMock->url, PHP_URL_PATH);
                 if (!$includeLanguage || $language === $defaultLanguage) {
-                    return parse_url($urlQueryMock->url, PHP_URL_PATH);
+                    return $path;
                 }
 
-                return '/' . $language . parse_url($urlQueryMock->url, PHP_URL_PATH);
+                return '/' . $language . $path;
             });
 
         $urlBuilderMock->expects($this->any())->method('getSuffix')
