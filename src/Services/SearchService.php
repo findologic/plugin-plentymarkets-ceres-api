@@ -261,7 +261,6 @@ class SearchService implements SearchServiceInterface
 
     /**
      * Since Ceres version 5.0.3 invalid ids are filtered by default.
-     * Custom version checking as Plentymarkets forbids using the version_compare function
      * @return bool
      */
     public function shouldFilterInvalidProducts(): bool
@@ -270,6 +269,7 @@ class SearchService implements SearchServiceInterface
             return true;
         }
 
+        /** Custom version checking as Plentymarkets forbids using the version_compare function */
         $versionParts = explode('.', $ceresVersion);
 
         if ($versionParts[0] > 5 ) {
