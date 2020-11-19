@@ -17,6 +17,10 @@ use IO\Services\ItemSearch\Services\ItemSearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
+use Plenty\Modules\Webshop\Helpers\UrlQuery;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -118,8 +122,12 @@ class SearchServiceTest extends TestCase
         string $shopUrl,
         array $dataQueryInfoMessage,
         $redirectUrl,
-        array $attributes
+        array $attributes,
+        string $language = 'de',
+        string $defaultLanguage = 'de'
     ) {
+        $this->setUpPlentyInternalSearchMocks($shopUrl, $defaultLanguage, $language);
+
         /** @var Request|HttpRequest|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
@@ -395,6 +403,53 @@ class SearchServiceTest extends TestCase
                 ],
                 'redirectUrl' => '/test-product_11_1011',
                 'attributes' => []
+            ],
+            'One product with another language found' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/en/test-product_11_1011',
+                'attributes' => [],
+                'language' => 'en'
             ],
             'One product found on first page should redirect to product detail' => [
                 'query' => ['query' => 'this is the text that was searched for'],
@@ -1051,5 +1106,72 @@ class SearchServiceTest extends TestCase
                 'shouldFilter' => false
             ]
         ];
+    }
+
+    /**
+     * @param string $shopUrl
+     * @param string $defaultLanguage
+     * @param string $language
+     * @return void
+     */
+    private function setUpPlentyInternalSearchMocks(string $shopUrl, string $defaultLanguage, string $language)
+    {
+        global $classInstances;
+
+        $localizationMock = $this->getMockBuilder(LocalizationRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $webStoreConfigMock = $this->getMockBuilder(WebstoreConfigurationRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $urlBuilderMock = $this->getMockBuilder(UrlBuilderRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $urlQueryMock = $this->getMockBuilder(UrlQuery::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Create mocks with logic, since we can not use the default logic from Plentymarkets,
+        // since this code is not available for us and only Plenty themselves have access to it.
+
+        $urlBuilderMock->expects($this->any())->method('buildVariationUrl')
+            ->willReturnCallback(function () use ($urlQueryMock, $shopUrl) {
+                $urlQueryMock->url = $shopUrl . '/test-product';
+
+                return $urlQueryMock;
+            });
+
+        $urlQueryMock->expects($this->any())->method('append')
+            ->willReturnCallback(function ($suffix) use ($urlQueryMock) {
+                $urlQueryMock->url .= $suffix;
+
+                return $urlQueryMock;
+            });
+
+        $urlQueryMock->expects($this->any())->method('toRelativeUrl')
+            ->willReturnCallback(function ($includeLanguage) use ($urlQueryMock, $defaultLanguage, $language) {
+                $path = parse_url($urlQueryMock->url, PHP_URL_PATH);
+                if (!$includeLanguage || $language === $defaultLanguage) {
+                    return $path;
+                }
+
+                return '/' . $language . $path;
+            });
+
+        $urlBuilderMock->expects($this->any())->method('getSuffix')
+            ->willReturnCallback(function ($itemId, $variationId, $withVariationId) {
+                if (!$withVariationId) {
+                    return sprintf('_%s', $itemId);
+                }
+
+                return sprintf('_%s_%s', $itemId, $variationId);
+            });
+
+        $classInstances[LocalizationRepositoryContract::class] = $localizationMock;
+        $classInstances[WebstoreConfigurationRepositoryContract::class] = $webStoreConfigMock;
+        $classInstances[UrlBuilderRepositoryContract::class] = $urlBuilderMock;
     }
 }
