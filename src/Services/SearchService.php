@@ -11,7 +11,10 @@ use Findologic\Exception\AliveException;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -25,6 +28,8 @@ use IO\Services\ItemSearch\Services\ItemSearchService;
  */
 class SearchService implements SearchServiceInterface
 {
+    use \Plenty\Plugin\Log\Loggable;
+
     CONST DEFAULT_ITEMS_PER_PAGE = 25;
 
     /**
@@ -101,13 +106,14 @@ class SearchService implements SearchServiceInterface
         return pluginApp(ItemSearchService::class);
     }
 
-    public function getSearchFactory(array $ids): VariationSearchFactory
+    public function getSearchFactory(): VariationSearchFactory
     {
-        $searchFactory = pluginApp( VariationSearchFactory::class);
+        return pluginApp(VariationSearchFactory::class);
+    }
 
-        $searchFactory->hasVariationIds($ids);
-
-        return $searchFactory;
+    public function getPluginRepository(): PluginRepositoryContract
+    {
+        return pluginApp(PluginRepositoryContract::class);
     }
 
     /**
@@ -138,16 +144,21 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $results = $this->search($request, $externalSearch);
-        $productsIds = $this->filterInvalidVariationIds($results->getVariationIds());
 
-        if ($this->shouldRedirectToProductDetailPage($productsIds, $request)) {
-            if ($redirectUrl = $this->getProductDetailUrl($productsIds[0])) {
+        if ($this->shouldFilterInvalidProducts()) {
+            $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
+        } else {
+            $variationIds = $results->getVariationIds();
+        }
+
+        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
+            if ($redirectUrl = $this->getProductDetailUrl($results)) {
                 $this->handleProductRedirectUrl($redirectUrl);
             }
         }
 
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults($productsIds, $results->getResultsCount());
+        $externalSearch->setResults($variationIds, $results->getResultsCount());
     }
 
     /**
@@ -210,7 +221,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
-     * @return \Findologic\Api\Response\Response
+     * @return Response
      * @throws AliveException
      */
     public function search(HttpRequest $request, ExternalSearch $externalSearch)
@@ -250,10 +261,38 @@ class SearchService implements SearchServiceInterface
         header('Location: ' . $url);
     }
 
+    /**
+     * Since Ceres version 5.0.3 invalid ids are filtered by default.
+     * @return bool
+     */
+    public function shouldFilterInvalidProducts(): bool
+    {
+        if (!$ceresVersion = $this->getCeresVersion()) {
+            return true;
+        }
+
+        /** Custom version checking as Plentymarkets forbids using the version_compare function */
+        $versionParts = explode('.', $ceresVersion);
+
+        if ($versionParts[0] > 5 ) {
+            return false;
+        }
+
+        if ($versionParts[0] == 5 && $versionParts[1] > 0) {
+            return false;
+        }
+
+        if ($versionParts[0] == 5 && $versionParts[1] == 0 && $versionParts[2] > 2) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function filterInvalidVariationIds(array $ids): array
     {
         $results = $this->getItemSearchService()->getResult(
-            $this->getSearchFactory($ids)
+            $this->getSearchFactory()->hasVariationIds($ids)
         );
 
         $variationIds = [];
@@ -306,24 +345,107 @@ class SearchService implements SearchServiceInterface
     /**
      * @return string|null
      */
-    private function getProductDetailUrl(int $productId)
+    private function getProductDetailUrl(Response $response)
     {
         /** @var ItemSearchService $itemSearchService */
         $itemSearchService = $this->getItemSearchService();
 
+        $productId = $response->getProductsIds()[0];
         $result = $itemSearchService->getResult(
-            $this->getSearchFactory([$productId])
+            $this->getSearchFactory()->hasItemId($productId)
         );
 
         if (!$result['success'] || empty($result['documents'][0])) {
             return null;
         }
 
+        $query = $response->getData(Response::DATA_QUERY)['query'];
+
         $productData = $result['documents'][0]['data'];
+        $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
+        if ($variationId !== $productId) {
+            $productData['variation']['id'] = $variationId;
+        }
 
-        $urlPath = $productData['texts'][0]['urlPath'];
-        $itemId = $productData['item']['id'];
+        return $this->buildItemURL($productData, $variationId !== $productId);
+    }
 
-        return sprintf('/%s/a-%s', $urlPath, $itemId);
+    /**
+     * Returns a variation id to be used for redirecting in searches with single result.
+     * If a variation has an identifier matching the query, its id is returned. Otherwise the main variation is used.
+     *
+     * @param string $query
+     * @param array $documents
+     * @return string
+     */
+    private function getVariationIdForRedirect(string $query, array $documents)
+    {
+        $lowercasedQuery = strtolower($query);
+        $mainVariationId = null;
+        foreach ($documents as $document) {
+            $variation = $document['data']['variation'];
+            $barcodes = $document['data']['barcodes'] ?? [];
+
+            if (
+                strtolower($variation['number']) == $lowercasedQuery ||
+                strtolower($variation['model']) == $lowercasedQuery ||
+                strtolower($variation['order']) == $lowercasedQuery
+            ) {
+                return $variation['id'];
+            }
+
+            foreach ($barcodes as $barcode) {
+                if (strtolower($barcode['code']) == $lowercasedQuery) {
+                    return $variation['id'];
+                }
+            }
+
+            if ($variation['isMain'] === true) {
+                $mainVariationId = $variation['id'];
+            }
+        }
+
+        return $mainVariationId;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getCeresVersion()
+    {
+        $pluginRepository = $this->getPluginRepository();
+        if (!$pluginsResult = $pluginRepository->searchPlugins(['name' => 'ceres'])->getResult()) {
+            return null;
+        }
+        $plugin = $pluginRepository->decoratePlugin($pluginsResult[0]);
+
+        return $plugin->versionProductive;
+    }
+
+    /**
+     * @see \IO\Extensions\Filters\URLFilter::buildItemURL (source)
+     */
+    private function buildItemURL($itemData, $withVariationId = true): string
+    {
+        $itemId = $itemData['item']['id'];
+        $variationId = $itemData['variation']['id'];
+
+        if ($itemId === null || $itemId <= 0) {
+            return '';
+        }
+
+        /** @var UrlBuilderRepositoryContract $urlBuilderRepository */
+        $urlBuilderRepository = pluginApp(UrlBuilderRepositoryContract::class);
+
+        $includeLanguage = Utils::getLang() !== Utils::getDefaultLang();
+        if ($variationId === null || $variationId <= 0) {
+            return $urlBuilderRepository->buildItemUrl($itemId)->toRelativeUrl($includeLanguage);
+        } else {
+            $url = $urlBuilderRepository->buildVariationUrl($itemId, $variationId);
+
+            return $url->append(
+                $urlBuilderRepository->getSuffix($itemId, $variationId, $withVariationId)
+            )->toRelativeUrl($includeLanguage);
+        }
     }
 }

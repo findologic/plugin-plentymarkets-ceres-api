@@ -16,11 +16,17 @@ use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Services\ItemSearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
+use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
+use Plenty\Modules\Webshop\Helpers\UrlQuery;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Plenty\Repositories\Models\PaginatedResult;
 use ReflectionException;
 
 /**
@@ -93,7 +99,7 @@ class SearchServiceTest extends TestCase
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory']);
+        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']);
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
 
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
@@ -106,17 +112,22 @@ class SearchServiceTest extends TestCase
 
     /**
      * @dataProvider redirectToProductPageOnDoSearchProvider
-     * @runInSeparateProcess
      */
     public function testRedirectToProductPageOnDoSearch(
+        array $query,
         array $responseVariationIds,
+        array $responseProductIds,
         array $itemSearchServiceResultsAll,
-        array $itemSearchResultsOneProduct,
+        array $variationSearchByItemIdResult,
         string $shopUrl,
         array $dataQueryInfoMessage,
         $redirectUrl,
-        array $attributes
+        array $attributes,
+        string $language = 'de',
+        string $defaultLanguage = 'de'
     ) {
+        $this->setUpPlentyInternalSearchMocks($shopUrl, $defaultLanguage, $language);
+
         /** @var Request|HttpRequest|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
@@ -125,17 +136,30 @@ class SearchServiceTest extends TestCase
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
         if ($redirectUrl) {
-            $responseMock->expects($this->once())->method('getData')->with(Response::DATA_QUERY_INFO_MESSAGE)->willReturn($dataQueryInfoMessage);
+            $responseMock->expects($this->exactly(2))->method('getData')
+                ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
+                ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
+            $responseMock->expects($this->once())->method('getProductsIds')->willReturn($responseProductIds);
+        } elseif ($dataQueryInfoMessage['queryStringType'] != 'notImprovedOrCorrected') {
+            $responseMock->expects($this->once())->method('getData')
+                ->with(Response::DATA_QUERY_INFO_MESSAGE)
+                ->willReturn($dataQueryInfoMessage);
         }
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods(['getResult'])->getMock();
         $itemSearchServiceMock->expects($this->at(0))->method('getResult')->willReturn($itemSearchServiceResultsAll);
         if ($redirectUrl) {
-            $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($itemSearchResultsOneProduct);
+            $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($variationSearchByItemIdResult);
         }
 
-        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'handleProductRedirectUrl']);
+        $searchServiceMock = $this->getSearchServiceMock([
+            'getCategoryService',
+            'getItemSearchService',
+            'getSearchFactory',
+            'handleProductRedirectUrl',
+            'getPluginRepository'
+        ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
         if ($redirectUrl) {
             $searchServiceMock->expects($this->once())->method('handleProductRedirectUrl')->with($redirectUrl);
@@ -226,7 +250,6 @@ class SearchServiceTest extends TestCase
 
     /**
      * @dataProvider categorySearchProvider
-     * @runInSeparateProcess
      */
     public function testSearchEndpointIsUsedInCaseCategoryIsTheCeresIoSearchCategory(
         array $responseVariationIds,
@@ -253,7 +276,8 @@ class SearchServiceTest extends TestCase
             'getCategoryService',
             'getItemSearchService',
             'getSearchFactory',
-            'handleProductRedirectUrl'
+            'handleProductRedirectUrl',
+            'getPluginRepository'
         ]);
         $searchServiceMock->expects($this->any())
             ->method('getItemSearchService')
@@ -335,9 +359,9 @@ class SearchServiceTest extends TestCase
     {
         return [
             'One product found' => [
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -347,7 +371,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -361,6 +385,13 @@ class SearchServiceTest extends TestCase
                                 ],
                                 'item' => [
                                     'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
                                 ]
                             ]
                         ]
@@ -370,13 +401,13 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product/a-11',
+                'redirectUrl' => '/test-product_11_1011',
                 'attributes' => []
             ],
-            'One product found on first page should redirect to product detail' => [
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+            'One product with another language found' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -386,7 +417,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -400,6 +431,13 @@ class SearchServiceTest extends TestCase
                                 ],
                                 'item' => [
                                     'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
                                 ]
                             ]
                         ]
@@ -409,15 +447,411 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product/a-11',
+                'redirectUrl' => '/en/test-product_11_1011',
+                'attributes' => [],
+                'language' => 'en'
+            ],
+            'One product found on first page should redirect to product detail' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1011',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with a model matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'this is the text that was searched for',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1012',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with a number matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'THIS IS THE TEXT THAT WAS SEARCHED FOR',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1011',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with an order matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'this is the text that was searched for'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1012',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to variation with a barcode matching the query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ],
+                                'barcodes' => [
+                                    ['code' => '123123123'],
+                                    ['code' => 'this is the text that was searched for'],
+                                    ['code' => '321321321']
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1012',
+                'attributes' => [
+                    'page' => 1
+                ]
+            ],
+            'One product with multiple variations redirects to main variation when no identifiers match query' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => [
+                    'success' => true,
+                    'total' => 1,
+                    'documents' => [
+                        [
+                            'id' => 1011
+                        ]
+                    ]
+                ],
+                'variationSearchByItemIdResult' => [
+                    'success' => true,
+                    'total' => 2,
+                    'documents' => [
+                        [
+                            'id' => 1011,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1011,
+                                    'isMain' => true,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ]
+                            ]
+                        ],
+                        [
+                            'id' => 1012,
+                            'data' => [
+                                'texts' => [
+                                    [
+                                        'urlPath' => 'test-product'
+                                    ]
+                                ],
+                                'item' => [
+                                    'id' => 11
+                                ],
+                                'variation' => [
+                                    'id' => 1012,
+                                    'isMain' => false,
+                                    'model' => 'model',
+                                    'number' => 'number',
+                                    'order' => 'order'
+                                ],
+                                'barcodes' => [
+                                    ['code' => '123123123'],
+                                    ['code' => '321321321']
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11_1011',
                 'attributes' => [
                     'page' => 1
                 ]
             ],
             'One product found on second page should not redirect to product detail' => [
-                'responseVariationIds' => [
-                    1011, 1012
-                ],
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -427,7 +861,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -456,9 +890,9 @@ class SearchServiceTest extends TestCase
                 ]
             ],
             'Multiple products found' => [
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 2,
@@ -471,7 +905,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
                     'documents' => [
@@ -507,9 +941,9 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found and query string type is corrected' => [
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -519,7 +953,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -544,9 +978,9 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found and query string type is improved' => [
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -556,7 +990,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -581,9 +1015,9 @@ class SearchServiceTest extends TestCase
                 'attributes' => []
             ],
             'One product found but filters are set' => [
-                'responseVariationIds' => [
-                    1011, 1022, 1023
-                ],
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1022, 1023],
+                'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
                     'success' => true,
                     'total' => 1,
@@ -593,7 +1027,7 @@ class SearchServiceTest extends TestCase
                         ]
                     ]
                 ],
-                'itemSearchResultsOneProduct' => [
+                'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
                     'documents' => [
@@ -622,5 +1056,122 @@ class SearchServiceTest extends TestCase
                 ]
             ],
         ];
+    }
+
+    /**
+     * @dataProvider versionFilterCheckProvider
+     * @param string|int $version
+     */
+    public function testFilterInvalidProductOnlyPriorToCertainVersion($version, bool $shouldFilter)
+    {
+        $searchServiceMock = $this->getSearchServiceMock(['getPluginRepository']);
+        $pluginRepositoryMock = $this->getMockBuilder(PluginRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $pluginSearchResultMock = $this->getMockBuilder(PaginatedResult::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $pluginMock = $this->getMockBuilder(\Plenty\Modules\Plugin\Models\Plugin::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $searchServiceMock->method('getPluginRepository')->willReturn($pluginRepositoryMock);
+        $pluginRepositoryMock->method('searchPlugins')->willReturn($pluginSearchResultMock);
+        $pluginSearchResultMock->method('getResult')->willReturn([$pluginMock]);
+        $pluginRepositoryMock->method('decoratePlugin')->willReturn($pluginMock);
+        $pluginMock->versionProductive = $version;
+
+        $this->assertEquals($shouldFilter, $searchServiceMock->shouldFilterInvalidProducts());
+    }
+
+    public function versionFilterCheckProvider(): array
+    {
+        return [
+            'Does not need to filter for Ceres version 5.0.3' => [
+                'version' => '5.0.3',
+                'shouldFilter' => false
+            ],
+            'Needs to filter when no Ceres version is returned' => [
+                'version' => null,
+                'shouldFilter' => true
+            ],
+            'Needs to filter for Ceres versions below 5.0.3' => [
+                'version' => '5.0.2',
+                'shouldFilter' => true
+            ],
+            'Does not need to filter for Ceres versions above 5.0.3' => [
+                'version' => '5.0.15',
+                'shouldFilter' => false
+            ]
+        ];
+    }
+
+    /**
+     * @param string $shopUrl
+     * @param string $defaultLanguage
+     * @param string $language
+     * @return void
+     */
+    private function setUpPlentyInternalSearchMocks(string $shopUrl, string $defaultLanguage, string $language)
+    {
+        global $classInstances;
+
+        $localizationMock = $this->getMockBuilder(LocalizationRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $webStoreConfigMock = $this->getMockBuilder(WebstoreConfigurationRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $urlBuilderMock = $this->getMockBuilder(UrlBuilderRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $urlQueryMock = $this->getMockBuilder(UrlQuery::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // Create mocks with logic, since we can not use the default logic from Plentymarkets,
+        // since this code is not available for us and only Plenty themselves have access to it.
+
+        $urlBuilderMock->expects($this->any())->method('buildVariationUrl')
+            ->willReturnCallback(function () use ($urlQueryMock, $shopUrl) {
+                $urlQueryMock->url = $shopUrl . '/test-product';
+
+                return $urlQueryMock;
+            });
+
+        $urlQueryMock->expects($this->any())->method('append')
+            ->willReturnCallback(function ($suffix) use ($urlQueryMock) {
+                $urlQueryMock->url .= $suffix;
+
+                return $urlQueryMock;
+            });
+
+        $urlQueryMock->expects($this->any())->method('toRelativeUrl')
+            ->willReturnCallback(function ($includeLanguage) use ($urlQueryMock, $defaultLanguage, $language) {
+                $path = parse_url($urlQueryMock->url, PHP_URL_PATH);
+                if (!$includeLanguage || $language === $defaultLanguage) {
+                    return $path;
+                }
+
+                return '/' . $language . $path;
+            });
+
+        $urlBuilderMock->expects($this->any())->method('getSuffix')
+            ->willReturnCallback(function ($itemId, $variationId, $withVariationId) {
+                if (!$withVariationId) {
+                    return sprintf('_%s', $itemId);
+                }
+
+                return sprintf('_%s_%s', $itemId, $variationId);
+            });
+
+        $classInstances[LocalizationRepositoryContract::class] = $localizationMock;
+        $classInstances[WebstoreConfigurationRepositoryContract::class] = $webStoreConfigMock;
+        $classInstances[UrlBuilderRepositoryContract::class] = $urlBuilderMock;
     }
 }
