@@ -1,5 +1,18 @@
 # Release Notes für Findologic
 
+## 3.2.0 (2020-11-19)
+
+### Geändert
+
+* [PLENTY-257] Die Weiterleitung zu Produktdetailseite verwendet nun die Ceres URL anstatt der Calisto URL.
+* [PLENTY-159] Findologic wird nicht länger eine interne Plentymarkets Suche durchführen um sicherzustellen, dass alle
+ Produkte die von Findologic zurückgegeben werden, auch tatsächlich angezeigt werden können. Dies gilt nur für Ceres > 5.0.2.
+
+### Behoben
+
+* [PLENTY-276] Ein Fehler wurde behoben, welcher dazu führte, dass die Weiterleitung auf die Produktdetailseite nicht die
+ aktuelle Sprache berücksichtigte. Dies führte dazu, dass Kunden unter Umständen auf eine andere Sprache weitergeleitet wurden.
+
 ## 3.1.5 (2020-11-02)
 
 ### Behoben

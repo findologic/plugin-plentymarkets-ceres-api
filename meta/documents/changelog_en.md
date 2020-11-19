@@ -1,5 +1,16 @@
 # Release Notes for Findologic
 
+## 3.2.0 (2020-11-19)
+
+### Changed
+
+* [PLENTY-257] The product redirect URL has been changed from the way Calisto defined it, to the new Ceres URL structure.
+* [PLENTY-159] Findologic will no longer do an internal Plentymarkets search to ensure that all displayed products can be displayed properly, when using Ceres version > 5.0.2
+
+### Fixed
+
+* [PLENTY-276] Fixed a bug that caused the product redirect, to not take the language into account, which may have caused customers being redirected to a different language.
+
 ## 3.1.5 (2020-11-02)
 
 ### Fixed
