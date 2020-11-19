@@ -12,6 +12,7 @@ use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -25,6 +26,8 @@ use IO\Services\ItemSearch\Services\ItemSearchService;
  */
 class SearchService implements SearchServiceInterface
 {
+    use \Plenty\Plugin\Log\Loggable;
+
     CONST DEFAULT_ITEMS_PER_PAGE = 25;
 
     /**
@@ -106,6 +109,11 @@ class SearchService implements SearchServiceInterface
         return pluginApp(VariationSearchFactory::class);
     }
 
+    public function getPluginRepository(): PluginRepositoryContract
+    {
+        return pluginApp(PluginRepositoryContract::class);
+    }
+
     /**
      * @return CategoryService
      */
@@ -135,7 +143,11 @@ class SearchService implements SearchServiceInterface
     {
         $results = $this->search($request, $externalSearch);
 
-        $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
+        if ($this->shouldFilterInvalidProducts()) {
+            $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
+        } else {
+            $variationIds = $results->getVariationIds();
+        }
 
         if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
             if ($redirectUrl = $this->getProductDetailUrl($results)) {
@@ -245,6 +257,34 @@ class SearchService implements SearchServiceInterface
     public function handleProductRedirectUrl(string $url)
     {
         header('Location: ' . $url);
+    }
+
+    /**
+     * Since Ceres version 5.0.3 invalid ids are filtered by default.
+     * @return bool
+     */
+    public function shouldFilterInvalidProducts(): bool
+    {
+        if (!$ceresVersion = $this->getCeresVersion()) {
+            return true;
+        }
+
+        /** Custom version checking as Plentymarkets forbids using the version_compare function */
+        $versionParts = explode('.', $ceresVersion);
+
+        if ($versionParts[0] > 5 ) {
+            return false;
+        }
+
+        if ($versionParts[0] == 5 && $versionParts[1] > 0) {
+            return false;
+        }
+
+        if ($versionParts[0] == 5 && $versionParts[1] == 0 && $versionParts[2] > 2) {
+            return false;
+        }
+
+        return true;
     }
 
     private function filterInvalidVariationIds(array $ids): array
@@ -363,5 +403,19 @@ class SearchService implements SearchServiceInterface
         }
 
         return $mainVariationId;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getCeresVersion()
+    {
+        $pluginRepository = $this->getPluginRepository();
+        if (!$pluginsResult = $pluginRepository->searchPlugins(['name' => 'ceres'])->getResult()) {
+            return null;
+        }
+        $plugin = $pluginRepository->decoratePlugin($pluginsResult[0]);
+
+        return $plugin->versionProductive;
     }
 }
