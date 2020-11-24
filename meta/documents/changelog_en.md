@@ -1,5 +1,11 @@
 # Release Notes for Findologic
 
+## 3.2.1 (2020-11-24)
+
+### Fixed
+
+* [PLENTY-286] Fixed a bug that caused the pagination not to work properly.
+
 ## 3.2.0 (2020-11-19)
 
 ### Changed
