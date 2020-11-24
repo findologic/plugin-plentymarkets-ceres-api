@@ -414,7 +414,7 @@ class SearchService implements SearchServiceInterface
     private function getCeresVersion()
     {
         $pluginRepository = $this->getPluginRepository();
-        if (!$plugin = $pluginRepository->getPluginByName( 'ceres')) {
+        if (!$plugin = $pluginRepository->getPluginByName('ceres')) {
             return null;
         }
 
