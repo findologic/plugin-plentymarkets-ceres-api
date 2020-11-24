@@ -1069,18 +1069,12 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $pluginSearchResultMock = $this->getMockBuilder(PaginatedResult::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
         $pluginMock = $this->getMockBuilder(\Plenty\Modules\Plugin\Models\Plugin::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $searchServiceMock->method('getPluginRepository')->willReturn($pluginRepositoryMock);
-        $pluginRepositoryMock->method('searchPlugins')->willReturn($pluginSearchResultMock);
-        $pluginSearchResultMock->method('getResult')->willReturn([$pluginMock]);
-        $pluginRepositoryMock->method('decoratePlugin')->willReturn($pluginMock);
+        $pluginRepositoryMock->method('getPluginByName')->willReturn($pluginMock);
         $pluginMock->versionProductive = $version;
 
         $this->assertEquals($shouldFilter, $searchServiceMock->shouldFilterInvalidProducts());
