@@ -8,6 +8,7 @@ use Findologic\Api\Services\Image;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use SimpleXMLElement;
 
 /**
  * Class FiltersParserTest
@@ -246,7 +247,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -304,7 +306,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'vendor',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
                         'itemCount' => 0,
@@ -352,7 +355,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'price',
                         'name' => 'Preis',
                         'select' => 'single',
-                        'type' => 'range-slider',
+                        'type' => '',
+                        'findologicFilterType' => 'range-slider',
                         'cssClass' => '',
                         'unit' => '€',
                         'isMain' => true,
@@ -404,7 +408,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'price-text',
                         'name' => 'Preis',
                         'select' => 'single',
-                        'type' => 'text',
+                        'type' => '',
+                        'findologicFilterType' => 'text',
                         'cssClass' => '',
                         'isMain' => false,
                         'itemCount' => 0,
@@ -425,7 +430,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'color',
                         'name' => 'Farbe',
                         'select' => 'multiselect',
-                        'type' => 'color',
+                        'type' => '',
+                        'findologicFilterType' => 'color',
                         'cssClass' => '',
                         'isMain' => false,
                         'itemCount' => 0,
@@ -500,7 +506,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -541,7 +548,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -582,7 +590,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => 'test-css-class',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -638,7 +647,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'vendor',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
                         'itemCount' => 0,
@@ -707,7 +717,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => 'test-css-class',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -749,7 +760,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => 'test-css-class',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 42,
                         'noAvailableFiltersText' => '',
@@ -814,7 +826,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -917,7 +930,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -1020,7 +1034,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -1099,7 +1114,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 6,
                         'noAvailableFiltersText' => 'Nothing left to show',
@@ -1117,6 +1133,162 @@ class FiltersParserTest extends TestCase
                     ]
                 ]
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider parseForWidgetsDataProvider
+     */
+    public function testParseForWidgets(array $parsedFilters, array $expectedResult)
+    {
+        $xml = new SimpleXMLElement('<filters/>');
+        /** @var FiltersParser|MockObject $filtersParserMock */
+        $filtersParserMock = $this->getFiltersParserMock(['parse']);
+        $filtersParserMock->method('parse')->willReturn($parsedFilters);
+        $this->assertEquals($expectedResult, $filtersParserMock->parseForWidgets($xml));
+    }
+
+    public function parseForWidgetsDataProvider(): array
+    {
+        return [
+            'typesGetMappedCorrectlyIfValuesExist' => [
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'type' => 'image',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'type' => 'range-slider',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'type' => 'select',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'color',
+                        'name' => 'Color',
+                        'type' => 'multiselect',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'some_attribute',
+                        'name' => 'Some Attribute',
+                        'type' => 'multiselect',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                ],
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'type' => 'producer',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'type' => 'price',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'type' => 'category',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'color',
+                        'name' => 'Color',
+                        'type' => 'dynamic',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ],
+                    [
+                        'id' => 'some_attribute',
+                        'name' => 'Some Attribute',
+                        'type' => 'dynamic',
+                        'values' => [
+                            ['id' => 1]
+                        ]
+                    ]
+                ]
+            ],
+            'typesAreLeftUnchangedIfNoValuesExist' => [
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'type' => 'image',
+                        'values' => false
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'type' => 'range-slider',
+                        'values' => []
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'type' => 'select',
+                    ],
+                    [
+                        'id' => 'color',
+                        'name' => 'Color',
+                        'type' => 'multiselect',
+                        'values' => null
+                    ]
+                ],
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'type' => 'image',
+                        'values' => false
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'type' => 'range-slider',
+                        'values' => []
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'type' => 'select',
+                    ],
+                    [
+                        'id' => 'color',
+                        'name' => 'Color',
+                        'type' => 'multiselect',
+                        'values' => null
+                    ]
+                ]
+            ]
         ];
     }
 }

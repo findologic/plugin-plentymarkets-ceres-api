@@ -833,7 +833,7 @@ exports.default = {
 
             var attributes = params[_constants2.default.PARAMETER_ATTRIBUTES];
 
-            if (facetId === 'price' || this.facet.type === 'range-slider') {
+            if (facetId === 'price' || this.facet.findologicFilterType === 'range-slider') {
                 attributes[facetId] = {
                     min: facetValue.min,
                     max: facetValue.max
