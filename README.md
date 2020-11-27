@@ -77,7 +77,7 @@ Alternatively if you have `gulp` installed globally, you can also simply run `gu
 
 ### Running unit-tests locally
 
-Make sure to include the `test/phpunit.xml` as an *alternative configuration file* in your IDE.
+Make sure to include the `tests/phpunit.xml` as an *alternative configuration file* in your IDE.
 
 Alternatively all tests can be run, by executing
 
