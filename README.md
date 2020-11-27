@@ -1,62 +1,88 @@
-# API plugin for Plentymarkets Ceres
+# Findologic API plugin for Plentymarkets Ceres
 [![Build Status](https://travis-ci.org/findologic/plugin-plentymarkets-ceres-api.svg?branch=development)](https://travis-ci.org/findologic/plugin-plentymarkets-ceres-api)
 
-Needs to be installed in Plentymarkets Ceres to utilize Findologic's search API.
+## Table of Contents
 
-## Getting started
+1. [Install](#install)
+   1. [Prerequisites](#prerequisites)
+   1. [Installation](#installation)
+1. [Development](#development)
+   1. [Installing dependencies](#installing-dependencies)
+   1. [Development cycle](#development-cycle)
+   1. [Running unit-tests locally](#running-unit-tests-locally)
+1. [Deployment & Release](#deployment--release)
+1. [Versioning](#versioning)
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+## Install
 
 ### Prerequisites
 
-Make sure that the listed software is installed:
+The following plugins must be installed in order for the Findologic plugin
+to be installed.
 
-* Npm
-* Node
-* Composer (1.8.0 or higher)
+* Ceres >= 5.0
+* IO >= 5.0
 
-### Installing
+### Installation
 
-Install the composer dependencies:
+When developing, install the Findologic Plugin in the Plentymarkets backend via GIT.  
+For non-development work, it can also be installed via the [marketplace](https://marketplace.plentymarkets.com/findologic_6390).  
 
-```
-$ composer install
-```
+*Note: In the Plentymarkets Backend you have the possibility to change the code of your plugin. This only works, if
+the plugin is installed via the marketplace.*
 
-Install node dependencies:
+## Development
 
-```
-$ npm install
-```
+Developing Plentymarkets plugins is very different from other shopsystems, as Plentymarkets
+is a Cloud-Hosted Shopsystem, which uses internal proprietary code by Plentymarkets.
+This also means that it can not be setup on a local machine.
 
-Install git hooks:
+### Installing dependencies
 
-```
-$ gulp install-hooks
-```
+We have PHP dependencies, as well as Javascript dependencies. Make sure you have Composer (min. 1.8),
+as well as Node and NPM installed.
 
-### Development
-
-Run following commands if JS or CSS changes were made respectively:
-
-```
-$ gulp js
+Install all PHP/Composer dependencies:
+```bash
+composer install
 ```
 
+Install all JS/NPM packages:
 ```
-$ gulp sass
+npm install
 ```
 
-Commit and push any local changes.
+Running the following command, will enable a Git hook, which prevents you from pushing
+your code, in case you have made JS/CSS changes, but did not build them:
+```
+gulp install-hooks
+```
 
-Pull the changes in Plentymarkets' backend (be sure to select the correct plugin set). Click on "Save & deploy plugin set" and start the preview for the relevant shop.
+### Development cycle
 
-## Running the tests
-
-Use phpunit installed in the vendor folder like so:
+Since you can not setup a local instance of Plentymarkets, you always need to push your changes
+onto a separate branch, which you then can checkout on the Plentymarkets backend.
 
 ```
-$ php vendor/bin/phpunit -c tests/phpunit.xml 
+git checkout -b PLENTY-<story-id>_<short-description>
+```
+
+Before pushing you may run build to ensure your JS/CSS is built.
+
+```
+npm run-script build
+```
+
+Alternatively if you have `gulp` installed globally, you can also simply run `gulp`.
+
+### Running unit-tests locally
+
+Make sure to include the `test/phpunit.xml` as an *alternative configuration file* in your IDE.
+
+Alternatively all tests can be run, by executing
+
+```
+composer test
 ```
 
 ## Deployment & Release
