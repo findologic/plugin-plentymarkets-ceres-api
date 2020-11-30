@@ -3,7 +3,7 @@
 
 ## Table of Contents
 
-1. [Installation](#installation)
+1. [Setup](#setup)
    1. [Prerequisites](#prerequisites)
    1. [Installation](#installation)
 1. [Development](#development)
@@ -13,7 +13,7 @@
 1. [Deployment & Release](#deployment--release)
 1. [Versioning](#versioning)
 
-## Installation
+## Setup
 
 ### Prerequisites
 
@@ -84,7 +84,7 @@ composer test
 ```
 
 ## Deployment & Release
-1. Update the german and english change logs in folder `meta/documents`.
+1. Update the German and English change logs in folder `meta/documents`.
 1. Bump the plugin version in files `plugin.json` and `src/Constants/Plugin.php`.
 1. Open the backend from our Plentymarkets shop.
 1. Go to *Plugins > Plugin overview > Ceres > Findologic > Git* and fetch & pull the `main` branch.
