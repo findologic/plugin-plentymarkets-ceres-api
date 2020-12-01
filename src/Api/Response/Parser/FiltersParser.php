@@ -73,30 +73,30 @@ class FiltersParser
             return [];
         }
 
-        foreach ($filters as &$filter) {
-            if (!isset($filter['values']) || !$filter['values']) {
-                continue;
+        $parsedFilters = [];
+
+        foreach ($filters as $filter) {
+            if (isset($filter['values']) && $filter['values']) {
+                switch ($filter['id']) {
+                    case 'vendor':
+                        $filter['type'] = 'producer';
+                        break;
+                    case 'cat':
+                        $filter['type'] = 'category';
+                        break;
+                    case 'price':
+                        $filter['type'] = 'price';
+                        break;
+                    default:
+                        $filter['type'] = 'dynamic';
+                        break;
+                }
             }
 
-            switch ($filter['id']) {
-                case 'vendor':
-                    $filter['type'] = 'producer';
-                    break;
-                case 'cat':
-                    $filter['type'] = 'category';
-                    break;
-                case 'price':
-                    $filter['type'] = 'price';
-                    break;
-                default:
-                    $filter['type'] = 'dynamic';
-                    break;
-            }
+            $parsedFilters[] = $filter;
         }
 
-        unset($filter);
-
-        return $filters;
+        return $parsedFilters;
     }
 
     /**
