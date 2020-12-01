@@ -65,8 +65,15 @@ class FiltersParser
         return $filters;
     }
 
-    public function parseForWidgets(SimpleXMLElement $data): array
+    /**
+     * @param SimpleXMLElement|null $data
+     */
+    public function parseForWidgets($data): array
     {
+        if (!$data instanceof SimpleXMLElement) {
+            return [];
+        }
+
         $filters = $this->parse($data);
 
         if (empty($filters)) {
