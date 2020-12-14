@@ -96,8 +96,6 @@ class Middleware extends PlentyMiddleware
                     'Findologic::content.scripts',
                     [
                         'shopkey' => strtoupper(md5($this->pluginConfig->getShopKey())),
-                        'searchResultContainer' => $this->pluginConfig->get(Plugin::CONFIG_SEARCH_RESULT_CONTAINER),
-                        'navigationContainer' => $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_CONTAINER),
                         'isSearchPage' => $this->isSearchPage,
                         'activeOnCatPage' => $this->activeOnCatPage
                     ]

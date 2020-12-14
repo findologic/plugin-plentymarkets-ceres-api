@@ -43,8 +43,6 @@ class Plugin
 
     const CONFIG_SHOPKEY = 'Findologic.shopkey';
     const CONFIG_NAVIGATION_ENABLED = 'Findologic.nav_enabled';
-    const CONFIG_SEARCH_RESULT_CONTAINER = 'Findologic.search_result_container';
-    const CONFIG_NAVIGATION_CONTAINER = 'Findologic.navigation_container';
     const CONFIG_FILTERS_STYLING_CSS_ENABLED = 'Findologic.filters_styling_css_enabled';
     const CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED = 'Findologic.load_no_ui_slider_styles_enabled';
 
