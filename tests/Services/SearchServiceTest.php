@@ -1179,7 +1179,7 @@ class SearchServiceTest extends TestCase
     /**
      * @return MockObject|VariationSearchFactory
      */
-    private function getSearchFactoryMock()
+    private function getSearchFactoryMock(): VariationSearchFactory
     {
         $searchServiceFactoryMock = $this->getMockBuilder(VariationSearchFactory::class)
             ->disableOriginalConstructor()
