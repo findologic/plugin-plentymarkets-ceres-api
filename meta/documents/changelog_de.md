@@ -1,5 +1,12 @@
 # Release Notes für Findologic
 
+## 3.2.2 (2020-12-17)
+
+### Behoben
+
+* [PLENTY-294] Ein Fehler wurde behoben, wodurch man auf eine 404 Seite weitergeleitet wurde, wenn die
+ Hauptvariation eines Produkts inaktiv war.
+
 ## 3.2.1 (2020-11-24)
 
 ### Behoben

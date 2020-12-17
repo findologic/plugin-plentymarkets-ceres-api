@@ -1,5 +1,11 @@
 # Release Notes for Findologic
 
+## 3.2.2 (2020-12-17)
+
+### Fixed
+
+* [PLENTY-294] Fixed a bug that caused a redirect to a 404 page, in case the main variation id of a product has been inactive.
+
 ## 3.2.1 (2020-11-24)
 
 ### Fixed
