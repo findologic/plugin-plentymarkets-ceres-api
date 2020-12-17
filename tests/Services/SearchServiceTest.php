@@ -401,7 +401,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product_11_1011',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => []
             ],
             'One product with another language found' => [
@@ -447,7 +447,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/en/test-product_11_1011',
+                'redirectUrl' => '/en/test-product_11',
                 'attributes' => [],
                 'language' => 'en'
             ],
@@ -494,7 +494,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product_11_1011',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => [
                     'page' => 1
                 ]
@@ -562,7 +562,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product_11_1012',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => [
                     'page' => 1
                 ]
@@ -630,7 +630,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product_11_1011',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => [
                     'page' => 1
                 ]
@@ -698,7 +698,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product_11_1012',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => [
                     'page' => 1
                 ]
@@ -771,7 +771,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product_11_1012',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => [
                     'page' => 1
                 ]
@@ -843,7 +843,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product_11_1011',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => [
                     'page' => 1
                 ]
