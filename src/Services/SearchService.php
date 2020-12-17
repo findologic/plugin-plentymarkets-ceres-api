@@ -367,7 +367,7 @@ class SearchService implements SearchServiceInterface
             $productData['variation']['id'] = $variationId;
         }
 
-        return $this->buildItemURL($productData, $variationId !== $productId);
+        return $this->buildItemURL($productData, false);
     }
 
     /**
