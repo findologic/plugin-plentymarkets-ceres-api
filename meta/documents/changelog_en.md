@@ -1,5 +1,19 @@
 # Release Notes for Findologic
 
+## 3.3.0 (2021-01-12)
+
+### Added
+
+* [PLENTY-266] Using the ShopBuilder filter widgets individually is now supported.
+
+### Changed
+
+* [PLENTY-242] Direct Integration container configuration has been removed.
+
+### Fixed
+
+* [PLENTY-280] Fixed a bug that caused gaps in the product listing, when using Ceres version lower or equal to 5.0.2.
+
 ## 3.2.2 (2020-12-17)
 
 ### Fixed
