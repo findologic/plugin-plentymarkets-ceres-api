@@ -18,6 +18,7 @@ class Response
     const DATA_RESULTS = 'results';
     const DATA_PRODUCTS = 'products';
     const DATA_FILTERS = 'filters';
+    const DATA_FILTERS_WIDGETS = 'filters_widgets';
     const DATA_QUERY_INFO_MESSAGE = 'query_info_message';
 
     const
