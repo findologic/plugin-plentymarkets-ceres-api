@@ -1,5 +1,5 @@
 {
-  "version": "3.2.2",
+  "version": "3.3.0",
   "name": "Findologic",
   "marketplaceName": {
     "de": "Findologic - Search & Navigation Platform",
@@ -34,12 +34,6 @@
       "name": "Filters",
       "description": "Display Findologic filters",
       "defaultLayoutContainer": "Ceres::Search.Filter"
-    },
-    {
-      "key": "Findologic\\Containers\\SearchBarContainer",
-      "name": "Search Bar",
-      "description": "Display search bar customized for Findologic",
-      "defaultLayoutContainer": "Ceres::Search.SearchBar"
     },
     {
       "key": "Findologic\\Containers\\PromotionContainer",
