@@ -8,6 +8,7 @@ use Findologic\Api\Services\Image;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use SimpleXMLElement;
 
 /**
  * Class FiltersParserTest
@@ -246,7 +247,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -304,7 +306,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'vendor',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
                         'itemCount' => 0,
@@ -352,7 +355,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'price',
                         'name' => 'Preis',
                         'select' => 'single',
-                        'type' => 'range-slider',
+                        'type' => '',
+                        'findologicFilterType' => 'range-slider',
                         'cssClass' => '',
                         'unit' => '€',
                         'isMain' => true,
@@ -404,7 +408,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'price-text',
                         'name' => 'Preis',
                         'select' => 'single',
-                        'type' => 'text',
+                        'type' => '',
+                        'findologicFilterType' => 'text',
                         'cssClass' => '',
                         'isMain' => false,
                         'itemCount' => 0,
@@ -425,7 +430,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'color',
                         'name' => 'Farbe',
                         'select' => 'multiselect',
-                        'type' => 'color',
+                        'type' => '',
+                        'findologicFilterType' => 'color',
                         'cssClass' => '',
                         'isMain' => false,
                         'itemCount' => 0,
@@ -500,7 +506,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -541,7 +548,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -582,7 +590,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => 'test-css-class',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -638,7 +647,8 @@ class FiltersParserTest extends TestCase
                         'id' => 'vendor',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'cssClass' => '',
                         'isMain' => true,
                         'itemCount' => 0,
@@ -707,7 +717,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => 'test-css-class',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -749,7 +760,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => 'test-css-class',
                         'name' => '',
                         'select' => 'multiple',
-                        'type' => 'image',
+                        'type' => '',
+                        'findologicFilterType' => 'image',
                         'isMain' => true,
                         'itemCount' => 42,
                         'noAvailableFiltersText' => '',
@@ -814,7 +826,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -917,7 +930,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -1020,7 +1034,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
@@ -1099,7 +1114,8 @@ class FiltersParserTest extends TestCase
                         'cssClass' => '',
                         'name' => 'Kategorie',
                         'select' => 'single',
-                        'type' => 'select',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
                         'isMain' => true,
                         'itemCount' => 6,
                         'noAvailableFiltersText' => 'Nothing left to show',
@@ -1117,6 +1133,420 @@ class FiltersParserTest extends TestCase
                     ]
                 ]
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider parseForWidgetsDataProvider
+     */
+    public function testParseForWidgets(array $parsedFilters, array $expectedResult)
+    {
+        $xml = new SimpleXMLElement('<filters/>');
+        /** @var FiltersParser|MockObject $filtersParserMock */
+        $filtersParserMock = $this->getFiltersParserMock(['parse']);
+        $filtersParserMock->method('parse')->willReturn($parsedFilters);
+        $this->assertEquals($expectedResult, $filtersParserMock->parseForWidgets($xml));
+    }
+
+    public function parseForWidgetsDataProvider(): array
+    {
+        return [
+            'typesGetMappedCorrectlyIfValuesExist' => [
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'select' => 'multiple',
+                        'type' => '',
+                        'findologicFilterType' => 'label',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => 'A & C Design',
+                                'position' => 'item',
+                                'count' => '',
+                                'image' => '',
+                                'id' => 27,
+                                'selected' => false,
+                            ]
+                        ]
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'select' => 'single',
+                        'type' => '',
+                        'findologicFilterType' => 'range-slider',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'unit' => '£',
+                        'minValue' => 59,
+                        'maxValue' => 2300,
+                        'step' => 0.1,
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => '59 - 149',
+                                'position' => 'item',
+                                'count' => '',
+                                'image' => '',
+                                'id' => 32,
+                                'selected' => false,
+                            ]
+                        ]
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'select' => 'single',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
+                        'isMain' => false,
+                        'itemCount' => '6',
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                    0 => [
+                                        'items' => [
+                                        ],
+                                        'name' => 'Armchairs & Stools',
+                                        'position' => 'item',
+                                        'count' => '19',
+                                        'image' => '',
+                                        'id' => 47,
+                                        'selected' => false,
+                                    ]
+                                ],
+                                'name' => 'Living room',
+                                'position' => 'item',
+                                'count' => '31',
+                                'image' => '',
+                                'id' => 46,
+                                'selected' => false,
+                            ]
+                        ]
+                    ],
+                    [
+                        'id' => 'Color',
+                        'name' => 'Color',
+                        'select' => 'multiselect',
+                        'type' => '',
+                        'findologicFilterType' => 'color',
+                        'isMain' => false,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => 'black',
+                                'position' => 'item',
+                                'count' => '',
+                                'image' => 'https://www.etc-shop.de/layout/findologic/black.png',
+                                'id' => 36,
+                                'selected' => false,
+                                'colorImageUrl' => NULL,
+                                'hexValue' => '#000000',
+                            ]
+                        ]
+                    ],
+                    [
+                        'id' => 'some_attribute',
+                        'name' => 'Some Attribute',
+                        'select' => 'multiple',
+                        'type' => '',
+                        'findologicFilterType' => 'multiselect',
+                        'isMain' => false,
+                        'itemCount' => '6',
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => '22220',
+                                'position' => 'item',
+                                'count' => '18',
+                                'image' => '',
+                                'id' => 51,
+                                'selected' => false,
+                            ],
+                            1 => [
+                                'items' => [
+                                ],
+                                'name' => '22221',
+                                'position' => 'item',
+                                'count' => '3',
+                                'image' => '',
+                                'id' => 52,
+                                'selected' => false,
+                            ],
+                        ],
+                    ]
+                ],
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'select' => 'multiple',
+                        'type' => 'producer',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => 'A & C Design',
+                                'position' => 'item',
+                                'count' => '',
+                                'image' => '',
+                                'id' => 27,
+                                'selected' => false,
+                            ]
+                        ],
+                        'findologicFilterType' => 'label'
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'select' => 'single',
+                        'type' => 'price',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'unit' => '£',
+                        'minValue' => 59,
+                        'maxValue' => 2300,
+                        'step' => 0.1,
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => '59 - 149',
+                                'position' => 'item',
+                                'count' => '',
+                                'image' => '',
+                                'id' => 32,
+                                'selected' => false,
+                            ]
+                        ],
+                        'findologicFilterType' => 'range-slider'
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'select' => 'single',
+                        'type' => 'category',
+                        'isMain' => false,
+                        'itemCount' => '6',
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                    0 => [
+                                        'items' => [
+                                        ],
+                                        'name' => 'Armchairs & Stools',
+                                        'position' => 'item',
+                                        'count' => '19',
+                                        'image' => '',
+                                        'id' => 47,
+                                        'selected' => false,
+                                    ]
+                                ],
+                                'name' => 'Living room',
+                                'position' => 'item',
+                                'count' => '31',
+                                'image' => '',
+                                'id' => 46,
+                                'selected' => false,
+                            ]
+                        ],
+                        'findologicFilterType' => 'select'
+                    ],
+                    [
+                        'id' => 'Color',
+                        'name' => 'Color',
+                        'select' => 'multiselect',
+                        'type' => 'dynamic',
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => 'black',
+                                'position' => 'item',
+                                'count' => '',
+                                'image' => 'https://www.etc-shop.de/layout/findologic/black.png',
+                                'id' => 36,
+                                'selected' => false,
+                                'colorImageUrl' => NULL,
+                                'hexValue' => '#000000',
+                            ]
+                        ],
+                        'findologicFilterType' => 'color',
+                        'isMain' => false
+                    ],
+                    [
+                        'id' => 'some_attribute',
+                        'name' => 'Some Attribute',
+                        'select' => 'multiple',
+                        'type' => 'dynamic',
+                        'isMain' => false,
+                        'itemCount' => '6',
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => [
+                            0 => [
+                                'items' => [
+                                ],
+                                'name' => '22220',
+                                'position' => 'item',
+                                'count' => '18',
+                                'image' => '',
+                                'id' => 51,
+                                'selected' => false,
+                            ],
+                            1 => [
+                                'items' => [
+                                ],
+                                'name' => '22221',
+                                'position' => 'item',
+                                'count' => '3',
+                                'image' => '',
+                                'id' => 52,
+                                'selected' => false,
+                            ],
+                        ],
+                        'findologicFilterType' => 'multiselect'
+                    ],
+                ]
+            ],
+            'typesAreLeftUnchangedIfNoValuesExist' => [
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'select' => 'multiple',
+                        'type' => '',
+                        'findologicFilterType' => 'label',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => false
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'select' => 'single',
+                        'type' => '',
+                        'findologicFilterType' => 'range-slider',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'unit' => '£',
+                        'minValue' => 59,
+                        'maxValue' => 2300,
+                        'step' => 0.1,
+                        'values' => null
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'select' => 'single',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
+                        'isMain' => false,
+                        'itemCount' => '6',
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => []
+                    ],
+                    [
+                        'id' => 'Color',
+                        'name' => 'Color',
+                        'select' => 'multiselect',
+                        'type' => '',
+                        'findologicFilterType' => 'color',
+                        'isMain' => false,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => ''
+                    ]
+                ],
+                [
+                    [
+                        'id' => 'vendor',
+                        'name' => 'Manufacturer',
+                        'select' => 'multiple',
+                        'type' => '',
+                        'findologicFilterType' => 'label',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => false
+                    ],
+                    [
+                        'id' => 'price',
+                        'name' => 'Price',
+                        'select' => 'single',
+                        'type' => '',
+                        'findologicFilterType' => 'range-slider',
+                        'isMain' => true,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'unit' => '£',
+                        'minValue' => 59,
+                        'maxValue' => 2300,
+                        'step' => 0.1,
+                        'values' => null
+                    ],
+                    [
+                        'id' => 'cat',
+                        'name' => 'Category',
+                        'select' => 'single',
+                        'type' => '',
+                        'findologicFilterType' => 'select',
+                        'isMain' => false,
+                        'itemCount' => '6',
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => '',
+                        'values' => []
+                    ],
+                    [
+                        'id' => 'Color',
+                        'name' => 'Color',
+                        'select' => 'multiselect',
+                        'type' => '',
+                        'findologicFilterType' => 'color',
+                        'isMain' => false,
+                        'itemCount' => 0,
+                        'noAvailableFiltersText' => '',
+                        'cssClass' => ''
+                    ]
+                ]
+            ]
         ];
     }
 }
