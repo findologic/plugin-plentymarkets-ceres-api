@@ -13,6 +13,7 @@ use Findologic\Services\SearchService;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use IO\Services\CategoryService;
+use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use IO\Services\ItemSearch\Services\ItemSearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
@@ -102,6 +103,8 @@ class SearchServiceTest extends TestCase
         $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']);
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
 
+        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
         $searchQueryMock->categoryId = null;
 
@@ -166,6 +169,8 @@ class SearchServiceTest extends TestCase
         } else {
             $searchServiceMock->expects($this->never())->method('handleProductRedirectUrl');
         }
+
+        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
 
         /** @var ExternalSearch|MockObject $searchQueryMock */
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
@@ -282,6 +287,8 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->expects($this->any())
             ->method('getItemSearchService')
             ->willReturn($itemSearchServiceMock);
+
+        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
 
         $this->configRepository->expects($this->once())->method('get')
             ->with('IO.routing.category_search')
@@ -1167,5 +1174,20 @@ class SearchServiceTest extends TestCase
         $classInstances[LocalizationRepositoryContract::class] = $localizationMock;
         $classInstances[WebstoreConfigurationRepositoryContract::class] = $webStoreConfigMock;
         $classInstances[UrlBuilderRepositoryContract::class] = $urlBuilderMock;
+    }
+
+    /**
+     * @return MockObject|VariationSearchFactory
+     */
+    private function getSearchFactoryMock(): VariationSearchFactory
+    {
+        $searchServiceFactoryMock = $this->getMockBuilder(VariationSearchFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $searchServiceFactoryMock->method('hasVariationIds')->willReturnSelf();
+        $searchServiceFactoryMock->method('hasItemId')->willReturnSelf();
+
+        return $searchServiceFactoryMock;
     }
 }

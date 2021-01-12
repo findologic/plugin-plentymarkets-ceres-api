@@ -292,7 +292,7 @@ class SearchService implements SearchServiceInterface
     private function filterInvalidVariationIds(array $ids): array
     {
         $results = $this->getItemSearchService()->getResult(
-            $this->getSearchFactory()->hasVariationIds($ids)
+            $this->getSearchFactory()->hasVariationIds($ids)->isActive()
         );
 
         $variationIds = [];
