@@ -528,6 +528,9 @@ Vue.component("item-filter-tag-list", {
     computed: {
         tagList: function tagList() {
             return this.getSelectedFilters();
+        },
+        facetNames: function facetNames() {
+            return this.getFacetIdNameMap();
         }
     },
 
@@ -542,6 +545,15 @@ Vue.component("item-filter-tag-list", {
         },
         resetAllTags: function resetAllTags() {
             this.removeAllAttribsAndRefresh();
+        },
+        getFacetIdNameMap: function getFacetIdNameMap() {
+            var map = {};
+
+            vueApp.$store.state.itemList.facets.forEach(function (facet) {
+                map[facet.id] = facet.name;
+            });
+
+            return map;
         }
     }
 });
