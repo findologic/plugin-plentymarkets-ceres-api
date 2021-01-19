@@ -528,6 +528,9 @@ Vue.component("item-filter-tag-list", {
     computed: {
         tagList: function tagList() {
             return this.getSelectedFilters();
+        },
+        dalykai: function dalykai() {
+            return this.$store.state.itemList.facets;
         }
     },
 

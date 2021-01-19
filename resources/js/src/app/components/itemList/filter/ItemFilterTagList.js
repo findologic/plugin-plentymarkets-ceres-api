@@ -27,6 +27,9 @@ Vue.component("item-filter-tag-list", {
     computed: {
         tagList() {
             return this.getSelectedFilters();
+        },
+        dalykai() {
+            return this.$store.state.itemList.facets;
         }
     },
 
