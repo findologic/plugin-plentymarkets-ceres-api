@@ -549,7 +549,7 @@ Vue.component("item-filter-tag-list", {
         getFacetIdNameMap: function getFacetIdNameMap() {
             var map = {};
 
-            vueApp.$store.state.itemList.facets.forEach(function (facet) {
+            this.$store.state.itemList.facets.forEach(function (facet) {
                 map[facet.id] = facet.name;
             });
 
