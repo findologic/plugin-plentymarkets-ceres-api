@@ -35,7 +35,6 @@ Vue.component("findologic-item-filter", {
 
     methods: {
         updateFacet(facetValue) {
-            console.log('for debugging');
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
 

@@ -433,7 +433,6 @@ Vue.component("findologic-item-filter", {
 
     methods: {
         updateFacet: function updateFacet(facetValue) {
-            console.log('for debugging');
             this.updateSelectedFilters(this.facet.id, facetValue.name);
         },
         getSubCategoryValue: function getSubCategoryValue(parentCategory, subCategory) {
