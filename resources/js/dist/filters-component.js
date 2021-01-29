@@ -680,7 +680,7 @@ exports.default = {
 
     data: function data() {
         return {
-            isShowDropdown: false
+            isOpen: false
         };
     },
 
@@ -700,12 +700,12 @@ exports.default = {
             this.updateSelectedFilters(this.facet.id, value);
         },
 
-        hideDropdown: function hideDropdown() {
-            this.isShowDropdown = false;
+        close: function close() {
+            this.isOpen = false;
         },
 
-        toggleDropdown: function toggleDropdown() {
-            this.isShowDropdown = !this.isShowDropdown;
+        toggle: function toggle() {
+            this.isOpen = !this.isOpen;
         }
     }
 };

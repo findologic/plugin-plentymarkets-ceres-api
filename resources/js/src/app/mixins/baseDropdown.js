@@ -6,7 +6,7 @@ export default {
 
     data: function () {
         return {
-            isShowDropdown: false
+            isOpen: false
         }
     },
 
@@ -25,12 +25,12 @@ export default {
             this.updateSelectedFilters(this.facet.id, value);
         },
 
-        hideDropdown: function () {
-            this.isShowDropdown = false;
+        close: function () {
+            this.isOpen = false;
         },
 
-        toggleDropdown: function () {
-            this.isShowDropdown = !this.isShowDropdown;
+        toggle: function () {
+            this.isOpen = !this.isOpen;
         }
     }
 };
