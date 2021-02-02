@@ -579,7 +579,8 @@ Vue.component("item-range-slider", {
         this.valueTo = values ? values.max : this.facet.maxValue;
 
         $(document).ready(function () {
-            var element = document.getElementById(self.sanitizedFacetId);
+            var element = self.$el.querySelector('#' + self.sanitizedFacetId);
+
             var slider = window.noUiSlider.create(element, {
                 step: self.facet.step,
                 start: [self.valueFrom, self.valueTo],
