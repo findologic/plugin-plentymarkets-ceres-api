@@ -67,26 +67,26 @@ and let Plenty update it for us automatically.
 Start the downloaded program. If you run Linux, you may need to give it execution
 permission with `chmod +x PlentyDevTool-1.1.5.AppImage`. Log in with your Plentymarkets credentials.
 
-// SCREENSHOT plenty_dev_tool_login.png
+![https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_login.png](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_login.png)
 
 Create a new folder, where you will save all plugins from your plugin-sets. Something like
 `~/Documents/plentyDevTool` should be sufficient. Select this folder in your PlentyDevTool.
 
-// SCREENSHOT plenty_dev_tool_folder.png
+![https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_folder.png](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_folder.png)
 
 In the Plentymarkets Backend create a new Plugin-Set that **only** contains **Ceres** and **IO**.
 This Plugin-Set **must not be linked with any store**, otherwise automatic deployment **does not work**.
 
-// SCREENSHOT plenty_backend_ceres_io.png
+![https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_backend_ceres_io.png](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_backend_ceres_io.png)
 
 Back in the PlentyDevTool go to the *Dashboard* and *Reload* the Plugin-Set list.
 
-// SCREENSHOT plenty_dev_tool_reload.png
+![https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_reload.png](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_reload.png)
 
 On the left side open your Plugin-Set and check the *Ceres* and *IO* plugin and then click on *Pull*.
 The initial pull may take some time, feel free to get a ☕ coffee in the meantime.
 
-// SCREENSHOT plenty_dev_tool_pulling.png
+![https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_pulling.png](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_pulling.png)
 
 Now that everything is setup, clone this repo inside of the Plugin-Set path.
 The path may be `~/Documents/plentyDevTool/34185/2`. The cloned repository name
@@ -99,7 +99,7 @@ git clone git@github.com:findologic/plugin-plentymarkets-ceres-api.git Findologi
 Now clicking *Detect new local plugins* in the PlentyDevTool should show the
 Findologic plugin in the list. Click *Install*, which will upload your local plugin.
 
-// SCREENSHOT plenty_dev_tool_install_plugin.png
+![https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_install_plugin.png](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_dev_tool_install_plugin.png)
 
 Refresh the Plugin-Sets in the PlentyDevTool and ensure to check the *Findologic* plugin
 now and uncheck *Ceres* and *IO*. This tells Plentymarkets to only check for file
@@ -109,7 +109,7 @@ Next refresh the Plugin-Set page in the browser and activate the newly added Fin
 plugin. Follow the [configuration instructions](https://docs.findologic.com/doku.php?id=integration_documentation:plentymarkets_ceres_plugin:ceres_plugin_configuration)
 in our documentation and deploy the Plugin-Set.
 
-// SCREENSHOT plenty_backend_deploy.png
+![https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_backend_deploy.png](https://raw.githubusercontent.com/findologic/plugin-plentymarkets-ceres-api/PLENTY-295_easier_development/meta/docs/images/plenty_backend_deploy.png)
 
 When files are now changed, the PlentyDevTool will automatically detect them and allow you to
 push your changes. Once pushed Plentymarkets will automatically trigger a build, that only
