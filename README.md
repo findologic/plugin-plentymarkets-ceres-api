@@ -9,6 +9,8 @@
 1. [Development](#development)
    1. [Installing dependencies](#installing-dependencies)
    1. [Development cycle](#development-cycle)
+      1. [Initial Setup](#initial-setup)
+      1. [Building non-compiled files](#building-non-compiled-files)
    1. [Running unit-tests locally](#running-unit-tests-locally)
 1. [Deployment & Release](#deployment--release)
 1. [Versioning](#versioning)
