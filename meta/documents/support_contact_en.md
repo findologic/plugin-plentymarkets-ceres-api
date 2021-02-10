@@ -1,13 +1,13 @@
 ## Installation and configuration
  
-Please find the step-by-step guide in our [documentation](https://docs.findologic.com/doku.php?id=integration_documentation:plentymarkets_ceres_plugin).
+Please find the step-by-step guide in our [documentation](https://docs.findologic.com/doku.php?id=integration_documentation:plugin:en:api:plentymarkets).
 
 Following topics are covered:
 
-* [Export of shopdata via REST-API](https://docs.findologic.com/doku.php?id=integration_documentation:plentymarkets_ceres_plugin:rest_export)
-* [Plugin configuration](https://docs.findologic.com/doku.php?id=integration_documentation:plentymarkets_ceres_plugin:ceres_plugin_configuration)
-* [Using promotions (optional)](https://docs.findologic.com/doku.php?id=integration_documentation:plentymarkets_ceres_plugin:promotions_with_ceres)
-* [Using Smart Did-You-Mean (optional)](https://docs.findologic.com/doku.php?id=integration_documentation:plentymarkets_ceres_plugin:ceres_smart_did-you-mean)
+* [Export of shopdata via REST-API](https://docs.findologic.com/doku.php?id=integration_documentation:plugin:en:api:plentymarkets:rest_export)
+* [Plugin configuration](https://docs.findologic.com/doku.php?id=integration_documentation:plugin:en:api:plentymarkets:plugin_configuration)
+* [Using promotions (optional)](https://docs.findologic.com/doku.php?id=integration_documentation:plugin:en:api:plentymarkets:promotions)
+* [Using Smart Did-You-Mean (optional)](https://docs.findologic.com/doku.php?id=integration_documentation:plugin:en:api:plentymarkets:smart_did_you_mean)
 
 ## Further information
 
