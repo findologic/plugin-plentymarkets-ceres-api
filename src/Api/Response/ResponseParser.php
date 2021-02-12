@@ -207,15 +207,13 @@ class ResponseParser
             return [];
         }
 
-        // Manually transform SimpleXMLElement instances to arrays, because Plentymarkets does not allow
-        // dynamic property access of instances.
-        $originalQuery = $this->htmlEncodeData((array)$data->query, 'originalQuery');
-        $didYouMeanQuery = $this->htmlEncodeData((array)$data->query, 'didYouMeanQuery');
-        $currentQuery = $this->htmlEncodeData((array)$data->query, 'queryString');
+        $originalQuery = $this->getFromXmlAndHtmlEncode($data->query, 'originalQuery');
+        $didYouMeanQuery = $this->getFromXmlAndHtmlEncode($data->query, 'didYouMeanQuery');
+        $currentQuery = $this->getFromXmlAndHtmlEncode($data->query, 'queryString');
 
         $queryStringType = null;
         if (isset($data->query->queryString->attributes()->type)) {
-            $queryStringType = $this->htmlEncodeData(((array)$data->query->queryString->attributes())['@attributes'], 'type');
+            $queryStringType = $this->getFromXmlAndHtmlEncode($data->query->queryString->attributes(), 'type');
         }
 
         $requestParams = (array) $request->all();
@@ -236,13 +234,13 @@ class ResponseParser
      *
      * @return string|null
      */
-    private function htmlEncodeData(array $data, string $key)
+    private function getFromXmlAndHtmlEncode(SimpleXMLElement $data, string $key)
     {
-        if (!isset($data[$key])) {
+        if (!isset($data->{$key})) {
             return null;
         }
 
-        return htmlentities($data[$key]);
+        return htmlentities($data->{$key}->__toString());
     }
 
     /**
