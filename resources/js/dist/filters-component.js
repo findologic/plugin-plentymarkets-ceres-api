@@ -58,7 +58,99 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"../../mixins/url":13}],3:[function(require,module,exports){
+},{"../../constants":12,"../../mixins/url":15}],2:[function(require,module,exports){
+"use strict";
+
+var _url = require("../../mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-search", {
+    mixins: [_url2.default],
+
+    props: {
+        template: {
+            type: String,
+            default: "#vue-item-search"
+        },
+        showItemImages: {
+            type: Boolean,
+            default: false
+        },
+        forwardToSingleItem: {
+            type: Boolean,
+            default: App.config.search.forwardToSingleItem
+        }
+    },
+
+    data: function data() {
+        return {
+            promiseCount: 0,
+            autocompleteResult: [],
+            selectedAutocompleteIndex: -1,
+            isSearchFocused: false
+        };
+    },
+
+
+    computed: {
+        selectedAutocompleteItem: function selectedAutocompleteItem() {
+            return null;
+        }
+    },
+
+    created: function created() {
+        this.$options.template = this.template;
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        this.$nextTick(function () {
+            var urlParams = _this.getUrlParams(document.location.search);
+
+            _this.$store.commit("setItemListSearchString", urlParams.query);
+
+            var rawQuery = urlParams.query ? urlParams.query : '';
+            // Manually regex out all "+" signs as decodeURIComponent does not take care of that.
+            // If we wouldn't replace them with spaces, "+" signs would be displayed in the search field.
+            _this.$refs.searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
+        });
+    },
+
+
+    methods: {
+        prepareSearch: function prepareSearch() {
+            $('#searchBox').collapse('hide');
+        },
+        search: function search() {
+            var searchBaseURL = '/search?query=';
+
+            if (App.defaultLanguage !== App.language) {
+                searchBaseURL = "/" + App.language + "/search?query=";
+            }
+
+            window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
+        },
+        autocomplete: function autocomplete(searchString) {},
+        selectAutocompleteItem: function selectAutocompleteItem(item) {},
+        keyup: function keyup() {},
+        keydown: function keydown() {},
+
+
+        // hide autocomplete after 100ms to make clicking on it possible
+        setIsSearchFocused: function setIsSearchFocused(value) {
+            var _this2 = this;
+
+            setTimeout(function () {
+                _this2.isSearchFocused = !!value;
+            }, 100);
+        }
+    }
+});
+
+},{"../../mixins/url":15}],3:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../mixins/url");
@@ -118,7 +210,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"../../constants":11,"../../mixins/url":13}],4:[function(require,module,exports){
+},{"../../constants":12,"../../mixins/url":15}],4:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -194,7 +286,48 @@ var options = {
 Vue.component('pagination', options);
 Vue.component('custom-pagination', options);
 
-},{"../../mixins/url":13}],5:[function(require,module,exports){
+},{"../../mixins/url":15}],5:[function(require,module,exports){
+"use strict";
+
+var _url = require("../../../mixins/url");
+
+var _url2 = _interopRequireDefault(_url);
+
+var _baseDropdown = require("../../../mixins/baseDropdown");
+
+var _baseDropdown2 = _interopRequireDefault(_baseDropdown);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Vue.component("item-category-dropdown", {
+    mixins: [_url2.default, _baseDropdown2.default],
+
+    computed: {
+        dropdownLabel: function dropdownLabel() {
+            var selectedFilters = this.getSelectedFilters();
+            var label = null;
+
+            for (var i = 0; i < selectedFilters.length; i++) {
+                var facet = selectedFilters[i];
+
+                if (facet.id === this.facet.id) {
+                    label = facet.name;
+                    break;
+                }
+            }
+
+            return label;
+        }
+    },
+
+    methods: {
+        getSubCategoryName: function getSubCategoryName(parentCategory, subCategory) {
+            return parentCategory.name + '_' + subCategory.name;
+        }
+    }
+});
+
+},{"../../../mixins/baseDropdown":14,"../../../mixins/url":15}],6:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -237,55 +370,24 @@ Vue.component("item-color-tiles", {
     }
 });
 
-},{"../../../mixins/url":13}],6:[function(require,module,exports){
-"use strict";
+},{"../../../mixins/url":15}],7:[function(require,module,exports){
+'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _url = require("../../../mixins/url");
+var _url = require('../../../mixins/url');
 
 var _url2 = _interopRequireDefault(_url);
+
+var _baseDropdown = require('../../../mixins/baseDropdown');
+
+var _baseDropdown2 = _interopRequireDefault(_baseDropdown);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 Vue.component("item-dropdown", {
-    mixins: [_url2.default],
-
-    props: ["template", "facet"],
-
-    data: function data() {
-        return {
-            isShowDropdown: false
-        };
-    },
-
-    created: function created() {
-        this.$options.template = this.template || "#vue-item-dropdown";
-    },
-
-
-    computed: _extends({}, Vuex.mapState({
-        isLoading: function isLoading(state) {
-            return state.itemList.isLoading;
-        }
-    })),
-
-    methods: {
-        selected: function selected(value) {
-            this.updateSelectedFilters(this.facet.id, value);
-        },
-
-        hideDropdown: function hideDropdown() {
-            this.isShowDropdown = false;
-        },
-
-        toggleDropdown: function toggleDropdown() {
-            this.isShowDropdown = !this.isShowDropdown;
-        }
-    }
+    mixins: [_url2.default, _baseDropdown2.default]
 });
 
-},{"../../../mixins/url":13}],7:[function(require,module,exports){
+},{"../../../mixins/baseDropdown":14,"../../../mixins/url":15}],8:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -342,7 +444,7 @@ Vue.component("findologic-item-filter", {
     }
 });
 
-},{"../../../mixins/url":13}],8:[function(require,module,exports){
+},{"../../../mixins/url":15}],9:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -404,7 +506,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"../../../mixins/url":13}],9:[function(require,module,exports){
+},{"../../../mixins/url":15}],10:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../../mixins/url");
@@ -454,7 +556,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"../../../mixins/url":13}],10:[function(require,module,exports){
+},{"../../../mixins/url":15}],11:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -534,7 +636,7 @@ Vue.component("item-range-slider", {
     }
 });
 
-},{"../../../mixins/url":13}],11:[function(require,module,exports){
+},{"../../../mixins/url":15}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -552,7 +654,7 @@ exports.default = {
     PARAMETER_ITEMS: PARAMETER_ITEMS
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 Vue.directive("render-category", {
@@ -565,7 +667,51 @@ Vue.directive("render-category", {
     }
 });
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = {
+    props: ["template", "facet"],
+
+    data: function data() {
+        return {
+            isOpen: false
+        };
+    },
+
+    created: function created() {
+        this.$options.template = this.template || "#vue-item-dropdown";
+    },
+
+
+    computed: _extends({}, Vuex.mapState({
+        isLoading: function isLoading(state) {
+            return state.itemList.isLoading;
+        }
+    })),
+
+    methods: {
+        selected: function selected(value) {
+            this.updateSelectedFilters(this.facet.id, value);
+        },
+
+        close: function close() {
+            this.isOpen = false;
+        },
+
+        toggle: function toggle() {
+            this.isOpen = !this.isOpen;
+        }
+    }
+};
+
+},{}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -749,8 +895,13 @@ exports.default = {
                 };
             } else if (this.facet.select === 'single') {
                 if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetValue)) {
-                    var index = Object.values(attributes[facetId]).indexOf(facetValue);
-                    delete attributes[facetId][index];
+                    if (this.facet.id === 'cat' && facetValue.includes('_')) {
+                        // Subcategory deselection
+                        attributes[facetId] = [facetValue.split('_')[0]];
+                    } else {
+                        var index = Object.values(attributes[facetId]).indexOf(facetValue);
+                        delete attributes[facetId][index];
+                    }
                 } else {
                     attributes[facetId] = [facetValue];
                 }
@@ -1017,7 +1168,7 @@ exports.default = {
     }
 };
 
-},{"../constants":11}]},{},[7,8,9,10,5,6,1,3,4,2,12])
+},{"../constants":12}]},{},[8,9,10,11,6,7,5,1,3,4,2,13])
 
 
 //# sourceMappingURL=filters-component.js.map
