@@ -55,14 +55,31 @@
                 </div>
             </div>
         </div>
-        <div v-else class="ml-0">
-            <div class="container-max component-loading" :class="{ 'isLoading': isLoading }">
-                <div class="row">
-                    <a class="btn btn-link filter-toggle no-main-filters-filter-toggle" data-toggle="collapse" href="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
-                        <i class="fa fa-sliders default-float" aria-hidden="true"></i> {{ trans("Findologic::Template.noMainFiltersItemFilter") }}
-                    </a>
+    </div>
+</script>
+
+<script type="x/template" data-component="item-search">
+    {{ component( "Findologic::ItemList.Components.ItemSearch") }}
+
+    <form method="GET" action="/search" onsubmit="return flSearchSubmitEventHandler(event, this);">
+        <div class="container-max">
+            <div class="position-relative">
+                <div class="d-flex flex-grow-1 position-relative my-2">
+                    <input name="query"
+                           type="search"
+                           class="search-input flex-grow-1 px-3 py-2"
+                           ref="searchInput"
+                           @keyup.enter="prepareSearch()"
+                           @keyup.down="keydown()"
+                           @keyup.up="keyup()"
+                           @focus="isSearchFocused = true"
+                           @blur="setIsSearchFocused(false)"
+                           autofocus>
+                    <button class="search-submit px-3" type="submit" @click="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </script>
