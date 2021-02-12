@@ -31,12 +31,14 @@
             max-height: 200px;
             overflow-y: auto;
 
-            .fl-dropdown-item {
-                cursor: pointer;
-
+            > .fl-dropdown-item {
                 &:first-child {
                     margin-top: 1rem;
                 }
+            }
+
+            .fl-dropdown-item {
+                cursor: pointer;
 
                 label {
                     cursor: pointer;

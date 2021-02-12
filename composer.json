@@ -14,7 +14,7 @@
     "plentymarkets/plugin-interface": "dev-stable7"
   },
   "scripts": {
-    "test": "phpunit -c tests/phpunit.xml"
+    "test": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.xml"
   },
   "repositories": [
     {
@@ -22,11 +22,11 @@
       "package": [
         {
           "name": "plentymarkets/plugin-io",
-          "version": "5.0.15",
+          "version": "5.0.20",
           "source": {
             "type": "git",
             "url": "https://github.com/plentymarkets/plugin-io",
-            "reference": "5.0.15"
+            "reference": "5.0.20"
           }
         }
       ]
@@ -36,11 +36,11 @@
       "package": [
         {
           "name": "plentymarkets/plugin-ceres",
-          "version": "5.0.15",
+          "version": "5.0.20",
           "source": {
             "type": "git",
             "url": "https://github.com/plentymarkets/plugin-ceres",
-            "reference": "5.0.15"
+            "reference": "5.0.20"
           }
         }
       ]

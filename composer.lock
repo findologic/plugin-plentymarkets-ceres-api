@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "436e0e1249215701ef0b95b68212deb4",
+    "content-hash": "10c1516f02c231f4d8844e4f8cdb8cef",
     "packages": [
         {
             "name": "findologic/http_request2",
@@ -1874,11 +1874,11 @@
         },
         {
             "name": "plentymarkets/plugin-ceres",
-            "version": "5.0.15",
+            "version": "5.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-ceres",
-                "reference": "5.0.15"
+                "reference": "5.0.20"
             },
             "type": "library"
         },
@@ -1903,11 +1903,11 @@
         },
         {
             "name": "plentymarkets/plugin-io",
-            "version": "5.0.15",
+            "version": "5.0.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/plentymarkets/plugin-io",
-                "reference": "5.0.15"
+                "reference": "5.0.20"
             },
             "type": "library"
         },
@@ -3722,7 +3722,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0"
+        "php": "^7.0",
+        "ext-simplexml": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
