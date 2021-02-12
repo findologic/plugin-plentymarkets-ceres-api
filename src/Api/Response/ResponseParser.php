@@ -207,14 +207,12 @@ class ResponseParser
             return [];
         }
 
-        $originalQuery = $this->getFromXmlAndHtmlEncode($data->query, 'originalQuery');
-        $didYouMeanQuery = $this->getFromXmlAndHtmlEncode($data->query, 'didYouMeanQuery');
-        $currentQuery = $this->getFromXmlAndHtmlEncode($data->query, 'queryString');
-
-        $queryStringType = null;
-        if (isset($data->query->queryString->attributes()->type)) {
-            $queryStringType = $this->getFromXmlAndHtmlEncode($data->query->queryString->attributes(), 'type');
-        }
+        $originalQuery = isset($data->query->originalQuery) ? $data->query->originalQuery->__toString() : null;
+        $didYouMeanQuery = isset($data->query->didYouMeanQuery) ? $data->query->didYouMeanQuery->__toString() : null;
+        $currentQuery = isset($data->query->queryString) ? $data->query->queryString->__toString() : null;
+        $queryStringType = isset($data->query->queryString->attributes()->type)
+            ? $data->query->queryString->attributes()->type->__toString()
+            : null;
 
         $requestParams = (array) $request->all();
 
@@ -227,20 +225,6 @@ class ResponseParser
             'selectedVendorName' => $this->getSelectedVendorName($requestParams),
             'shoppingGuide' => $this->getShoppingGuide($requestParams)
         ];
-    }
-
-    /**
-     * Encodes the given data to HTML. Prevents direct XSS attacks.
-     *
-     * @return string|null
-     */
-    private function getFromXmlAndHtmlEncode(SimpleXMLElement $data, string $key)
-    {
-        if (!isset($data->{$key})) {
-            return null;
-        }
-
-        return htmlentities($data->{$key}->__toString());
     }
 
     /**

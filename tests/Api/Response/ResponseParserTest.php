@@ -380,35 +380,7 @@ class ResponseParserTest extends TestCase
                     'selectedVendorName' => 'TestVendor',
                     'shoppingGuide' => null
                 ]
-            ],
-            'Query containing XSS contents' => [
-                [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>&lt;script&gt;alert("Hi Mom!")&lt;/script&gt;</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
-                [
-                    'originalQuery' => null,
-                    'didYouMeanQuery' => null,
-                    'currentQuery' => '&lt;script&gt;alert(&quot;Hi Mom!&quot;)&lt;/script&gt;',
-                    'queryStringType' => null,
-                    'selectedCategoryName' => null,
-                    'selectedVendorName' => null,
-                    'shoppingGuide' => null,
-                ]
-            ],
+            ]
         ];
     }
 
