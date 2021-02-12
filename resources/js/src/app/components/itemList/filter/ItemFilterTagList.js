@@ -28,8 +28,8 @@ Vue.component("item-filter-tag-list", {
         tagList() {
             return this.getSelectedFilters();
         },
-        facetNames() {
-            return this.getFacetIdNameMap();
+        facetInfo() {
+            return this.getFacetIdInfoMap();
         }
     },
 
@@ -44,16 +44,6 @@ Vue.component("item-filter-tag-list", {
 
         resetAllTags() {
             this.removeAllAttribsAndRefresh();
-        },
-
-        getFacetIdNameMap() {
-            const map = {};
-
-            this.$store.state.itemList.facets.forEach(facet => {
-                map[facet.id] = facet.name;
-            });
-
-            return map;
         }
     }
 });

@@ -53,12 +53,26 @@ Vue.component("item-range-slider", {
         isDisabled() {
             return (this.valueFrom === "" && this.valueTo === "") ||
                 (parseFloat(this.valueFrom) > parseFloat(this.valueTo)) ||
+                isNaN(this.valueFrom) ||
+                isNaN(this.valueTo) ||
+                this.valueFrom === '' ||
+                this.valueTo === '' ||
                 this.isLoading;
         },
 
         ...Vuex.mapState({
             isLoading: state => state.itemList.isLoading
-        })
+        }),
+    },
+
+    watch: {
+        valueFrom(value) {
+            this.valueFrom = this.fixDecimalSeparator(value);
+        },
+
+        valueTo(value) {
+            this.valueTo =  this.fixDecimalSeparator(value);
+        }
     },
 
     methods: {
@@ -71,6 +85,16 @@ Vue.component("item-range-slider", {
 
                 this.updateSelectedFilters(this.facet.id, facetValue);
             }
+        },
+
+        fixDecimalSeparator(value) {
+            if (value.indexOf('.') > -1) {
+                value = value.replace(',', '');
+            } else {
+                value = value.replace(',', '.');
+            }
+
+            return value;
         }
     }
 });

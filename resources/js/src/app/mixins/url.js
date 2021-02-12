@@ -238,9 +238,13 @@ export default {
                 }
 
                 if (filter === 'price' || this.isRangeSliderFilter(attributes[filter])) {
+                    let facetInfo = this.getFacetIdInfoMap();
+
+                    let unit = (facetInfo[filter] && facetInfo[filter].unit) ? ' ' + facetInfo[filter].unit : '';
+
                     selectedFilters.push({
                         id: filter,
-                        name: attributes[filter].min + ' - ' + attributes[filter].max
+                        name: attributes[filter].min + unit + ' - ' + attributes[filter].max + unit
                     });
 
                     continue;
@@ -418,6 +422,16 @@ export default {
             delete params[Constants.PARAMETER_PAGE];
             delete params[Constants.PARAMETER_ATTRIBUTES];
             document.location.search = '?' + $.param(params);
+        },
+
+        getFacetIdInfoMap() {
+            const map = {};
+
+            this.$store.state.itemList.facets.forEach(facet => {
+                map[facet.id] = facet;
+            });
+
+            return map;
         }
     }
 }
