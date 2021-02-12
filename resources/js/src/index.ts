@@ -1,3 +1,4 @@
+import './../../scss/findologic.scss'
 
 // TODO: Split up into subcomponents
 import './app/components/itemList/filter/ItemFilter'
@@ -12,3 +13,11 @@ import './app/components/itemList/ItemsPerPage.js'
 import './app/components/itemList/Pagination.js'
 import './app/components/itemList/ItemSearch.js'
 import './app/directives/navigation/renderCategory.js'
+
+// Testing Vue
+import TestComponent from './app/components/TestComponent.vue';
+
+// @ts-ignore We need to use the Vue instance provided by Plentymarkets to be able to add our own components.
+const plentyVue = Vue
+
+plentyVue.component('test-component', TestComponent)
