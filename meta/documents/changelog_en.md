@@ -1,5 +1,23 @@
 # Release Notes for Findologic
 
+## 3.4.0 (2021-02-15)
+
+### Added
+
+* [PLENTY-245] Selected filters now also contain the name of the filter.
+* [PLENTY-273] The category filter will now be properly shown as a dropdown, when it is configured as a dropdown,
+  in the filter configuration.
+* [PLENTY-308] Hovering over any color filter value, will now show the name of the color as a title.
+
+### Changed
+
+* [PLENTY-287] The search bar component is now globally overridden, instead of using a container link.
+
+### Fixed
+
+* [PLENTY-311] Fixed a bug that would allow execution of XSS, when using the Smart Did-You-Mean container link.
+* [PLENTY-299] Fixed a bug that would throw console errors when both topbar and filter widgets were used on the same page.
+
 ## 3.3.0 (2021-01-12)
 
 ### Added
