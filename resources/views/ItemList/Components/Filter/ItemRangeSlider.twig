@@ -2,11 +2,11 @@
     <div class="fl-range-slider-container">
         <div class="row">
             <div class="col-md-6 col-xs-6">
-                <input class="fl-range-input" v-model="valueFrom">
+                <input class="fl-range-input" v-model="valueFrom" pattern="^\d+(\.\d+)?$">
                 <span class="fl-unit" v-text="facet.unit"></span>
             </div>
             <div class="col-md-6 col-xs-6">
-                <input class="fl-range-input" v-model="valueTo">
+                <input class="fl-range-input" v-model="valueTo" pattern="^\d+(\.\d+)?$">
                 <span class="fl-unit" v-text="facet.unit"></span>
             </div>
         </div>
