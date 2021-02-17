@@ -1,13 +1,13 @@
 <template>
   <div>
     <h1>Hello World!</h1>
-    <span class="fl-red-text">This should be red. Test: {{ typedMethod('Hi Mom!') }}</span>
+    <span class="fl-red-text">This should be red! Test: {{ typedMethod('Hi Mom!') }}. HMR is awesome!!</span>
   </div>
 </template>
 
 <script lang="ts">
 export default {
-  name: "TestComponent",
+  name: 'TestComponent',
   methods: {
     typedMethod(something: string) {
       return something;

@@ -4,3 +4,8 @@ build/
 .idea/
 src/index.php
 src/Mocks
+
+private.crt
+private.csr
+private.key
+private.pem

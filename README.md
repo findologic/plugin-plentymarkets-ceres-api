@@ -37,6 +37,15 @@ the plugin has been installed via the marketplace.
 Plentymarkets is a cloud hosted shop system, this means that it's not possible to setup on a local machine.
 Create separate plugin sets in the Plentymarkets for development or debugging purposes.
 
+### Create SSL certificates
+
+```bash
+openssl genrsa -out private.key 4096
+openssl req -new -sha256 -out private.csr -key private.key
+openssl x509 -req -days 3650 -in private.csr -signkey private.key -out private.crt -extensions req_ext
+openssl x509 -in private.crt -out private.pem -outform PEM
+```
+
 ### Installing dependencies
 
 This project contains PHP and Javascript dependencies.
