@@ -2,11 +2,11 @@
     <div class="fl-range-slider-container">
         <div class="row">
             <div class="col-md-6 col-xs-6">
-                <input class="fl-range-input" v-model="valueFrom" pattern="^\d+(\.\d+)?$">
+                <input class="fl-range-input" v-model="valueFrom" pattern="^\d+(\.\d+)?$" data-custom-validation-message="{{ trans("Findologic::Template.itemRangeSliderFormatValidationMessage") }}">
                 <span class="fl-unit" v-text="facet.unit"></span>
             </div>
             <div class="col-md-6 col-xs-6">
-                <input class="fl-range-input" v-model="valueTo" pattern="^\d+(\.\d+)?$">
+                <input class="fl-range-input" v-model="valueTo" pattern="^\d+(\.\d+)?$" data-custom-validation-message="{{ trans("Findologic::Template.itemRangeSliderFormatValidationMessage") }}">
                 <span class="fl-unit" v-text="facet.unit"></span>
             </div>
         </div>

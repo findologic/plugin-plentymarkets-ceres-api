@@ -628,9 +628,11 @@ Vue.component("item-range-slider", {
     watch: {
         valueFrom: function valueFrom(value) {
             this.valueFrom = this.fixDecimalSeparator(value);
+            this.setCustomValidationMessage();
         },
         valueTo: function valueTo(value) {
             this.valueTo = this.fixDecimalSeparator(value);
+            this.setCustomValidationMessage();
         }
     },
 
@@ -646,6 +648,10 @@ Vue.component("item-range-slider", {
             }
         },
         fixDecimalSeparator: function fixDecimalSeparator(value) {
+            if (typeof value === 'number') {
+                value = value.toString();
+            }
+
             if (value.indexOf('.') > -1) {
                 value = value.replace(',', '');
             } else {
@@ -653,6 +659,16 @@ Vue.component("item-range-slider", {
             }
 
             return value;
+        },
+        setCustomValidationMessage: function setCustomValidationMessage() {
+            this.$el.querySelectorAll('input.fl-range-input[data-custom-validation-message]').forEach(function (input) {
+                // Must be reset before the validity check as existence of custom validity counts as a validation error.
+                input.setCustomValidity('');
+
+                if (!input.checkValidity()) {
+                    input.setCustomValidity(input.dataset.customValidationMessage);
+                }
+            });
         }
     }
 });
