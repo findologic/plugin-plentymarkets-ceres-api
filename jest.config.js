@@ -1,6 +1,8 @@
-import type {Config} from '@jest/types';
-
-const config: Config.InitialOptions = {
+module.exports = {
+    preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
+    testMatch: [
+        "**/resources/js/src/**/*.spec.[jt]s?(x)",
+    ],
     verbose: true,
     moduleFileExtensions: [
         'js',
@@ -17,5 +19,3 @@ const config: Config.InitialOptions = {
         '/node_modules/(?!vue-awesome)'
     ]
 };
-
-export default config;

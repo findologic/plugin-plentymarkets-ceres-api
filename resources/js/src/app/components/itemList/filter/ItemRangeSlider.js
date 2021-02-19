@@ -1,7 +1,8 @@
-import url from '../../../mixins/url'
+import Url from '../../../mixins/url'
+import Vue from "vue";
 
 Vue.component("item-range-slider", {
-    mixins: [url],
+    mixins: [Url],
 
     props: [
         "template",
@@ -16,7 +17,8 @@ Vue.component("item-range-slider", {
     },
 
     created() {
-        let self = this;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const self = this;
 
         this.$options.template = this.template || "#vue-item-range-slider";
 
@@ -25,10 +27,11 @@ Vue.component("item-range-slider", {
         this.valueFrom = values ? values.min : this.facet.minValue;
         this.valueTo = values ? values.max : this.facet.maxValue;
 
+        // eslint-disable-next-line no-undef
         $(document).ready(function () {
-            var element = self.$el.querySelector('#' + self.sanitizedFacetId);
+            const element = self.$el.querySelector('#' + self.sanitizedFacetId);
 
-            var slider = window.noUiSlider.create(element, {
+            const slider = window.noUiSlider.create(element, {
                 step: self.facet.step,
                 start: [self.valueFrom, self.valueTo],
                 connect: true,
@@ -56,6 +59,7 @@ Vue.component("item-range-slider", {
                 this.isLoading;
         },
 
+        // eslint-disable-next-line no-undef
         ...Vuex.mapState({
             isLoading: state => state.itemList.isLoading
         })
@@ -64,7 +68,7 @@ Vue.component("item-range-slider", {
     methods: {
         triggerFilter() {
             if (!this.isDisabled) {
-                let facetValue = {
+                const facetValue = {
                     min: this.valueFrom,
                     max: this.valueTo ? this.valueTo : Number.MAX_SAFE_INTEGER
                 };

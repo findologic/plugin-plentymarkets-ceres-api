@@ -1,7 +1,8 @@
-import url from '../../../mixins/url'
+import Url from '../../../mixins/url'
+import Vue from "vue";
 
 Vue.component("findologic-item-filter", {
-    mixins: [url],
+    mixins: [Url],
 
     delimiters: ["${", "}"],
 
@@ -12,6 +13,7 @@ Vue.component("findologic-item-filter", {
 
     computed: {
         facets() {
+            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             return this.facet.values.sort((facetA, facetB) => {
                 if (facetA.position > facetB.position) {
                     return 1;
@@ -23,6 +25,7 @@ Vue.component("findologic-item-filter", {
             });
         },
 
+        // eslint-disable-next-line no-undef
         ...Vuex.mapState({
             selectedFacets: state => state.itemList.selectedFacets,
             isLoading: state => state.itemList.isLoading

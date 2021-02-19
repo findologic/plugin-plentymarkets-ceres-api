@@ -4,10 +4,6 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   entry: './resources/js/src/index.ts',
-  output: {
-    filename: 'findologic_ceres.js',
-    path: path.resolve(__dirname, 'resources/js/dist'),
-  },
   module: {
     rules: [
       { test: /\.js$/, use: 'babel-loader' },

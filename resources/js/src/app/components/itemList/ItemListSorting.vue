@@ -3,58 +3,72 @@
 </template>
 
 <script lang="ts">
-import url from '../../mixins/url';
+import Url from '../../mixins/url';
 import Constants from '../../constants';
+import { Component, Mixins, Prop } from 'vue-property-decorator';
+import Vue from 'vue';
 
-export default {
-  name: "ItemListSorting",
-  mixins: [url],
+const ItemListSortingProps = Vue.extend({
+  props: {
+    sortingList: Array,
+    defaultSorting: String,
+    template: String
+  }
+})
 
-  props: [
-    "sortingList",
-    "defaultSorting",
-    "template"
-  ],
+interface MixinInterface {
+  content: string;
+  // getUrlParams: Function,
+  setUrlParamValues: Function;
+  sortingList: Array<any>;
+  defaultSorting: string;
+  template: string;
+}
 
-  data() {
-    return {
-      selectedSorting: {}
-    };
-  },
+@Component
+export default class ItemListSorting extends Mixins<MixinInterface, Url>(ItemListSortingProps, Url) {
+
+  get templateProp() {
+    return this.template
+  }
+
+  get defaultSortingProp () {
+    return this.defaultSorting
+  }
+
+  @Prop() private selectedSorting = {}
 
   created() {
-    this.$options.template = this.template || "#vue-item-list-sorting";
+    this.$options.template = this.templateProp || "#vue-item-list-sorting";
     this.setSelectedValue();
-  },
+  }
 
-  methods: {
-    updateSorting() {
-      this.setUrlParamValues([
-        {
-          key: Constants.PARAMETER_SORTING,
-          value: this.selectedSorting
-        },
-        {
-          key: Constants.PARAMETER_PAGE,
-          value: 1
-        }
-      ]);
-    },
-
-    /**
-     * Determine the initial value and set it in the vuex storage.
-     */
-    setSelectedValue() {
-      const urlParams = this.getUrlParams(document.location.search);
-
-      if (urlParams.sorting) {
-        this.selectedSorting = urlParams.sorting;
-      } else {
-        this.selectedSorting = this.defaultSorting;
+  updateSorting() {
+    this.setUrlParamValues([
+      {
+        key: Constants.PARAMETER_SORTING,
+        value: this.selectedSorting
+      },
+      {
+        key: Constants.PARAMETER_PAGE,
+        value: 1
       }
+    ]);
+  }
 
-      this.$store.commit("setItemListSorting", this.selectedSorting);
+  /**
+   * Determine the initial value and set it in the vuex storage.
+   */
+  setSelectedValue() {
+    const urlParams = this.getUrlParams(document.location.search);
+
+    if (urlParams.sorting) {
+      this.selectedSorting = urlParams.sorting;
+    } else {
+      this.selectedSorting = this.defaultSortingProp;
     }
+
+    this.$store.commit("setItemListSorting", this.selectedSorting);
   }
 }
 </script>

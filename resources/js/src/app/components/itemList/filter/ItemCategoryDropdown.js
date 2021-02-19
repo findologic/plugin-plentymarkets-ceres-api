@@ -1,16 +1,17 @@
-import url from '../../../mixins/url'
+import Url from '../../../mixins/url'
 import baseDropdown from "../../../mixins/baseDropdown";
+import Vue from 'vue';
 
 Vue.component("item-category-dropdown", {
-    mixins: [url, baseDropdown],
+    mixins: [Url, baseDropdown],
 
     computed: {
         dropdownLabel() {
-            let selectedFilters = this.getSelectedFilters();
+            const selectedFilters = this.getSelectedFilters();
             let label = null;
 
             for (let i = 0; i < selectedFilters.length; i++) {
-                let facet = selectedFilters[i];
+                const facet = selectedFilters[i];
 
                 if (facet.id === this.facet.id) {
                     label = facet.name;

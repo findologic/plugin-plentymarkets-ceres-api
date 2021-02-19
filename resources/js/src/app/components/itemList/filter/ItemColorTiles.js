@@ -1,7 +1,8 @@
-import url from '../../../mixins/url'
+import Url from '../../../mixins/url'
+import Vue from "vue";
 
 Vue.component("item-color-tiles", {
-    mixins: [url],
+    mixins: [Url],
 
     props: [
         "template",
@@ -13,6 +14,7 @@ Vue.component("item-color-tiles", {
     },
 
     computed: {
+        // eslint-disable-next-line no-undef
         ...Vuex.mapState({
             isLoading: state => state.itemList.isLoading,
         })
@@ -20,7 +22,7 @@ Vue.component("item-color-tiles", {
 
     methods: {
         isSelected(facetValueName) {
-            let facetValue = this.facet.values.filter((value) => value.name === facetValueName);
+            const facetValue = this.facet.values.filter((value) => value.name === facetValueName);
 
             return facetValue.length && this.isValueSelected(this.facet.id, facetValue[0].name);
         },

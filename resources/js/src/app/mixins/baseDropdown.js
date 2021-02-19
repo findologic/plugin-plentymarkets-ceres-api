@@ -15,6 +15,7 @@ export default {
     },
 
     computed: {
+        // eslint-disable-next-line no-undef
         ...Vuex.mapState({
             isLoading: state => state.itemList.isLoading
         })

@@ -1,7 +1,8 @@
-import url from '../../../mixins/url'
+import Url from '../../../mixins/url'
+import Vue from "vue";
 
 Vue.component("item-filter-price", {
-    mixins: [url],
+    mixins: [Url],
 
     delimiters: ["${", "}"],
 
@@ -14,6 +15,7 @@ Vue.component("item-filter-price", {
         return {
             priceMin: "",
             priceMax: "",
+            // eslint-disable-next-line no-undef
             currency: App.activeCurrency
         };
     },
@@ -34,6 +36,7 @@ Vue.component("item-filter-price", {
                 this.isLoading;
         },
 
+        // eslint-disable-next-line no-undef
         ...Vuex.mapState({
             isLoading: state => state.itemList.isLoading
         })
@@ -46,7 +49,7 @@ Vue.component("item-filter-price", {
 
         triggerFilter() {
             if (!this.isDisabled) {
-                let facetValue = {
+                const facetValue = {
                     min: this.priceMin,
                     max: this.priceMax ? this.priceMax : Number.MAX_SAFE_INTEGER
                 };

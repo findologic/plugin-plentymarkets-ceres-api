@@ -1,6 +1,8 @@
+import Vue from "vue";
+
 Vue.directive("render-category",
 {
-    bind(el, binding)
+    bind(el)
     {
         el.onclick = event =>
         {

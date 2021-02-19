@@ -1,10 +1,11 @@
-node_modules/
-vendor/
-build/
-.idea/
-src/index.php
-src/Mocks
+# IDE
+/.idea/
 
+# Depencencies
+/node_modules/
+/vendor/
+
+# Local SSL certificates
 private.crt
 private.csr
 private.key

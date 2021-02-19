@@ -1,8 +1,9 @@
-import url from "../../mixins/url";
+import Url from "../../mixins/url";
 import Constants from '../../constants';
+import Vue from "vue";
 
 Vue.component("items-per-page", {
-    mixins: [url],
+    mixins: [Url],
 
     delimiters: ["${", "}"],
 
@@ -38,6 +39,7 @@ Vue.component("items-per-page", {
 
         setSelectedValueByUrl() {
             const urlParams = this.getUrlParams(document.location.search);
+            // eslint-disable-next-line no-undef
             const defaultItemsPerPage = App.config.pagination.columnsPerPage * App.config.pagination.rowsPerPage[0];
 
             if (urlParams.items) {

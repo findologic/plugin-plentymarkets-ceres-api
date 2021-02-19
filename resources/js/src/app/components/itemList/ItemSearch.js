@@ -1,7 +1,8 @@
-import url from "../../mixins/url";
+import Url from "../../mixins/url";
+import Vue from "vue";
 
 Vue.component("item-search", {
-    mixins: [url],
+    mixins: [Url],
 
     props: {
         template: {
@@ -14,6 +15,7 @@ Vue.component("item-search", {
         },
         forwardToSingleItem: {
             type: Boolean,
+            // eslint-disable-next-line no-undef
             default: App.config.search.forwardToSingleItem
         }
     },
@@ -50,7 +52,7 @@ Vue.component("item-search", {
 
             this.$store.commit("setItemListSearchString", urlParams.query);
 
-            let rawQuery = urlParams.query ? urlParams.query : '';
+            const rawQuery = urlParams.query ? urlParams.query : '';
             // Manually regex out all "+" signs as decodeURIComponent does not take care of that.
             // If we wouldn't replace them with spaces, "+" signs would be displayed in the search field.
             this.$refs.searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
@@ -61,6 +63,7 @@ Vue.component("item-search", {
     {
         prepareSearch()
         {
+            // eslint-disable-next-line no-undef
             $('#searchBox').collapse('hide');
         },
 
@@ -68,28 +71,36 @@ Vue.component("item-search", {
         {
             let searchBaseURL = '/search?query=';
 
+            // eslint-disable-next-line no-undef
             if (App.defaultLanguage !== App.language)
             {
+                // eslint-disable-next-line no-undef
                 searchBaseURL = `/${App.language}/search?query=`;
             }
 
             window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         autocomplete(searchString)
         {
+            // Nothing to do.
         },
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         selectAutocompleteItem(item)
         {
+            // Nothing to do.
         },
 
         keyup()
         {
+            // Nothing to do.
         },
 
         keydown()
         {
+            // Nothing to do.
         },
 
         // hide autocomplete after 100ms to make clicking on it possible

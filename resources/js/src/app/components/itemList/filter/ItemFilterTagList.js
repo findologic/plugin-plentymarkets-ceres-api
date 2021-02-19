@@ -1,7 +1,8 @@
-import url from "../../../mixins/url";
+import Url from "../../../mixins/url";
+import Vue from "vue";
 
 Vue.component("item-filter-tag-list", {
-    mixins: [url],
+    mixins: [Url],
 
     delimiters: ["${", "}"],
 

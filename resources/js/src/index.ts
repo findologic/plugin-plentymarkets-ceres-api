@@ -1,4 +1,4 @@
-/// <reference path="../declarations/globals.d.ts" />
+import { Store } from 'vuex';
 
 import './../../scss/findologic.scss'
 
@@ -19,5 +19,8 @@ import './app/directives/navigation/renderCategory.js'
 import TestComponent from './app/components/TestComponent.vue';
 import ItemListSorting from './app/components/itemList/ItemListSorting.vue';
 
-Vue.component('test-component', TestComponent)
-Vue.component('item-list-sorting', ItemListSorting)
+// @ts-ignore
+const plentyVue = Vue;
+
+plentyVue.component('test-component', TestComponent)
+plentyVue.component('item-list-sorting', ItemListSorting)

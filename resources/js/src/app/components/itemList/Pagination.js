@@ -1,7 +1,8 @@
-import url from "../../mixins/url";
+import Url from "../../mixins/url";
+import Vue from "vue";
 
-let options = {
-    mixins: [url],
+const options = {
+    mixins: [Url],
 
     delimiters: ["${", "}"],
 
@@ -32,6 +33,7 @@ let options = {
             return parseInt(pageMax) || 1;
         },
 
+        // eslint-disable-next-line no-undef
         ...Vuex.mapState({
             page: state => state.itemList.page || 1,
             isLoading: state => state.itemList.isLoading,

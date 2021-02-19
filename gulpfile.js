@@ -17,7 +17,7 @@ const cleanCss = require("gulp-clean-css");
 const symlink = require('gulp-symlink');
 
 gulp.task("js", () => {
-    var builder = browserify({
+    const builder = browserify({
         entries: [
             "app/components/itemList/filter/ItemFilter.js",
             "app/components/itemList/filter/ItemFilterPrice.js",
