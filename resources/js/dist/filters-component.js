@@ -617,7 +617,7 @@ Vue.component("item-range-slider", {
             return 'fl-range-slider-' + this.facet.id.replace(/\W/g, '-').replace(/-+/, '-').replace(/-$/, '');
         },
         isDisabled: function isDisabled() {
-            return this.valueFrom === "" && this.valueTo === "" || parseFloat(this.valueFrom) > parseFloat(this.valueTo) || isNaN(this.valueFrom) || isNaN(this.valueTo) || this.valueFrom === '' || this.valueTo === '' || this.isLoading;
+            return this.valueFrom === '' && this.valueTo === '' || parseFloat(this.valueFrom) > parseFloat(this.valueTo) || isNaN(this.valueFrom) || isNaN(this.valueTo) || this.valueFrom === '' || this.valueTo === '' || this.isLoading;
         }
     }, Vuex.mapState({
         isLoading: function isLoading(state) {
@@ -652,7 +652,7 @@ Vue.component("item-range-slider", {
                 value = value.toString();
             }
 
-            if (value.indexOf('.') > -1) {
+            if (value.includes('.')) {
                 value = value.replace(',', '');
             } else {
                 value = value.replace(',', '.');

@@ -51,7 +51,7 @@ Vue.component("item-range-slider", {
         },
 
         isDisabled() {
-            return (this.valueFrom === "" && this.valueTo === "") ||
+            return (this.valueFrom === '' && this.valueTo === '') ||
                 (parseFloat(this.valueFrom) > parseFloat(this.valueTo)) ||
                 isNaN(this.valueFrom) ||
                 isNaN(this.valueTo) ||
@@ -94,7 +94,7 @@ Vue.component("item-range-slider", {
                 value = value.toString();
             }
 
-            if (value.indexOf('.') > -1) {
+            if (value.includes('.')) {
                 value = value.replace(',', '');
             } else {
                 value = value.replace(',', '.');
