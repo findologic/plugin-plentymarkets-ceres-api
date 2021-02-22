@@ -5,6 +5,7 @@ const prod = require('./webpack.dev.js');
  * @type {import('@vue/cli-service').ProjectOptions}
  */
 module.exports = {
+  publicPath: 'https://localhost:8083',
   configureWebpack: prod,
   outputDir: path.resolve(__dirname, 'resources/js/dist'),
   chainWebpack: config => {
@@ -18,4 +19,14 @@ module.exports = {
       chunkFilename: 'findologic_ceres.css',
     },
   },
+  devServer: {
+    contentBase: './resources/js/dist',
+    // Allow all headers, as the Plentymarkets Shop is not hosted on the same host, as the dev server
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    },
+    disableHostCheck: true,
+  }
 }

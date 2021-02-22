@@ -1,7 +1,3 @@
-<template>
-
-</template>
-
 <script lang="ts">
 import Url from '../../mixins/url';
 import Constants from '../../constants';
@@ -18,9 +14,7 @@ const ItemListSortingProps = Vue.extend({
 
 interface MixinInterface {
   content: string;
-  // getUrlParams: Function,
   setUrlParamValues: Function;
-  sortingList: Array<any>;
   defaultSorting: string;
   template: string;
 }

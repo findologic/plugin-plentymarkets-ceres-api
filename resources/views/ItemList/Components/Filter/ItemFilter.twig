@@ -23,7 +23,7 @@
         </div>
         <div v-else-if="facet.findologicFilterType === 'color'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-color-tiles template-override="#vue-findologic-item-color-tiles" :facet="facet"></item-color-tiles>
+                <item-color-tiles :facet="facet"></item-color-tiles>
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>
