@@ -3,14 +3,20 @@ import Constants from '../../constants';
 import Vue from "vue";
 
 Vue.component("items-per-page", {
-    mixins: [Url],
 
     delimiters: ["${", "}"],
+    mixins: [Url],
 
-    props: [
-        "paginationValues",
-        "template"
-    ],
+    props: {
+        paginationValues: {
+            type: Array,
+            default: () => []
+        },
+        template: {
+            type: String,
+            default: null
+        }
+    },
 
     data() {
         return {

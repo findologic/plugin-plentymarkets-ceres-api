@@ -1,22 +1,22 @@
-<script type="x/template" id="vue-findologic-item-category-dropdown">
-    <div class="fl-dropdown">
-        <div class="fl-dropdown-container fl-category-dropdown-container custom-select" tabindex="0" @click="toggle()" @blur="close()">
-            <span v-if="dropdownLabel" class="fl-dropdown-label" v-text="dropdownLabel"></span>
-            <span v-else class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span>
-            <ul v-show="isOpen" class="fl-dropdown-content form-check">
-                <li v-for="value in facet.values" @click.stop="close(); selected(value.name);" class="fl-dropdown-item" :class="{'form-check-label': !value.selected}" rel="nofollow">
-                    <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" :disabled="isLoading">
-                    <label :for="'option-' + value.id" :class="{'form-check-label': value.selected}" v-text="value.name" rel="nofollow"></label>
-                    <div class="filter-badge" v-if="!value.selected && value.count" v-text="value.count"></div>
-                    <ul v-if="value.selected && value.items.length > 0" class="form-check subcategories">
-                        <li v-for="subcategory in value.items" :key="subcategory.id" @click.stop="close(); selected(getSubCategoryName(value, subcategory));" class="fl-dropdown-item" :class="{'form-check-label': !subcategory.selected}">
-                            <input :id="'option-' + subcategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="subcategory.selected" :disabled="isLoading">
-                            <label :for="'option-' + subcategory.id" :class="{'form-check-label': subcategory.selected}" v-text="subcategory.name" rel="nofollow"></label>
-                            <div class="filter-badge" v-if="!subcategory.selected && subcategory.count" v-text="subcategory.count"></div>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</script>
+{#<script type="x/template" id="vue-findologic-item-category-dropdown">#}
+{#    <div class="fl-dropdown">#}
+{#        <div class="fl-dropdown-container fl-category-dropdown-container custom-select" tabindex="0" @click="toggle()" @blur="close()">#}
+{#            <span v-if="dropdownLabel" class="fl-dropdown-label" v-text="dropdownLabel"></span>#}
+{#            <span v-else class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span>#}
+{#            <ul v-show="isOpen" class="fl-dropdown-content form-check">#}
+{#                <li v-for="value in facet.values" @click.stop="close(); selected(value.name);" class="fl-dropdown-item" :class="{'form-check-label': !value.selected}" rel="nofollow">#}
+{#                    <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" :disabled="isLoading">#}
+{#                    <label :for="'option-' + value.id" :class="{'form-check-label': value.selected}" v-text="value.name" rel="nofollow"></label>#}
+{#                    <div class="filter-badge" v-if="!value.selected && value.count" v-text="value.count"></div>#}
+{#                    <ul v-if="value.selected && value.items.length > 0" class="form-check subcategories">#}
+{#                        <li v-for="subcategory in value.items" :key="subcategory.id" @click.stop="close(); selected(getSubCategoryName(value, subcategory));" class="fl-dropdown-item" :class="{'form-check-label': !subcategory.selected}">#}
+{#                            <input :id="'option-' + subcategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="subcategory.selected" :disabled="isLoading">#}
+{#                            <label :for="'option-' + subcategory.id" :class="{'form-check-label': subcategory.selected}" v-text="subcategory.name" rel="nofollow"></label>#}
+{#                            <div class="filter-badge" v-if="!subcategory.selected && subcategory.count" v-text="subcategory.count"></div>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+{#    </div>#}
+{#</script>#}

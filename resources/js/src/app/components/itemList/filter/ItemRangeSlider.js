@@ -4,16 +4,39 @@ import Vue from "vue";
 Vue.component("item-range-slider", {
     mixins: [Url],
 
-    props: [
-        "template",
-        "facet"
-    ],
+    props: {
+        template: {
+            type: String,
+            default: null
+        },
+        facet: {
+            type: Object,
+            required: true
+        }
+    },
 
     data() {
         return {
             valueFrom: "",
             valueTo: ""
         };
+    },
+
+    computed: {
+        sanitizedFacetId() {
+            return 'fl-range-slider-' + this.facet.id.replace(/\W/g, '-').replace(/-+/, '-').replace(/-$/, '');
+        },
+
+        isDisabled() {
+            return (this.valueFrom === "" && this.valueTo === "") ||
+              (parseFloat(this.valueFrom) > parseFloat(this.valueTo)) ||
+              this.isLoading;
+        },
+
+        // eslint-disable-next-line no-undef
+        ...Vuex.mapState({
+            isLoading: state => state.itemList.isLoading
+        })
     },
 
     created() {
@@ -46,23 +69,6 @@ Vue.component("item-range-slider", {
                 self.valueTo = ui[1];
             });
         });
-    },
-
-    computed: {
-        sanitizedFacetId() {
-            return 'fl-range-slider-' + this.facet.id.replace(/\W/g, '-').replace(/-+/, '-').replace(/-$/, '');
-        },
-
-        isDisabled() {
-            return (this.valueFrom === "" && this.valueTo === "") ||
-                (parseFloat(this.valueFrom) > parseFloat(this.valueTo)) ||
-                this.isLoading;
-        },
-
-        // eslint-disable-next-line no-undef
-        ...Vuex.mapState({
-            isLoading: state => state.itemList.isLoading
-        })
     },
 
     methods: {

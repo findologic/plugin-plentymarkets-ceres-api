@@ -2,14 +2,20 @@ import Url from '../../../mixins/url'
 import Vue from "vue";
 
 Vue.component("item-filter-price", {
-    mixins: [Url],
 
     delimiters: ["${", "}"],
+    mixins: [Url],
 
-    props: [
-        "template",
-        "facet"
-    ],
+    props: {
+        template: {
+            type: String,
+            default: null
+        },
+        facet: {
+            type: Object,
+            required: true
+        }
+    },
 
     data() {
         return {
@@ -20,6 +26,19 @@ Vue.component("item-filter-price", {
         };
     },
 
+    computed: {
+        isDisabled() {
+            return (this.priceMin === "" && this.priceMax === "") ||
+              (parseFloat(this.priceMin) > parseFloat(this.priceMax)) ||
+              this.isLoading;
+        },
+
+        // eslint-disable-next-line no-undef
+        ...Vuex.mapState({
+            isLoading: state => state.itemList.isLoading
+        })
+    },
+
     created() {
         this.$options.template = this.template || "#vue-item-filter-price";
 
@@ -27,19 +46,6 @@ Vue.component("item-filter-price", {
 
         this.priceMin = values ? values.min : "";
         this.priceMax = values ? values.max : "";
-    },
-
-    computed: {
-        isDisabled() {
-            return (this.priceMin === "" && this.priceMax === "") ||
-                (parseFloat(this.priceMin) > parseFloat(this.priceMax)) ||
-                this.isLoading;
-        },
-
-        // eslint-disable-next-line no-undef
-        ...Vuex.mapState({
-            isLoading: state => state.itemList.isLoading
-        })
     },
 
     methods: {

@@ -2,9 +2,9 @@ import Url from "../../../mixins/url";
 import Vue from "vue";
 
 Vue.component("item-filter-tag-list", {
-    mixins: [Url],
 
     delimiters: ["${", "}"],
+    mixins: [Url],
 
     props:
     {

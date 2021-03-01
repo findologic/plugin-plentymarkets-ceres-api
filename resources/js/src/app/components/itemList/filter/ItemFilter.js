@@ -2,14 +2,20 @@ import Url from '../../../mixins/url'
 import Vue from "vue";
 
 Vue.component("findologic-item-filter", {
-    mixins: [Url],
 
     delimiters: ["${", "}"],
+    mixins: [Url],
 
-    props: [
-        "template",
-        "facet"
-    ],
+    props: {
+        template: {
+            type: String,
+            default: null
+        },
+        facet: {
+            type: Object,
+            required: true
+        }
+    },
 
     computed: {
         facets() {

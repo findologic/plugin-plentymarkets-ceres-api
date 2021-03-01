@@ -1,8 +1,9 @@
 import { Store } from 'vuex'
+import { ItemListData } from '../src/app/interfaces';
 
 declare module '@vue/runtime-core' {
     interface State {
-        count: number;
+        itemList: ItemListData;
     }
 
     interface CustomProperties {

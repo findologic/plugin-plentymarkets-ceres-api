@@ -6,9 +6,18 @@ import Vue from 'vue';
 
 const ItemListSortingProps = Vue.extend({
   props: {
-    sortingList: Array,
-    defaultSorting: String,
-    template: String
+    sortingList: {
+      type: Array,
+      required: true
+    },
+    defaultSorting: {
+      type: String,
+      required: true
+    },
+    template: {
+      type: String,
+      default: null
+    }
   }
 })
 
