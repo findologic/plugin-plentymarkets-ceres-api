@@ -145,6 +145,10 @@ class SearchService implements SearchServiceInterface
     {
         $results = $this->search($request, $externalSearch);
 
+        if ($results->getResultsCount() == 0) {
+            return;
+        }
+
         if ($this->shouldFilterInvalidProducts()) {
             $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
         } else {

@@ -1,0 +1,21 @@
+<searchResult
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/findologic/xml-response-schema/master/schema.xsd"
+>
+    <servers>
+        <frontend>tyrell.frontend.findologic.com</frontend>
+        <backend>hydra.backend.findologic.com</backend>
+    </servers>
+    <query>
+        <limit first="0" count="4"/>
+        <queryString>this should return no results</queryString>
+    </query>
+    <results>
+        <count>0</count>
+    </results>
+    <products/>
+    <filters>
+        <main/>
+        <other/>
+    </filters>
+</searchResult>

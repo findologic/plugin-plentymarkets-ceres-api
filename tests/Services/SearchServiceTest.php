@@ -12,6 +12,7 @@ use Findologic\Services\FallbackSearchService;
 use Findologic\Services\SearchService;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
+use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use IO\Services\ItemSearch\Services\ItemSearchService;
@@ -36,6 +37,8 @@ use ReflectionException;
  */
 class SearchServiceTest extends TestCase
 {
+    use MockResponseHelper;
+
     /**
      * @var Client|MockObject
      */
@@ -97,6 +100,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn([1, 2, 3]);
+        $responseMock->expects($this->exactly(2))->method('getResultsCount')->willReturn(3);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -138,6 +142,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         if ($redirectUrl) {
             $responseMock->expects($this->exactly(2))->method('getData')
                 ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
@@ -268,6 +273,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
@@ -1107,6 +1113,31 @@ class SearchServiceTest extends TestCase
                 'shouldFilter' => false
             ]
         ];
+    }
+
+    public function testExternalSearchIsNotManipulatedOnNoResultPages()
+    {
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $externalSearchServiceMock->expects($this->never())->method('setResults');
+
+        $originalExternalSearchMock = clone $externalSearchServiceMock;
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+        $this->client->expects($this->once())
+            ->method('call')
+            ->willReturn($this->getMockResponse('noResults.xml'));
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doSearch($requestMock, $externalSearchServiceMock);
+
+        $this->assertEquals($originalExternalSearchMock, $externalSearchServiceMock);
     }
 
     /**
