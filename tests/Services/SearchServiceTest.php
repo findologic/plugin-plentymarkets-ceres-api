@@ -100,6 +100,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn([1, 2, 3]);
+        $responseMock->expects($this->exactly(2))->method('getResultsCount')->willReturn(3);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -141,6 +142,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         if ($redirectUrl) {
             $responseMock->expects($this->exactly(2))->method('getData')
                 ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
@@ -271,6 +273,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
