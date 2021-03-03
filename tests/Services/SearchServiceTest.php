@@ -12,6 +12,7 @@ use Findologic\Services\FallbackSearchService;
 use Findologic\Services\SearchService;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
+use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use IO\Services\ItemSearch\Services\ItemSearchService;
@@ -36,6 +37,8 @@ use ReflectionException;
  */
 class SearchServiceTest extends TestCase
 {
+    use MockResponseHelper;
+
     /**
      * @var Client|MockObject
      */
@@ -1107,6 +1110,30 @@ class SearchServiceTest extends TestCase
                 'shouldFilter' => false
             ]
         ];
+    }
+
+    public function testExternalSearchIsNotManipulatedOnNoResultPages()
+    {
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $originalExternalSearchMock = clone $externalSearchServiceMock;
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+        $this->client->expects($this->once())
+            ->method('call')
+            ->willReturn($this->getMockResponse('noResults.xml'));
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doSearch($requestMock, $externalSearchServiceMock);
+
+        $this->assertEquals($originalExternalSearchMock, $externalSearchServiceMock);
     }
 
     /**

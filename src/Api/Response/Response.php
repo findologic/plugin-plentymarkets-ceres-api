@@ -99,7 +99,7 @@ class Response
     /**
      * @return int
      */
-    public function getResultsCount()
+    public function getResultsCount(): int
     {
         if (!isset($this->data[self::DATA_RESULTS]['count'])) {
             return 0;
