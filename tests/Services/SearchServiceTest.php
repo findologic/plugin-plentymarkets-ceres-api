@@ -1124,6 +1124,7 @@ class SearchServiceTest extends TestCase
         $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $externalSearchServiceMock->expects($this->never())->method('setResults');
 
         $originalExternalSearchMock = clone $externalSearchServiceMock;
 
