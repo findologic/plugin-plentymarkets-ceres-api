@@ -539,8 +539,8 @@ Vue.component("item-filter-tag-list", {
         tagList: function tagList() {
             return this.getSelectedFilters();
         },
-        facetNames: function facetNames() {
-            return this.getFacetIdNameMap();
+        facetInfo: function facetInfo() {
+            return this.getFacetIdInfoMap();
         }
     },
 
@@ -555,15 +555,6 @@ Vue.component("item-filter-tag-list", {
         },
         resetAllTags: function resetAllTags() {
             this.removeAllAttribsAndRefresh();
-        },
-        getFacetIdNameMap: function getFacetIdNameMap() {
-            var map = {};
-
-            this.$store.state.itemList.facets.forEach(function (facet) {
-                map[facet.id] = facet.name;
-            });
-
-            return map;
         }
     }
 });
@@ -626,13 +617,24 @@ Vue.component("item-range-slider", {
             return 'fl-range-slider-' + this.facet.id.replace(/\W/g, '-').replace(/-+/, '-').replace(/-$/, '');
         },
         isDisabled: function isDisabled() {
-            return this.valueFrom === "" && this.valueTo === "" || parseFloat(this.valueFrom) > parseFloat(this.valueTo) || this.isLoading;
+            return this.valueFrom === '' && this.valueTo === '' || parseFloat(this.valueFrom) > parseFloat(this.valueTo) || isNaN(this.valueFrom) || isNaN(this.valueTo) || this.valueFrom === '' || this.valueTo === '' || this.isLoading;
         }
     }, Vuex.mapState({
         isLoading: function isLoading(state) {
             return state.itemList.isLoading;
         }
     })),
+
+    watch: {
+        valueFrom: function valueFrom(value) {
+            this.valueFrom = this.fixDecimalSeparator(value);
+            this.setCustomValidationMessage();
+        },
+        valueTo: function valueTo(value) {
+            this.valueTo = this.fixDecimalSeparator(value);
+            this.setCustomValidationMessage();
+        }
+    },
 
     methods: {
         triggerFilter: function triggerFilter() {
@@ -644,6 +646,29 @@ Vue.component("item-range-slider", {
 
                 this.updateSelectedFilters(this.facet.id, facetValue);
             }
+        },
+        fixDecimalSeparator: function fixDecimalSeparator(value) {
+            if (typeof value === 'number') {
+                value = value.toString();
+            }
+
+            if (value.includes('.')) {
+                value = value.replace(',', '');
+            } else {
+                value = value.replace(',', '.');
+            }
+
+            return value;
+        },
+        setCustomValidationMessage: function setCustomValidationMessage() {
+            this.$el.querySelectorAll('input.fl-range-input[data-custom-validation-message]').forEach(function (input) {
+                // Must be reset before the validity check as existence of custom validity counts as a validation error.
+                input.setCustomValidity('');
+
+                if (!input.checkValidity()) {
+                    input.setCustomValidity(input.dataset.customValidationMessage);
+                }
+            });
         }
     }
 });
@@ -990,9 +1015,13 @@ exports.default = {
                 }
 
                 if (filter === 'price' || this.isRangeSliderFilter(attributes[filter])) {
+                    var facetInfo = this.getFacetIdInfoMap();
+
+                    var unit = facetInfo[filter] && facetInfo[filter].unit ? ' ' + facetInfo[filter].unit : '';
+
                     selectedFilters.push({
                         id: filter,
-                        name: attributes[filter].min + ' - ' + attributes[filter].max
+                        name: attributes[filter].min + unit + ' - ' + attributes[filter].max + unit
                     });
 
                     continue;
@@ -1176,6 +1205,15 @@ exports.default = {
             delete params[_constants2.default.PARAMETER_PAGE];
             delete params[_constants2.default.PARAMETER_ATTRIBUTES];
             document.location.search = '?' + $.param(params);
+        },
+        getFacetIdInfoMap: function getFacetIdInfoMap() {
+            var map = {};
+
+            this.$store.state.itemList.facets.forEach(function (facet) {
+                map[facet.id] = facet;
+            });
+
+            return map;
         }
     }
 };
