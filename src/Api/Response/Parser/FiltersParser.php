@@ -19,11 +19,6 @@ class FiltersParser
     protected $valueId;
 
     /**
-     * @var Image
-     */
-    protected $imageService;
-
-    /**
      * @var LibraryCallContract
      */
     protected $libraryCallContract;
@@ -31,12 +26,10 @@ class FiltersParser
     /**
      * FiltersParser constructor.
      * @param LibraryCallContract $libraryCallContract
-     * @param Image $colorImageService
      */
-    public function __construct(LibraryCallContract $libraryCallContract, Image $colorImageService)
+    public function __construct(LibraryCallContract $libraryCallContract)
     {
         $this->libraryCallContract = $libraryCallContract;
-        $this->imageService = $colorImageService;
     }
 
     /**
