@@ -71,6 +71,13 @@ class Middleware extends PlentyMiddleware
      */
     public function before(Request $request)
     {
+        $this->eventDispatcher->listen(
+            'Ceres.Search.Query',
+            function (ExternalSearch $externalSearch) use ($request) {
+                $this->searchService->handleSearchQuery($request, $externalSearch);
+            }
+        );
+
         if (!$this->pluginConfig->getShopKey()) {
             return;
         }
@@ -121,13 +128,6 @@ class Middleware extends PlentyMiddleware
                 }
             }, 0);
         }
-
-        $this->eventDispatcher->listen(
-            'Ceres.Search.Query',
-            function (ExternalSearch $externalSearch) use ($request) {
-                $this->searchService->handleSearchQuery($request, $externalSearch);
-            }
-        );
     }
 
     /**
