@@ -346,6 +346,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '25',
                                 'image' => 'https://test.com/vendor/a_amp_c_design.jpg',
+                                'imageUrl' => 'https://test.com/vendor/a_amp_c_design.jpg',
                                 'selected' => false,
                                 'id' => 9
                             ]
@@ -687,6 +688,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '25',
                                 'image' => 'https://test.com/vendor/a_amp_c_design.jpg',
+                                'imageUrl' => 'https://test.com/vendor/a_amp_c_design.jpg',
                                 'selected' => false,
                                 'id' => 4
                             ]

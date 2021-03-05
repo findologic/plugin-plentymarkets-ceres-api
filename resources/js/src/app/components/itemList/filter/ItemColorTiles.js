@@ -5,7 +5,8 @@ Vue.component("item-color-tiles", {
 
     props: [
         "template",
-        "facet"
+        "facet",
+        "fallbackImage"
     ],
 
     created() {
@@ -27,6 +28,14 @@ Vue.component("item-color-tiles", {
 
         tileClicked: function (value) {
             this.updateSelectedFilters(this.facet.id, value);
+        },
+
+        handleImageError: function(event, colorValue) {
+            if (!colorValue.hexValue) {
+                event.target.src = this.fallbackImage;
+            } else {
+                event.target.remove();
+            }
         }
     }
 });

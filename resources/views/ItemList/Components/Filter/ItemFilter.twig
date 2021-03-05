@@ -9,21 +9,11 @@
             <item-range-slider template-override="#vue-findologic-item-range-slider" :facet="facet"></item-range-slider>
         </div>
         <div v-else-if="facet.findologicFilterType === 'image'">
-            <div v-if="!facet.noAvailableFiltersText">
-                <div class="form-check" v-for="value in facet.values" :key="value.id">
-                    <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
-                    <label :for="'option-' + value.id" class="form-check-label" rel="nofollow">
-                        <img v-show="value.imageUrl" :src="value.imageUrl" width="80px"/>
-                        <span v-show="!value.imageUrl" v-text="value.name"></span>
-                    </label>
-                    <div class="filter-badge" v-text="value.count"></div>
-                </div>
-            </div>
-            <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
+            <item-filter-image template-override="#vue-findologic-item-filter-image" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"></item-filter-image>
         </div>
         <div v-else-if="facet.findologicFilterType === 'color'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-color-tiles template-override="#vue-findologic-item-color-tiles" :facet="facet"></item-color-tiles>
+                <item-color-tiles template-override="#vue-findologic-item-color-tiles" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture.png'"></item-color-tiles>
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>
