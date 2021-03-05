@@ -6,6 +6,7 @@ use Findologic\Components\PluginConfig;
 use Findologic\Contexts\FindologicCategoryItemContext;
 use Findologic\Contexts\FindologicItemSearchContext;
 use Findologic\Services\SearchService;
+use Findologic\Validators\MainValidator;
 use IO\Helper\TemplateContainer;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\ServiceProvider;
@@ -22,11 +23,21 @@ class FindologicServiceProvider extends ServiceProvider
     {
         $this->getApplication()->singleton(SearchService::class);
         $this->getApplication()->singleton(PluginConfig::class);
+        $this->getApplication()->singleton(MainValidator::class);
+
+        if (!$this->validate()) {
+            return;
+        }
+
         $this->addGlobalMiddleware(Middleware::class);
     }
 
     public function boot(Twig $twig, Dispatcher $eventDispatcher)
     {
+        if (!$this->validate()) {
+            return;
+        }
+
         $eventDispatcher->listen('IO.ctx.search', function (TemplateContainer $templateContainer, $templateData = []) {
             $templateContainer->setContext(FindologicItemSearchContext::class);
             return false;
@@ -38,5 +49,16 @@ class FindologicServiceProvider extends ServiceProvider
                 return false;
             }
         );
+    }
+
+    /**
+     * @return bool
+     */
+    private function validate()
+    {
+        /** @var MainValidator $validator */
+        $validator = $this->getApplication()->make(MainValidator::class);
+
+        return $validator->validate();
     }
 }
