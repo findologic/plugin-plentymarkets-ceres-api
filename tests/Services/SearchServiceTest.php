@@ -1140,6 +1140,46 @@ class SearchServiceTest extends TestCase
         $this->assertEquals($originalExternalSearchMock, $externalSearchServiceMock);
     }
 
+    public function testInitialNavigationPageGetsResultCountFromPlenty()
+    {
+        $plentyResultCount = 100;
+
+        $this->configRepository->expects($this->once())
+            ->method('get')
+            ->willReturn(true);
+
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $responseMock->expects($this->any())
+            ->method('getData')
+            ->willReturn(['count' => $plentyResultCount]);
+
+        $this->fallbackSearchService->expects($this->once())
+            ->method('handleSearchQuery')
+            ->willReturn($responseMock);
+
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $externalSearchServiceMock->expects($this->once())
+            ->method('setResults')
+            ->with(null, $plentyResultCount);
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+        $this->client->expects($this->once())
+            ->method('call')
+            ->willReturn($this->getMockResponse('someResultsWithFilters.xml'));
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doNavigation($requestMock, $externalSearchServiceMock);
+    }
+
     /**
      * @param string $shopUrl
      * @param string $defaultLanguage
