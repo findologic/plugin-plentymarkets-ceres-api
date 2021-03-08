@@ -1,5 +1,21 @@
 # Release Notes für Findologic
 
+## 3.5.0 (2021-03-08)
+
+### Geändert
+
+* [PLENTY-305] Die Benutzerfreundlichkeit des Bereichssliders wurde optimiert
+  * Die Währung/Einheit wird nun beim selektierten Filter ausgegeben.
+  * Eingegebene Kommas (`,`) werden nun mit Punkten (`.`) ersetzt.
+  * Nicht-Numerische Eingaben können nicht länger abgeschickt werden.
+* [PLENTY-313] Die Performance bei Seiten, die Herstellerbilder, oder Farbbilder Filter verwenden, wurde verbessert.
+
+### Behoben
+
+* [PLENTY-315] Ein Fehler wurde behoben, wodurch auf Suchseiten ohne Ergebnisse, eine lange Ladezeit entstand.
+* [PLENTY-316] Ein Fehler wurde behoben, wodurch die Annzahl der Proukte auf Kategorieseiten nicht
+ der tatsächlichen Anzahl der Produkte entsprach.
+
 ## 3.4.0 (2021-02-15)
 
 ### Hinzugefügt
@@ -13,7 +29,7 @@
 
 * [PLENTY-287] Anstatt der Container-Verknüpfung wird nun die Komponente für das Suchfeld global überschrieben.
 
-### Fixed
+### Behoben
 
 * [PLENTY-311] Ein Fehler wurde behoben, welcher es erlaubte XSS auszuführen, wenn die Smart Did-You-Mean
   Container-Verknüpfung verwendet wurde.
