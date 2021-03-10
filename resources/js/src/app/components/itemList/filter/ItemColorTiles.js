@@ -19,6 +19,14 @@ Vue.component("item-color-tiles", {
         })
     },
 
+    mounted() {
+        this.$nextTick(function () {
+            $(function() {
+                SVGInjector($('img.fl-svg'));
+            });
+        })
+    },
+
     methods: {
         isSelected(facetValueName) {
             let facetValue = this.facet.values.filter((value) => value.name === facetValueName);

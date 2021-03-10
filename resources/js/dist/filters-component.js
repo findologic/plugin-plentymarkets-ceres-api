@@ -354,6 +354,15 @@ Vue.component("item-color-tiles", {
         }
     })),
 
+    mounted: function mounted() {
+        this.$nextTick(function () {
+            $(function () {
+                SVGInjector($('img.fl-svg'));
+            });
+        });
+    },
+
+
     methods: {
         isSelected: function isSelected(facetValueName) {
             var facetValue = this.facet.values.filter(function (value) {
