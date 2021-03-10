@@ -466,12 +466,12 @@ class ParametersHandlerTest extends TestCase
         $defaultSortingSearch = '',
         $defaultSorting = ''
     ) {
-        return $config = (object) array(
-            'sorting' => (object) array(
+        return $config = (object) [
+            'sorting' => (object) [
                 'data' => $sortingData,
                 'defaultSortingSearch' => $defaultSortingSearch,
                 'defaultSorting' => $defaultSorting
-            )
-        );
+            ]
+        ];
     }
 }

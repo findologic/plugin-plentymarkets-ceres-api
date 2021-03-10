@@ -150,7 +150,10 @@ class ParametersHandler
      */
     public function getCurrentItemsPerPage($request, $search)
     {
-        $currentItemsPerPage = $request->get(Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE, $search->getDefaultItemsPerPage());
+        $currentItemsPerPage = $request->get(
+            Plugin::PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE,
+            $search->getDefaultItemsPerPage()
+        );
 
         if (!$currentItemsPerPage) {
             $itemsPerPageOptions = $this->getItemsPerPage($search);

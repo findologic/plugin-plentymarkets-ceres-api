@@ -91,8 +91,8 @@ class RequestBuilder
         $request = $this->createRequestObject();
         $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT, 1);
         $request->setUrl(
-            $this->getUrl(self::ALIVE_REQUEST_TYPE))->setParam('shopkey', $this->pluginConfig->getShopKey()
-        );
+            $this->getUrl(self::ALIVE_REQUEST_TYPE)
+        )->setParam('shopkey', $this->pluginConfig->getShopKey());
 
         return $request;
     }
@@ -115,7 +115,7 @@ class RequestBuilder
 
         if ($type == self::ALIVE_REQUEST_TYPE) {
             $url .= 'alivetest.php';
-        } else if ($type == self::CATEGORY_REQUEST_TYPE) {
+        } elseif ($type == self::CATEGORY_REQUEST_TYPE) {
             $url .= 'selector.php';
         } else {
             $url .= 'index.php';
@@ -183,7 +183,10 @@ class RequestBuilder
         $request->setParam('revision', $this->getPluginVersion());
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
         $request->setParam('shopkey', $this->pluginConfig->getShopKey());
-        $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT, Client::DEFAULT_CONNECTION_TIME_OUT);
+        $request->setConfiguration(
+            Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT,
+            Client::DEFAULT_CONNECTION_TIME_OUT
+        );
 
         if ($this->getUserIp()) {
             $request->setParam('userip', $this->getUserIp());

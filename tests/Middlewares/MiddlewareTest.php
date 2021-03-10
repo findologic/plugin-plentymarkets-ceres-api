@@ -44,10 +44,22 @@ class MiddlewareTest extends TestCase
 
     public function setUp()
     {
-        $this->searchService = $this->getMockBuilder(SearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->eventDispatcher = $this->getMockBuilder(Dispatcher::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->searchService = $this->getMockBuilder(SearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->eventDispatcher = $this->getMockBuilder(Dispatcher::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
     }
 
     public function testBootShopKeyNotSet()
@@ -132,7 +144,10 @@ class MiddlewareTest extends TestCase
                 ]
             )
             ->getMock();
-        $loggerMock = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->middleware->method('getLoggerObject')->willReturn($loggerMock);
 
         $this->middleware->before(

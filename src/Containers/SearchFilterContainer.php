@@ -12,7 +12,7 @@ use Plenty\Plugin\Templates\Twig;
  */
 class SearchFilterContainer
 {
-    public function call(Twig $twig, SearchService $searchService):string
+    public function call(Twig $twig, SearchService $searchService): string
     {
         if (!$searchService->getResults()) {
             return '';
