@@ -480,6 +480,9 @@ Vue.component("item-filter-image", {
     })),
 
     methods: {
+        updateFacet: function updateFacet(facetValue) {
+            this.updateSelectedFilters(this.facet.id, facetValue.name);
+        },
         handleImageError: function handleImageError(event) {
             event.target.src = this.fallbackImage;
         }
