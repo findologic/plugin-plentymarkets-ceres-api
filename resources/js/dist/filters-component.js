@@ -354,6 +354,13 @@ Vue.component("item-color-tiles", {
         }
     })),
 
+    mounted: function mounted() {
+        this.$nextTick(function () {
+            SVGInjector($('img.fl-svg'));
+        });
+    },
+
+
     methods: {
         isSelected: function isSelected(facetValueName) {
             var facetValue = this.facet.values.filter(function (value) {
@@ -480,6 +487,9 @@ Vue.component("item-filter-image", {
     })),
 
     methods: {
+        updateFacet: function updateFacet(facetValue) {
+            this.updateSelectedFilters(this.facet.id, facetValue.name);
+        },
         handleImageError: function handleImageError(event) {
             event.target.src = this.fallbackImage;
         }

@@ -32,12 +32,6 @@
     <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component-min.js"></script>
 {% endif %}
 
-<script>
-    $(function() {
-        SVGInjector($('img.fl-svg'));
-    });
-</script>
-
 <script type="x/template" data-component="item-filter-list">
     <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
