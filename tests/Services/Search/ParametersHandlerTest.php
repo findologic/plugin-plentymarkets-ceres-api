@@ -7,6 +7,7 @@ use Findologic\Services\Search\ParametersHandler;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Plenty\Plugin\Http\Request;
+use stdClass;
 
 /**
  * Class SearchServiceTest
@@ -466,12 +467,14 @@ class ParametersHandlerTest extends TestCase
         $defaultSortingSearch = '',
         $defaultSorting = ''
     ) {
-        return $config = (object) [
-            'sorting' => (object) [
-                'data' => $sortingData,
-                'defaultSortingSearch' => $defaultSortingSearch,
-                'defaultSorting' => $defaultSorting
-            ]
-        ];
+        $sorting = new stdClass();
+        $sorting->data = $sortingData;
+        $sorting->defaultSortingSearch = $defaultSortingSearch;
+        $sorting->defaultSorting = $defaultSorting;
+
+        $config = new stdClass();
+        $config->sorting = $sorting;
+
+        return $config;
     }
 }
