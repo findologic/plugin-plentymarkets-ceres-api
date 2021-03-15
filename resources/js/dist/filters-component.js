@@ -356,9 +356,7 @@ Vue.component("item-color-tiles", {
 
     mounted: function mounted() {
         this.$nextTick(function () {
-            $(function () {
-                SVGInjector($('img.fl-svg'));
-            });
+            SVGInjector($('img.fl-svg'));
         });
     },
 

@@ -21,9 +21,7 @@ Vue.component("item-color-tiles", {
 
     mounted() {
         this.$nextTick(function () {
-            $(function() {
-                SVGInjector($('img.fl-svg'));
-            });
+            SVGInjector($('img.fl-svg'));
         })
     },
 
