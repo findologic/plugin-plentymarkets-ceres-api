@@ -31,9 +31,12 @@ class FindologicServiceProvider extends ServiceProvider
             $templateContainer->setContext(FindologicItemSearchContext::class);
             return false;
         });
-        $eventDispatcher->listen('IO.ctx.category.item', function (TemplateContainer $templateContainer, $templateData = []) {
-            $templateContainer->setContext(FindologicCategoryItemContext::class);
-            return false;
-        });
+        $eventDispatcher->listen(
+            'IO.ctx.category.item',
+            function (TemplateContainer $templateContainer, $templateData = []) {
+                $templateContainer->setContext(FindologicCategoryItemContext::class);
+                return false;
+            }
+        );
     }
 }

@@ -104,7 +104,8 @@ class Middleware extends PlentyMiddleware
                 if ($this->pluginConfig->get(Plugin::CONFIG_FILTERS_STYLING_CSS_ENABLED)) {
                     $container->addStyleTemplate('Findologic::content.styles');
                 }
-            }, 0
+            },
+            0
         );
 
         if ($this->isSearchPage || $this->activeOnCatPage) {
@@ -115,8 +116,8 @@ class Middleware extends PlentyMiddleware
                 }
             );
 
-            $this->eventDispatcher->listen('IO.Component.Import', function(ComponentContainer $container) {
-                if( $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
+            $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
+                if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
                     $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
                 }
             }, 0);

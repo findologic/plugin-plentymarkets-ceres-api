@@ -20,7 +20,10 @@ class ResponseTest extends TestCase
 
     public function setUp()
     {
-        $this->translator = $this->getMockBuilder(Translator::class)->disableOriginalConstructor()->setMethods(['trans'])->getMock();
+        $this->translator = $this->getMockBuilder(Translator::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['trans'])
+            ->getMock();
     }
 
     /**

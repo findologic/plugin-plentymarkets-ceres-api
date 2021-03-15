@@ -17,7 +17,7 @@ class PromotionContainer
      * @param SearchService $searchService
      * @return string
      */
-    public function call(Twig $twig, SearchService $searchService):string
+    public function call(Twig $twig, SearchService $searchService): string
     {
         if (!$searchService->getResults()) {
             return '';

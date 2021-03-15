@@ -82,14 +82,35 @@ class SearchServiceTest extends TestCase
     public function setUp()
     {
         $this->client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->requestBuilder = $this->getMockBuilder(RequestBuilder::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->responseParser = $this->getMockBuilder(ResponseParser::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->searchParametersHandler = $this->getMockBuilder(ParametersHandler::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->requestBuilder = $this->getMockBuilder(RequestBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->responseParser = $this->getMockBuilder(ResponseParser::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->searchParametersHandler = $this->getMockBuilder(ParametersHandler::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->logger = $this->getMockBuilder(LoggerContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
-        $this->fallbackSearchService = $this->getMockBuilder(FallbackSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->fallbackSearchService = $this->getMockBuilder(FallbackSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
     }
 
     public function testHandleSearchQuery()
@@ -103,16 +124,27 @@ class SearchServiceTest extends TestCase
         $responseMock->expects($this->exactly(2))->method('getResultsCount')->willReturn(3);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']);
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $searchServiceMock = $this->getSearchServiceMock(
+            ['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']
+        );
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
 
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
 
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setResults'])
+            ->getMock();
         $searchQueryMock->categoryId = null;
 
-        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
 
         $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
     }
@@ -155,10 +187,15 @@ class SearchServiceTest extends TestCase
         }
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods(['getResult'])->getMock();
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getResult'])
+            ->getMock();
         $itemSearchServiceMock->expects($this->at(0))->method('getResult')->willReturn($itemSearchServiceResultsAll);
         if ($redirectUrl) {
-            $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($variationSearchByItemIdResult);
+            $itemSearchServiceMock->expects($this->at(1))
+                ->method('getResult')
+                ->willReturn($variationSearchByItemIdResult);
         }
 
         $searchServiceMock = $this->getSearchServiceMock([
@@ -178,11 +215,17 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
 
         /** @var ExternalSearch|MockObject $searchQueryMock */
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setResults'])
+            ->getMock();
         $searchQueryMock->categoryId = null;
 
         /** @var HttpRequest|MockObject $requestMock */
-        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $requestMock->expects($this->any())
             ->method('all')
             ->willReturn($attributes);

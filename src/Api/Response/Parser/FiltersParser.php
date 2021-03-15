@@ -160,6 +160,8 @@ class FiltersParser
      */
     protected function parseFilter($filter, $isMainFilter = false)
     {
+        $noAvailableFiltersText = $filter->noAvailableFiltersText ? $filter->noAvailableFiltersText->__toString() : '';
+
         $filterName = $filter->name->__toString();
         $filterData = [
             'id' => $filterName,
@@ -169,7 +171,7 @@ class FiltersParser
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'itemCount' => $filter->itemCount ? $filter->itemCount->__toString() : 0,
-            'noAvailableFiltersText' => $filter->noAvailableFiltersText ? $filter->noAvailableFiltersText->__toString() : ''
+            'noAvailableFiltersText' => $noAvailableFiltersText
         ];
 
         $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';

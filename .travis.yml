@@ -13,4 +13,5 @@ install:
   - php composer.phar install
 
 script:
+  - composer lint
   - composer test

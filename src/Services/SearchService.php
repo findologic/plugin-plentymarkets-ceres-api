@@ -30,7 +30,7 @@ class SearchService implements SearchServiceInterface
 {
     use \Plenty\Plugin\Log\Loggable;
 
-    CONST DEFAULT_ITEMS_PER_PAGE = 25;
+    const DEFAULT_ITEMS_PER_PAGE = 25;
 
     /**
      * @var Client
@@ -203,7 +203,9 @@ class SearchService implements SearchServiceInterface
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
 
         try {
-            if ($isCategoryPage && (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))) {
+            if ($isCategoryPage &&
+                (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))
+            ) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
@@ -285,7 +287,7 @@ class SearchService implements SearchServiceInterface
         /** Custom version checking as Plentymarkets forbids using the version_compare function */
         $versionParts = explode('.', $ceresVersion);
 
-        if ($versionParts[0] > 5 ) {
+        if ($versionParts[0] > 5) {
             return false;
         }
 
@@ -397,8 +399,7 @@ class SearchService implements SearchServiceInterface
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
 
-            if (
-                strtolower($variation['number']) == $lowercasedQuery ||
+            if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
                 strtolower($variation['order']) == $lowercasedQuery
             ) {
