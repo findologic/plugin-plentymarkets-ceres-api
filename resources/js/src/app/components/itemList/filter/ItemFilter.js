@@ -23,10 +23,14 @@ Vue.component("findologic-item-filter", {
             });
         },
 
+        isSelected() {
+            return typeof this.getSelectedFilters().find(element => element.id == this.facet.id) !== 'undefined';
+        },
+
         ...Vuex.mapState({
             selectedFacets: state => state.itemList.selectedFacets,
             isLoading: state => state.itemList.isLoading
-        })
+        }),
     },
 
     created() {

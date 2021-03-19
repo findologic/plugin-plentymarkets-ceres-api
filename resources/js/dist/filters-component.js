@@ -431,6 +431,13 @@ Vue.component("findologic-item-filter", {
                     return 0;
                 }
             });
+        },
+        isSelected: function isSelected() {
+            var _this = this;
+
+            return typeof this.getSelectedFilters().find(function (element) {
+                return element.id == _this.facet.id;
+            }) !== 'undefined';
         }
     }, Vuex.mapState({
         selectedFacets: function selectedFacets(state) {
