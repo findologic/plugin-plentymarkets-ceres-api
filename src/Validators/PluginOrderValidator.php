@@ -5,12 +5,9 @@ namespace Findologic\Validators;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Modules\Plugin\PluginSet\Contracts\PluginSetRepositoryContract;
 
-class PluginOrderValidator
+class PluginOrderValidator implements ValidatorInterface
 {
-    /**
-     * @return bool
-     */
-    public function validate()
+    public function validate(): bool
     {
         $pluginSetRepository = $this->getPluginSetRepository();
         $currentPluginSet = $pluginSetRepository->getCurrentPluginSetId();

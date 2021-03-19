@@ -6,7 +6,7 @@ use Findologic\Components\PluginConfig;
 use Findologic\Contexts\FindologicCategoryItemContext;
 use Findologic\Contexts\FindologicItemSearchContext;
 use Findologic\Services\SearchService;
-use Findologic\Validators\MainValidator;
+use Findologic\Validators\PluginConfigurationValidator;
 use IO\Helper\TemplateContainer;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\ServiceProvider;
@@ -23,9 +23,9 @@ class FindologicServiceProvider extends ServiceProvider
     {
         $this->getApplication()->singleton(SearchService::class);
         $this->getApplication()->singleton(PluginConfig::class);
-        $this->getApplication()->singleton(MainValidator::class);
+        $this->getApplication()->singleton(PluginConfigurationValidator::class);
 
-        if (!$this->validate()) {
+        if (!$this->validatePluginConfiguration()) {
             return;
         }
 
@@ -34,7 +34,7 @@ class FindologicServiceProvider extends ServiceProvider
 
     public function boot(Twig $twig, Dispatcher $eventDispatcher)
     {
-        if (!$this->validate()) {
+        if (!$this->validatePluginConfiguration()) {
             return;
         }
 
@@ -51,13 +51,10 @@ class FindologicServiceProvider extends ServiceProvider
         );
     }
 
-    /**
-     * @return bool
-     */
-    private function validate()
+    private function validatePluginConfiguration(): bool
     {
-        /** @var MainValidator $validator */
-        $validator = $this->getApplication()->make(MainValidator::class);
+        /** @var PluginConfigurationValidator $validator */
+        $validator = $this->getApplication()->make(PluginConfigurationValidator::class);
 
         return $validator->validate();
     }

@@ -2,14 +2,14 @@
 
 namespace Findologic\Tests\Validators;
 
-use Findologic\Validators\MainValidator;
+use Findologic\Validators\PluginConfigurationValidator;
 use Findologic\Validators\PluginOrderValidator;
 use Findologic\Validators\ShopkeyValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Plenty\Log\Contracts\LoggerContract;
 
-class MainValidatorTest extends TestCase
+class PluginConfigurationValidatorTest extends TestCase
 {
     /**
      * @var PluginOrderValidator|MockObject
@@ -22,7 +22,7 @@ class MainValidatorTest extends TestCase
     private $shopKeyValidatorMock;
 
     /**
-     * @var MainValidator|MockObject
+     * @var PluginConfigurationValidator|MockObject
      */
     private $mainValidatorMock;
 
@@ -40,7 +40,7 @@ class MainValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['validate'])
             ->getMock();
-        $this->mainValidatorMock = $this->getMockBuilder(MainValidator::class)
+        $this->mainValidatorMock = $this->getMockBuilder(PluginConfigurationValidator::class)
             ->setMethods(['getPluginOrderValidator', 'getShopkeyValidator', 'getLoggerObject'])
             ->getMock();
         $this->loggerMock = $this->getMockForAbstractClass(LoggerContract::class);
@@ -74,7 +74,7 @@ class MainValidatorTest extends TestCase
         $this->pluginOrderValidatorMock->method('validate')->willReturn(true);
         $this->shopKeyValidatorMock->method('validate')->willReturn(false);
         $this->loggerMock->expects($this->once())
-            ->method('error')
+            ->method('notice')
             ->with('Findologic shopkey is not set in the plugin configuration.');
 
         $this->assertFalse($this->mainValidatorMock->validate());

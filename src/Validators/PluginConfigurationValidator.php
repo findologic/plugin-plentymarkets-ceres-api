@@ -7,10 +7,10 @@ use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Application;
 use Plenty\Plugin\Log\Loggable;
 
-class MainValidator
+class PluginConfigurationValidator implements ValidatorInterface
 {
     use Loggable;
-    
+
     /**
      * @var bool|null
      */
@@ -21,10 +21,7 @@ class MainValidator
      */
     private $logger;
 
-    /**
-     * @return bool
-     */
-    public function validate()
+    public function validate(): bool
     {
         if ($this->validationStatus !== null) {
             return $this->validationStatus;
@@ -42,10 +39,9 @@ class MainValidator
 
         // Shopkey validator can only be constructed if the plugin order is correct so it can't be injected.
         $shopkeyValidator = $this->getShopkeyValidator();
-
         if (!$shopkeyValidator->validate()) {
             $this->validationStatus = false;
-            $this->getLoggerObject()->error('Findologic shopkey is not set in the plugin configuration.');
+            $this->getLoggerObject()->notice('Findologic shopkey is not set in the plugin configuration.');
 
             return false;
         }

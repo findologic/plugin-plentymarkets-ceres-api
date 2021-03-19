@@ -4,7 +4,7 @@ namespace Findologic\Validators;
 
 use Findologic\Components\PluginConfig;
 
-class ShopkeyValidator
+class ShopkeyValidator implements ValidatorInterface
 {
     /**
      * @var PluginConfig
@@ -16,16 +16,8 @@ class ShopkeyValidator
         $this->pluginConfig = $pluginConfig;
     }
 
-    /**
-     * @return bool
-     */
-    public function validate()
+    public function validate(): bool
     {
-        /** @var PluginConfig $pluginConfig */
-        if (!$this->pluginConfig->getShopKey()) {
-            return false;
-        }
-
-        return true;
+        return (bool)$this->pluginConfig->getShopKey();
     }
 }
