@@ -172,7 +172,8 @@ class SearchService implements SearchServiceInterface
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
+        $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
+        $response = $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
 
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
@@ -188,10 +189,7 @@ class SearchService implements SearchServiceInterface
             $total = $response->getData(Response::DATA_RESULTS)['count'];
         }
 
-        $externalSearch->setResults(
-            $response->getVariationIds(),
-            $total
-        );
+        $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
     }
 
     /**
