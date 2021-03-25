@@ -77,6 +77,11 @@ class SearchService implements SearchServiceInterface
      */
     protected $configRepository;
 
+    /**
+     * @var bool
+     */
+    protected $aliveTestResult;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -263,10 +268,18 @@ class SearchService implements SearchServiceInterface
      */
     public function aliveTest()
     {
-        $request = $this->requestBuilder->buildAliveRequest();
-        $response = $this->client->call($request);
+        if ($this->aliveTestResult === null) {
+            $request = $this->requestBuilder->buildAliveRequest();
+            $response = $this->client->call($request);
 
-        return $response === Plugin::API_ALIVE_RESPONSE_BODY;
+            $this->aliveTestResult = ($response === Plugin::API_ALIVE_RESPONSE_BODY);
+
+            if (!$this->aliveTestResult) {
+                $this->logger->error('Findologic search is not available!');
+            }
+        }
+
+        return $this->aliveTestResult;
     }
 
     public function handleProductRedirectUrl(string $url)
