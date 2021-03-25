@@ -2,16 +2,16 @@
     {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
     <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-{{ config('Findologic.filters_per_row') }}" :class="facet.cssClass">
         <div class="h3" v-text="facet.name"></div>
-        <div v-if="facet.findologicFilterType === 'price'">
+        <div v-if="facetType === 'price'">
             <item-filter-price template-override="#vue-findologic-item-price" :facet="facet"></item-filter-price>
         </div>
-        <div v-else-if="facet.findologicFilterType === 'range-slider'">
+        <div v-else-if="facetType === 'range-slider'">
             <item-range-slider template-override="#vue-findologic-item-range-slider" :facet="facet"></item-range-slider>
         </div>
-        <div v-else-if="facet.findologicFilterType === 'image'">
+        <div v-else-if="facetType === 'image'">
             <item-filter-image template-override="#vue-findologic-item-filter-image" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"></item-filter-image>
         </div>
-        <div v-else-if="facet.findologicFilterType === 'color'">
+        <div v-else-if="facetType === 'color'">
             <div v-if="!facet.noAvailableFiltersText">
                 <item-color-tiles template-override="#vue-findologic-item-color-tiles" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture.png'"></item-color-tiles>
             </div>
@@ -19,7 +19,7 @@
         </div>
         <div v-else-if="facet.id === 'cat'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-category-dropdown v-if="facet.findologicFilterType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
+                <item-category-dropdown v-if="facetType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
                 <div v-else class="form-check" v-for="value in facet.values" :key="value.id">
                     <div class="category-container">
                         <input :id="'option-' + value.id"
@@ -51,7 +51,7 @@
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>
-        <div v-else-if="facet.findologicFilterType === 'select'">
+        <div v-else-if="facetType === 'select'">
             <div v-if="!facet.noAvailableFiltersText">
                 <item-dropdown template-override="#vue-findologic-item-dropdown" :facet="facet"></item-dropdown>
             </div>

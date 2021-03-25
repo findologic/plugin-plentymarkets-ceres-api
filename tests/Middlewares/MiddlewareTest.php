@@ -2,6 +2,7 @@
 
 namespace Findologic\Tests\Middlewares;
 
+use Findologic\Constants\Plugin;
 use Findologic\Services\SearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
@@ -88,10 +89,7 @@ class MiddlewareTest extends TestCase
 
         $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
 
-        $this->eventDispatcher->expects($this->exactly(2))->method('listen')
-            ->withConsecutive(['IO.Resources.Import'], ['Ceres.Search.Query']);
-
-        $this->request->method('getUri')->willReturn('https://testshop.com/testpage');
+        $this->eventDispatcher->expects($this->never())->method('listen');
 
         $this->runBefore();
     }
@@ -102,8 +100,10 @@ class MiddlewareTest extends TestCase
 
         $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
 
-        $this->eventDispatcher->expects($this->exactly(4))->method('listen')->withConsecutive(
+        $this->eventDispatcher->expects($this->exactly(6))->method('listen')->withConsecutive(
             ['IO.Resources.Import'],
+            ['IO.ctx.search'],
+            ['IO.ctx.category.item'],
             ['Ceres.Search.Options'],
             ['IO.Component.Import'],
             ['Ceres.Search.Query']
@@ -117,11 +117,19 @@ class MiddlewareTest extends TestCase
     public function testIsNotSearchPageAndIsActiveOnCatPage()
     {
         $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testConfigValue');
+        $this->pluginConfig->expects($this->once())
+            ->method('get')
+            ->with(Plugin::CONFIG_NAVIGATION_ENABLED)
+            ->willReturn(true);
 
         $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
 
-        $this->eventDispatcher->expects($this->exactly(2))->method('listen')->withConsecutive(
+        $this->eventDispatcher->expects($this->exactly(6))->method('listen')->withConsecutive(
             ['IO.Resources.Import'],
+            ['IO.ctx.search'],
+            ['IO.ctx.category.item'],
+            ['Ceres.Search.Options'],
+            ['IO.Component.Import'],
             ['Ceres.Search.Query']
         );
 

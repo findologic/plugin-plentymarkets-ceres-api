@@ -6,16 +6,19 @@ use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
 use Exception;
 use Findologic\Constants\Plugin;
+use Findologic\Contexts\FindologicCategoryItemContext;
+use Findologic\Contexts\FindologicItemSearchContext;
 use Findologic\Exception\AliveException;
 use IO\Helper\ComponentContainer;
 use IO\Helper\ResourceContainer;
+use IO\Helper\TemplateContainer;
+use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Http\Response;
-use Plenty\Plugin\Log\Loggable;
 use Findologic\Components\PluginConfig;
 use Findologic\Services\SearchService;
 use Plenty\Plugin\Events\Dispatcher;
-use Plenty\Log\Contracts\LoggerContract;
+use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Middleware as PlentyMiddleware;
 
 /**
@@ -76,13 +79,18 @@ class Middleware extends PlentyMiddleware
         }
 
         if (!$this->searchService->aliveTest()) {
-            $this->getLoggerObject()->error('Findologic search is not available!');
-
+            $this->getLoggerObject()->alert(
+                'Findologic search is not available! Using Plentymarkets search/navigation for this request.'
+            );
             return;
         }
 
         $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
         $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
+
+        if (!$this->isSearchPage && !$this->activeOnCatPage) {
+            return;
+        }
 
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
@@ -108,20 +116,34 @@ class Middleware extends PlentyMiddleware
             0
         );
 
-        if ($this->isSearchPage || $this->activeOnCatPage) {
-            $this->eventDispatcher->listen(
-                'Ceres.Search.Options',
-                function (ExternalSearchOptions $searchOptions) use ($request) {
-                    $this->searchService->handleSearchOptions($request, $searchOptions);
-                }
-            );
+        $this->eventDispatcher->listen(
+            'IO.ctx.search',
+            function (TemplateContainer $templateContainer, $templateData = []) {
+                $templateContainer->setContext(FindologicItemSearchContext::class);
+                return false;
+            }
+        );
 
-            $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
-                if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
-                    $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
-                }
-            }, 0);
-        }
+        $this->eventDispatcher->listen(
+            'IO.ctx.category.item',
+            function (TemplateContainer $templateContainer, $templateData = []) {
+                $templateContainer->setContext(FindologicCategoryItemContext::class);
+                return false;
+            }
+        );
+
+        $this->eventDispatcher->listen(
+            'Ceres.Search.Options',
+            function (ExternalSearchOptions $searchOptions) use ($request) {
+                $this->searchService->handleSearchOptions($request, $searchOptions);
+            }
+        );
+
+        $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
+            if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
+                $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
+            }
+        }, 0);
 
         $this->eventDispatcher->listen(
             'Ceres.Search.Query',
