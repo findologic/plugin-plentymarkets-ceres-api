@@ -198,7 +198,6 @@ class SearchService implements SearchServiceInterface
                 $total
             );
         }
-
     }
 
     /**
