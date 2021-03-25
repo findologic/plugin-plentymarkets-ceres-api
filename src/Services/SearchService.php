@@ -189,7 +189,16 @@ class SearchService implements SearchServiceInterface
             $total = $response->getData(Response::DATA_RESULTS)['count'];
         }
 
-        $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
+        // Available since Ceres 5.0.26
+        if (method_exists(ExternalSearch::class, 'setDocuments')) {
+            $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
+        } else {
+            $externalSearch->setResults(
+                $response->getVariationIds(),
+                $total
+            );
+        }
+
     }
 
     /**
