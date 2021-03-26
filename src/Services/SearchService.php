@@ -17,6 +17,7 @@ use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Services\CategoryService;
@@ -28,7 +29,7 @@ use IO\Services\ItemSearch\Services\ItemSearchService;
  */
 class SearchService implements SearchServiceInterface
 {
-    use \Plenty\Plugin\Log\Loggable;
+    use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
 
