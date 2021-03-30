@@ -2,6 +2,7 @@
 
 namespace Findologic\Services;
 
+use Exception;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -190,10 +191,10 @@ class SearchService implements SearchServiceInterface
             $total = $response->getData(Response::DATA_RESULTS)['count'];
         }
 
-        // Available since Ceres 5.0.26
-        if (method_exists(ExternalSearch::class, 'setDocuments')) {
+        try {
+            // Available since Ceres 5.0.26
             $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
-        } else {
+        } catch(Exception $e) {
             $externalSearch->setResults(
                 $response->getVariationIds(),
                 $total
@@ -217,7 +218,7 @@ class SearchService implements SearchServiceInterface
             } else {
                 $this->doSearch($request, $externalSearch);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);
         }
@@ -232,7 +233,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Exception while handling search options.');
             $this->logger->logException($e);
         }
