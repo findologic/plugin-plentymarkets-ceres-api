@@ -192,7 +192,7 @@ class SearchService implements SearchServiceInterface
         }
 
         try {
-            // Available since Ceres 5.0.26
+            // Available from Ceres 5.0.26
             $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
         } catch(Exception $e) {
             $externalSearch->setResults(
