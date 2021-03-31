@@ -40,7 +40,8 @@ class FallbackSearchService implements SearchServiceInterface
     /**
      * @inheritdoc
      */
-    public function handleSearchQuery(Request $request, ExternalSearch $externalSearch) {
+    public function handleSearchQuery(Request $request, ExternalSearch $externalSearch)
+    {
         $searchResults = $this->getSearchResults($request, $externalSearch);
         $response = $this->createResponseFromSearchResult($searchResults);
 

@@ -194,7 +194,7 @@ class SearchService implements SearchServiceInterface
         try {
             // Available from Ceres 5.0.26
             $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $externalSearch->setResults(
                 $response->getVariationIds(),
                 $total
