@@ -1261,7 +1261,7 @@ class SearchServiceTest extends TestCase
             ->getMock();
         $externalSearchServiceMock->expects($this->once())
             ->method('setDocuments')
-            ->willThrowException(new Exception('Method setDocuments doesn\t exist'));
+            ->willThrowException(new Exception('Method setDocuments doesn\'t exist'));
         $externalSearchServiceMock->expects($this->once())
             ->method('setResults')
             ->with(null, $plentyResultCount);
