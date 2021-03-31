@@ -1191,6 +1191,11 @@ class SearchServiceTest extends TestCase
             ->method('get')
             ->willReturn(true);
 
+        $mockedFallbackSearchResult = json_decode($this->getMockResponse('fallbackSearchResult.json'), true);
+        $this->fallbackSearchService->expects($this->once())
+            ->method('getSearchResults')
+            ->willReturn($mockedFallbackSearchResult);
+
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1199,7 +1204,7 @@ class SearchServiceTest extends TestCase
             ->willReturn(['count' => $plentyResultCount]);
 
         $this->fallbackSearchService->expects($this->once())
-            ->method('handleSearchQuery')
+            ->method('createResponseFromSearchResult')
             ->willReturn($responseMock);
 
         $requestMock = $this->getMockBuilder(HttpRequest::class)
@@ -1210,8 +1215,8 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $externalSearchServiceMock->expects($this->once())
-            ->method('setResults')
-            ->with(null, $plentyResultCount);
+            ->method('setDocuments')
+            ->with($mockedFallbackSearchResult['itemList']['documents'], $plentyResultCount);
 
         $this->requestBuilder->expects($this->once())->method('build')
             ->willReturn(new Request());
