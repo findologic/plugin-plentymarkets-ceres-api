@@ -1228,54 +1228,6 @@ class SearchServiceTest extends TestCase
         $searchService->doNavigation($requestMock, $externalSearchServiceMock);
     }
 
-    public function testExternalSearchUsesSetResultsIfSetDocumentsDoesNotExist()
-    {
-        $plentyResultCount = 100;
-
-        $this->configRepository->expects($this->once())
-            ->method('get')
-            ->willReturn(true);
-
-        $mockedFallbackSearchResult = json_decode($this->getMockResponse('fallbackSearchResult.json'), true);
-        $this->fallbackSearchService->expects($this->once())
-            ->method('getSearchResults')
-            ->willReturn($mockedFallbackSearchResult);
-
-        $responseMock = $this->getMockBuilder(Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $responseMock->expects($this->any())
-            ->method('getData')
-            ->willReturn(['count' => $plentyResultCount]);
-
-        $this->fallbackSearchService->expects($this->once())
-            ->method('createResponseFromSearchResult')
-            ->willReturn($responseMock);
-
-        $requestMock = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $externalSearchServiceMock->expects($this->once())
-            ->method('setDocuments')
-            ->willThrowException(new Exception('Method setDocuments doesn\t exist'));
-        $externalSearchServiceMock->expects($this->once())
-            ->method('setResults')
-            ->with(null, $plentyResultCount);
-
-        $this->requestBuilder->expects($this->once())->method('build')
-            ->willReturn(new Request());
-        $this->client->expects($this->once())
-            ->method('call')
-            ->willReturn($this->getMockResponse('someResultsWithFilters.xml'));
-
-        $searchService = $this->getSearchServiceMock();
-        $searchService->doNavigation($requestMock, $externalSearchServiceMock);
-    }
-
     /**
      * @param string $shopUrl
      * @param string $defaultLanguage
