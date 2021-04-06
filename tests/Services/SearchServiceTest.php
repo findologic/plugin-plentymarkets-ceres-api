@@ -1227,7 +1227,7 @@ class SearchServiceTest extends TestCase
         $searchService = $this->getSearchServiceMock();
         $searchService->doNavigation($requestMock, $externalSearchServiceMock);
     }
-    
+
     /**
      * @param string $shopUrl
      * @param string $defaultLanguage
