@@ -12,13 +12,11 @@ use Findologic\Exception\AliveException;
 use IO\Helper\ComponentContainer;
 use IO\Helper\ResourceContainer;
 use IO\Helper\TemplateContainer;
-use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Http\Response;
 use Findologic\Components\PluginConfig;
 use Findologic\Services\SearchService;
 use Plenty\Plugin\Events\Dispatcher;
-use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Middleware as PlentyMiddleware;
 
 /**
@@ -27,13 +25,6 @@ use Plenty\Plugin\Middleware as PlentyMiddleware;
  */
 class Middleware extends PlentyMiddleware
 {
-    use Loggable;
-
-    /**
-     * @var LoggerContract
-     */
-    private $logger;
-
     /**
      * @var bool
      */
@@ -74,14 +65,7 @@ class Middleware extends PlentyMiddleware
      */
     public function before(Request $request)
     {
-        if (!$this->pluginConfig->getShopKey()) {
-            return;
-        }
-
-        if (!$this->searchService->aliveTest()) {
-            $this->getLoggerObject()->alert(
-                'Findologic search is not available! Using Plentymarkets search/navigation for this request.'
-            );
+        if (!$this->pluginConfig->getShopKey() || !$this->searchService->aliveTest()) {
             return;
         }
 
@@ -161,17 +145,5 @@ class Middleware extends PlentyMiddleware
     public function after(Request $request, Response $response): Response
     {
         return $response;
-    }
-
-    /**
-     * @return LoggerContract
-     */
-    protected function getLoggerObject()
-    {
-        if (!$this->logger) {
-            $this->logger = $this->getLogger(Plugin::PLUGIN_IDENTIFIER);
-        }
-
-        return $this->logger;
     }
 }
