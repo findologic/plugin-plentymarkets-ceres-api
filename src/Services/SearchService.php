@@ -78,7 +78,7 @@ class SearchService implements SearchServiceInterface
     protected $configRepository;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $aliveTestResult;
 
