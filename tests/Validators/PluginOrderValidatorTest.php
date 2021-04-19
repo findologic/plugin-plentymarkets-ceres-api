@@ -27,7 +27,7 @@ class PluginOrderValidatorTest extends TestCase
      */
     private $pluginRepositoryMock;
 
-    public function setup()
+    public function setUp()
     {
         /** @var PluginSetRepositoryContract|MockObject $pluginSetRepositoryMock */
         $this->pluginSetRepositoryMock = $this->getMockBuilder(PluginSetRepositoryContract::class)
@@ -84,7 +84,7 @@ class PluginOrderValidatorTest extends TestCase
     {
         return [
             'It is valid when IO is loaded before Findologic in the current plugin set' => [
-                [
+                'ioPluginSetEntriesData' => [
                     [
                         'id' => 1,
                         'pluginId' => "15",
@@ -119,7 +119,7 @@ class PluginOrderValidatorTest extends TestCase
                         'commit' => null,
                     ],
                 ],
-                [
+                'findologicPluginSetEntriesData' => [
                     [
                         'id' => 1,
                         'pluginId' => "16",
@@ -143,10 +143,10 @@ class PluginOrderValidatorTest extends TestCase
                         'commit' => null,
                     ]
                 ],
-                true
+                'expectedResult' => true
             ],
             'It is not valid when IO is loaded after Findologic in the current plugin set' => [
-                [
+                'ioPluginSetEntriesData' => [
                     [
                         'id' => 2,
                         'pluginId' => "15",
@@ -159,7 +159,7 @@ class PluginOrderValidatorTest extends TestCase
                         'commit' => null,
                     ],
                 ],
-                [
+                'findologicPluginSetEntriesData' => [
                     [
                         'id' => 2,
                         'pluginId' => "18",
@@ -168,14 +168,14 @@ class PluginOrderValidatorTest extends TestCase
                         'updatedAt' => "2021-03-15T12:27:35+01:00",
                         'deleted_at' => null,
                         'branchName' => null,
-                        'position' => "1",
+                        'position' => "0",
                         'commit' => null,
                     ]
                 ],
-                false
+                'expectedResult' => false
             ],
             'It is not valid when IO is not in the current plugin set' => [
-                [
+                'ioPluginSetEntriesData' => [
                     [
                         'id' => 2,
                         'pluginId' => "15",
@@ -188,7 +188,7 @@ class PluginOrderValidatorTest extends TestCase
                         'commit' => null,
                     ],
                 ],
-                [
+                'findologicPluginSetEntriesData' => [
                     [
                         'id' => 2,
                         'pluginId' => "18",
@@ -201,10 +201,10 @@ class PluginOrderValidatorTest extends TestCase
                         'commit' => null,
                     ]
                 ],
-                false
+                'expectedResult' => false
             ],
             'It is not valid when Findologic is not in the current plugin set' => [
-                [
+                'ioPluginSetEntriesData' => [
                     [
                         'id' => 2,
                         'pluginId' => "15",
@@ -217,7 +217,7 @@ class PluginOrderValidatorTest extends TestCase
                         'commit' => null,
                     ],
                 ],
-                [
+                'findologicPluginSetEntriesData' => [
                     [
                         'id' => 2,
                         'pluginId' => "18",
@@ -230,7 +230,36 @@ class PluginOrderValidatorTest extends TestCase
                         'commit' => null,
                     ]
                 ],
-                false
+                'expectedResult' => false
+            ],
+            'It is valid when Findologic has the same priority as IO' => [
+                'ioPluginSetEntriesData' => [
+                    [
+                        'id' => 2,
+                        'pluginId' => "15",
+                        'pluginSetId' => "1",
+                        'createdAt' => "2021-03-10T17:52:07+01:00",
+                        'updatedAt' => "2021-03-15T12:27:35+01:00",
+                        'deleted_at' => null,
+                        'branchName' => null,
+                        'position' => "0",
+                        'commit' => null,
+                    ],
+                ],
+                'findologicPluginSetEntriesData' => [
+                    [
+                        'id' => 2,
+                        'pluginId' => "18",
+                        'pluginSetId' => "1",
+                        'createdAt' => "2021-03-10T17:52:07+01:00",
+                        'updatedAt' => "2021-03-15T12:27:35+01:00",
+                        'deleted_at' => null,
+                        'branchName' => null,
+                        'position' => "0",
+                        'commit' => null,
+                    ]
+                ],
+                'expectedResult' => true
             ]
         ];
     }

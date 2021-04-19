@@ -31,11 +31,11 @@ class PluginOrderValidator implements ValidatorInterface
             }
         }
 
-        if ($findologicPosition === null || $ioPosition === null || $findologicPosition <= $ioPosition) {
+        if ($findologicPosition === null || $ioPosition === null) {
             return false;
         }
 
-        return true;
+        return $findologicPosition >= $ioPosition;
     }
 
     /**
