@@ -1,52 +1,39 @@
-// @ts-nocheck
-import Constants from '../shared/constants';
-import Component from 'vue-class-component';
-import { Vue } from 'vue-property-decorator';
+import Constants from './constants';
+import { Facet } from './interfaces';
 
-@Component
-export default class Url extends Vue {
+export default class UrlBuilder {
     /**
-     * Plentymarkets standart method for parsing params from string into object
-     *
-     * @public
-     * @param {string} urlParams
-     * @returns {Object}
+     * Plentymarkets standard method for parsing params from string into object
      */
-    getUrlParams(urlParams): UrlParams {
-        if (urlParams) {
-            let tokens;
-            const params = {};
-            const regex = /[?&]?([^=]+)=([^&]*)/g;
-
-            urlParams = urlParams.split("+").join(" ");
-
-            // eslint-disable-next-line
-            while (tokens = regex.exec(urlParams)) {
-                params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
-            }
-
-            return params;
+    public getUrlParams(urlParams?: string|null): UrlParams {
+        if (!urlParams) {
+            return {} as UrlParams;
         }
 
-        return {};
+        let tokens;
+        const params = {} as UrlParams;
+        const regex = /[?&]?([^=]+)=([^&]*)/g;
+
+        urlParams = urlParams.split('+').join(' ');
+        while ((tokens = regex.exec(urlParams)) !== null) {
+            params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+        }
+
+        return params;
     }
 
     /**
      * Findologic method for parsing url params into a parameter map from current url
      * Taken from direct integration flUtils class
-     *
-     * @returns {{}} The parameter map
      */
-    getSearchParams() {
+    getSearchParams(): UrlParams {
         let queryString = document.location.search;
-        const requestParameters = {};
+        const requestParameters = {} as UrlParams;
 
-        /*
-         * Remove any leading ? as it is not part of the query string but will be passed due to the way we use
-         * parseQueryString
-         */
+        // Remove any leading ? as it is not part of the query string but will be passed due to
+        // the way we use parseQueryString.
         if (typeof queryString !== 'undefined') {
-            queryString = queryString.replace(/^\?/, "");
+            queryString = queryString.replace(/^\?/, '');
         } else {
             queryString = '';
         }
@@ -57,12 +44,11 @@ export default class Url extends Vue {
             .split('&');
 
         const sal = strArr.length;
-        const fixStr = function(queryString) {
+        const fixStr = function(queryString: string) {
             return decodeURIComponent(queryString.replace(/\+/g, '%20'));
         }
 
-        let i, j, ct, p, lastObj, obj, undef, chr, tmp, key, value,
-          postLeftBracketPos, keys, keysLen;
+        let i, j, ct, p, lastObj, obj, chr, tmp, key, value, postLeftBracketPos, keys, keysLen;
 
         for (i = 0; i < sal; i++) {
             tmp = strArr[i].split('=');
@@ -107,20 +93,23 @@ export default class Url extends Vue {
                     }
                 }
 
-                obj = requestParameters;
+                // Taken from direct integration flUtils class
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                obj = requestParameters as any;
                 for (j = 0, keysLen = keys.length; j < keysLen; j++) {
                     key = keys[j].replace(/^['"]/, '')
-                      .replace(/['"]$/, '');
+                        .replace(/['"]$/, '');
                     lastObj = obj;
                     if ((key !== '' && key !== ' ') || j === 0) {
-                        if (obj[key] === undef) {
+                        if (typeof obj[key] === 'undefined') {
                             obj[key] = {};
                         }
+
                         obj = obj[key];
                     } else { // To insert new dimension
                         ct = -1;
                         for (p in obj) {
-                            if (obj.prototype.hasOwnProperty.call(p)) {
+                            if (Object.prototype.hasOwnProperty.call(obj, p)) {
                                 if (+p > ct && p.match(/^\d+$/g)) {
                                     ct = +p;
                                 }
@@ -142,45 +131,48 @@ export default class Url extends Vue {
 
     /**
      * Update url with selected filters
-     *
-     * @param {string} facetId
-     * @param {string|array} facetValue
      */
-    updateSelectedFilters(facetId, facetValue) {
+    updateSelectedFilters(facet: Facet, facetId: string, facetValue: string|PriceFacetValue): void {
         const params = this.getSearchParams();
 
         if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
             params[Constants.PARAMETER_ATTRIBUTES] = {};
         }
 
-        const attributes = params[Constants.PARAMETER_ATTRIBUTES];
+        const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
 
-        if (facetId === 'price' || this.facet.findologicFilterType === 'range-slider') {
+        if (facetId === 'price' || facet.findologicFilterType === 'range-slider') {
+            const facetVal = facetValue as PriceFacetValue;
+
             attributes[facetId] = {
-                min: facetValue.min,
-                max: facetValue.max
+                min: facetVal.min,
+                max: facetVal.max
             };
-        } else if (this.facet.select === 'single') {
-            if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetValue)) {
-                if (this.facet.id === 'cat' && facetValue.includes('_') ) {
+        } else if (facet.select === 'single') {
+            const facetVal = facetValue as string;
+
+            if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetVal)) {
+                if (facet.id === 'cat' && facetVal.includes('_') ) {
                     // Subcategory deselection
-                    attributes[facetId] = [facetValue.split('_')[0]];
+                    attributes[facetId] = [facetVal.split('_')[0]];
                 } else {
-                    const index = Object.values(attributes[facetId]).indexOf(facetValue);
+                    const index = Object.values(attributes[facetId]).indexOf(facetVal);
                     delete attributes[facetId][index];
                 }
             } else {
-                attributes[facetId] = [facetValue];
+                attributes[facetId] = [facetVal];
             }
         } else {
+            const facetVal = facetValue as string;
+
             if (!(facetId in attributes)) {
-                attributes[facetId] = [facetValue];
+                attributes[facetId] = [facetVal];
             } else {
-                const valueId = this.getKeyByValue(attributes[facetId], facetValue);
+                const valueId = this.getKeyByValue(attributes[facetId], facetVal);
 
                 if (valueId === -1) {
                     const index = Object.keys(attributes[facetId]).length;
-                    attributes[facetId][index] = facetValue;
+                    attributes[facetId][index] = facetVal;
                 } else {
                     delete attributes[facetId][valueId];
                 }
@@ -195,23 +187,19 @@ export default class Url extends Vue {
 
     /**
      * Check if value is selected
-     *
-     * @param {string} facetId
-     * @param {string} facetValue
-     * @returns {boolean}
      */
-    isValueSelected(facetId, facetValue) {
+    isValueSelected(facet: Facet, facetId: string, facetValue: string): boolean {
         const params = this.getSearchParams();
 
         if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
             return false;
         }
 
-        const attributes = params[Constants.PARAMETER_ATTRIBUTES];
+        const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
 
         if (!(facetId in attributes)) {
             return false;
-        } else if (facetId !== 'cat' && this.facet.select === 'single' && attributes[facetId] === facetValue) {
+        } else if (facetId !== 'cat' && facet.select === 'single' && attributes[facetId] === facetValue) {
             return true;
         } else if (facetId === 'cat') {
             return this.getKeyBySuffix(attributes[facetId], facetValue) !== -1;
@@ -223,21 +211,23 @@ export default class Url extends Vue {
     }
 
     /**
-     * Get the list of selected filters from url
-     *
-     * @returns {Object}
+     * Get the list of selected filters from url.
      */
-    getSelectedFilters() {
-        const selectedFilters = [];
+    getSelectedFilters(): Facet[] {
+        const selectedFilters = [] as Facet[];
         const params = this.getSearchParams();
 
         if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
             return selectedFilters;
         }
 
-        const attributes = params[Constants.PARAMETER_ATTRIBUTES];
+        const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
 
         for (const filter in attributes) {
+            if (!Object.prototype.hasOwnProperty.call(attributes, filter)) {
+                continue;
+            }
+
             if (filter === 'wizard') {
                 continue;
             }
@@ -254,11 +244,16 @@ export default class Url extends Vue {
             if (typeof attributes[filter] === 'object') {
                 const values = attributes[filter];
                 for (const value in values) {
+                    if (!Object.prototype.hasOwnProperty.call(values, value)) {
+                        continue;
+                    }
+
                     selectedFilters.push({
                         id: filter,
                         name: values[value].replace(/_/g, " > ")
                     });
                 }
+
                 continue;
             }
 
@@ -271,11 +266,7 @@ export default class Url extends Vue {
         return selectedFilters;
     }
 
-    /**
-     * @param attributeValue
-     * @returns {boolean}
-     */
-    isRangeSliderFilter(attributeValue) {
+    isRangeSliderFilter(attributeValue: Attribute): boolean {
         return (typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined')
     }
 
@@ -285,19 +276,23 @@ export default class Url extends Vue {
      * @param {string} facetId
      * @param {string} facetValue
      */
-    removeSelectedFilter(facetId, facetValue) {
+    removeSelectedFilter(facetId: string, facetValue: string): void {
         facetValue = facetValue.replace(' > ', '_');
         const params = this.getSearchParams();
-        const attributes = params[Constants.PARAMETER_ATTRIBUTES];
+        const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
 
         if (typeof attributes[facetId] !== 'object'
-          || facetId === 'price'
-          || this.isRangeSliderFilter(attributes[facetId])
+            || facetId === 'price'
+            || this.isRangeSliderFilter(attributes[facetId])
         ) {
             delete attributes[facetId];
         } else {
             const values = attributes[facetId];
             for (const value in values) {
+                if (!Object.prototype.hasOwnProperty.call(values, value)) {
+                    continue;
+                }
+
                 if (values[value] === facetValue) {
                     delete attributes[facetId][value];
                 }
@@ -311,19 +306,16 @@ export default class Url extends Vue {
     }
 
     /**
-     * Get selected filter value from url
-     *
-     * @param {string} facetId
-     * @returns {Object|null}
+     * Get selected filter value from url.
      */
-    getSelectedFilterValue(facetId) {
+    getSelectedFilterValue(facetId: string): Facet|null {
         const params = this.getSearchParams();
 
         if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
             return null;
         }
 
-        const attributes = params[Constants.PARAMETER_ATTRIBUTES];
+        const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
 
         if (!(facetId in attributes)) {
             return null;
@@ -333,12 +325,9 @@ export default class Url extends Vue {
     }
 
     /**
-     * Get simple url parameter value
-     *
-     * @param {string} key
-     * @returns {string|null}
+     * Get simple url parameter value.
      */
-    getUrlParamValue(key) {
+    getUrlParamValue(key: string): string|number|object|null|undefined {
         const params = this.getSearchParams();
 
         if (!(key in params)) {
@@ -349,12 +338,9 @@ export default class Url extends Vue {
     }
 
     /**
-     * Get simple url parameter value
-     *
-     * @param {string} key
-     * @param {string|array} value
+     * Get simple url parameter value.
      */
-    setUrlParamValue(key, value) {
+    setUrlParamValue(key: string, value: string|string[]|number|number[]) {
         const params = this.getSearchParams();
 
         params[key] = value;
@@ -364,14 +350,11 @@ export default class Url extends Vue {
 
     /**
      * Set multiple url parameter values
-     *
-     * @public
-     * @param {array} keyValueArray
      */
-    setUrlParamValues(keyValueArray) {
+    setUrlParamValues(keyValueArray: UrlParameterValue[]) {
         const params = this.getSearchParams();
 
-        keyValueArray.forEach(function (keyValueObject) {
+        keyValueArray.forEach(function (keyValueObject: UrlParameterValue) {
             params[keyValueObject.key] = keyValueObject.value;
         });
 
@@ -379,16 +362,12 @@ export default class Url extends Vue {
     }
 
     /**
-     * Get key from object by value
-     *
-     * @param {Object} object
-     * @param {string} value
-     * @returns {string|number}
+     * Get key from object by value.
      */
-    getKeyByValue(object, value) {
-        for (const prop in object) {
-            if (Object.prototype.hasOwnProperty.call(prop)) {
-                if (object[prop] === value) {
+    getKeyByValue(obj: Attribute, value: string): string|number {
+        for (const prop in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+                if (obj[prop] === value) {
                     return prop;
                 }
             }
@@ -399,15 +378,13 @@ export default class Url extends Vue {
 
     /**
      * Get key from object by value suffix
-     *
-     * @param {Object} object
-     * @param {string} value
-     * @returns {string|number}
      */
-    getKeyBySuffix(object, value) {
+    getKeyBySuffix(object: Attribute, value: string): string|number {
         for (const prop in object) {
-            if (object.prototype.hasOwnProperty.call(prop)) {
-                if (object[prop].endsWith(value)) {
+            if (Object.prototype.hasOwnProperty.call(object, prop)) {
+                const val = object[prop] as string;
+
+                if (val.endsWith(value)) {
                     return prop;
                 }
             }
@@ -427,6 +404,26 @@ export default class Url extends Vue {
     }
 }
 
-interface UrlParams {
-    sorting: undefined|null|string;
+export interface UrlParams {
+    sorting?: string;
+    [key: string]: string|number|object|undefined;
+}
+
+export interface UrlParameterValue {
+    key: string;
+    value: string|number;
+}
+
+type Attributes = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key in keyof Attribute]: any
+}
+
+export interface Attribute {
+    [key: string]: string|number|object|undefined;
+}
+
+export interface PriceFacetValue {
+    min?: number;
+    max?: number;
 }

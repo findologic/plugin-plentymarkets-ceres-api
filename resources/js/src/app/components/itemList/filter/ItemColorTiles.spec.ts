@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { ColorFacet } from '../../../interfaces';
+import { ColorFacet } from '../../../shared/interfaces';
 import ItemColorTiles from './ItemColorTiles.vue';
 
 describe('ItemColorTiles', () => {

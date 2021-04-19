@@ -14,7 +14,7 @@
       <span
         v-else
         class="fl-dropdown-label"
-      >{{ trans("Findologic::Template.pleaseSelect") }}</span>
+      >{{ translate("Findologic::Template.pleaseSelect") }}</span>
       <ul
         v-show="isOpen"
         class="fl-dropdown-content form-check"
@@ -83,47 +83,53 @@
 </template>
 
 <script lang="ts">
-
-import Component from 'vue-class-component';
-import { Mixins } from 'vue-property-decorator';
 import BaseDropdown from '../../../mixins/baseDropdown';
-import { FacetValue } from '../../../interfaces';
+import { FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
+import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import UrlBuilder from '../../../shared/urlBuilder';
 
-@Component
-export default class ItemCategoryDropdown extends Mixins<BaseDropdown>(
+interface CategoryDropdownProps extends TemplateOverridable, FacetAware { }
+
+export default defineComponent({
+  mixins: [
     BaseDropdown
-) {
-  get dropdownLabel() {
-    const selectedFilters = this.getSelectedFilters();
-    let label = null;
+  ],
+  setup(props: CategoryDropdownProps, {root}) {
+    root.$options.template = props.template || "#vue-item-dropdown";
 
-    for (let i = 0; i < selectedFilters.length; i++) {
-      const facet = selectedFilters[i];
+    const urlBuilder = new UrlBuilder();
 
-      if (facet.id === this.facet.id) {
-        label = facet.name;
-        break;
+    const translate = (key: string) => {
+      return window.ceresTranslate(key);
+    }
+    const buildDropdownLabel = () => {
+      const selectedFilters = urlBuilder.getSelectedFilters();
+
+      for (let i = 0; i < selectedFilters.length; i++) {
+        const facet = selectedFilters[i];
+
+        if (facet.id === props.facet.id) {
+          return facet.name;
+        }
       }
+
+      return '';
+    }
+    const getSubCategoryName = (parentCategory: FacetValue, subCategory: FacetValue): string => {
+      return parentCategory.name + '_' + subCategory.name;
     }
 
-    return label;
-  }
+    const dropdownLabel = ref('');
 
-  getSubCategoryName(parentCategory: FacetValue, subCategory: FacetValue) {
-    return parentCategory.name + '_' + subCategory.name;
-  }
+    onMounted(() => {
+      dropdownLabel.value = buildDropdownLabel() as string
+    });
 
-  trans(translation: string) {
-    // @ts-ignore
-    return window.ceresTranslate(translation);
-    // // TODO: Use Vue translation.
-    // if (translation) {
-    //   return 'Please select';
-    // }
+    return {
+      translate,
+      dropdownLabel,
+      getSubCategoryName
+    }
   }
-}
+})
 </script>
-
-<style scoped>
-
-</style>

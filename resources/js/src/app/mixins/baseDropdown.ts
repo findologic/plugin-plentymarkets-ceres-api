@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Facet } from '../interfaces';
+import { Facet } from '../shared/interfaces';
 import { Mixins } from 'vue-property-decorator';
 import Url from './url';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 import Url from '../../mixins/url';
-import Constants from '../../constants';
+import Constants from '../../shared/constants';
 import { Component, Mixins, Prop } from 'vue-property-decorator';
 import Vue from 'vue';
 

@@ -1,5 +1,5 @@
 import Url from "../../mixins/url";
-import Constants from '../../constants';
+import Constants from '../../shared/constants';
 import Vue from "vue";
 
 Vue.component("items-per-page", {

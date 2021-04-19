@@ -44,7 +44,7 @@ import Url from "../../../mixins/url";
 import { Mixins } from "vue-property-decorator";
 import Component from "vue-class-component";
 import Vue from 'vue';
-import { ColorFacet } from '../../../interfaces';
+import { ColorFacet } from '../../../shared/interfaces';
 
 const ItemColorTileProps = Vue.extend({
   props: {

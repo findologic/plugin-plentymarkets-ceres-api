@@ -14,7 +14,11 @@
     "start-https": "webpack serve --https --key private.key --cert private.pem --disable-host-check --hot --config webpack.dev.js",
     "test": "jest"
   },
+  "files": [
+    "resources/js/types"
+  ],
   "dependencies": {
+    "@vue/composition-api": "^1.0.0-rc.5",
     "nouislider": "^14.6.1",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
