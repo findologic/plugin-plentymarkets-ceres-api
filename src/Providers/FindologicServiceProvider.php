@@ -3,14 +3,10 @@
 namespace Findologic\Providers;
 
 use Findologic\Components\PluginConfig;
-use Findologic\Contexts\FindologicCategoryItemContext;
-use Findologic\Contexts\FindologicItemSearchContext;
 use Findologic\Services\SearchService;
-use IO\Helper\TemplateContainer;
-use Plenty\Plugin\Events\Dispatcher;
+use Findologic\Validators\PluginConfigurationValidator;
 use Plenty\Plugin\ServiceProvider;
 use Findologic\Middlewares\Middleware;
-use Plenty\Plugin\Templates\Twig;
 
 /**
  * Class FindologicServiceProvider
@@ -22,21 +18,20 @@ class FindologicServiceProvider extends ServiceProvider
     {
         $this->getApplication()->singleton(SearchService::class);
         $this->getApplication()->singleton(PluginConfig::class);
+        $this->getApplication()->singleton(PluginConfigurationValidator::class);
+
+        if (!$this->validatePluginConfiguration()) {
+            return;
+        }
+
         $this->addGlobalMiddleware(Middleware::class);
     }
 
-    public function boot(Twig $twig, Dispatcher $eventDispatcher)
+    private function validatePluginConfiguration(): bool
     {
-        $eventDispatcher->listen('IO.ctx.search', function (TemplateContainer $templateContainer, $templateData = []) {
-            $templateContainer->setContext(FindologicItemSearchContext::class);
-            return false;
-        });
-        $eventDispatcher->listen(
-            'IO.ctx.category.item',
-            function (TemplateContainer $templateContainer, $templateData = []) {
-                $templateContainer->setContext(FindologicCategoryItemContext::class);
-                return false;
-            }
-        );
+        /** @var PluginConfigurationValidator $validator */
+        $validator = $this->getApplication()->make(PluginConfigurationValidator::class);
+
+        return $validator->validate();
     }
 }
