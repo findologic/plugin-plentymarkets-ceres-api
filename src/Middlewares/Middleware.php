@@ -9,6 +9,7 @@ use Findologic\Constants\Plugin;
 use Findologic\Contexts\FindologicCategoryItemContext;
 use Findologic\Contexts\FindologicItemSearchContext;
 use Findologic\Exception\AliveException;
+use Findologic\Validators\PluginConfigurationValidator;
 use IO\Helper\ComponentContainer;
 use IO\Helper\ResourceContainer;
 use IO\Helper\TemplateContainer;
@@ -65,6 +66,10 @@ class Middleware extends PlentyMiddleware
      */
     public function before(Request $request)
     {
+        if (!$this->validatePluginConfiguration()) {
+            return;
+        }
+
         if (!$this->pluginConfig->getShopKey() || !$this->searchService->aliveTest()) {
             return;
         }
@@ -135,6 +140,14 @@ class Middleware extends PlentyMiddleware
                 $this->searchService->handleSearchQuery($request, $externalSearch);
             }
         );
+    }
+
+    private function validatePluginConfiguration(): bool
+    {
+        /** @var PluginConfigurationValidator $validator */
+        $validator = pluginApp(PluginConfigurationValidator::class);
+
+        return $validator->validate();
     }
 
     /**

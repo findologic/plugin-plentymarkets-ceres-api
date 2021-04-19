@@ -20,18 +20,6 @@ class FindologicServiceProvider extends ServiceProvider
         $this->getApplication()->singleton(PluginConfig::class);
         $this->getApplication()->singleton(PluginConfigurationValidator::class);
 
-        if (!$this->validatePluginConfiguration()) {
-            return;
-        }
-
         $this->addGlobalMiddleware(Middleware::class);
-    }
-
-    private function validatePluginConfiguration(): bool
-    {
-        /** @var PluginConfigurationValidator $validator */
-        $validator = $this->getApplication()->make(PluginConfigurationValidator::class);
-
-        return $validator->validate();
     }
 }
