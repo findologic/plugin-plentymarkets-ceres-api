@@ -4,6 +4,7 @@ namespace Findologic\Tests\Middlewares;
 
 use Findologic\Constants\Plugin;
 use Findologic\Services\SearchService;
+use Findologic\Validators\PluginConfigurationValidator;
 use IO\Services\SessionStorageService;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
@@ -41,6 +42,11 @@ class MiddlewareTest extends TestCase
     protected $pluginConfig;
 
     /**
+     * @var PluginConfigurationValidator|MockObject
+     */
+    protected $pluginConfigurationValidatorMock;
+
+    /**
      * @var Middleware|MockObject
      */
     protected $middleware;
@@ -63,6 +69,15 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+        $this->pluginConfigurationValidatorMock = $this->getMockBuilder(PluginConfigurationValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pluginConfigurationValidatorMock->expects($this->any())
+            ->method('validate')
+            ->willReturn(true);
+
+        global $classInstances;
+        $classInstances[PluginConfigurationValidator::class] = $this->pluginConfigurationValidatorMock;
     }
 
     public function testBootShopKeyNotSet()
