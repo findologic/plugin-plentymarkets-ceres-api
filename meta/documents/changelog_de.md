@@ -1,5 +1,12 @@
 # Release Notes für Findologic
 
+## 3.5.2 (2020-04-19)
+
+### Behoben
+
+* [PLENTY-332] Ein Fehler wurde behoben, wodurch sich das Findologic Plugin in einem inaktiven Zustand
+ befand, wenn IO und Findologic derselben Priorität zugeordnet wurden.
+
 ## 3.5.1 (2021-04-19)
 
 ### Geändert
