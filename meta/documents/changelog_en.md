@@ -1,5 +1,16 @@
 # Release Notes for Findologic
 
+## 3.5.1 (2021-04-19)
+
+### Changed
+
+* [PLENTY-307] Filters that have at least one selected filter, will now receive a `fl-active` CSS class.
+
+### Fixed
+
+* [PLENTY-314/PLENTY-324] Fixed a bug that caused an error, when a shop had multiple languages and only some of
+  them had a shopkey configured.
+
 ## 3.5.0 (2021-03-08)
 
 ### Changed
