@@ -7,7 +7,7 @@
                     <img :src="value.imageUrl" @error="handleImageError($event)" :width="value.imageUrl ? '80px' : ''"/>
                     <span v-text="value.name"></span>
                 </label>
-                <div class="filter-badge" v-if="value.count" v-text="value.count"></div>
+                <div class="filter-badge" v-if="!value.selected" v-text="value.count"></div>
             </div>
         </div>
         <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
