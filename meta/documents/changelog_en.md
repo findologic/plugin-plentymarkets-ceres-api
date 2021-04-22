@@ -1,5 +1,30 @@
 # Release Notes for Findologic
 
+## 3.5.3 (2020-04-22)
+
+### Fixed
+
+* [PLENTY-332] Fixed a bug that caused the Findologic plugin no longer to properly
+  handle search/navigation requests, when the IO plugin had a higher priority than the Findologic plugin.
+
+## 3.5.2 (2020-04-19)
+
+### Fixed
+
+* [PLENTY-332] Fixed a bug that caused the Findologic to be in an inactive State, when
+ the IO and the Findologic plugin have been assigned the same priority.
+
+## 3.5.1 (2021-04-19)
+
+### Changed
+
+* [PLENTY-307] Filters that have at least one selected filter, will now receive a `fl-active` CSS class.
+
+### Fixed
+
+* [PLENTY-314/PLENTY-324] Fixed a bug that caused an error, when a shop had multiple languages and only some of
+  them had a shopkey configured.
+
 ## 3.5.0 (2021-03-08)
 
 ### Changed

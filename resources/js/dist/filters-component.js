@@ -420,6 +420,13 @@ Vue.component("findologic-item-filter", {
 
     props: ["template", "facet"],
 
+    data: function data() {
+        return {
+            facetType: null
+        };
+    },
+
+
     computed: _extends({
         facets: function facets() {
             return this.facet.values.sort(function (facetA, facetB) {
@@ -431,6 +438,13 @@ Vue.component("findologic-item-filter", {
                     return 0;
                 }
             });
+        },
+        isSelected: function isSelected() {
+            var _this = this;
+
+            return typeof this.getSelectedFilters().find(function (element) {
+                return element.id == _this.facet.id;
+            }) !== 'undefined';
         }
     }, Vuex.mapState({
         selectedFacets: function selectedFacets(state) {
@@ -443,6 +457,7 @@ Vue.component("findologic-item-filter", {
 
     created: function created() {
         this.$options.template = this.template || "#vue-item-filter";
+        this.facetType = typeof this.facet.findologicFilterType !== 'undefined' ? this.facet.findologicFilterType : this.facet.type;
     },
 
 
