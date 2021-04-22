@@ -27,16 +27,6 @@ class PluginConfigurationValidator implements ValidatorInterface
             return $this->validationStatus;
         }
 
-        $pluginOrderValidator = $this->getPluginOrderValidator();
-        if (!$pluginOrderValidator->validate()) {
-            $this->validationStatus = false;
-            $this->getLoggerObject()->error(
-                'IO plugin must be loaded before the Findologic plugin. Check the plugin priorities.'
-            );
-
-            return false;
-        }
-
         // Shopkey validator can only be constructed if the plugin order is correct so it can't be injected.
         $shopkeyValidator = $this->getShopkeyValidator();
         if (!$shopkeyValidator->validate()) {
@@ -49,17 +39,6 @@ class PluginConfigurationValidator implements ValidatorInterface
         $this->validationStatus = true;
 
         return true;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    protected function getPluginOrderValidator(): PluginOrderValidator
-    {
-        /** @var Application $app */
-        $app = pluginApp(Application::class);
-
-        return $app->make(PluginOrderValidator::class);
     }
 
     /**
