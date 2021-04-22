@@ -1,5 +1,12 @@
 # Release Notes for Findologic
 
+## 3.5.3 (2020-04-22)
+
+### Fixed
+
+* [PLENTY-332] Fixed a bug that caused the Findologic plugin no longer to properly
+  handle search/navigation requests, when the IO plugin had a higher priority than the Findologic plugin.
+
 ## 3.5.2 (2020-04-19)
 
 ### Fixed
