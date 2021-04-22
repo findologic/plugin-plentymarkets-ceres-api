@@ -6,6 +6,7 @@ use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
 use Findologic\Helpers\Tags;
+use Findologic\Services\PluginInfoService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -23,6 +24,7 @@ class RequestBuilder
     const ALIVE_REQUEST_TYPE = 'alive';
     const CATEGORY_REQUEST_TYPE = 'category';
     const SEARCH_SERVER_URL = 'https://service.findologic.com/ps/';
+    const SHOPTYPE = 'Plentymarkets';
 
     /**
      * @var ParametersBuilder
@@ -54,18 +56,25 @@ class RequestBuilder
      */
     private $tagsHelper;
 
+    /**
+     * @var PluginInfoService
+     */
+    private $pluginInfoService;
+
     public function __construct(
         ParametersBuilder $parametersBuilder,
         PluginConfig $pluginConfig,
         LoggerFactory $loggerFactory,
         WebstoreConfigurationService $webstoreConfigurationService,
-        Tags $tagsHelper
+        Tags $tagsHelper,
+        PluginInfoService $pluginInfoService
     ) {
         $this->parametersBuilder = $parametersBuilder;
         $this->pluginConfig = $pluginConfig;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
         $this->webstoreConfig = $webstoreConfigurationService->getWebstoreConfig();
         $this->tagsHelper = $tagsHelper;
+        $this->pluginInfoService = $pluginInfoService;
     }
 
     /**
@@ -191,6 +200,8 @@ class RequestBuilder
         if ($this->getUserIp()) {
             $request->setParam('userip', $this->getUserIp());
         }
+        $request->setParam('shopType', self::SHOPTYPE);
+        $request->setParam('shopVersion', $this->pluginInfoService->getPluginVersion('ceres'));
 
         return $request;
     }
