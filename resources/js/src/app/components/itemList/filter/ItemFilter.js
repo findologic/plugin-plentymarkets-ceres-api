@@ -39,15 +39,11 @@ Vue.component("findologic-item-filter", {
         }),
 
         selectedValuesCount() {
-            let count = 0;
-
-            this.facet.values.forEach(function(value) {
-                if (value.selected) {
-                    count++;
-                }
+            const selectedFacets = this.facet.values.filter(function (value) {
+                return value.selected;
             });
 
-            return count;
+            return selectedFacets.length;
         }
     },
 

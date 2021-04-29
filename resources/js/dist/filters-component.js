@@ -455,15 +455,11 @@ Vue.component("findologic-item-filter", {
         }
     }), {
         selectedValuesCount: function selectedValuesCount() {
-            var count = 0;
-
-            this.facet.values.forEach(function (value) {
-                if (value.selected) {
-                    count++;
-                }
+            var selectedFacets = this.facet.values.filter(function (value) {
+                return value.selected;
             });
 
-            return count;
+            return selectedFacets.length;
         }
     }),
 
