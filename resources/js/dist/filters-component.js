@@ -453,7 +453,19 @@ Vue.component("findologic-item-filter", {
         isLoading: function isLoading(state) {
             return state.itemList.isLoading;
         }
-    })),
+    }), {
+        selectedValuesCount: function selectedValuesCount() {
+            var count = 0;
+
+            this.facet.values.forEach(function (value) {
+                if (value.selected) {
+                    count++;
+                }
+            });
+
+            return count;
+        }
+    }),
 
     created: function created() {
         this.$options.template = this.template || "#vue-item-filter";
