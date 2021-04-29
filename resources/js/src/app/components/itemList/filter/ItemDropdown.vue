@@ -85,7 +85,7 @@ export default defineComponent({
     root.$options.template = props.template || "#vue-item-dropdown";
 
     const trans = (key: string) => {
-      return key;
+      return window.ceresTranslate(key);
     }
 
     return {trans};

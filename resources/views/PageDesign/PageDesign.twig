@@ -1,0 +1,9 @@
+{% extends getPartial('ceres-page-design') %}
+{% import "Ceres::PageDesign.Macros.Translations" as Translations %}
+
+{# Add plugin translations to Ceres JS #}
+{% block PartialFooter %}
+    {{ Translations.add( "Findologic", "Template" ) }}
+
+    {{ parent() }}
+{% endblock %}
