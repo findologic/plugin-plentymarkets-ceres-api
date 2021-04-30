@@ -1,8 +1,8 @@
 <script lang="ts">
-import Url from '../../mixins/url';
 import Constants from '../../shared/constants';
 import { Component, Mixins, Prop } from 'vue-property-decorator';
 import Vue from 'vue';
+import UrlBuilder from '../../shared/UrlBuilder';
 
 const ItemListSortingProps = Vue.extend({
   props: {
@@ -29,7 +29,7 @@ interface MixinInterface {
 }
 
 @Component
-export default class ItemListSorting extends Mixins<MixinInterface, Url>(ItemListSortingProps, Url) {
+export default class ItemListSorting extends Mixins<MixinInterface>(ItemListSortingProps) {
 
   get templateProp() {
     return this.template
@@ -63,7 +63,7 @@ export default class ItemListSorting extends Mixins<MixinInterface, Url>(ItemLis
    * Determine the initial value and set it in the vuex storage.
    */
   setSelectedValue() {
-    const urlParams = this.getUrlParams(document.location.search);
+    const urlParams = UrlBuilder.getUrlParams(document.location.search);
 
     if (urlParams.sorting) {
       this.selectedSorting = urlParams.sorting;

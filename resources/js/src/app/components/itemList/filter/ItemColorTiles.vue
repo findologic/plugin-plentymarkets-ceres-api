@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts">
-import Url from "../../../mixins/url";
 import { Mixins } from "vue-property-decorator";
 import Component from "vue-class-component";
 import Vue from 'vue';
 import { ColorFacet } from '../../../shared/interfaces';
+import UrlBuilder from '../../../shared/UrlBuilder';
 
 const ItemColorTileProps = Vue.extend({
   props: {
@@ -66,7 +66,7 @@ interface ItemColorTilePropsInterface {
     }
   }
 })
-export default class ItemColorTiles extends Mixins<ItemColorTilePropsInterface, Url>(ItemColorTileProps, Url) {
+export default class ItemColorTiles extends Mixins<ItemColorTilePropsInterface>(ItemColorTileProps) {
   get facetData(): ColorFacet {
     return this.facet;
   }
@@ -74,11 +74,11 @@ export default class ItemColorTiles extends Mixins<ItemColorTilePropsInterface, 
   isSelected(facetValueName: string) {
     const facetValue = this.facetData.values.filter((value) => value.name === facetValueName);
 
-    return facetValue.length && this.isValueSelected(this.facetData.id, facetValue[0].name);
+    return facetValue.length && UrlBuilder.isValueSelected(this.facet, this.facetData.id, facetValue[0].name);
   }
 
   tileClicked(value: string) {
-    this.updateSelectedFilters(this.facetData.id, value);
+    UrlBuilder.updateSelectedFilters(this.facet, this.facetData.id, value);
   }
 }
 </script>

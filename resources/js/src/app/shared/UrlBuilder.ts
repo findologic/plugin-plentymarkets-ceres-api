@@ -1,7 +1,7 @@
 import Constants from './constants';
 import { Facet } from './interfaces';
 
-export default class UrlBuilder {
+class UrlBuilder {
     /**
      * Plentymarkets standard method for parsing params from string into object
      */
@@ -427,3 +427,5 @@ export interface PriceFacetValue {
     min?: number;
     max?: number;
 }
+
+export default new UrlBuilder();

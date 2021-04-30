@@ -1,5 +1,3 @@
-/// import ./../types/plenty_ceres.d.ts
-
 import './../../scss/findologic.scss'
 
 // TODO: Split up into subcomponents

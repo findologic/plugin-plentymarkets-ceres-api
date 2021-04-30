@@ -29,7 +29,7 @@
         </div>
         <div v-else-if="facet.id === 'cat'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-category-dropdown v-if="facet.findologicFilterType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
+                <item-category-dropdown v-if="facet.findologicFilterType === 'select'" :facet="facet"></item-category-dropdown>
                 <div v-else class="form-check" v-for="value in facet.values" :key="value.id">
                     <div class="category-container">
                         <input :id="'option-' + value.id"
@@ -63,7 +63,7 @@
         </div>
         <div v-else-if="facet.findologicFilterType === 'select'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-dropdown template-override="#vue-findologic-item-dropdown" :facet="facet"></item-dropdown>
+                <item-dropdown :facet="facet"></item-dropdown>
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>

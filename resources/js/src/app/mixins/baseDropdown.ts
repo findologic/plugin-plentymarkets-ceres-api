@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Facet } from '../shared/interfaces';
 import { Mixins } from 'vue-property-decorator';
-import Url from './url';
+import UrlBuilder from '../shared/UrlBuilder';
 
 const BaseDropdownProps = Vue.extend({
     props: {
@@ -29,7 +29,7 @@ interface BaseDropdownInterface {
         }
     }
 })
-export default class BaseDropdown extends Mixins<Vue, BaseDropdownInterface, Url>(Vue, BaseDropdownProps, Url) {
+export default class BaseDropdown extends Mixins<Vue, BaseDropdownInterface>(Vue, BaseDropdownProps) {
     protected isOpen = false
 
     get facetData(): Facet {
@@ -41,7 +41,7 @@ export default class BaseDropdown extends Mixins<Vue, BaseDropdownInterface, Url
     }
 
     selected(value: string) {
-        this.updateSelectedFilters(this.facetData.id, value);
+        UrlBuilder.updateSelectedFilters(this.facet, this.facetData.id, value);
     }
 
     close() {

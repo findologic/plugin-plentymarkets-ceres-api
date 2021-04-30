@@ -86,7 +86,7 @@
 import BaseDropdown from '../../../mixins/baseDropdown';
 import { FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
 import { defineComponent, onMounted, ref } from '@vue/composition-api'
-import UrlBuilder from '../../../shared/urlBuilder';
+import UrlBuilder from '../../../shared/UrlBuilder';
 
 interface CategoryDropdownProps extends TemplateOverridable, FacetAware { }
 
@@ -97,13 +97,11 @@ export default defineComponent({
   setup(props: CategoryDropdownProps, {root}) {
     root.$options.template = props.template || "#vue-item-dropdown";
 
-    const urlBuilder = new UrlBuilder();
-
     const translate = (key: string) => {
       return window.ceresTranslate(key);
     }
     const buildDropdownLabel = () => {
-      const selectedFilters = urlBuilder.getSelectedFilters();
+      const selectedFilters = UrlBuilder.getSelectedFilters();
 
       for (let i = 0; i < selectedFilters.length; i++) {
         const facet = selectedFilters[i];
