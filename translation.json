@@ -1,6 +1,5 @@
 {
-  "sections":
-  [
+  "sections": [
     {
       "name": "Template.itemFilter",
       "prefix": "itemFilter"
@@ -50,8 +49,7 @@
       "prefix": "itemRangeSliderFormatValidationMessage"
     }
   ],
-  "ignoredTranslationFiles":
-  [
+  "ignoredTranslationFiles": [
     "Config.properties"
   ]
 }
