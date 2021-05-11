@@ -14,6 +14,7 @@ use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use Plenty\Modules\Plugin\PluginSet\Contracts\PluginSetRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
@@ -439,7 +440,22 @@ class SearchService implements SearchServiceInterface
             return null;
         }
 
+        if (!$plugin->versionProductive || $plugin->versionProductive == '0.0.0') {
+            $pluginSetId = $this->getCurrentPluginSetId();
+            $plugin = $pluginRepository->decoratePlugin($plugin, $pluginSetId);
+        }
+
+        $this->logger->error(sprintf('USED CERES VERSION IS: %s', $plugin->versionProductive));
+
         return $plugin->versionProductive;
+    }
+
+    private function getCurrentPluginSetId(): int
+    {
+        /** @var PluginSetRepositoryContract $contract */
+        $contract = pluginApp(PluginSetRepositoryContract::class);
+
+        return $contract->getCurrentPluginSetId();
     }
 
     /**
