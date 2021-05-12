@@ -12,7 +12,7 @@
             <item-range-slider template-override="#vue-findologic-item-range-slider" :facet="facet"></item-range-slider>
         </div>
         <div v-else-if="facetType === 'image'">
-            <item-filter-image template-override="#vue-`findologic-item-filter-image" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"></item-filter-image>
+            <item-filter-image template-override="#vue-findologic-item-filter-image" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"></item-filter-image>
         </div>
         <div v-else-if="facetType === 'color'">
             <div v-if="!facet.noAvailableFiltersText">
