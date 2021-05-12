@@ -15,6 +15,12 @@ export interface Facet {
     select?: string;
     values?: FacetValue[];
     findologicFilterType?: string;
+    minValue?: string;
+    min?: string;
+    maxValue?: string;
+    max?: string;
+    step?: number;
+    unit?: string;
 }
 
 export interface FacetValue {

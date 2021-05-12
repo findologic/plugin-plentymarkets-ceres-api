@@ -5,6 +5,9 @@ declare module '*.vue' {
     declare global {
         interface Window {
             ceresTranslate: (key: string) => {};
+            noUiSlider: {
+                create: (element: Element|null, config) => {on: (eventName, callback) => {}};
+            };
         }
     }
 }
