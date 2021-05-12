@@ -11,10 +11,17 @@ class PluginInfoService
 {
     const PLUGIN_VERSION_CACHE_KEY_PREFIX = 'plugin_version_';
 
+    const DEFAULT_PLUGIN_VERSION = '0.0.0';
+
     /**
-     * @var PluginRepositoryContract|null
+     * @var PluginRepositoryContract
      */
     private $pluginRepository;
+
+    /**
+     * @var PluginSetRepositoryContract
+     */
+    private $pluginSetRepository;
 
     /**
      * @var CachingRepository
@@ -22,16 +29,26 @@ class PluginInfoService
     private $cache;
 
     /**
-     * @var Plugin|null[]
+     * @var Plugin[]
      */
     private $plugins = [];
+
+    public function __construct(
+        PluginRepositoryContract $pluginRepository,
+        PluginSetRepositoryContract $pluginSetRepository,
+        CachingRepository $cache
+    ) {
+        $this->pluginRepository = $pluginRepository;
+        $this->cache = $cache;
+        $this->pluginSetRepository = $pluginSetRepository;
+    }
 
     /**
      * @return string|null
      */
     public function getPluginVersion(string $pluginName)
     {
-        $cachedVersion = $this->getCache()->get(self::PLUGIN_VERSION_CACHE_KEY_PREFIX . $pluginName);
+        $cachedVersion = $this->cache->get(self::PLUGIN_VERSION_CACHE_KEY_PREFIX . $pluginName);
         if ($cachedVersion !== null) {
             return $cachedVersion;
         }
@@ -40,12 +57,12 @@ class PluginInfoService
             return null;
         }
 
-        if (!$plugin->versionProductive || $plugin->versionProductive == '0.0.0') {
-            $pluginSetId = $this->getCurrentPluginSetId();
-            $plugin = $this->getPluginRepository()->decoratePlugin($plugin, $pluginSetId);
+        if (!$plugin->versionProductive || $plugin->versionProductive == self::DEFAULT_PLUGIN_VERSION) {
+            $pluginSetId = $this->pluginSetRepository->getCurrentPluginSetId();
+            $plugin = $this->pluginRepository->decoratePlugin($plugin, $pluginSetId);
         }
 
-        $this->getCache()->put(self::PLUGIN_VERSION_CACHE_KEY_PREFIX . $pluginName, $plugin->versionProductive, 60*24);
+        $this->cache->put(self::PLUGIN_VERSION_CACHE_KEY_PREFIX . $pluginName, $plugin->versionProductive, 60*24);
 
         return $plugin->versionProductive;
     }
@@ -53,38 +70,12 @@ class PluginInfoService
     /**
      * @return Plugin|null
      */
-    private function getPlugin(string $pluginName)
+    protected function getPlugin(string $pluginName)
     {
         if (!isset($this->plugins[$pluginName])) {
-            $this->plugins[$pluginName] = $this->getPluginRepository()->getPluginByName($pluginName);
+            $this->plugins[$pluginName] = $this->pluginRepository->getPluginByName($pluginName);
         }
 
         return $this->plugins[$pluginName];
-    }
-
-    private function getCurrentPluginSetId(): int
-    {
-        /** @var PluginSetRepositoryContract $contract */
-        $contract = pluginApp(PluginSetRepositoryContract::class);
-
-        return $contract->getCurrentPluginSetId();
-    }
-
-    private function getPluginRepository(): PluginRepositoryContract
-    {
-        if ($this->pluginRepository === null) {
-            $this->pluginRepository = pluginApp(PluginRepositoryContract::class);
-        }
-
-        return $this->pluginRepository;
-    }
-
-    private function getCache()
-    {
-        if ($this->cache === null) {
-            $this->cache = pluginApp(CachingRepository::class);
-        }
-
-        return $this->cache;
     }
 }
