@@ -1,5 +1,20 @@
 # Release Notes für Findologic
 
+## 3.6.0 (2020-05-18)
+
+### Hinzugefügt
+
+* [PLENTY-310] Die Anzahl der selektierten Filter kann nun neben dem Namen des Filters ausgegeben werden.
+  * [PLENTY-337] Eine Konfigurationsoption wurde hinzugefügt um dieses Feature zu aktivieren/deaktivieren.
+* [PLENTY-329] Eine `translation.json` wurde hinzugefügt, welche es erlaubt Storefront-Übersetzungen anzupassen.
+* [PLENTY-330] Übersetzungen für alle von Findologic unterstützten Sprachen, wurden hinzugefügt.
+* [PLENTY-327] Parameter `shopType` und `shopVersion` werden nun an die Findologic API gesendet.
+
+### Behoben
+
+* [PLENTY-309] Ein Fehler wurde behoben, wodurch bei manchen selektierten Filtern, eine `0` als Produktanzahl
+  angezeigt wurde.
+
 ## 3.5.3 (2020-04-22)
 
 ### Behoben
