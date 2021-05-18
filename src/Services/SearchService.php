@@ -14,7 +14,6 @@ use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
-use Plenty\Modules\Plugin\PluginSet\Contracts\PluginSetRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
@@ -83,6 +82,11 @@ class SearchService implements SearchServiceInterface
      */
     protected $aliveTestResult;
 
+    /**
+     * @var PluginInfoService
+     */
+    protected $pluginInfoService;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -90,7 +94,8 @@ class SearchService implements SearchServiceInterface
         ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
         FallbackSearchService $fallbackSearchService,
-        ConfigRepository $configRepository
+        ConfigRepository $configRepository,
+        PluginInfoService $pluginInfoService
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
@@ -102,6 +107,7 @@ class SearchService implements SearchServiceInterface
         );
         $this->fallbackSearchService = $fallbackSearchService;
         $this->configRepository = $configRepository;
+        $this->pluginInfoService = $pluginInfoService;
     }
 
     /**
@@ -115,11 +121,6 @@ class SearchService implements SearchServiceInterface
     public function getSearchFactory(): VariationSearchFactory
     {
         return pluginApp(VariationSearchFactory::class);
-    }
-
-    public function getPluginRepository(): PluginRepositoryContract
-    {
-        return pluginApp(PluginRepositoryContract::class);
     }
 
     /**
@@ -435,27 +436,7 @@ class SearchService implements SearchServiceInterface
      */
     private function getCeresVersion()
     {
-        $pluginRepository = $this->getPluginRepository();
-        if (!$plugin = $pluginRepository->getPluginByName('ceres')) {
-            return null;
-        }
-
-        if (!$plugin->versionProductive || $plugin->versionProductive == '0.0.0') {
-            $pluginSetId = $this->getCurrentPluginSetId();
-            $plugin = $pluginRepository->decoratePlugin($plugin, $pluginSetId);
-        }
-
-        $this->logger->error(sprintf('USED CERES VERSION IS: %s', $plugin->versionProductive));
-
-        return $plugin->versionProductive;
-    }
-
-    private function getCurrentPluginSetId(): int
-    {
-        /** @var PluginSetRepositoryContract $contract */
-        $contract = pluginApp(PluginSetRepositoryContract::class);
-
-        return $contract->getCurrentPluginSetId();
+        return $this->pluginInfoService->getPluginVersion('ceres');
     }
 
     /**

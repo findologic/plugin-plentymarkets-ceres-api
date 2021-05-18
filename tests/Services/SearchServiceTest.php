@@ -9,6 +9,7 @@ use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
 use Findologic\Constants\Plugin;
 use Findologic\Services\FallbackSearchService;
+use Findologic\Services\PluginInfoService;
 use Findologic\Services\SearchService;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
@@ -79,6 +80,11 @@ class SearchServiceTest extends TestCase
      */
     protected $configRepository;
 
+    /**
+     * @var PluginInfoService|MockObject
+     */
+    private $pluginInfoService;
+
     public function setUp()
     {
         $this->client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -108,6 +114,10 @@ class SearchServiceTest extends TestCase
             ->setMethods([])
             ->getMock();
         $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->pluginInfoService = $this->getMockBuilder(PluginInfoService::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -404,7 +414,8 @@ class SearchServiceTest extends TestCase
                 'searchParametersHandler' => $this->searchParametersHandler,
                 'loggerFactory' => $this->loggerFactory,
                 'fallbackSearchService' => $this->fallbackSearchService,
-                'configRepository' => $this->configRepository
+                'configRepository' => $this->configRepository,
+                'pluginInfoService' => $this->pluginInfoService
             ])
             ->setMethods($methods);
 
@@ -1121,17 +1132,7 @@ class SearchServiceTest extends TestCase
     public function testFilterInvalidProductOnlyPriorToCertainVersion($version, bool $shouldFilter)
     {
         $searchServiceMock = $this->getSearchServiceMock(['getPluginRepository']);
-        $pluginRepositoryMock = $this->getMockBuilder(PluginRepositoryContract::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $pluginMock = $this->getMockBuilder(\Plenty\Modules\Plugin\Models\Plugin::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $searchServiceMock->method('getPluginRepository')->willReturn($pluginRepositoryMock);
-        $pluginRepositoryMock->method('getPluginByName')->willReturn($pluginMock);
-        $pluginMock->versionProductive = $version;
+        $this->pluginInfoService->method('getPluginVersion')->willReturn($version);
 
         $this->assertEquals($shouldFilter, $searchServiceMock->shouldFilterInvalidProducts());
     }
