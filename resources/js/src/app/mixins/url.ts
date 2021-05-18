@@ -18,7 +18,7 @@ export default class Url extends Vue {
             const params = {};
             const regex = /[?&]?([^=]+)=([^&]*)/g;
 
-            urlParams = urlParams.split("+").join(" ");
+            urlParams = urlParams.split('+').join(' ');
 
             // eslint-disable-next-line
             while (tokens = regex.exec(urlParams)) {
@@ -46,7 +46,7 @@ export default class Url extends Vue {
          * parseQueryString
          */
         if (typeof queryString !== 'undefined') {
-            queryString = queryString.replace(/^\?/, "");
+            queryString = queryString.replace(/^\?/, '');
         } else {
             queryString = '';
         }
@@ -59,7 +59,7 @@ export default class Url extends Vue {
         const sal = strArr.length;
         const fixStr = function(queryString) {
             return decodeURIComponent(queryString.replace(/\+/g, '%20'));
-        }
+        };
 
         let i, j, ct, p, lastObj, obj, undef, chr, tmp, key, value,
           postLeftBracketPos, keys, keysLen;
@@ -256,7 +256,7 @@ export default class Url extends Vue {
                 for (const value in values) {
                     selectedFilters.push({
                         id: filter,
-                        name: values[value].replace(/_/g, " > ")
+                        name: values[value].replace(/_/g, ' > ')
                     });
                 }
                 continue;
@@ -276,7 +276,7 @@ export default class Url extends Vue {
      * @returns {boolean}
      */
     isRangeSliderFilter(attributeValue) {
-        return (typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined')
+        return (typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined');
     }
 
     /**

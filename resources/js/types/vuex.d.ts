@@ -1,4 +1,4 @@
-import { Store } from 'vuex'
+import { Store } from 'vuex';
 import { ItemListData } from '../src/app/shared/interfaces';
 import FacetService from '../src/app/services/facet.service';
 

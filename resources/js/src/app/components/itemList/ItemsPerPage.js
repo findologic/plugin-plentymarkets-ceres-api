@@ -1,10 +1,10 @@
-import Url from "../../mixins/url";
+import Url from '../../mixins/url';
 import Constants from '../../shared/constants';
-import Vue from "vue";
+import Vue from 'vue';
 
-Vue.component("items-per-page", {
+Vue.component('items-per-page', {
 
-    delimiters: ["${", "}"],
+    delimiters: ['${', '}'],
     mixins: [Url],
 
     props: {
@@ -25,7 +25,7 @@ Vue.component("items-per-page", {
     },
 
     created() {
-        this.$options.template = this.template || "#vue-items-per-page";
+        this.$options.template = this.template || '#vue-items-per-page';
         this.setSelectedValueByUrl();
     },
 
@@ -58,7 +58,7 @@ Vue.component("items-per-page", {
                 this.selectedValue = defaultItemsPerPage;
             }
 
-            this.$store.commit("setItemsPerPage", parseInt(this.selectedValue));
+            this.$store.commit('setItemsPerPage', parseInt(this.selectedValue));
         }
     }
 });

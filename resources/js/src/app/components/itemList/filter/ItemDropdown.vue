@@ -70,27 +70,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent } from '@vue/composition-api';
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import BaseDropdown from '../../../mixins/baseDropdown';
 
 interface ItemDropdownProps extends TemplateOverridable, FacetAware { }
 
 export default defineComponent({
+  name: 'ItemDropdown',
   mixins: [
       BaseDropdown
   ],
-  name: 'ItemDropdown',
-  setup: (props: ItemDropdownProps, {root}) => {
-    root.$options.template = props.template || "#vue-item-dropdown";
+  setup: (props: ItemDropdownProps, { root }) => {
+    root.$options.template = props.template || '#vue-item-dropdown';
 
     const trans = (key: string) => {
       return window.ceresTranslate(key);
-    }
+    };
 
-    return {trans};
+    return { trans };
   }
-})
+});
 </script>
 
 <style scoped>

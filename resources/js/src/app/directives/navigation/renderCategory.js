@@ -1,6 +1,6 @@
-import Vue from "vue";
+import Vue from 'vue';
 
-Vue.directive("render-category",
+Vue.directive('render-category',
 {
     bind(el)
     {

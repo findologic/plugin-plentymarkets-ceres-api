@@ -37,7 +37,7 @@
           :class="{'disabled': isDisabled}"
           data-toggle="tooltip"
           data-placement="top"
-          title="{{ trans('Ceres::Template.itemApply') }}"
+          :title="TranslationService.translate('Ceres::Template.itemApply')"
           rel="nofollow"
           @click="triggerFilter()"
         >
@@ -53,15 +53,22 @@
 </template>
 
 <script lang="ts">
-import {FacetAware, TemplateOverridable} from '../../../shared/interfaces';
-import { computed, defineComponent, onBeforeMount, ref } from '@vue/composition-api';
+import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
+import { computed, defineComponent, onMounted, ref } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
+import TranslationService from '../../../shared/TranslationService';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
 
 export default defineComponent({
   name: 'ItemRangeSlider',
-  setup: (props: ItemRangeSliderProps, {root}) => {
+  props: {
+    facet: {
+      type: Object,
+      required: true
+    }
+  },
+  setup: (props: ItemRangeSliderProps, { root }) => {
     const valueFrom = ref('');
     const valueTo = ref('');
     const facet = props.facet;
@@ -71,16 +78,17 @@ export default defineComponent({
     valueTo.value = (values ? values.max : props.facet.maxValue) || '';
 
     const isLoading = computed(() => root.$store.state.isLoading);
-    const sanitizedFacetId = computed(() => 'fl-range-slider-' + props.facet.id.replace(/\W/g, '-').replace(/-+/, '-').replace(/-$/, ''));
+    const sanitizedFacetId = computed(() => {
+      return 'fl-range-slider-' + props.facet.id
+          .replace(/\W/g, '-')
+          .replace(/-+/, '-')
+          .replace(/-$/, '');
+    });
     const isDisabled = computed(() => {
-      return (valueFrom.value === "" && valueTo.value === "") ||
+      return (valueFrom.value === '' && valueTo.value === '') ||
           (parseFloat(valueFrom.value) > parseFloat(valueTo.value)) ||
           root.$store.state.isLoading;
     });
-
-    const trans = (key: string) => {
-      return window.ceresTranslate(key);
-    }
 
     const triggerFilter = () => {
       if (!isDisabled.value) {
@@ -91,11 +99,11 @@ export default defineComponent({
 
         UrlBuilder.updateSelectedFilters(facet, facet.id, facetValue);
       }
-    }
+    };
 
-    onBeforeMount(() => {
+    onMounted(() => {
       $(document).ready(function () {
-        const element = root.$el.querySelector('#' + sanitizedFacetId);
+        const element = document.getElementById(sanitizedFacetId.value);
 
         const slider = window.noUiSlider.create(element, {
           step: props.facet.step,
@@ -120,12 +128,11 @@ export default defineComponent({
       sanitizedFacetId,
       isDisabled,
       isLoading,
-      trans,
       triggerFilter,
-      facet
+      TranslationService
     };
   }
-})
+});
 </script>
 
 <style scoped>

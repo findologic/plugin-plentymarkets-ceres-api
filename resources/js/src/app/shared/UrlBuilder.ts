@@ -46,7 +46,7 @@ class UrlBuilder {
         const sal = strArr.length;
         const fixStr = function(queryString: string) {
             return decodeURIComponent(queryString.replace(/\+/g, '%20'));
-        }
+        };
 
         let i, j, ct, p, lastObj, obj, chr, tmp, key, value, postLeftBracketPos, keys, keysLen;
 
@@ -250,7 +250,7 @@ class UrlBuilder {
 
                     selectedFilters.push({
                         id: filter,
-                        name: values[value].replace(/_/g, " > ")
+                        name: values[value].replace(/_/g, ' > ')
                     });
                 }
 
@@ -267,7 +267,7 @@ class UrlBuilder {
     }
 
     isRangeSliderFilter(attributeValue: Attribute): boolean {
-        return (typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined')
+        return (typeof attributeValue.min !== 'undefined' && typeof attributeValue.max !== 'undefined');
     }
 
     /**

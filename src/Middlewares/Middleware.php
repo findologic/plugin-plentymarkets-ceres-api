@@ -129,13 +129,6 @@ class Middleware extends PlentyMiddleware
                 $this->searchService->handleSearchQuery($request, $externalSearch);
             }
         );
-
-        $this->eventDispatcher->listen('IO.init.templates', function (Partial $partial) {
-            $partial->set('ceres-page-design', 'Ceres::PageDesign.PageDesign');
-            $partial->set('page-design', 'Findologic::PageDesign.PageDesign');
-
-            return false;
-        });
     }
 
     /**

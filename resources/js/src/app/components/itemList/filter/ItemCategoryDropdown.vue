@@ -14,7 +14,7 @@
       <span
         v-else
         class="fl-dropdown-label"
-      >{{ translate("Findologic::Template.pleaseSelect") }}</span>
+      >{{ TranslationService.translate("Findologic::Template.pleaseSelect") }}</span>
       <ul
         v-show="isOpen"
         class="fl-dropdown-content form-check"
@@ -85,8 +85,9 @@
 <script lang="ts">
 import BaseDropdown from '../../../mixins/baseDropdown';
 import { FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
-import { defineComponent, onMounted, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from '@vue/composition-api';
 import UrlBuilder from '../../../shared/UrlBuilder';
+import TranslationService from '../../../shared/TranslationService';
 
 interface CategoryDropdownProps extends TemplateOverridable, FacetAware { }
 
@@ -94,12 +95,9 @@ export default defineComponent({
   mixins: [
     BaseDropdown
   ],
-  setup(props: CategoryDropdownProps, {root}) {
-    root.$options.template = props.template || "#vue-item-dropdown";
+  setup(props: CategoryDropdownProps, { root }) {
+    root.$options.template = props.template || '#vue-item-dropdown';
 
-    const translate = (key: string) => {
-      return window.ceresTranslate(key);
-    }
     const buildDropdownLabel = () => {
       const selectedFilters = UrlBuilder.getSelectedFilters();
 
@@ -112,22 +110,22 @@ export default defineComponent({
       }
 
       return '';
-    }
+    };
     const getSubCategoryName = (parentCategory: FacetValue, subCategory: FacetValue): string => {
       return parentCategory.name + '_' + subCategory.name;
-    }
+    };
 
     const dropdownLabel = ref('');
 
     onMounted(() => {
-      dropdownLabel.value = buildDropdownLabel() as string
+      dropdownLabel.value = buildDropdownLabel() as string;
     });
 
     return {
-      translate,
       dropdownLabel,
-      getSubCategoryName
-    }
+      getSubCategoryName,
+      TranslationService
+    };
   }
-})
+});
 </script>

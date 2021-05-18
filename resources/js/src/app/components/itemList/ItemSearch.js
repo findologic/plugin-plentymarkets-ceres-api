@@ -1,13 +1,13 @@
-import Url from "../../mixins/url";
-import Vue from "vue";
+import Url from '../../mixins/url';
+import Vue from 'vue';
 
-Vue.component("item-search", {
+Vue.component('item-search', {
     mixins: [Url],
 
     props: {
         template: {
             type: String,
-            default: "#vue-item-search"
+            default: '#vue-item-search'
         },
         showItemImages: {
             type: Boolean,
@@ -50,7 +50,7 @@ Vue.component("item-search", {
         {
             const urlParams = this.getUrlParams(document.location.search);
 
-            this.$store.commit("setItemListSearchString", urlParams.query);
+            this.$store.commit('setItemListSearchString', urlParams.query);
 
             const rawQuery = urlParams.query ? urlParams.query : '';
             // Manually regex out all "+" signs as decodeURIComponent does not take care of that.

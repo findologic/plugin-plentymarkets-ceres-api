@@ -39,5 +39,9 @@
   "exclude": [
     "node_modules",
     "gulpfile.js"
+  ],
+  "files": [
+    "resources/js/types/vue.d.ts",
+    "resources/js/types/vuex.d.ts"
   ]
 }

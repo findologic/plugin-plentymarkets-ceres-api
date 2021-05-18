@@ -19,7 +19,7 @@ const ItemListSortingProps = Vue.extend({
       default: null
     }
   }
-})
+});
 
 interface MixinInterface {
   content: string;
@@ -32,17 +32,17 @@ interface MixinInterface {
 export default class ItemListSorting extends Mixins<MixinInterface>(ItemListSortingProps) {
 
   get templateProp() {
-    return this.template
+    return this.template;
   }
 
   get defaultSortingProp () {
-    return this.defaultSorting
+    return this.defaultSorting;
   }
 
   @Prop() private selectedSorting = {}
 
   created() {
-    this.$options.template = this.templateProp || "#vue-item-list-sorting";
+    this.$options.template = this.templateProp || '#vue-item-list-sorting';
     this.setSelectedValue();
   }
 
@@ -71,7 +71,7 @@ export default class ItemListSorting extends Mixins<MixinInterface>(ItemListSort
       this.selectedSorting = this.defaultSortingProp;
     }
 
-    this.$store.commit("setItemListSorting", this.selectedSorting);
+    this.$store.commit('setItemListSorting', this.selectedSorting);
   }
 }
 </script>

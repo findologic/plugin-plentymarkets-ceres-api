@@ -1,9 +1,9 @@
-import Url from "../../../mixins/url";
-import Vue from "vue";
+import Url from '../../../mixins/url';
+import Vue from 'vue';
 
-Vue.component("item-filter-tag-list", {
+Vue.component('item-filter-tag-list', {
 
-    delimiters: ["${", "}"],
+    delimiters: ['${', '}'],
     mixins: [Url],
 
     props:
@@ -11,7 +11,7 @@ Vue.component("item-filter-tag-list", {
         template:
             {
                 type: String,
-                default: "#vue-item-filter-tag-list"
+                default: '#vue-item-filter-tag-list'
             },
         marginClasses:
             {
@@ -35,7 +35,7 @@ Vue.component("item-filter-tag-list", {
     },
 
     created() {
-        this.$options.template = this.template || "#vue-item-filter-tag-list";
+        this.$options.template = this.template || '#vue-item-filter-tag-list';
     },
 
     methods: {

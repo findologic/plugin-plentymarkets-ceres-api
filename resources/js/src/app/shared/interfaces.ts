@@ -1,9 +1,15 @@
+import { Store } from 'vuex';
+
 export interface TemplateOverridable {
     template?: string;
 }
 
 export interface FacetAware {
     facet: Facet;
+}
+
+export interface State {
+    itemList: ItemListData;
 }
 
 export interface Facet {
@@ -21,10 +27,14 @@ export interface Facet {
     max?: string;
     step?: number;
     unit?: string;
+    noAvailableFiltersText?: string;
+    cssClass?: string;
 }
 
 export interface FacetValue {
+    id?: string;
     name: string;
+    imageUrl?: string;
 }
 
 export interface ColorFacet extends Facet {
@@ -37,5 +47,11 @@ export interface ColorFacetValue extends FacetValue {
 }
 
 export interface ItemListData {
-    isLoading: boolean;
+    isLoading?: boolean;
+    selectedFacets: Facet[];
+    facets: Facet[];
+}
+
+export interface PlentyVuexStore extends Store<unknown> {
+    itemList: ItemListData;
 }

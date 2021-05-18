@@ -13,7 +13,7 @@ export default {
       return something;
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

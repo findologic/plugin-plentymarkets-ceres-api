@@ -1,13 +1,13 @@
-import Url from "../../mixins/url";
-import Vue from "vue";
+import Url from '../../mixins/url';
+import Vue from 'vue';
 
 const options = {
     mixins: [Url],
 
-    delimiters: ["${", "}"],
+    delimiters: ['${', '}'],
 
     props: [
-        "template"
+        'template'
     ],
 
     data() {
@@ -48,7 +48,7 @@ const options = {
         const urlParams = this.getUrlParams(document.location.search);
         const page = urlParams.page || 1;
 
-        this.$store.commit("setItemListPage", parseInt(page));
+        this.$store.commit('setItemListPage', parseInt(page));
     },
 
     methods: {

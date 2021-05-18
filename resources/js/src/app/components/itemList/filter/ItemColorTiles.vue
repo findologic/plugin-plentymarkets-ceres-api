@@ -40,47 +40,38 @@
 </template>
 
 <script lang="ts">
-import { Mixins } from "vue-property-decorator";
-import Component from "vue-class-component";
-import Vue from 'vue';
-import { ColorFacet } from '../../../shared/interfaces';
+import { ColorFacet, FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
 import UrlBuilder from '../../../shared/UrlBuilder';
+import { defineComponent } from '@vue/composition-api';
 
-const ItemColorTileProps = Vue.extend({
+interface ItemColorTilesProps extends TemplateOverridable, FacetAware {
+  facet: ColorFacet;
+}
+
+export default defineComponent({
+  name: 'ItemColorTiles',
   props: {
     facet: {
       type: Object,
       required: true
-    }
-  }
-})
+    },
+  },
+  setup: (props: ItemColorTilesProps) => {
+    const isSelected = (facetValueName: string) => {
+      const facetValue = props.facet.values.filter((value: FacetValue) => value.name === facetValueName);
 
-interface ItemColorTilePropsInterface {
-  facet: ColorFacet;
-}
+      return facetValue.length && UrlBuilder.isValueSelected(props.facet, props.facet.id, facetValue[0].name);
+    };
+    const tileClicked = (value: string) => {
+      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, value);
+    };
 
-@Component({
-  computed: {
-    isLoading() {
-      return this.$store.state.itemList.isLoading
-    }
+    return {
+      isSelected,
+      tileClicked
+    };
   }
-})
-export default class ItemColorTiles extends Mixins<ItemColorTilePropsInterface>(ItemColorTileProps) {
-  get facetData(): ColorFacet {
-    return this.facet;
-  }
-
-  isSelected(facetValueName: string) {
-    const facetValue = this.facetData.values.filter((value) => value.name === facetValueName);
-
-    return facetValue.length && UrlBuilder.isValueSelected(this.facet, this.facetData.id, facetValue[0].name);
-  }
-
-  tileClicked(value: string) {
-    UrlBuilder.updateSelectedFilters(this.facet, this.facetData.id, value);
-  }
-}
+});
 </script>
 
 <style scoped>

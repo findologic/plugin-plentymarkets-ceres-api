@@ -15,7 +15,7 @@ const BaseDropdownProps = Vue.extend({
             default: null
         }
     }
-})
+});
 
 interface BaseDropdownInterface {
     facet: Facet;
@@ -25,7 +25,7 @@ interface BaseDropdownInterface {
 @Component({
     computed: {
         isLoading() {
-            return this.$store.state.itemList.isLoading
+            return this.$store.state.itemList.isLoading;
         }
     }
 })
@@ -37,7 +37,7 @@ export default class BaseDropdown extends Mixins<Vue, BaseDropdownInterface>(Vue
     }
 
     created() {
-        this.$options.template = this.template || "#vue-item-dropdown";
+        this.$options.template = this.template || '#vue-item-dropdown';
     }
 
     selected(value: string) {
