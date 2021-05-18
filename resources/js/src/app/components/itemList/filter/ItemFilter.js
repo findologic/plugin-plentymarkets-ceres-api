@@ -37,6 +37,14 @@ Vue.component("findologic-item-filter", {
             selectedFacets: state => state.itemList.selectedFacets,
             isLoading: state => state.itemList.isLoading
         }),
+
+        selectedValuesCount() {
+            const selectedFacets = this.facet.values.filter(function (value) {
+                return value.selected;
+            });
+
+            return selectedFacets.length;
+        }
     },
 
     created() {
