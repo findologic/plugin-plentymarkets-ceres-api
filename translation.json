@@ -1,0 +1,55 @@
+{
+  "sections": [
+    {
+      "name": "Template.itemFilter",
+      "prefix": "itemFilter"
+    },
+    {
+      "name": "Template.noMainFiltersItemFilter",
+      "prefix": "noMainFiltersItemFilter"
+    },
+    {
+      "name": "Template.pleaseSelect",
+      "prefix": "pleaseSelect"
+    },
+    {
+      "name": "Template.didYouMeanQuery",
+      "prefix": "didYouMeanQuery"
+    },
+    {
+      "name": "Template.improvedQuery",
+      "prefix": "improvedQuery"
+    },
+    {
+      "name": "Template.correctedQuery",
+      "prefix": "correctedQuery"
+    },
+    {
+      "name": "Template.queryInfoMessageCat",
+      "prefix": "queryInfoMessageCat"
+    },
+    {
+      "name": "Template.queryInfoMessageVendor",
+      "prefix": "queryInfoMessageVendor"
+    },
+    {
+      "name": "Template.queryInfoMessageQuery",
+      "prefix": "queryInfoMessageQuery"
+    },
+    {
+      "name": "Template.queryInfoMessageDefault",
+      "prefix": "queryInfoMessageDefault"
+    },
+    {
+      "name": "Template.queryInfoMessageShoppingGuide",
+      "prefix": "queryInfoMessageShoppingGuide"
+    },
+    {
+      "name": "Template.itemRangeSliderFormatValidationMessage",
+      "prefix": "itemRangeSliderFormatValidationMessage"
+    }
+  ],
+  "ignoredTranslationFiles": [
+    "Config.properties"
+  ]
+}
