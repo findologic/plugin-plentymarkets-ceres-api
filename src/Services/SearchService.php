@@ -82,6 +82,11 @@ class SearchService implements SearchServiceInterface
      */
     protected $aliveTestResult;
 
+    /**
+     * @var PluginInfoService
+     */
+    protected $pluginInfoService;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -89,7 +94,8 @@ class SearchService implements SearchServiceInterface
         ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
         FallbackSearchService $fallbackSearchService,
-        ConfigRepository $configRepository
+        ConfigRepository $configRepository,
+        PluginInfoService $pluginInfoService
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
@@ -101,6 +107,7 @@ class SearchService implements SearchServiceInterface
         );
         $this->fallbackSearchService = $fallbackSearchService;
         $this->configRepository = $configRepository;
+        $this->pluginInfoService = $pluginInfoService;
     }
 
     /**
@@ -114,11 +121,6 @@ class SearchService implements SearchServiceInterface
     public function getSearchFactory(): VariationSearchFactory
     {
         return pluginApp(VariationSearchFactory::class);
-    }
-
-    public function getPluginRepository(): PluginRepositoryContract
-    {
-        return pluginApp(PluginRepositoryContract::class);
     }
 
     /**
@@ -434,12 +436,7 @@ class SearchService implements SearchServiceInterface
      */
     private function getCeresVersion()
     {
-        $pluginRepository = $this->getPluginRepository();
-        if (!$plugin = $pluginRepository->getPluginByName('ceres')) {
-            return null;
-        }
-
-        return $plugin->versionProductive;
+        return $this->pluginInfoService->getPluginVersion('ceres');
     }
 
     /**
