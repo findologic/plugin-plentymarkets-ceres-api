@@ -106,7 +106,9 @@ class MiddlewareTest extends TestCase
 
         $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
 
-        $this->eventDispatcher->expects($this->never())->method('listen');
+        $this->eventDispatcher->expects($this->once())->method('listen')->with([
+            'IO.Resources.Import'
+        ]);
 
         $this->runBefore();
     }
@@ -264,8 +266,10 @@ class MiddlewareTest extends TestCase
 
         $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
 
-        // Ensure Findologic is not triggered.
-        $eventDispatcherMock->expects($this->never())->method('listen');
+        // Ensure snippets get loaded but Findologic is not triggered.
+        $eventDispatcherMock->expects($this->once())->method('listen')->with([
+            'IO.Resources.Import'
+        ]);
 
         $requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
