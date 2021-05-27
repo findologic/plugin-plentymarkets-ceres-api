@@ -74,13 +74,6 @@ class Middleware extends PlentyMiddleware
             return;
         }
 
-        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
-        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
-
-        if (!$this->isSearchPage && !$this->activeOnCatPage) {
-            return;
-        }
-
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) {
@@ -104,6 +97,13 @@ class Middleware extends PlentyMiddleware
             },
             0
         );
+
+        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
+        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
+
+        if (!$this->isSearchPage && !$this->activeOnCatPage) {
+            return;
+        }
 
         $this->eventDispatcher->listen(
             'IO.ctx.search',
