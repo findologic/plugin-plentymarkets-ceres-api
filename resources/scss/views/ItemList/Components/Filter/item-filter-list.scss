@@ -59,6 +59,10 @@
                             }
                         }
 
+                        &:not(:checked) + label {
+                            width: calc(100% - 3.5rem);
+                        }
+
                         &:disabled + label {
                             cursor: not-allowed;
                         }
