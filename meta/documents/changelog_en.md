@@ -1,5 +1,14 @@
 # Release Notes for Findologic
 
+## 3.6.1 (2020-05-31)
+
+### Fixed
+
+* [PLENTY-340] Fixed a bug that may caused filter values showing up behind the filter count, when the filter value
+  contained too many characters.
+* [PLENTY-341] Fixed a bug that caused the Smart Suggest not being shown on non-search pages, when Findologic has
+  been disabled on category pages.
+
 ## 3.6.0 (2020-05-18)
 
 ### Added
