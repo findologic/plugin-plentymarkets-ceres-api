@@ -58,5 +58,7 @@ const options = {
     }
 };
 
-Vue.component('pagination', options);
-Vue.component('custom-pagination', options);
+if (window.flCeresConfig.isSearchPage || window.flCeresConfig.activeOnCatPage) {
+    Vue.component('pagination', options);
+    Vue.component('custom-pagination', options);
+}

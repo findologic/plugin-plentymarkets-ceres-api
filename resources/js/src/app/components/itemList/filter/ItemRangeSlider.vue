@@ -41,10 +41,9 @@
           rel="nofollow"
           @click="triggerFilter()"
         >
-          <i
-            v-waiting-animation="isLoading"
-            class="fa fa-check"
-            aria-hidden="true"
+          <icon
+            icon="fa-check"
+            :loading="isLoading"
           />
         </button>
       </div>

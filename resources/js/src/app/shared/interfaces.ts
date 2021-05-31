@@ -52,6 +52,14 @@ export interface ItemListData {
     facets: Facet[];
 }
 
-export interface PlentyVuexStore extends Store<unknown> {
+export interface StoreState {
     itemList: ItemListData;
+}
+
+export interface PlentyVuexStore extends Store<StoreState> {
+    itemList: ItemListData;
+}
+
+export interface JQuery {
+    collapse: () => {};
 }

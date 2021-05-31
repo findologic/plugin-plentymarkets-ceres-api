@@ -2,6 +2,7 @@
 {% import "Ceres::PageDesign.Macros.Translations" as Translations %}
 {{ Translations.add( "Findologic", "Template" ) }}
 
+
 <script type="x/template" id="vue-findologic-item-filter-list">
     <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
         <div class="ml-0 main-filters" v-if="facets.some(e => e.isMain === true)">

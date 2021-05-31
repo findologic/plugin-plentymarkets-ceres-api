@@ -8,6 +8,19 @@ declare module '*.vue' {
             noUiSlider: {
                 create: (element: Element|null, config) => {on: (eventName, callback) => {}};
             };
+            App: {
+                defaultLanguage: string;
+                language: string;
+                config: {
+                    search: {
+                        forwardToSingleItem: boolean;
+                    };
+                };
+            };
+            flCeresConfig: {
+                isSearchPage: boolean;
+                activeOnCatPage: boolean;
+            };
         }
     }
 }

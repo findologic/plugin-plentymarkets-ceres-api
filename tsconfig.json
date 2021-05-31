@@ -15,7 +15,7 @@
     "types": [
       "webpack-env",
       "jest",
-      "jquery",
+      "jqueryui",
       "vue"
     ],
     "paths": {
