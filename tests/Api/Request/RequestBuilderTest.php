@@ -7,6 +7,7 @@ use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Helpers\Tags;
+use Findologic\Services\PluginInfoService;
 use IO\Services\CategoryService;
 use IO\Services\WebstoreConfigurationService;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
@@ -54,6 +55,11 @@ class RequestBuilderTest extends TestCase
      */
     protected $tagsHelper;
 
+    /**
+     * @var PluginInfoService|MockObject
+     */
+    protected $pluginInfoService;
+
     public function setUp()
     {
         $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)
@@ -78,6 +84,10 @@ class RequestBuilderTest extends TestCase
             ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
         $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->setMethods()->getMock();
+        $this->pluginInfoService = $this->getMockBuilder(PluginInfoService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
     }
 
     public function buildAliveRequestProvider()
@@ -121,7 +131,9 @@ class RequestBuilderTest extends TestCase
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
-                    'revision' => '0.0.1'
+                    'revision' => '0.0.1',
+                    'shopType' => 'Plentymarkets',
+                    'shopVersion' => '5.0.30'
                 ]
             ],
             'Category page request' => [
@@ -132,7 +144,9 @@ class RequestBuilderTest extends TestCase
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
-                    'revision' => '0.0.1'
+                    'revision' => '0.0.1',
+                    'shopType' => 'Plentymarkets',
+                    'shopVersion' => '5.0.30'
                 ]
             ],
             'Search page request' => [
@@ -143,7 +157,9 @@ class RequestBuilderTest extends TestCase
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
-                    'revision' => '0.0.1'
+                    'revision' => '0.0.1',
+                    'shopType' => 'Plentymarkets',
+                    'shopVersion' => '5.0.30'
                 ]
             ]
         ];
@@ -182,6 +198,8 @@ class RequestBuilderTest extends TestCase
         $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
         $requestBuilderMock->expects($this->any())->method('getUserIp')->willReturn($userIp);
         $requestBuilderMock->expects($this->any())->method('getPluginVersion')->willReturn('0.0.1');
+
+        $this->pluginInfoService->method('getPluginVersion')->with('ceres')->willReturn('5.0.30');
 
         $this->parametersBuilder->expects($this->any())->method('setSearchParams')->willReturnArgument(0);
 
@@ -258,7 +276,8 @@ class RequestBuilderTest extends TestCase
                 'pluginConfig' => $this->pluginConfig,
                 'loggerFactory' => $this->loggerFactory,
                 'webstoreConfigurationService' => $this->webstoreConfigurationService,
-                'tagsHelper' => $this->tagsHelper
+                'tagsHelper' => $this->tagsHelper,
+                'pluginInfoService' => $this->pluginInfoService
             ])
             ->setMethods($methods)
             ->getMock();

@@ -1,7 +1,10 @@
 <script type="x/template" id="vue-findologic-item-filter">
     {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
     <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-{{ config('Findologic.filters_per_row') }}" :class="[isSelected ? 'fl-active' : '', facet.cssClass]">
-        <div class="h3" v-text="facet.name"></div>
+        <div class="facet-title">
+            <div class="h3" v-text="facet.name"></div>
+            <div class="selected-values-count" v-if="selectedValuesCount > 0 && this.$parent.showSelectedFiltersCount" v-text="selectedValuesCount"></div>
+        </div>
         <div v-if="facetType === 'price'">
             <item-filter-price template-override="#vue-findologic-item-price" :facet="facet"></item-filter-price>
         </div>
@@ -61,7 +64,7 @@
             <div class="form-check" v-for="value in facet.values" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
                 <label :for="'option-' + value.id" class="form-check-label" v-text="value.name" rel="nofollow"></label>
-                <div class="filter-badge" v-text="value.count"></div>
+                <div v-if="!value.selected" class="filter-badge" v-text="value.count"></div>
             </div>
         </div>
     </div>

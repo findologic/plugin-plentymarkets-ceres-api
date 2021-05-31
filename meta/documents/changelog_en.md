@@ -1,5 +1,28 @@
 # Release Notes for Findologic
 
+## 3.6.1 (2020-05-31)
+
+### Fixed
+
+* [PLENTY-340] Fixed a bug that may caused filter values showing up behind the filter count, when the filter value
+  contained too many characters.
+* [PLENTY-341] Fixed a bug that caused the Smart Suggest not being shown on non-search pages, when Findologic has
+  been disabled on category pages.
+
+## 3.6.0 (2020-05-18)
+
+### Added
+
+* [PLENTY-310] The selected filter count is can now shown next to the name of the filter.
+  * [PLENTY-337] Added a configuration option, to enable/disable this feature.
+* [PLENTY-329] Added a `translation.json`, which allows storefront-translations to be customized.
+* [PLENTY-330] Added translations for all languages supported by Findologic.
+* [PLENTY-327] Parameters `shopType` and `shopVersion` are now sent to the Findologic API.
+
+### Fixed
+
+* [PLENTY-309] Fixed a bug that caused already selected filters, to show a frequency of `0`.
+
 ## 3.5.3 (2020-04-22)
 
 ### Fixed
