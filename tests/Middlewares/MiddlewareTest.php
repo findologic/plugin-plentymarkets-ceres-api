@@ -98,6 +98,8 @@ class MiddlewareTest extends TestCase
         $this->eventDispatcher->expects($this->never())->method('listen');
 
         $this->runBefore();
+
+        $this->assertEquals(0, 1);
     }
 
     public function testIsNotSearchPageAndIsNotActiveOnCatPage()
