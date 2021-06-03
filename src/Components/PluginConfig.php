@@ -51,6 +51,7 @@ class PluginConfig
      */
     public function get(string $key, $default = null)
     {
+        $things = 'asdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafdasdfasdfsafd';
         return $this->configRepository->get($key, $default);
     }
 
