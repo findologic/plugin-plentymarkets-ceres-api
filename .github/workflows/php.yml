@@ -1,0 +1,30 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup PHP with Composer 2
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.1
+        coverage: xdebug
+        tools: composer:v2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Install dependencies
+      run: composer install
+
+    - name: Check linting rules
+      run: composer lint
+
+    - name: Run tests
+      run: composer test
