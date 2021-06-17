@@ -5,7 +5,7 @@
     }
 
     function handleSearchQuery(formElement, action) {
-        document.location = action + '?query=' + formElement.querySelector('input.search-input').value;
+        document.location = action + '?query=' + encodeURIComponent(formElement.querySelector('input.search-input').value);
     }
 
     function flSearchSubmitEventHandler(event, formElement) {
