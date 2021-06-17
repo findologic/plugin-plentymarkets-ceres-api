@@ -32,9 +32,14 @@ export interface Facet {
 }
 
 export interface FacetValue {
+    count?: string;
+    image?: string;
     id?: string;
     name: string;
     imageUrl?: string;
+    items?: [];
+    position?: string;
+    selected?: boolean;
 }
 
 export interface ColorFacet extends Facet {
