@@ -2,6 +2,7 @@
 
 namespace Findologic\Services;
 
+use Exception;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -17,6 +18,7 @@ use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Services\CategoryService;
@@ -28,7 +30,7 @@ use IO\Services\ItemSearch\Services\ItemSearchService;
  */
 class SearchService implements SearchServiceInterface
 {
-    use \Plenty\Plugin\Log\Loggable;
+    use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
 
@@ -179,7 +181,8 @@ class SearchService implements SearchServiceInterface
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
+        $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
+        $response = $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
 
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
@@ -195,10 +198,7 @@ class SearchService implements SearchServiceInterface
             $total = $response->getData(Response::DATA_RESULTS)['count'];
         }
 
-        $externalSearch->setResults(
-            $response->getVariationIds(),
-            $total
-        );
+        $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
     }
 
     /**
@@ -217,7 +217,7 @@ class SearchService implements SearchServiceInterface
             } else {
                 $this->doSearch($request, $externalSearch);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);
         }
@@ -232,7 +232,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Exception while handling search options.');
             $this->logger->logException($e);
         }
