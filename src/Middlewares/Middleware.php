@@ -87,7 +87,8 @@ class Middleware extends PlentyMiddleware
                     [
                         'shopkey' => strtoupper(md5($this->pluginConfig->getShopKey())),
                         'isSearchPage' => $this->isSearchPage,
-                        'activeOnCatPage' => $this->activeOnCatPage
+                        'activeOnCatPage' => $this->activeOnCatPage,
+                        'minSearchLength' => $this->pluginConfig->getMinSearchLength()
                     ]
                 );
 

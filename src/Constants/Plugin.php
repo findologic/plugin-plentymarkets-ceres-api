@@ -45,6 +45,7 @@ class Plugin
     const CONFIG_NAVIGATION_ENABLED = 'Findologic.nav_enabled';
     const CONFIG_FILTERS_STYLING_CSS_ENABLED = 'Findologic.filters_styling_css_enabled';
     const CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED = 'Findologic.load_no_ui_slider_styles_enabled';
+    const CONFIG_MIN_SEARCH_LENGTH = 'Findologic.minSearchLength';
 
     const CONFIG_IO_CATEGORY_SEARCH = 'IO.routing.category_search';
 
