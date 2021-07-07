@@ -32,6 +32,7 @@
     <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component-min.js"></script>
 {% endif %}
 
+<!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
     <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
@@ -52,7 +53,9 @@
         </div>
     </div>
 </script>
+<!-- /SSR -->
 
+<!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
     {{ component( "Findologic::ItemList.Components.ItemSearch") }}
 
@@ -78,3 +81,4 @@
         </div>
     </form>
 </script>
+<!-- /SSR -->
