@@ -30,6 +30,7 @@
 
 {% if isSearchPage or activeOnCatPage %}
     <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component-min.js"></script>
+    <!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/filters-component-min.js') }}) -->
 {% endif %}
 
 <!-- SSR:template(item-filter-list) -->
