@@ -39,7 +39,7 @@ export interface FacetValue {
     imageUrl?: string;
     items?: FacetValue[];
     position?: string;
-    selected?: boolean;
+    selected: boolean;
 }
 
 export interface ColorFacet extends Facet {
