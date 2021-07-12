@@ -1,3 +1,4 @@
+<!-- SSR:template(findologic-item-filter-list) -->
 <script type="x/template" id="vue-findologic-item-filter-list">
     <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
@@ -39,3 +40,4 @@
         </div>
     </div>
 </script>
+<!-- /SSR -->
