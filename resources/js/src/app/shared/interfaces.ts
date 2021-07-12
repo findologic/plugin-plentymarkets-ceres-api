@@ -32,12 +32,11 @@ export interface Facet {
 }
 
 export interface FacetValue {
-    count?: string;
+    count?: number;
     image?: string;
     id?: string;
     name: string;
     imageUrl?: string;
-    items?: [];
     position?: string;
     selected?: boolean;
 }
