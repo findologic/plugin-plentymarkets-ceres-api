@@ -27,6 +27,14 @@
               }
             ]
           }
+        },
+        "minSearchLength": {
+          "type": "inputText",
+          "required": false,
+          "label": "Config.minSearchLengthLabel",
+          "options": {
+            "defaultValue": 0
+          }
         }
       }
     },

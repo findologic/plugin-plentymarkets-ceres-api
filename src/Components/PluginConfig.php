@@ -152,6 +152,18 @@ class PluginConfig
     }
 
     /**
+     * return int
+     */
+    public function getMinSearchLength()
+    {
+        $minSearchLength = $this->configRepository->get(Plugin::CONFIG_MIN_SEARCH_LENGTH, 0);
+
+        $isPositiveInteger = (preg_match('/^\d+$/', $minSearchLength) === 1);
+
+        return $isPositiveInteger ? (int)$minSearchLength : 0;
+    }
+
+    /**
      * @return string|null
      */
     protected function getCurrentSessionLanguageCode()
