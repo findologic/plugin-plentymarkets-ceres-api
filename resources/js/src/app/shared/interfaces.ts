@@ -37,6 +37,7 @@ export interface FacetValue {
     id?: string;
     name: string;
     imageUrl?: string;
+    items?: FacetValue[];
     position?: string;
     selected?: boolean;
 }
