@@ -40,6 +40,8 @@ Vue.component("item-search", {
     created()
     {
         this.$options.template = this.template;
+        // Ensure item-search template is loaded for Smart Suggest initialization
+        this.$store.dispatch('loadComponent', 'item-search')
     },
 
     mounted()

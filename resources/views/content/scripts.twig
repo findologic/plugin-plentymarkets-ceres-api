@@ -48,7 +48,9 @@
         <div class="ml-0 main-filters">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <findologic-item-filter template-override="#vue-findologic-item-filter" v-for="facet in facets" :facet="facet" :key="facet.id"></findologic-item-filter>
+                    <client-only>
+                        <findologic-item-filter template-override="#vue-findologic-item-filter" v-for="facet in facets" :facet="facet" :key="facet.id"></findologic-item-filter>
+                    </client-only>
                 </div>
             </div>
         </div>
