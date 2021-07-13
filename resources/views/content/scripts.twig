@@ -59,8 +59,8 @@
                            type="search"
                            class="search-input flex-grow-1 px-3 py-2"
                            ref="searchInput"
-                           {% if minSearchLength %}
-                               minlength="{{ minSearchLength }}"
+                           {% if minimalSearchTermLength > 0 %}
+                               minlength="{{ minimalSearchTermLength }}"
                            {% endif %}
                            @keyup.down="keydown()"
                            @keyup.up="keyup()"

@@ -151,16 +151,13 @@ class PluginConfig
         return $this->shopkeys;
     }
 
-    /**
-     * return int
-     */
-    public function getMinSearchLength()
+    public function getMinimalSearchTermLength(): int
     {
-        $minSearchLength = $this->configRepository->get(Plugin::CONFIG_MIN_SEARCH_LENGTH, 0);
+        $minimalSearchTermLength = $this->configRepository->get(Plugin::CONFIG_MINIMAL_SEARCH_TERM_LENGTH, 0);
 
-        $isPositiveInteger = (preg_match('/^\d+$/', $minSearchLength) === 1);
+        $isPositiveInteger = (preg_match('/^\d+$/', $minimalSearchTermLength) === 1);
 
-        return $isPositiveInteger ? (int)$minSearchLength : 0;
+        return $isPositiveInteger ? (int)$minimalSearchTermLength : 0;
     }
 
     /**

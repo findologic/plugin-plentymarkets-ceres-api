@@ -28,10 +28,10 @@
             ]
           }
         },
-        "minSearchLength": {
+        "minimalSearchTermLength": {
           "type": "inputText",
           "required": false,
-          "label": "Config.minSearchLengthLabel",
+          "label": "Config.minimalSearchTermLengthLabel",
           "options": {
             "defaultValue": 0
           }
