@@ -111,9 +111,9 @@ Vue.component("item-search", {
 
         this.$nextTick(function () {
             // Ensure item-search template is loaded for Smart Suggest initialization
-            //this.$store.dispatch('loadComponent', 'vue-item-search');
-            //this.$store.dispatch('loadComponent', 'item-search');
-            //console.log("mounted - loadComponent");
+            _this.$store.dispatch('loadComponent', 'vue-item-search');
+            _this.$store.dispatch('loadComponent', 'item-search');
+            console.log("mounted - loadComponent");
 
             var urlParams = _this.getUrlParams(document.location.search);
 
