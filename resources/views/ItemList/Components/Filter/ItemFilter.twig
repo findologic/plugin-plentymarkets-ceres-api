@@ -31,34 +31,36 @@
         </div>
         <div v-else-if="facet.id === 'cat'">
             <div v-if="!facet.noAvailableFiltersText">
-                <client-only>
-                    <item-category-dropdown v-if="facetType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
-                </client-only>
-            </div>
-            <div v-else class="form-check" v-for="value in facet.values" :key="value.id">
-                <div class="category-container">
-                    <input :id="'option-' + value.id"
-                           class="form-check-input hidden-xs-up"
-                           type="checkbox"
-                           :checked="value.selected"
-                           @change="updateFacet(value)"
-                           :disabled="isLoading"
-                    >
-                    <label :for="'option-' + value.id" class="form-check-label" v-text="value.name" rel="nofollow"></label>
-                    <div class="filter-badge" v-text="value.count"></div>
+                <div v-if="facet.findologicFilterType === 'select'">
+                    <client-only>
+                        <item-category-dropdown v-if="facetType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
+                    </client-only>
                 </div>
-                <div v-if="value.selected">
-                    <div class="sub-category-container" v-if="value.items.length > 0">
-                        <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
-                            <input :id="'option-' + subCategory.id"
-                                   class="form-check-input hidden-xs-up"
-                                   type="checkbox"
-                                   :checked="subCategory.selected"
-                                   @change="updateFacet(getSubCategoryValue(value, subCategory))"
-                                   :disabled="isLoading"
-                            >
-                            <label :for="'option-' + subCategory.id" class="form-check-label" v-text="subCategory.name" rel="nofollow"></label>
-                            <div class="filter-badge" v-text="subCategory.count"></div>
+                <div v-else class="form-check" v-for="value in facet.values" :key="value.id">
+                    <div class="category-container">
+                        <input :id="'option-' + value.id"
+                               class="form-check-input hidden-xs-up"
+                               type="checkbox"
+                               :checked="value.selected"
+                               @change="updateFacet(value)"
+                               :disabled="isLoading"
+                        >
+                        <label :for="'option-' + value.id" class="form-check-label" v-text="value.name" rel="nofollow"></label>
+                        <div class="filter-badge" v-text="value.count"></div>
+                    </div>
+                    <div v-if="value.selected">
+                        <div class="sub-category-container" v-if="value.items.length > 0">
+                            <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
+                                <input :id="'option-' + subCategory.id"
+                                       class="form-check-input hidden-xs-up"
+                                       type="checkbox"
+                                       :checked="subCategory.selected"
+                                       @change="updateFacet(getSubCategoryValue(value, subCategory))"
+                                       :disabled="isLoading"
+                                >
+                                <label :for="'option-' + subCategory.id" class="form-check-label" v-text="subCategory.name" rel="nofollow"></label>
+                                <div class="filter-badge" v-text="subCategory.count"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

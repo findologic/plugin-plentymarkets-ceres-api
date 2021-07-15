@@ -103,18 +103,13 @@ Vue.component("item-search", {
 
     created: function created() {
         this.$options.template = this.template;
-        console.log("created - loadComponent");
-        this.$store.dispatch('loadComponent', 'item-search');
+
+        // TODO: Re-initialize Smart Suggest
     },
     mounted: function mounted() {
         var _this = this;
 
         this.$nextTick(function () {
-            // Ensure item-search template is loaded for Smart Suggest initialization
-            _this.$store.dispatch('loadComponent', 'vue-item-search');
-            _this.$store.dispatch('loadComponent', 'item-search');
-            console.log("mounted - loadComponent");
-
             var urlParams = _this.getUrlParams(document.location.search);
 
             _this.$store.commit("setItemListSearchString", urlParams.query);
