@@ -103,11 +103,18 @@ Vue.component("item-search", {
 
     created: function created() {
         this.$options.template = this.template;
+        console.log("created - loadComponent");
+        this.$store.dispatch('loadComponent', 'item-search');
     },
     mounted: function mounted() {
         var _this = this;
 
         this.$nextTick(function () {
+            // Ensure item-search template is loaded for Smart Suggest initialization
+            //this.$store.dispatch('loadComponent', 'vue-item-search');
+            //this.$store.dispatch('loadComponent', 'item-search');
+            //console.log("mounted - loadComponent");
+
             var urlParams = _this.getUrlParams(document.location.search);
 
             _this.$store.commit("setItemListSearchString", urlParams.query);
@@ -892,7 +899,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     methods: {
         /*
-         * Plentymarkets standart method for parsing params from string into object
+         * Plentymarkets standard method for parsing params from string into object
          *
          * @param {string} urlParams
          * @returns {Object}
