@@ -103,8 +103,6 @@ Vue.component("item-search", {
 
     created: function created() {
         this.$options.template = this.template;
-
-        // TODO: Re-initialize Smart Suggest
     },
     mounted: function mounted() {
         var _this = this;
