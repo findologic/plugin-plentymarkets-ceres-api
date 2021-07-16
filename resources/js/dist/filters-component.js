@@ -123,10 +123,9 @@ Vue.component("item-search", {
 
 
     methods: {
-        prepareSearch: function prepareSearch() {
-            $('#searchBox').collapse('hide');
-        },
         search: function search() {
+            $('#searchBox').collapse('hide');
+
             var searchBaseURL = '/search?query=';
 
             if (App.defaultLanguage !== App.language) {
