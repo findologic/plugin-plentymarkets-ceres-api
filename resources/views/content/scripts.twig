@@ -35,7 +35,9 @@
 
 <!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
-    <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
+    <div class="findologic-filter-wrapper"
+         :class="{'mb-5': facets.some(e => e.isMain === true)}"
+         v-show="facets && facets.length > 0">
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
         {{ component( "Ceres::ItemList.Components.Filter.ItemFilterPrice") }}
         {{ component( "Findologic::ItemList.Components.Filter.ItemRangeSlider") }}
@@ -49,7 +51,10 @@
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
                     <client-only>
-                        <findologic-item-filter template-override="#vue-findologic-item-filter" v-for="facet in facets" :facet="facet" :key="facet.id"></findologic-item-filter>
+                        <findologic-item-filter template-override="#vue-findologic-item-filter"
+                                                v-for="facet in facets"
+                                                :facet="facet"
+                                                :key="facet.id"></findologic-item-filter>
                     </client-only>
                 </div>
             </div>
