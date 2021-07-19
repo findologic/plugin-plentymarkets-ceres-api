@@ -10,15 +10,18 @@ describe('ItemColorTiles', () => {
                 {
                     name: 'Red',
                     hexValue: '#ff0000',
+                    selected: false
                 },
                 {
                     name: 'Colorful',
                     hexValue: null,
-                    colorImageUrl: 'https://your-store.com/images/colors/colorful.png'
+                    colorImageUrl: 'https://your-store.com/images/colors/colorful.png',
+                    selected: false
                 },
                 {
                     name: 'Unknown',
                     hexValue: null,
+                    selected: false
                 }
             ]
         };

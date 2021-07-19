@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
-import { Facet, ColorFacet } from '../../../shared/interfaces';
+import { Facet, ColorFacet, State } from '../../../shared/interfaces';
+import { Store } from 'vuex';
 import FindologicItemFilter from './FindologicItemFilter.vue';
 import VueCompositionAPI from '@vue/composition-api';
 
@@ -60,7 +61,7 @@ describe('FindologicItemFilter', () => {
 
     const wrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': facet, 'filtersPerRow': 3 }, store, localVue });
 
-    expect(wrapper.element.querySelector(':scope > div.h3').innerHTML).toBe('Facet name');
+    expect(wrapper.element.querySelector(':scope > div.h3')!.innerHTML).toBe('Facet name');
   });
 
   it('Shows the noAvailableFiltersText when facet has no values', () => {
@@ -113,12 +114,12 @@ describe('FindologicItemFilter', () => {
     const categoryWrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': categoryFacet, 'filtersPerRow': 3 }, store, localVue });
     const colorWrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': colorFacet, 'filtersPerRow': 3 }, store, localVue });
 
-    expect(dropdownWrapper.element.querySelector(':scope > div:last-child p').innerHTML).toBe('No values available for this dropdown');
-    expect(categoryWrapper.element.querySelector(':scope > div:last-child p').innerHTML).toBe('No values available for this category dropdown');
-    expect(colorWrapper.element.querySelector(':scope > div:last-child p').innerHTML).toBe('No values available for this color filter');
+    expect(dropdownWrapper.element.querySelector(':scope > div:last-child p')!.innerHTML).toBe('No values available for this dropdown');
+    expect(categoryWrapper.element.querySelector(':scope > div:last-child p')!.innerHTML).toBe('No values available for this category dropdown');
+    expect(colorWrapper.element.querySelector(':scope > div:last-child p')!.innerHTML).toBe('No values available for this color filter');
   });
 
-  it('Shows filter values correctly', () => {
+  it('Renders values correctly in the respective filter containers', () => {
     const dropdownFacet: Facet = {
       cssClass: '',
       findologicFilterType: 'select',
@@ -232,21 +233,22 @@ describe('FindologicItemFilter', () => {
     };
 
     const dropdownWrapper = mount(FindologicItemFilter, { propsData: { 'facet': dropdownFacet, 'filtersPerRow': 3 }, store, localVue });
-    const dropdownElement = dropdownWrapper.element.querySelector(':scope > div:last-child .fl-dropdown');
+    const dropdownElement = dropdownWrapper.element.querySelector(':scope > div:last-child .fl-dropdown')!;
     expect(dropdownElement.querySelectorAll('div.form-check').length).toBe(2);
-    expect(dropdownElement.querySelector('div.form-check:first-child label.form-check-label').innerHTML).toBe('22220');
-    expect(dropdownElement.querySelector('div.form-check:first-child .filter-badge').innerHTML).toBe('9');
+    expect(dropdownElement.querySelector('div.form-check:first-child label.form-check-label')!.innerHTML).toBe('22220');
+    expect(dropdownElement.querySelector('div.form-check:first-child .filter-badge')!.innerHTML).toBe('9');
 
     const categoryWrapper = mount(FindologicItemFilter, { propsData: { 'facet': categoryFacet, 'filtersPerRow': 3 }, store, localVue });
-    const categoryElement = categoryWrapper.element.querySelector(':scope > div:last-child div.fl-category-dropdown-container');
+    const categoryElement = categoryWrapper.element.querySelector(':scope > div:last-child div.fl-category-dropdown-container')!;
     expect(categoryElement.querySelectorAll('ul.fl-dropdown-content li').length).toBe(2);
-    expect(categoryElement.querySelector('ul.fl-dropdown-content li:first-child label').innerHTML).toBe('Living Room');
-    expect(categoryElement.querySelector('ul.fl-dropdown-content li:first-child .filter-badge').innerHTML).toBe('4');
+    expect(categoryElement.querySelector('ul.fl-dropdown-content li:first-child label')!.innerHTML).toBe('Living Room');
+    expect(categoryElement.querySelector('ul.fl-dropdown-content li:first-child .filter-badge')!.innerHTML).toBe('4');
 
     const colorWrapper = mount(FindologicItemFilter, { propsData: { 'facet': colorFacet, 'filtersPerRow': 3 }, store, localVue });
     const colorElement = colorWrapper.element.querySelector(':scope > div:last-child .fl-item-color-tiles-container');
+    expect(colorElement).toBeTruthy();
     expect(colorWrapper.element.querySelectorAll('ul.fl-item-color-tiles-list li.fl-item-color-tiles-list-item').length).toBe(3);
-    const tileElement = colorWrapper.element.querySelector('li.fl-item-color-tiles-list-item:first-child .fl-color-tile-background');
-    expect(tileElement.style._values['background-color']).toBe('rgb(0, 0, 255)');
+    const tileElement = colorWrapper.element.querySelector('li.fl-item-color-tiles-list-item:first-child .fl-color-tile-background')!;
+    expect(tileElement).toBeTruthy();
   });
 });

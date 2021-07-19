@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { Facet } from '../../../shared/interfaces';
+import { Facet, State } from '../../../shared/interfaces';
+import { Store } from 'vuex';
 import ItemCategoryDropdown from './ItemCategoryDropdown.vue';
 import VueCompositionAPI from '@vue/composition-api';
 
@@ -62,7 +63,7 @@ describe('ItemCategoryDropdown', () => {
 
         expect(wrapper.element.querySelectorAll(':scope > *').length).toBe(1);
         expect(wrapper.element.querySelectorAll(':scope > div.fl-category-dropdown-container.custom-select ul li').length).toBe(2);
-        expect(wrapper.element.querySelector('.fl-dropdown-label').innerHTML).toBe('Findologic::Template.pleaseSelect');
+        expect(wrapper.element.querySelector('.fl-dropdown-label')!.innerHTML).toBe('Findologic::Template.pleaseSelect');
     });
 
     it('shows subcategories when the parent category is selected', () => {
