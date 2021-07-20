@@ -4,6 +4,7 @@ import { Facet, ColorFacet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
 import FindologicItemFilter from './FindologicItemFilter.vue';
 import VueCompositionAPI from '@vue/composition-api';
+import UrlBuilder from "../../../shared/UrlBuilder";
 
 const localVue = createLocalVue();
 
@@ -250,5 +251,101 @@ describe('FindologicItemFilter', () => {
     expect(colorWrapper.element.querySelectorAll('ul.fl-item-color-tiles-list li.fl-item-color-tiles-list-item').length).toBe(3);
     const tileElement = colorWrapper.element.querySelector('li.fl-item-color-tiles-list-item:first-child .fl-color-tile-background')!;
     expect(tileElement).toBeTruthy();
+  });
+
+  it('Redirects to page with filter params applied after a filter value is clicked', async () => {
+    const dropdownFacet: Facet = {
+      cssClass: '',
+      findologicFilterType: 'select',
+      id: 'test',
+      isMain: false,
+      itemCount: 3,
+      name: 'Test',
+      noAvailableFiltersText: '',
+      select: 'multiple',
+      type: '',
+      values: [
+        {
+          count: 9,
+          id: '20',
+          image: '',
+          items: [],
+          name: '22220',
+          position: 'item',
+          selected: false
+        }
+      ]
+    };
+
+    const categoryFacet: Facet = {
+      cssClass: '',
+      findologicFilterType: 'select',
+      id: 'cat',
+      isMain: false,
+      itemCount: 6,
+      name: 'Category',
+      noAvailableFiltersText: '',
+      select: 'single',
+      type: '',
+      values: [
+        {
+          count: 4,
+          id: '4',
+          image: '',
+          items: [],
+          name: 'Living Room',
+          position: 'item',
+          selected: false
+        }
+      ]
+    };
+
+    const colorFacet: ColorFacet = {
+      cssClass: '',
+      findologicFilterType: 'color',
+      id: 'Color',
+      isMain: false,
+      itemCount: 8,
+      name: 'Color',
+      noAvailableFiltersText: '',
+      select: 'multiselect',
+      type: '',
+      values: [
+        {
+          colorImageUrl: 'https://plugin.demo.findologic.com/yellow.png',
+          count: 5,
+          hexValue: '#FF0000',
+          id: '11',
+          image: 'https://plugin.demo.findologic.com/yellow.png',
+          items: [],
+          name: 'red',
+          position: 'item',
+          selected: false
+        }
+      ]
+    };
+
+    store.state.itemList = {
+      isLoading: false,
+      selectedFacets: [],
+      facets: [dropdownFacet, categoryFacet, colorFacet]
+    };
+
+    UrlBuilder.updateSelectedFilters = jest.fn();
+
+    const dropdownWrapper = mount(FindologicItemFilter, { propsData: { 'facet': dropdownFacet, 'filtersPerRow': 3 }, store, localVue });
+    const dropdownOptionElement = dropdownWrapper.find('div.form-check:first-child label.form-check-label');
+    await dropdownOptionElement.trigger('click')
+    expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(1, dropdownFacet, 'test', '22220');
+
+    const categoryWrapper = mount(FindologicItemFilter, { propsData: { 'facet': categoryFacet, 'filtersPerRow': 3 }, store, localVue });
+    const categoryOptionElement = categoryWrapper.find('ul.fl-dropdown-content li');
+    await categoryOptionElement.trigger('click')
+    expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(2, categoryFacet, 'cat', 'Living Room');
+
+    const colorWrapper = mount(FindologicItemFilter, { propsData: { 'facet': colorFacet, 'filtersPerRow': 3 }, store, localVue });
+    const colorOptionElement = colorWrapper.find('ul.fl-item-color-tiles-list li.fl-item-color-tiles-list-item label');
+    await colorOptionElement.trigger('click')
+    expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(3, colorFacet, 'Color', 'red');
   });
 });
