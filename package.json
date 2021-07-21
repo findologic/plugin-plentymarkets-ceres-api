@@ -20,6 +20,7 @@
   "dependencies": {
     "@types/jqueryui": "^1.12.15",
     "@vue/composition-api": "^1.0.0-rc.5",
+    "jquery": "^3.6.0",
     "nouislider": "^14.6.1",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",

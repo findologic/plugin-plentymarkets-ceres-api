@@ -88,7 +88,7 @@ describe('ItemCategoryDropdown', () => {
                             id: '5',
                             image: '',
                             items: [],
-                            name: '"Armchairs & Stools"',
+                            name: 'Armchairs & Stools',
                             position: 'item',
                             selected: false
                         },

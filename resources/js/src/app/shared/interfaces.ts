@@ -21,9 +21,9 @@ export interface Facet {
     select?: string;
     values?: FacetValue[];
     findologicFilterType?: string;
-    minValue?: string;
+    minValue?: number;
     min?: string;
-    maxValue?: string;
+    maxValue?: number;
     max?: string;
     step?: number;
     unit?: string;

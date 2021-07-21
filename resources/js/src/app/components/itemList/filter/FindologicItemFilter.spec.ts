@@ -4,7 +4,7 @@ import { Facet, ColorFacet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
 import FindologicItemFilter from './FindologicItemFilter.vue';
 import VueCompositionAPI from '@vue/composition-api';
-import UrlBuilder from "../../../shared/UrlBuilder";
+import UrlBuilder from '../../../shared/UrlBuilder';
 
 const localVue = createLocalVue();
 
