@@ -891,7 +891,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     methods: {
         /*
-         * Plentymarkets standart method for parsing params from string into object
+         * Plentymarkets standard method for parsing params from string into object
          *
          * @param {string} urlParams
          * @returns {Object}

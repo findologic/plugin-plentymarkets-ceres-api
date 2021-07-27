@@ -3,7 +3,7 @@ import Constants from '../constants';
 export default {
     methods:{
         /*
-         * Plentymarkets standart method for parsing params from string into object
+         * Plentymarkets standard method for parsing params from string into object
          *
          * @param {string} urlParams
          * @returns {Object}

@@ -1,3 +1,4 @@
+<!-- SSR:template(findologic-item-filter) -->
 <script type="x/template" id="vue-findologic-item-filter">
     {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
     <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-{{ config('Findologic.filters_per_row') }}" :class="[isSelected ? 'fl-active' : '', facet.cssClass]">
@@ -6,23 +7,35 @@
             <div class="selected-values-count" v-if="selectedValuesCount > 0 && this.$parent.showSelectedFiltersCount" v-text="selectedValuesCount"></div>
         </div>
         <div v-if="facetType === 'price'">
-            <item-filter-price template-override="#vue-findologic-item-price" :facet="facet"></item-filter-price>
+            <client-only>
+                <item-filter-price template-override="#vue-findologic-item-price" :facet="facet"></item-filter-price>
+            </client-only>
         </div>
         <div v-else-if="facetType === 'range-slider'">
-            <item-range-slider template-override="#vue-findologic-item-range-slider" :facet="facet"></item-range-slider>
+            <client-only>
+                <item-range-slider template-override="#vue-findologic-item-range-slider" :facet="facet"></item-range-slider>
+            </client-only>
         </div>
         <div v-else-if="facetType === 'image'">
-            <item-filter-image template-override="#vue-findologic-item-filter-image" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"></item-filter-image>
+            <client-only>
+                <item-filter-image template-override="#vue-findologic-item-filter-image" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"></item-filter-image>
+            </client-only>
         </div>
         <div v-else-if="facetType === 'color'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-color-tiles template-override="#vue-findologic-item-color-tiles" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture.png'"></item-color-tiles>
+                <client-only>
+                    <item-color-tiles template-override="#vue-findologic-item-color-tiles" :facet="facet" :fallbackImage="'{{ plugin_path("Findologic") }}/images/no-picture.png'"></item-color-tiles>
+                </client-only>
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>
         <div v-else-if="facet.id === 'cat'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-category-dropdown v-if="facetType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
+                <div v-if="facet.findologicFilterType === 'select'">
+                    <client-only>
+                        <item-category-dropdown v-if="facetType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
+                    </client-only>
+                </div>
                 <div v-else class="form-check" v-for="value in facet.values" :key="value.id">
                     <div class="category-container">
                         <input :id="'option-' + value.id"
@@ -56,7 +69,9 @@
         </div>
         <div v-else-if="facetType === 'select'">
             <div v-if="!facet.noAvailableFiltersText">
-                <item-dropdown template-override="#vue-findologic-item-dropdown" :facet="facet"></item-dropdown>
+                <client-only>
+                    <item-dropdown template-override="#vue-findologic-item-dropdown" :facet="facet"></item-dropdown>
+                </client-only>
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>
@@ -69,3 +84,4 @@
         </div>
     </div>
 </script>
+<!-- /SSR -->
