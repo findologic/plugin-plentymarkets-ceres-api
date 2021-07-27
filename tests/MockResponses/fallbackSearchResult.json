@@ -1,0 +1,308 @@
+{
+  "itemList": {
+    "total": 1,
+    "documents": [
+      {
+        "id": 1007,
+        "categories.all": {
+          "16": 29,
+          "17": 17
+        },
+        "data": [
+          {
+            "images": [
+              {
+                "all": [
+                  {
+                    "path": "S3:109:109-Barhocker-White-SanFrancisco.jpg",
+                    "urlMiddle": "https:\/\/cdn03.plentymarkets.com\/0pb05rir4h9r\/item\/images\/109\/middle\/109-Barhocker-White-SanFrancisco.jpg",
+                    "names": {
+                      "name": "",
+                      "imageId": 23,
+                      "alternate": "",
+                      "lang": "de"
+                    },
+                    "position": 0,
+                    "cleanImageName": "109-Barhocker-White-SanFrancisco.jpg"
+                  }
+                ],
+                "variation": []
+              }
+            ],
+            "item": {
+              "id": 109,
+              "storeSpecial": null,
+              "manufacturerId": 2,
+              "itemType": "default",
+              "manufacturer": {
+                "id": 2,
+                "name": "A & C Design",
+                "logo": "",
+                "url": "",
+                "street": null,
+                "email": "",
+                "position": 0,
+                "pixmaniaBrandId": 0,
+                "neckermannBrandId": 0,
+                "externalName": "A & C Design",
+                "neckermannAtEpBrandId": 0,
+                "postcode": null,
+                "houseNo": null,
+                "town": null,
+                "countryId": 0,
+                "phoneNumber": null,
+                "faxNumber": null,
+                "laRedouteBrandId": 0,
+                "comment": "",
+                "updatedAt": null,
+                "nameExternal": "A & C Design"
+              },
+              "rebate": 0,
+              "salableVariationCount": 1,
+              "customsTariffNumber": "",
+              "producingCountry": {
+                "names": []
+              },
+              "condition": {
+                "names": []
+              }
+            },
+            "texts": {
+              "lang": "de",
+              "name3": "N \/ A",
+              "urlPath": "wohnzimmer\/sessel-hocker\/barhocker-white-sanfrancisco",
+              "name2": "N \/ A",
+              "name1": "Barhocker White SanFrancisco"
+            },
+            "defaultCategories": [
+              {
+                "id": 17,
+                "parentCategoryId": 16,
+                "level": 2,
+                "type": "item",
+                "linklist": true,
+                "right": "all",
+                "sitemap": true,
+                "updatedAt": "2014-08-29T13:56:07+02:00",
+                "manually": false,
+                "plentyId": 34185
+              }
+            ],
+            "variation": {
+              "itemId": 109,
+              "maximumOrderQuantity": null,
+              "minimumOrderQuantity": 1,
+              "intervalOrderQuantity": 1,
+              "releasedAt": null,
+              "name": "",
+              "vatId": 0,
+              "bundleType": null,
+              "mayShowUnitPrice": true,
+              "availability": {
+                "id": 1,
+                "icon": "av1.gif",
+                "averageDays": 2,
+                "createdAt": "2019-08-07 11:04:19",
+                "updatedAt": "2019-08-07 11:04:19",
+                "names": {
+                  "id": 1,
+                  "availabilityId": 1,
+                  "lang": "de",
+                  "name": "Sofort versandfertig, Lieferzeit 48h",
+                  "createdAt": "2019-08-07 11:04:19",
+                  "updatedAt": "2019-08-07 11:04:19"
+                }
+              },
+              "id": 1007,
+              "availabilityUpdatedAt": "2018-02-28T12:15:53+01:00",
+              "model": ""
+            },
+            "filter": {
+              "isSalable": true,
+              "isSalableAndActive": true,
+              "hasActiveChildren": false,
+              "hasChildren": true
+            },
+            "unit": {
+              "names": {
+                "unitId": 1,
+                "lang": "de",
+                "name": "St\u00fcck"
+              },
+              "unitOfMeasurement": "C62",
+              "content": 1
+            },
+            "hasOrderProperties": false,
+            "groupedAttributes": [],
+            "prices": {
+              "default": {
+                "price": {
+                  "value": 79,
+                  "formatted": "79,00\u00a0EUR"
+                },
+                "unitPrice": {
+                  "value": 79,
+                  "formatted": "79,00\u00a0EUR"
+                },
+                "basePrice": "79,00\u00a0EUR \/ St\u00fcck",
+                "baseLot": 1,
+                "baseUnit": "C62",
+                "baseSinglePrice": 79,
+                "minimumOrderQuantity": 1,
+                "contactClassDiscount": {
+                  "percent": 0,
+                  "amount": 0
+                },
+                "categoryDiscount": {
+                  "percent": 0,
+                  "amount": 0
+                },
+                "currency": "EUR",
+                "vat": {
+                  "id": 0,
+                  "value": 19
+                },
+                "isNet": false,
+                "data": {
+                  "salesPriceId": 1,
+                  "price": 79,
+                  "priceNet": 66.386554621849,
+                  "basePrice": 79,
+                  "basePriceNet": 66.386554621849,
+                  "unitPrice": 79,
+                  "unitPriceNet": 66.386554621849,
+                  "customerClassDiscountPercent": 0,
+                  "customerClassDiscount": 0,
+                  "customerClassDiscountNet": 0,
+                  "categoryDiscountPercent": 0,
+                  "categoryDiscount": 0,
+                  "categoryDiscountNet": 0,
+                  "vatId": 0,
+                  "vatValue": 19,
+                  "currency": "EUR",
+                  "interval": "none",
+                  "conversionFactor": 1,
+                  "minimumOrderQuantity": "1.00",
+                  "updatedAt": "2016-09-05 13:25:20",
+                  "type": "default"
+                }
+              },
+              "rrp": {
+                "price": {
+                  "value": 100,
+                  "formatted": "100,00\u00a0EUR"
+                },
+                "unitPrice": {
+                  "value": 100,
+                  "formatted": "100,00\u00a0EUR"
+                },
+                "basePrice": "100,00\u00a0EUR \/ St\u00fcck",
+                "baseLot": 1,
+                "baseUnit": "C62",
+                "baseSinglePrice": 100,
+                "minimumOrderQuantity": 0,
+                "contactClassDiscount": {
+                  "percent": 0,
+                  "amount": 0
+                },
+                "categoryDiscount": {
+                  "percent": 0,
+                  "amount": 0
+                },
+                "currency": "EUR",
+                "vat": {
+                  "id": 0,
+                  "value": 19
+                },
+                "isNet": false,
+                "data": {
+                  "salesPriceId": 2,
+                  "price": 100,
+                  "priceNet": 84.033613445378,
+                  "basePrice": 100,
+                  "basePriceNet": 84.033613445378,
+                  "unitPrice": 100,
+                  "unitPriceNet": 84.033613445378,
+                  "customerClassDiscountPercent": 0,
+                  "customerClassDiscount": 0,
+                  "customerClassDiscountNet": 0,
+                  "categoryDiscountPercent": 0,
+                  "categoryDiscount": 0,
+                  "categoryDiscountNet": 0,
+                  "vatId": 0,
+                  "vatValue": 19,
+                  "currency": "EUR",
+                  "interval": "none",
+                  "conversionFactor": 1,
+                  "minimumOrderQuantity": "0.00",
+                  "updatedAt": "2016-09-05 13:25:20",
+                  "type": "rrp"
+                }
+              },
+              "set": null,
+              "specialOffer": null,
+              "graduatedPrices": [
+                {
+                  "price": {
+                    "value": 79,
+                    "formatted": "79,00\u00a0EUR"
+                  },
+                  "unitPrice": {
+                    "value": 79,
+                    "formatted": "79,00\u00a0EUR"
+                  },
+                  "basePrice": "79,00\u00a0EUR \/ St\u00fcck",
+                  "baseLot": 1,
+                  "baseUnit": "C62",
+                  "baseSinglePrice": 79,
+                  "minimumOrderQuantity": 1,
+                  "contactClassDiscount": {
+                    "percent": 0,
+                    "amount": 0
+                  },
+                  "categoryDiscount": {
+                    "percent": 0,
+                    "amount": 0
+                  },
+                  "currency": "EUR",
+                  "vat": {
+                    "id": 0,
+                    "value": 19
+                  },
+                  "isNet": false,
+                  "data": {
+                    "salesPriceId": 1,
+                    "price": 79,
+                    "priceNet": 66.386554621849,
+                    "basePrice": 79,
+                    "basePriceNet": 66.386554621849,
+                    "unitPrice": 79,
+                    "unitPriceNet": 66.386554621849,
+                    "customerClassDiscountPercent": 0,
+                    "customerClassDiscount": 0,
+                    "customerClassDiscountNet": 0,
+                    "categoryDiscountPercent": 0,
+                    "categoryDiscount": 0,
+                    "categoryDiscountNet": 0,
+                    "vatId": 0,
+                    "vatValue": 19,
+                    "currency": "EUR",
+                    "interval": "none",
+                    "conversionFactor": 1,
+                    "minimumOrderQuantity": "1.00",
+                    "updatedAt": "2016-09-05 13:25:20",
+                    "type": "default"
+                  }
+                }
+              ]
+            },
+            "facets": [],
+            "attributes": [],
+            "properties": []
+          }
+        ]
+      }
+    ]
+  },
+  "facets": null
+}
