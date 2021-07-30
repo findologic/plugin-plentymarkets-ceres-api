@@ -67,7 +67,18 @@ describe('ItemRangeSlider', () => {
         };
         UrlBuilder.updateSelectedFilters = jest.fn();
 
-        const wrapper = shallowMount(ItemRangeSlider, { propsData: { facet }, store, localVue });
+        const wrapper = shallowMount(
+            ItemRangeSlider,
+            {
+                propsData: { facet },
+                stubs: {'icon': true},
+                directives: {
+                    tooltip() {}
+                },
+                store,
+                localVue
+            }
+        );
 
         const submitButton = wrapper.find('button');
         await submitButton.trigger('click')
@@ -122,16 +133,35 @@ describe('ItemRangeSlider', () => {
         };
         UrlBuilder.updateSelectedFilters = jest.fn();
 
-        const wrapper = shallowMount(ItemRangeSlider, { propsData: { facet }, store, localVue });
+        const wrapper = shallowMount(
+            ItemRangeSlider,
+            {
+                propsData: { facet },
+                stubs: {'icon': true},
+                directives: {
+                    tooltip() {}
+                },
+                store,
+                localVue
+            }
+        );
         const submitButton = wrapper.find('button');
 
         await wrapper.setData({valueFrom: '', valueTo: ''});
         expect(submitButton.classes()).toContain('disabled');
-        await submitButton.trigger('click')
+        await submitButton.trigger('click');
+
+        await wrapper.setData({valueFrom: '', valueTo: 100});
+        expect(submitButton.classes()).toContain('disabled');
+        await submitButton.trigger('click');
+
+        await wrapper.setData({valueFrom: 100, valueTo: ''});
+        expect(submitButton.classes()).toContain('disabled');
+        await submitButton.trigger('click');
 
         await wrapper.setData({valueFrom: 'notNumber', valueTo: 'someTextInsteadOfANumber'});
         expect(submitButton.classes()).toContain('disabled');
-        await submitButton.trigger('click')
+        await submitButton.trigger('click');
 
         expect(UrlBuilder.updateSelectedFilters).not.toHaveBeenCalled();
     });
