@@ -68,8 +68,8 @@ export default defineComponent({
     }
   },
   setup: (props: ItemRangeSliderProps, { root }) => {
-    const valueFrom = ref('');
-    const valueTo = ref('');
+    const valueFrom = ref();
+    const valueTo = ref();
     const facet = props.facet;
 
     const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
