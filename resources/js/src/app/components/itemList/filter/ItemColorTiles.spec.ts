@@ -28,7 +28,7 @@ describe('ItemColorTiles', () => {
 
         const component = mount(ItemColorTiles, { propsData: { facet } });
 
-        const actualColors = component.element.querySelectorAll('.fl-color-tile-background');
-        expect(actualColors.length).toBe(3);
+        const colorTiles = component.findAll('.fl-color-tile-background');
+        expect(colorTiles.length).toBe(3);
     });
 });

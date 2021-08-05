@@ -35,19 +35,13 @@ describe('ItemDropdown', () => {
                 {
                     count: 9,
                     id: '20',
-                    image: '',
-                    items: [],
                     name: '22220',
-                    position: 'item',
                     selected: false
                 },
                 {
                     count: 1,
                     id: '21',
-                    image: '',
-                    items: [],
                     name: '22221',
-                    position: 'item',
                     selected: false
                 }
             ]
@@ -61,7 +55,7 @@ describe('ItemDropdown', () => {
 
         const wrapper = shallowMount(ItemDropdown, { propsData: { facet }, store, localVue });
 
-        expect(wrapper.element.querySelectorAll('.fl-dropdown-container').length).toBe(0);
+        expect(wrapper.find('.fl-dropdown-container').exists()).toBeFalsy();
     });
 
     it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', () => {
@@ -79,17 +73,13 @@ describe('ItemDropdown', () => {
                 {
                     count: 9,
                     id: '20',
-                    items: [],
                     name: '22220',
-                    position: 'item',
                     selected: false
                 },
                 {
                     count: 1,
                     id: '21',
-                    items: [],
                     name: '22221',
-                    position: 'item',
                     selected: false
                 }
             ]
@@ -103,11 +93,10 @@ describe('ItemDropdown', () => {
 
         const wrapper = shallowMount(ItemDropdown, { propsData: { facet }, store, localVue });
 
-        expect(wrapper.element.querySelectorAll(':scope > *').length).toBe(2);
-        expect(wrapper.element.querySelectorAll(':scope > div.form-check').length).toBe(1);
-        expect(wrapper.element.querySelectorAll(':scope > div.fl-dropdown-container.custom-select ul li').length).toBe(1);
+        expect(wrapper.findAll(':scope > *').length).toBe(2);
+        expect(wrapper.findAll(':scope > div.form-check').length).toBe(1);
+        expect(wrapper.findAll(':scope > div.fl-dropdown-container.custom-select ul li').length).toBe(1);
     });
-
 
     it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', () => {
         const facet: Facet = {
@@ -124,17 +113,13 @@ describe('ItemDropdown', () => {
                 {
                     count: 9,
                     id: '20',
-                    items: [],
                     name: '22220',
-                    position: 'item',
                     selected: false
                 },
                 {
                     count: 1,
                     id: '21',
-                    items: [],
                     name: '22221',
-                    position: 'item',
                     selected: false
                 }
             ]
@@ -148,8 +133,11 @@ describe('ItemDropdown', () => {
 
         const wrapper = shallowMount(ItemDropdown, { propsData: { facet }, store, localVue });
 
-        expect(wrapper.element.querySelectorAll(':scope > *').length).toBe(1);
-        expect(wrapper.element.querySelectorAll(':scope > div.fl-dropdown-container.custom-select ul li').length).toBe(2);
-        expect(wrapper.element.querySelector('.fl-dropdown-label')!.innerHTML).toBe('Findologic::Template.pleaseSelect');
+        expect(wrapper.findAll(':scope > *').length).toBe(1);
+        const options = wrapper.findAll(':scope > div.fl-dropdown-container.custom-select ul li');
+        expect(options.length).toBe(2);
+        expect(options.at(0).find('label').text()).toBe('22220');
+        expect(options.at(1).find('label').text()).toBe('22221');
+        expect(wrapper.find('.fl-dropdown-label').text()).toBe('Findologic::Template.pleaseSelect');
     });
 });

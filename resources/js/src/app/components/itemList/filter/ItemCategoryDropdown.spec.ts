@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { Facet, State } from '../../../shared/interfaces';
+import { CategoryFacet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
 import ItemCategoryDropdown from './ItemCategoryDropdown.vue';
 import VueCompositionAPI from '@vue/composition-api';
@@ -21,7 +21,7 @@ describe('ItemCategoryDropdown', () => {
     });
 
     it('shows all options in a dropdown regardless of set fixed item count', () => {
-        const facet: Facet = {
+        const facet: CategoryFacet = {
             cssClass: '',
             findologicFilterType: 'select',
             id: 'cat',
@@ -35,19 +35,15 @@ describe('ItemCategoryDropdown', () => {
                 {
                     count: 4,
                     id: '4',
-                    image: '',
                     items: [],
                     name: 'Living Room',
-                    position: 'item',
                     selected: false
                 },
                 {
                     count: 1,
                     id: '21',
-                    image: '',
                     items: [],
                     name: 'Office',
-                    position: 'item',
                     selected: false
                 }
             ]
@@ -61,13 +57,16 @@ describe('ItemCategoryDropdown', () => {
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
 
-        expect(wrapper.element.querySelectorAll(':scope > *').length).toBe(1);
-        expect(wrapper.element.querySelectorAll(':scope > div.fl-category-dropdown-container.custom-select ul li').length).toBe(2);
-        expect(wrapper.element.querySelector('.fl-dropdown-label')!.innerHTML).toBe('Findologic::Template.pleaseSelect');
+        expect(wrapper.findAll(':scope > *').length).toBe(1);
+        const options = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select ul li');
+        expect(options.length).toBe(2);
+        expect(options.at(0).find('label').text()).toBe('Living Room');
+        expect(options.at(1).find('label').text()).toBe('Office');
+        expect(wrapper.find('.fl-dropdown-label').text()).toBe('Findologic::Template.pleaseSelect');
     });
 
     it('shows subcategories when the parent category is selected', () => {
-        const facet: Facet = {
+        const facet: CategoryFacet = {
             cssClass: '',
             findologicFilterType: 'select',
             id: 'cat',
@@ -81,29 +80,23 @@ describe('ItemCategoryDropdown', () => {
                 {
                     count: 4,
                     id: '4',
-                    image: '',
                     items: [
                         {
                             count: 2,
                             id: '5',
-                            image: '',
                             items: [],
                             name: 'Armchairs & Stools',
-                            position: 'item',
                             selected: false
                         },
                         {
                             count: 2,
                             id: '6',
-                            image: '',
                             items: [],
                             name: 'Sofas',
-                            position: 'item',
                             selected: false
                         }
                     ],
                     name: 'Living Room',
-                    position: 'item',
                     selected: true
                 }
             ]
@@ -117,12 +110,16 @@ describe('ItemCategoryDropdown', () => {
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
 
-        expect(wrapper.element.querySelectorAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li').length).toBe(1);
-        expect(wrapper.element.querySelectorAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li ul.subcategories li').length).toBe(2);
+        expect(wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li').length).toBe(1);
+        const subcategories = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li ul.subcategories li');
+        expect(subcategories.length).toBe(2);
+        expect(subcategories.at(0).find('label').text()).toBe('Armchairs & Stools');
+        expect(subcategories.at(1).find('label').text()).toBe('Sofas');
+        //TODO: check the dropdown text to be the selected category
     });
 
     it('does not show subcategories when no parent category is selected', () => {
-        const facet: Facet = {
+        const facet: CategoryFacet = {
             cssClass: '',
             findologicFilterType: 'select',
             id: 'cat',
@@ -136,57 +133,45 @@ describe('ItemCategoryDropdown', () => {
                 {
                     count: 4,
                     id: '4',
-                    image: '',
                     items: [
                         {
                             count: 2,
                             id: '5',
-                            image: '',
                             items: [],
                             name: '"Armchairs & Stools"',
-                            position: 'item',
                             selected: false
                         },
                         {
                             count: 2,
                             id: '6',
-                            image: '',
                             items: [],
                             name: 'Sofas',
-                            position: 'item',
                             selected: false
                         }
                     ],
                     name: 'Living Room',
-                    position: 'item',
                     selected: false
                 },
                 {
                     count: 4,
                     id: '5',
-                    image: '',
                     items: [
                         {
                             count: 2,
                             id: '8',
-                            image: '',
                             items: [],
                             name: 'Something',
-                            position: 'item',
                             selected: false
                         },
                         {
                             count: 2,
                             id: '9',
-                            image: '',
                             items: [],
                             name: 'Something else',
-                            position: 'item',
                             selected: false
                         }
                     ],
-                    name: 'Living Room',
-                    position: 'item',
+                    name: 'Not Living Room',
                     selected: false
                 }
             ]
@@ -200,7 +185,11 @@ describe('ItemCategoryDropdown', () => {
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
 
-        expect(wrapper.element.querySelectorAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li').length).toBe(2);
-        expect(wrapper.element.querySelectorAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li ul.subcategories li').length).toBe(0);
+        const options = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li');
+        expect(options.length).toBe(2);
+        expect(options.at(0).find('label').text()).toBe('Living Room');
+        expect(options.at(0).find('ul.subcategories li').exists()).toBeFalsy();
+        expect(options.at(1).find('label').text()).toBe('Not Living Room');
+        expect(options.at(1).find('ul.subcategories li').exists()).toBeFalsy();
     });
 });

@@ -44,19 +44,13 @@ describe('ItemRangeSlider', () => {
                 {
                     count: 9,
                     id: '20',
-                    image: '',
-                    items: [],
                     name:'59 - 99',
-                    position: 'item',
                     selected: false
                 },
                 {
                     count: 1,
                     id: '21',
-                    image: '',
-                    items: [],
                     name: '119 - 149',
-                    position: 'item',
                     selected: false
                 }
             ]
@@ -75,7 +69,7 @@ describe('ItemRangeSlider', () => {
                 propsData: { facet },
                 stubs: {'icon': true},
                 directives: {
-                    tooltip() {}
+                    tooltip: jest.fn
                 },
                 store,
                 localVue
@@ -110,19 +104,13 @@ describe('ItemRangeSlider', () => {
                 {
                     count: 9,
                     id: '20',
-                    image: '',
-                    items: [],
                     name:'59 - 99',
-                    position: 'item',
                     selected: false
                 },
                 {
                     count: 1,
                     id: '21',
-                    image: '',
-                    items: [],
                     name: '119 - 149',
-                    position: 'item',
                     selected: false
                 }
             ]

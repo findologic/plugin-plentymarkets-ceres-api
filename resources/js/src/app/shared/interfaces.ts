@@ -33,12 +33,9 @@ export interface Facet {
 
 export interface FacetValue {
     count?: number;
-    image?: string;
     id?: string;
     name: string;
     imageUrl?: string;
-    items?: FacetValue[];
-    position?: string;
     selected: boolean;
 }
 
@@ -49,6 +46,14 @@ export interface ColorFacet extends Facet {
 export interface ColorFacetValue extends FacetValue {
     hexValue: string|null;
     colorImageUrl?: string|null;
+}
+
+export interface CategoryFacet extends Facet {
+    values: CategoryFacetValue[];
+}
+
+export interface CategoryFacetValue extends FacetValue {
+    items: CategoryFacetValue[]
 }
 
 export interface ItemListData {
