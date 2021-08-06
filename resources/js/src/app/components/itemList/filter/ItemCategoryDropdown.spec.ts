@@ -4,6 +4,7 @@ import { CategoryFacet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
 import ItemCategoryDropdown from './ItemCategoryDropdown.vue';
 import VueCompositionAPI from '@vue/composition-api';
+import UrlBuilder from '../../../shared/UrlBuilder';
 
 const localVue = createLocalVue();
 
@@ -65,7 +66,7 @@ describe('ItemCategoryDropdown', () => {
         expect(wrapper.find('.fl-dropdown-label').text()).toBe('Findologic::Template.pleaseSelect');
     });
 
-    it('shows subcategories when the parent category is selected', () => {
+    it('shows subcategories when the parent category is selected', async () => {
         const facet: CategoryFacet = {
             cssClass: '',
             findologicFilterType: 'select',
@@ -108,14 +109,23 @@ describe('ItemCategoryDropdown', () => {
             facets: [facet]
         };
 
+        UrlBuilder.getSelectedFilters = jest.fn(() => [{ id: 'cat', name: 'Living Room' }]);
+
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
 
-        expect(wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li').length).toBe(1);
-        const subcategories = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li ul.subcategories li');
+        await localVue.nextTick();
+
+        const dropdownLabel = wrapper.find(':scope > div.fl-category-dropdown-container.custom-select > .fl-dropdown-label');
+        expect(dropdownLabel.text()).toBe('Living Room');
+
+        const categories = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li');
+        expect(categories.length).toBe(1);
+        expect(categories.at(0).find('label').text()).toBe('Living Room');
+
+        const subcategories = categories.at(0).findAll('ul.subcategories li');
         expect(subcategories.length).toBe(2);
         expect(subcategories.at(0).find('label').text()).toBe('Armchairs & Stools');
         expect(subcategories.at(1).find('label').text()).toBe('Sofas');
-        //TODO: check the dropdown text to be the selected category
     });
 
     it('does not show subcategories when no parent category is selected', () => {
