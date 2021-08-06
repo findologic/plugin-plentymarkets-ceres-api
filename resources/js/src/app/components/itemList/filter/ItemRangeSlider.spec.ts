@@ -1,13 +1,13 @@
-const globalAny:any = global;
+const globalAny: any = global;
 
 import Vuex from 'vuex';
-import {shallowMount, createLocalVue, mount} from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { Facet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
 import ItemRangeSlider from './ItemRangeSlider.vue';
 import VueCompositionAPI from '@vue/composition-api';
-import $ from 'jquery'
-import UrlBuilder from "../../../shared/UrlBuilder";
+import $ from 'jquery';
+import UrlBuilder from '../../../shared/UrlBuilder';
 
 const localVue = createLocalVue();
 
@@ -19,7 +19,7 @@ window.ceresTranslate = key => key;
 describe('ItemRangeSlider', () => {
 
     let store: Store<State>;
-    globalAny.$ = $
+    globalAny.$ = $;
 
     beforeEach(() => {
         store = new Vuex.Store({});
@@ -67,7 +67,7 @@ describe('ItemRangeSlider', () => {
             ItemRangeSlider,
             {
                 propsData: { facet },
-                stubs: {'icon': true},
+                stubs: { 'icon': true },
                 directives: {
                     tooltip: jest.fn
                 },
@@ -77,12 +77,12 @@ describe('ItemRangeSlider', () => {
         );
 
         const submitButton = wrapper.find('button');
-        await submitButton.trigger('click')
-        expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(1, facet, 'price', {'max': 149, 'min': 59});
+        await submitButton.trigger('click');
+        expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(1, facet, 'price', { 'max': 149, 'min': 59 });
 
-        wrapper.setData({valueFrom: 100, valueTo: 140.55});
-        await submitButton.trigger('click')
-        expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(2, facet, 'price', {'max': 140.55, 'min': 100});
+        wrapper.setData({ valueFrom: 100, valueTo: 140.55 });
+        await submitButton.trigger('click');
+        expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(2, facet, 'price', { 'max': 140.55, 'min': 100 });
     });
 
     it('Disables the filter submit button if fields contain incorrect values', async () => {
@@ -127,9 +127,9 @@ describe('ItemRangeSlider', () => {
             ItemRangeSlider,
             {
                 propsData: { facet },
-                stubs: {'icon': true},
+                stubs: { 'icon': true },
                 directives: {
-                    tooltip() {}
+                    tooltip: jest.fn()
                 },
                 store,
                 localVue
@@ -137,19 +137,19 @@ describe('ItemRangeSlider', () => {
         );
         const submitButton = wrapper.find('button');
 
-        await wrapper.setData({valueFrom: '', valueTo: ''});
+        await wrapper.setData({ valueFrom: '', valueTo: '' });
         expect(submitButton.classes()).toContain('disabled');
         await submitButton.trigger('click');
 
-        await wrapper.setData({valueFrom: '', valueTo: 100});
+        await wrapper.setData({ valueFrom: '', valueTo: 100 });
         expect(submitButton.classes()).toContain('disabled');
         await submitButton.trigger('click');
 
-        await wrapper.setData({valueFrom: 100, valueTo: ''});
+        await wrapper.setData({ valueFrom: 100, valueTo: '' });
         expect(submitButton.classes()).toContain('disabled');
         await submitButton.trigger('click');
 
-        await wrapper.setData({valueFrom: 'notNumber', valueTo: 'someTextInsteadOfANumber'});
+        await wrapper.setData({ valueFrom: 'notNumber', valueTo: 'someTextInsteadOfANumber' });
         expect(submitButton.classes()).toContain('disabled');
         await submitButton.trigger('click');
 

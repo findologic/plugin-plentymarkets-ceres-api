@@ -53,7 +53,7 @@ export interface CategoryFacet extends Facet {
 }
 
 export interface CategoryFacetValue extends FacetValue {
-    items: CategoryFacetValue[]
+    items: CategoryFacetValue[];
 }
 
 export interface ItemListData {

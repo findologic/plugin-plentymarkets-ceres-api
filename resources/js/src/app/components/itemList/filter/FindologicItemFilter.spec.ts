@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
-import {Facet, ColorFacet, State, CategoryFacet} from '../../../shared/interfaces';
+import { Facet, ColorFacet, State, CategoryFacet } from '../../../shared/interfaces';
 import { Store } from 'vuex';
 import FindologicItemFilter from './FindologicItemFilter.vue';
 import VueCompositionAPI from '@vue/composition-api';
@@ -106,8 +106,8 @@ describe('FindologicItemFilter', () => {
         } as Facet,
         expectedNoAvailableFiltersTextMessage: 'No values available for this color filter'
       }
-    ]
-  };
+    ];
+  }
 
   it.each(noAvailableFiltersTextTestFacetProvider())('Shows the noAvailableFiltersText when facet has no values', (data) => {
     const facet: Facet = data.facet;
@@ -334,8 +334,8 @@ describe('FindologicItemFilter', () => {
         expectedFacetId: 'Color',
         expectedFacetValue: 'red'
       }
-    ]
-  };
+    ];
+  }
 
   it.each(filterClickRedirectionTestProvider())('Redirects to page with filter params applied after a filter value is clicke', async (data) => {
     const facet = data.facet;
@@ -350,7 +350,7 @@ describe('FindologicItemFilter', () => {
 
     const wrapper = mount(FindologicItemFilter, { propsData: { facet, 'filtersPerRow': 3 }, store, localVue });
     const optionElement = wrapper.find(data.itemSelector);
-    await optionElement.trigger('click')
+    await optionElement.trigger('click');
     expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(1, facet, data.expectedFacetId, data.expectedFacetValue);
   });
 });
