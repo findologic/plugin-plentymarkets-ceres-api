@@ -1,5 +1,3 @@
-const globalAny: any = global;
-
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { Facet, State } from '../../../shared/interfaces';
@@ -15,11 +13,11 @@ localVue.use(Vuex);
 localVue.use(VueCompositionAPI);
 
 window.ceresTranslate = key => key;
+window.$ = $;
 
 describe('ItemRangeSlider', () => {
 
     let store: Store<State>;
-    globalAny.$ = $;
 
     beforeEach(() => {
         store = new Vuex.Store({});
