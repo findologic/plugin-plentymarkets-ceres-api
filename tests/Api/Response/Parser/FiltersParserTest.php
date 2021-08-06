@@ -46,6 +46,8 @@ class FiltersParserTest extends TestCase
      */
     public function testParse($response, array $expectedResult)
     {
+        $this->imageService->method('isImageAccessible')->willReturn(true);
+
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 
@@ -338,7 +340,8 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '25',
                                 'selected' => false,
-                                'id' => 9
+                                'id' => 9,
+                                'imageUrl' => 'https://test.com/vendor/a_amp_c_design.jpg'
                             ]
                         ]
                     ],
@@ -663,7 +666,8 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '25',
                                 'selected' => false,
-                                'id' => 4
+                                'id' => 4,
+                                'imageUrl' => 'https://test.com/vendor/a_amp_c_design.jpg'
                             ]
                         ]
                     ],
