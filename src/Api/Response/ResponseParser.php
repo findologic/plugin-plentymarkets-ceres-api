@@ -34,7 +34,7 @@ class ResponseParser
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
-    public function parse(HttpRequest $request, string $responseData): Response
+    public function parse(HttpRequest $request, $responseData): Response
     {
         /** @var Response $response */
         $response = $this->createResponseObject();
