@@ -39,6 +39,12 @@ class ResponseParser
         /** @var Response $response */
         $response = $this->createResponseObject();
 
+        if (!is_string($responseData)) {
+            $this->logger->error('Invalid response received from server.', ['response' => $responseData]);
+
+            return $response;
+        }
+
         try {
             $data = $this->loadXml($responseData);
             $landingPageData = $this->parseLandingPage($data);

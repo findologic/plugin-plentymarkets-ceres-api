@@ -88,7 +88,6 @@ class ResponseParserTest extends TestCase
             'error_file' => '/findologic/http_request2/HTTP/Request2/Adapter/Curl.php',
             'error_line' => 155
         ];
-        $expectedExceptionMessage = 'simplexml_load_string() expects parameter 1 to be string, array given';
 
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
@@ -103,16 +102,8 @@ class ResponseParserTest extends TestCase
 
         $this->logger
             ->expects($this->once())
-            ->method('warning')
-            ->with('Could not parse response from server.');
-        $this->logger
-            ->expects($this->once())
-            ->method('logException')
-            ->with(
-                $this->callback(function ($e) use ($expectedExceptionMessage) {
-                    return $e->getMessage() == $expectedExceptionMessage;
-                })
-            );
+            ->method('error')
+            ->with('Invalid response received from server.', ['response' => $errorResponse]);
 
         $response = $responseParserMock->parse($requestMock, $errorResponse);
 
