@@ -148,7 +148,7 @@ describe('ItemCategoryDropdown', () => {
                             count: 2,
                             id: '5',
                             items: [],
-                            name: '"Armchairs & Stools"',
+                            name: 'Armchairs & Stools',
                             selected: false
                         },
                         {
