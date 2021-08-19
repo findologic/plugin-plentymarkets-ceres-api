@@ -56,7 +56,8 @@ describe('FindologicItemFilter', () => {
 
     const wrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': facet, 'filtersPerRow': 3 }, store, localVue });
 
-    expect(wrapper.find(':scope > div.h3').text()).toBe('Facet name');
+    const filterHeading = wrapper.find(':scope > div.h3').text();
+    expect(filterHeading).toBe('Facet name');
   });
 
   function noAvailableFiltersTextTestFacetProvider() {
@@ -120,7 +121,8 @@ describe('FindologicItemFilter', () => {
 
     const wrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': facet, 'filtersPerRow': 3 }, store, localVue });
 
-    expect(wrapper.find(':scope > div:last-child p').text()).toBe(data.expectedNoAvailableFiltersTextMessage);
+    const textInFilterElement = wrapper.find(':scope > div:last-child p').text();
+    expect(textInFilterElement).toBe(data.expectedNoAvailableFiltersTextMessage);
   });
 
   it('Renders dropdown facet values correctly in the respective filter container', () => {
@@ -158,9 +160,12 @@ describe('FindologicItemFilter', () => {
 
     const dropdownWrapper = mount(FindologicItemFilter, { propsData: { 'facet': dropdownFacet, 'filtersPerRow': 3 }, store, localVue });
     const dropdownElement = dropdownWrapper.find(':scope > div:last-child .fl-dropdown');
-    expect(dropdownElement.findAll('div.form-check').length).toBe(2);
-    expect(dropdownElement.find('div.form-check:first-child label.form-check-label').text()).toBe('22220');
-    expect(dropdownElement.find('div.form-check:first-child .filter-badge').text()).toBe('9');
+    const dropdownOptions = dropdownElement.findAll('div.form-check');
+    expect(dropdownOptions.length).toBe(2);
+    const firstOptionLabel = dropdownOptions.at(0).find('label.form-check-label').text();
+    expect(firstOptionLabel).toBe('22220');
+    const firstOptionItemsCount = dropdownOptions.at(0).find('.filter-badge').text();
+    expect(firstOptionItemsCount).toBe('9');
   });
 
   it('Renders category facet values correctly in the respective filter container', () => {
@@ -200,9 +205,12 @@ describe('FindologicItemFilter', () => {
 
     const categoryWrapper = mount(FindologicItemFilter, { propsData: { 'facet': categoryFacet, 'filtersPerRow': 3 }, store, localVue });
     const categoryElement = categoryWrapper.find(':scope > div:last-child div.fl-category-dropdown-container');
-    expect(categoryElement.findAll('ul.fl-dropdown-content li').length).toBe(2);
-    expect(categoryElement.find('ul.fl-dropdown-content li:first-child label').text()).toBe('Living Room');
-    expect(categoryElement.find('ul.fl-dropdown-content li:first-child .filter-badge').text()).toBe('4');
+    const dropdownOptions = categoryElement.findAll('ul.fl-dropdown-content li');
+    expect(dropdownOptions.length).toBe(2);
+    const firstOptionLabel = dropdownOptions.at(0).find('label').text();
+    expect(firstOptionLabel).toBe('Living Room');
+    const firstOptionItemsCount = dropdownOptions.at(0).find('.filter-badge').text();
+    expect(firstOptionItemsCount).toBe('4');
   });
 
   it('Renders color facet values correctly in the respective filter container', () => {
