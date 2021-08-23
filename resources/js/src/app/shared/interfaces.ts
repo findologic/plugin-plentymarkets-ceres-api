@@ -21,9 +21,9 @@ export interface Facet {
     select?: string;
     values?: FacetValue[];
     findologicFilterType?: string;
-    minValue?: string;
+    minValue?: number;
     min?: string;
-    maxValue?: string;
+    maxValue?: number;
     max?: string;
     step?: number;
     unit?: string;
@@ -32,9 +32,11 @@ export interface Facet {
 }
 
 export interface FacetValue {
+    count?: number;
     id?: string;
     name: string;
     imageUrl?: string;
+    selected: boolean;
 }
 
 export interface ColorFacet extends Facet {
@@ -44,6 +46,14 @@ export interface ColorFacet extends Facet {
 export interface ColorFacetValue extends FacetValue {
     hexValue: string|null;
     colorImageUrl?: string|null;
+}
+
+export interface CategoryFacet extends Facet {
+    values: CategoryFacetValue[];
+}
+
+export interface CategoryFacetValue extends FacetValue {
+    items: CategoryFacetValue[];
 }
 
 export interface ItemListData {

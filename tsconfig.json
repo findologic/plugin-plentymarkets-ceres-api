@@ -16,7 +16,8 @@
       "webpack-env",
       "jest",
       "jqueryui",
-      "vue"
+      "vue",
+      "node"
     ],
     "paths": {
       "@/*": [

@@ -10,22 +10,25 @@ describe('ItemColorTiles', () => {
                 {
                     name: 'Red',
                     hexValue: '#ff0000',
+                    selected: false
                 },
                 {
                     name: 'Colorful',
                     hexValue: null,
-                    colorImageUrl: 'https://your-store.com/images/colors/colorful.png'
+                    colorImageUrl: 'https://your-store.com/images/colors/colorful.png',
+                    selected: false
                 },
                 {
                     name: 'Unknown',
                     hexValue: null,
+                    selected: false
                 }
             ]
         };
 
         const component = mount(ItemColorTiles, { propsData: { facet } });
 
-        const actualColors = component.element.querySelectorAll('.fl-color-tile-background');
-        expect(actualColors.length).toBe(3);
+        const colorTiles = component.findAll('.fl-color-tile-background');
+        expect(colorTiles.length).toBe(3);
     });
 });

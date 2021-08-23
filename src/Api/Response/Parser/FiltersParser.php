@@ -120,7 +120,6 @@ class FiltersParser
             $filterItem['name'] = $data->name->__toString();
             $filterItem['position'] = $index;
             $filterItem['count'] = $data->frequency->__toString();
-            $filterItem['image'] = $data->image->__toString();
             $filterItem['id'] = ++$this->valueId;
             $filterItem['selected'] = false;
 
