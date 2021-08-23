@@ -1,3 +1,4 @@
+<!-- SSR:template(item-filter-tag-list) -->
 <script type="x/template" id="vue-item-filter-tag-list">
     <div class="selected-filters clearfix">
         <span :class="'selected-filter filter-' + tag.id" v-for="tag in tagList" @click="removeTag(tag)" rel="nofollow">
@@ -14,3 +15,4 @@
         </span>
     </div>
 </script>
+<!-- /SSR -->
