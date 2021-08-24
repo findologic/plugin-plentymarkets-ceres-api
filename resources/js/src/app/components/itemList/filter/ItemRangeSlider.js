@@ -33,8 +33,8 @@ Vue.component("item-range-slider", {
                 start: [self.valueFrom, self.valueTo],
                 connect: true,
                 range: {
-                    'min': self.facet.minValue,
-                    'max': self.facet.maxValue
+                    'min': Math.min(self.valueFrom, self.facet.minValue),
+                    'max': Math.max(self.valueTo, self.facet.maxValue)
                 }
             });
 
