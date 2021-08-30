@@ -1,5 +1,16 @@
 # Release Notes for Findologic
 
+## 3.7.2 (2021-08-30)
+
+### Changed
+
+* [PLENTY-365] The minimal required Ceres & IO version now is `5.0.35`.
+
+### Fixed
+
+* [PLENTY-362] Fixed a bug that caused selected filters not to properly render, when SSR has been enabled.
+* [PLENTY-363] Fixed a bug that caused the wrong minimal price, in case a lower price was set than was possible.
+
 ## 3.7.1 (2021-08-16)
 
 ### Fixed
