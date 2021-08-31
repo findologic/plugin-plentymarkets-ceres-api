@@ -1,5 +1,20 @@
 # Release Notes for Findologic
 
+## 3.5.0 (2021-03-08)
+
+### Changed
+
+* [PLENTY-305] The usability of the range slider has been improved.
+  * The currency/unit is now shown in the selected filter.
+  * Entered commas (`,`) will be replaced by dots (`.`).
+  * Non-numerical inputs can no longer be submitted.
+* [PLENTY-313] The performance on pages, where vendor image, or color image filters are displayed, has been improved.
+
+### Fixed
+
+* [PLENTY-315] Fixed a bug that may have caused a long loading time on no-result pages.
+* [PLENTY-316] Fixed a bug that caused a wrong product count on category pages.
+
 ## 3.4.0 (2021-02-15)
 
 ### Added

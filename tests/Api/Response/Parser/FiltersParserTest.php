@@ -46,8 +46,6 @@ class FiltersParserTest extends TestCase
      */
     public function testParse($response, array $expectedResult)
     {
-        $this->imageService->method('isImageAccessible')->willReturn(true);
-
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 

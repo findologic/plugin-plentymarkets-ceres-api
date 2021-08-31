@@ -36,12 +36,6 @@
 
 {% set flPublicScriptPath = plugin_path("Findologic") ~ '/js/dist/findologic_ceres.js' %}
 
-<script>
-    $(function() {
-        SVGInjector($('img.fl-svg'));
-    });
-</script>
-
 <script type="x/template" data-component="item-filter-list">
     <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
@@ -51,6 +45,7 @@
         {{ component( "Findologic::ItemList.Components.Filter.ItemDropdown" ) }}
         {{ component( "Findologic::ItemList.Components.Filter.ItemCategoryDropdown" ) }}
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilterPrice" ) }}
+        {{ component( "Findologic::ItemList.Components.Filter.ItemFilterImage" ) }}
 
         <div class="ml-0 main-filters">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">

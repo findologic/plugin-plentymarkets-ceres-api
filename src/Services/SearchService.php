@@ -145,6 +145,10 @@ class SearchService implements SearchServiceInterface
     {
         $results = $this->search($request, $externalSearch);
 
+        if ($results->getResultsCount() == 0) {
+            return;
+        }
+
         if ($this->shouldFilterInvalidProducts()) {
             $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
         } else {
@@ -177,9 +181,16 @@ class SearchService implements SearchServiceInterface
             $this->results = $response;
         }
 
+        $parameters = (array) $request->all();
+        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
+            $total = $this->results->getData(Response::DATA_RESULTS)['count'];
+        } else {
+            $total = $response->getData(Response::DATA_RESULTS)['count'];
+        }
+
         $externalSearch->setResults(
             $response->getVariationIds(),
-            $this->results->getData(Response::DATA_RESULTS)['count']
+            $total
         );
     }
 

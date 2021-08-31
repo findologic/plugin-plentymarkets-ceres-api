@@ -19,11 +19,6 @@ class FiltersParser
     protected $valueId;
 
     /**
-     * @var Image
-     */
-    protected $imageService;
-
-    /**
      * @var LibraryCallContract
      */
     protected $libraryCallContract;
@@ -31,12 +26,10 @@ class FiltersParser
     /**
      * FiltersParser constructor.
      * @param LibraryCallContract $libraryCallContract
-     * @param Image $colorImageService
      */
-    public function __construct(LibraryCallContract $libraryCallContract, Image $colorImageService)
+    public function __construct(LibraryCallContract $libraryCallContract)
     {
         $this->libraryCallContract = $libraryCallContract;
-        $this->imageService = $colorImageService;
     }
 
     /**
@@ -134,19 +127,13 @@ class FiltersParser
 
             if ($filterType === Plugin::FILTER_TYPE_IMAGE) {
                 if (isset($data->image) && $data->image->__toString() !== '' && $data->image->__toString()[0] !== '/') {
-                    if ($this->imageService->isImageAccessible($data->image->__toString())) {
-                        $filterItem['imageUrl'] = $data->image->__toString();
-                    }
+                    $filterItem['imageUrl'] = $data->image->__toString();
                 }
             }
 
             if ($filterType === Plugin::FILTER_TYPE_COLOR) {
                 if (isset($data->image) && $data->image->__toString() !== '') {
-                    $filterItem['colorImageUrl'] = null;
-
-                    if ($this->imageService->isImageAccessible($data->image->__toString())) {
-                        $filterItem['colorImageUrl'] = $data->image->__toString();
-                    }
+                    $filterItem['colorImageUrl'] = $data->image->__toString();
                 }
 
                 $filterItem['hexValue'] = $data->color->__toString();
