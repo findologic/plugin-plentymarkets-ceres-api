@@ -1,5 +1,25 @@
 # Release Notes für Findologic
 
+## 3.4.0 (2021-02-15)
+
+### Hinzugefügt
+
+* [PLENTY-245] Die selektierten Filter enthalten nun auch den Namen des Filters.
+* [PLENTY-273] Der Kategoriefilter wird nun als Dropdown dargestellt, wenn der Filter in der Filterkonfiguration als
+  Dropdown konfiguriert wurde.
+* [PLENTY-308] Beim Halten des Mauszeigers über eine Farbfilter-Kachel wird nun der Name der Farbe als Titel angezeigt.
+
+### Geändert
+
+* [PLENTY-287] Anstatt der Container-Verknüpfung wird nun die Komponente für das Suchfeld global überschrieben.
+
+### Fixed
+
+* [PLENTY-311] Ein Fehler wurde behoben, welcher es erlaubte XSS auszuführen, wenn die Smart Did-You-Mean
+  Container-Verknüpfung verwendet wurde.
+* [PLENTY-299] Ein Fehler wurde behoben, wodurch Fehler in der Konsole ausgegeben wurden, wenn sowohl die
+  TopBar als auch Filter-Widgets auf der selben Seite verwendet wurden.
+
 ## 3.3.0 (2021-01-12)
 
 ### Hinzugefügt
