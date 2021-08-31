@@ -7,7 +7,15 @@
         <div class="ml-0 main-filters" v-if="facets.some(e => e.isMain === true)">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <findologic-item-filter v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}" v-for="facet in facets" v-if="facet.isMain" :facet="facet" :key="facet.id"></findologic-item-filter>
+                    <findologic-item-filter
+                            v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}"
+                            v-bind:fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+                            v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+                            v-for="facet in facets"
+                            v-if="facet.isMain"
+                            :facet="facet"
+                            :key="facet.id"
+                    ></findologic-item-filter>
                 </div>
                 <div class="row">
                     <a class="btn btn-link filter-toggle" data-toggle="collapse" href="#filterCollapse" aria-controls="filterCollapse">
@@ -28,7 +36,15 @@
         <div class="ml-0 filter-collapse collapse" id="filterCollapse">
             <div class="container-max component-loading page-content mb-5" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <findologic-item-filter v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}" v-for="facet in facets" v-if="!facet.isMain" :facet="facet" :key="facet.id"></findologic-item-filter>
+                    <findologic-item-filter
+                            v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}"
+                            :fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+                            :fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+                            v-for="facet in facets"
+                            v-if="!facet.isMain"
+                            :facet="facet"
+                            :key="facet.id"
+                    ></findologic-item-filter>
                 </div>
             </div>
         </div>

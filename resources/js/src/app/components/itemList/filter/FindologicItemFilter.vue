@@ -13,49 +13,17 @@
       <item-range-slider :facet="facet" />
     </div>
     <div v-else-if="facet.findologicFilterType === 'image'">
-      <div v-if="!facet.noAvailableFiltersText">
-        <div
-          v-for="value in facet.values"
-          :key="value.id"
-          class="form-check"
-        >
-          <input
-            :id="'option-' + value.id"
-            class="form-check-input hidden-xs-up"
-            type="checkbox"
-            :checked="value.selected"
-            :disabled="isLoading"
-            @change="updateFacet(value)"
-          >
-          <label
-            :for="'option-' + value.id"
-            class="form-check-label"
-            rel="nofollow"
-          >
-            <img
-              v-show="value.imageUrl"
-              :src="value.imageUrl"
-              width="80px"
-            >
-            <span
-              v-show="!value.imageUrl"
-              v-text="value.name"
-            />
-          </label>
-          <div
-            class="filter-badge"
-            v-text="value.count"
-          />
-        </div>
-      </div>
-      <p
-        v-if="facet.noAvailableFiltersText"
-        v-text="facet.noAvailableFiltersText"
+      <item-filter-image
+        :facet="facet"
+        :fallback-image="fallbackImageImageFilter"
       />
     </div>
     <div v-else-if="facet.findologicFilterType === 'color'">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-color-tiles :facet="facet" />
+        <item-color-tiles
+          :facet="facet"
+          :fallback-image="fallbackImageColorFilter"
+        />
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
@@ -184,9 +152,11 @@ import ItemColorTiles from './ItemColorTiles.vue';
 import ItemCategoryDropdown from './ItemCategoryDropdown.vue';
 import ItemDropdown from './ItemDropdown.vue';
 import UrlBuilder from '../../../shared/UrlBuilder';
+import ItemFilterImage from './ItemFilterImage.vue';
 
 interface ItemFilterProps extends TemplateOverridable, FacetAware {
   filtersPerRow: number;
+  fallbackImage: string;
 }
 
 export default defineComponent({
@@ -203,13 +173,22 @@ export default defineComponent({
     filtersPerRow: {
       type: Number,
       required: true
+    },
+    fallbackImageColorFilter: {
+      type: String,
+      default: ''
+    },
+    fallbackImageImageFilter: {
+      type: String,
+      default: ''
     }
   },
   components: {
     'item-range-slider': ItemRangeSlider,
     'item-color-tiles': ItemColorTiles,
     'item-category-dropdown': ItemCategoryDropdown,
-    'item-dropdown': ItemDropdown
+    'item-dropdown': ItemDropdown,
+    'item-filter-image': ItemFilterImage
   },
   setup: (props: ItemFilterProps, { root }) => {
     root.$options.template = props.template || '#vue-item-filter';

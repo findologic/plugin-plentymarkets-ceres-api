@@ -1,6 +1,10 @@
 import { mount } from '@vue/test-utils';
 import { ColorFacet } from '../../../shared/interfaces';
 import ItemColorTiles from './ItemColorTiles.vue';
+import $ from 'jquery';
+
+window.$ = $;
+window.SVGInjector = jest.fn;
 
 describe('ItemColorTiles', () => {
     it('must show all color tiles', () => {

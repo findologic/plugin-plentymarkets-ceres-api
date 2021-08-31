@@ -84,7 +84,7 @@
 
 <script lang="ts">
 import BaseDropdown from '../../../mixins/baseDropdown';
-import { FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
+import { FacetAware, FacetValue, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
 import { defineComponent, onMounted, ref } from '@vue/composition-api';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
@@ -99,7 +99,7 @@ export default defineComponent({
     root.$options.template = props.template || '#vue-item-dropdown';
 
     const buildDropdownLabel = () => {
-      const selectedFilters = UrlBuilder.getSelectedFilters();
+      const selectedFilters = UrlBuilder.getSelectedFilters(root.$store as PlentyVuexStore);
 
       for (let i = 0; i < selectedFilters.length; i++) {
         const facet = selectedFilters[i];

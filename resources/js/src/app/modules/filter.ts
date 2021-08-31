@@ -9,6 +9,7 @@ import ItemDropdown from '../components/itemList/filter/ItemDropdown.vue';
 import ItemRangeSlider from '../components/itemList/filter/ItemRangeSlider.vue';
 import FindologicItemFilter from '../components/itemList/filter/FindologicItemFilter.vue';
 import ItemFilterTagList from '../components/itemList/filter/ItemFilterTagList.vue';
+import ItemFilterImage from '../components/itemList/filter/ItemFilterImage.vue';
 
 if (window.flCeresConfig.isSearchPage || window.flCeresConfig.activeOnCatPage) {
     // @ts-ignore
@@ -20,6 +21,7 @@ if (window.flCeresConfig.isSearchPage || window.flCeresConfig.activeOnCatPage) {
     plentyVue.component('item-category-dropdown', ItemCategoryDropdown);
     plentyVue.component('item-dropdown', ItemDropdown);
     plentyVue.component('item-range-slider', ItemRangeSlider);
+    plentyVue.component('item-filter-image', ItemFilterImage);
     plentyVue.component('findologic-item-filter', FindologicItemFilter);
     plentyVue.component('item-filter-tag-list', ItemFilterTagList);
 }

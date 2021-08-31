@@ -59,7 +59,7 @@ export default defineComponent({
     root.$options.template = props.template || '#vue-item-filter-tag-list';
     const store = root.$store as PlentyVuexStore;
 
-    const tagList = computed((): Facet[] => UrlBuilder.getSelectedFilters());
+    const tagList = computed((): Facet[] => UrlBuilder.getSelectedFilters(store));
     const facetNames = computed(() => {
       const map: {[key: string]: string} = {};
 

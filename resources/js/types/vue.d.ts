@@ -5,7 +5,7 @@ declare module '*.vue' {
     declare global {
         interface Window {
             ceresTranslate: (key: string) => string;
-            $: {},
+            $: {};
             noUiSlider: {
                 create: (element: Element|null, config) => {on: (eventName, callback) => {}};
             };
@@ -22,6 +22,7 @@ declare module '*.vue' {
                 isSearchPage: boolean;
                 activeOnCatPage: boolean;
             };
+            SVGInjector: (element: JQuery<HTMLElement>|HTMLElement|Element|null) => {};
         }
     }
 }

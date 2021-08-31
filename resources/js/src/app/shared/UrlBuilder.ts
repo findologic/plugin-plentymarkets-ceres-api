@@ -1,5 +1,5 @@
 import Constants from './constants';
-import { Facet } from './interfaces';
+import { Facet, PlentyVuexStore } from './interfaces';
 
 class UrlBuilder {
     /**
@@ -213,7 +213,7 @@ class UrlBuilder {
     /**
      * Get the list of selected filters from url.
      */
-    getSelectedFilters(): Facet[] {
+    getSelectedFilters(store?: PlentyVuexStore): Facet[] {
         const selectedFilters = [] as Facet[];
         const params = this.getSearchParams();
 
@@ -233,9 +233,13 @@ class UrlBuilder {
             }
 
             if (filter === 'price' || this.isRangeSliderFilter(attributes[filter])) {
+                const facetInfo = this.getFacetIdInfoMap(store);
+
+                const unit = (facetInfo[filter] && facetInfo[filter].unit) ? ' ' + facetInfo[filter].unit : '';
+
                 selectedFilters.push({
                     id: filter,
-                    name: attributes[filter].min + ' - ' + attributes[filter].max
+                    name: attributes[filter].min + unit + ' - ' + attributes[filter].max + unit
                 });
 
                 continue;
@@ -401,6 +405,20 @@ class UrlBuilder {
         delete params[Constants.PARAMETER_PAGE];
         delete params[Constants.PARAMETER_ATTRIBUTES];
         document.location.search = '?' + $.param(params);
+    }
+
+    getFacetIdInfoMap(store?: PlentyVuexStore): { [key: string]: Facet } {
+        const map: { [key: string]: Facet } = {};
+
+        if (!store) {
+            return map;
+        }
+
+        store.state.itemList.facets.forEach(facet => {
+            map[facet.id] = facet;
+        });
+
+        return map;
     }
 }
 

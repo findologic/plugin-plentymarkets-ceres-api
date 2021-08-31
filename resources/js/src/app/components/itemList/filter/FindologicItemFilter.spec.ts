@@ -5,6 +5,7 @@ import { Store } from 'vuex';
 import FindologicItemFilter from './FindologicItemFilter.vue';
 import VueCompositionAPI from '@vue/composition-api';
 import UrlBuilder from '../../../shared/UrlBuilder';
+import $ from 'jquery';
 
 const localVue = createLocalVue();
 
@@ -12,6 +13,8 @@ localVue.use(Vuex);
 localVue.use(VueCompositionAPI);
 
 window.ceresTranslate = key => key;
+window.$ = $;
+window.SVGInjector = jest.fn;
 
 describe('FindologicItemFilter', () => {
 
