@@ -4,7 +4,10 @@
 
 <!-- SSR:template(findologic-item-filter-list) -->
 <script type="x/template" id="vue-findologic-item-filter-list">
-    <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
+    <div class="findologic-filter-wrapper"
+         :class="{'mb-5': facets.some(e => e.isMain === true)}"
+         v-show="facets && facets.length > 0"
+    >
         <div class="ml-0 main-filters" v-if="facets.some(e => e.isMain === true)">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">

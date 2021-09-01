@@ -79,6 +79,37 @@ class ResponseParserTest extends TestCase
         ]);
     }
 
+    public function testHandleErrorResponse()
+    {
+        $errorResponse = [
+            'error' => true,
+            'error_no' => 0,
+            'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
+            'error_file' => '/findologic/http_request2/HTTP/Request2/Adapter/Curl.php',
+            'error_line' => 155
+        ];
+
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+        /** @var ResponseParser|MockObject $responseParserMock */
+        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
+        $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
+
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
+
+        $this->logger
+            ->expects($this->once())
+            ->method('error')
+            ->with('Invalid response received from server.', ['response' => $errorResponse]);
+
+        $response = $responseParserMock->parse($requestMock, $errorResponse);
+
+        $this->assertEquals([], $response->getData());
+    }
+
     /**
      * @dataProvider queryInfoMessageProvider
      *

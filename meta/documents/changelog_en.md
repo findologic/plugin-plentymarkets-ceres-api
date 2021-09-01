@@ -1,6 +1,14 @@
 # Release Notes for Findologic
 
-## 3.7.0 (2020-07-26)
+## 3.7.1 (2021-08-16)
+
+### Fixed
+
+* [PLENTY-357] Fixed a bug that caused some filter containers not to take up the full width when using
+server-side-rendering.
+* [PLENTY-356] Fixed a bug that caused an error in case the Findologic API was not reachable by Plentymarkets.
+
+## 3.7.0 (2021-07-26)
 
 ### Added
 
@@ -16,7 +24,7 @@
 * [PLENTY-345] Fixed a bug that caused search terms to be cut-off when they contained an ampersand.
 * [PLENTY-351] Fixed several bugs related to Ceres server-side-rendering.
 
-## 3.6.1 (2020-05-31)
+## 3.6.1 (2021-05-31)
 
 ### Fixed
 
@@ -25,7 +33,7 @@
 * [PLENTY-341] Fixed a bug that caused the Smart Suggest not being shown on non-search pages, when Findologic has
   been disabled on category pages.
 
-## 3.6.0 (2020-05-18)
+## 3.6.0 (2021-05-18)
 
 ### Added
 
@@ -39,14 +47,14 @@
 
 * [PLENTY-309] Fixed a bug that caused already selected filters, to show a frequency of `0`.
 
-## 3.5.3 (2020-04-22)
+## 3.5.3 (2021-04-22)
 
 ### Fixed
 
 * [PLENTY-332] Fixed a bug that caused the Findologic plugin no longer to properly
   handle search/navigation requests, when the IO plugin had a higher priority than the Findologic plugin.
 
-## 3.5.2 (2020-04-19)
+## 3.5.2 (2021-04-19)
 
 ### Fixed
 
