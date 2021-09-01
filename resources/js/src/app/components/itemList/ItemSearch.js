@@ -5,13 +5,13 @@ Vue.component('item-search', {
     mixins: [Url],
 
     props: {
-        template: {
+        template:
+        {
             type: String,
-            default: '#vue-item-search'
+            default: "#vue-item-search"
         },
         showItemImages: {
-            type: Boolean,
-            default: false
+            type: Boolean, default: false
         },
         forwardToSingleItem: {
             type: Boolean,
