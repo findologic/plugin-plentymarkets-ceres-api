@@ -8,7 +8,7 @@ Vue.component('item-search', {
         template:
         {
             type: String,
-            default: '#vue-item-search'
+            default: "#vue-item-search"
         },
         showItemImages: {
             type: Boolean, default: false
@@ -81,12 +81,13 @@ Vue.component('item-search', {
             window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
 
-
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         autocomplete(searchString)
         {
             // Nothing to do.
         },
-        
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         selectAutocompleteItem(item)
         {
             // Nothing to do.
