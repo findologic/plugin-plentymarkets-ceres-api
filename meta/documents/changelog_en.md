@@ -1,5 +1,21 @@
 # Release Notes for Findologic
 
+## 3.7.0 (2020-07-26)
+
+### Added
+
+* [PLENTY-346] There now is an option that allows a minimal search term length to be configured.
+
+### Changed
+
+* [PLENTY-318] Increase navigation performance, by using a different endpoint provided by Ceres. Please note that the
+  minimal Ceres version required now is 5.0.26.
+
+### Fixed
+
+* [PLENTY-345] Fixed a bug that caused search terms to be cut-off when they contained an ampersand.
+* [PLENTY-351] Fixed several bugs related to Ceres server-side-rendering.
+
 ## 3.6.1 (2020-05-31)
 
 ### Fixed

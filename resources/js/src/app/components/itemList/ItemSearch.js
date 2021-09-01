@@ -61,14 +61,11 @@ Vue.component('item-search', {
 
     methods:
     {
-        prepareSearch()
+        search()
         {
             // eslint-disable-next-line no-undef
             $('#searchBox').collapse('hide');
-        },
 
-        search()
-        {
             let searchBaseURL = '/search?query=';
 
             // eslint-disable-next-line no-undef

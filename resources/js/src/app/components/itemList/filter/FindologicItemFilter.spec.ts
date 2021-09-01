@@ -57,7 +57,15 @@ describe('FindologicItemFilter', () => {
       facets: [facet]
     };
 
-    const wrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': facet, 'filtersPerRow': 3 }, store, localVue });
+    const wrapper = shallowMount(FindologicItemFilter, {
+      stubs: { 'client-only': true },
+      propsData: {
+        'facet': facet,
+        'filtersPerRow': 3
+      },
+      store,
+      localVue
+    });
 
     const filterHeading = wrapper.find(':scope > div div.h3').text();
     expect(filterHeading).toBe('Facet name');
@@ -122,7 +130,15 @@ describe('FindologicItemFilter', () => {
       facets: [facet]
     };
 
-    const wrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': facet, 'filtersPerRow': 3 }, store, localVue });
+    const wrapper = shallowMount(FindologicItemFilter, {
+      stubs: { 'client-only': true },
+      propsData: {
+        'facet': facet,
+        'filtersPerRow': 3
+      },
+      store,
+      localVue
+    });
 
     const textInFilterElement = wrapper.find(':scope > div:last-child p').text();
     expect(textInFilterElement).toBe(data.expectedNoAvailableFiltersTextMessage);
@@ -161,7 +177,15 @@ describe('FindologicItemFilter', () => {
       facets: [dropdownFacet]
     };
 
-    const dropdownWrapper = mount(FindologicItemFilter, { propsData: { 'facet': dropdownFacet, 'filtersPerRow': 3 }, store, localVue });
+    const dropdownWrapper = mount(FindologicItemFilter, {
+      stubs: { 'client-only': true },
+      propsData: {
+        'facet': dropdownFacet,
+        'filtersPerRow': 3
+      },
+      store,
+      localVue
+    });
     const dropdownElement = dropdownWrapper.find(':scope > div:last-child .fl-dropdown');
     const dropdownOptions = dropdownElement.findAll('div.form-check');
     expect(dropdownOptions.length).toBe(2);
@@ -206,7 +230,15 @@ describe('FindologicItemFilter', () => {
       facets: [categoryFacet]
     };
 
-    const categoryWrapper = mount(FindologicItemFilter, { propsData: { 'facet': categoryFacet, 'filtersPerRow': 3 }, store, localVue });
+    const categoryWrapper = mount(FindologicItemFilter, {
+      stubs: { 'client-only': true },
+      propsData: {
+        'facet': categoryFacet,
+        'filtersPerRow': 3
+      },
+      store,
+      localVue
+    });
     const categoryElement = categoryWrapper.find(':scope > div:last-child div.fl-category-dropdown-container');
     const dropdownOptions = categoryElement.findAll('ul.fl-dropdown-content li');
     expect(dropdownOptions.length).toBe(2);
@@ -258,7 +290,15 @@ describe('FindologicItemFilter', () => {
       facets: [colorFacet]
     };
 
-    const colorWrapper = mount(FindologicItemFilter, { propsData: { 'facet': colorFacet, 'filtersPerRow': 3 }, store, localVue });
+    const colorWrapper = mount(FindologicItemFilter, {
+      stubs: { 'client-only': true },
+      propsData: {
+        'facet': colorFacet,
+        'filtersPerRow': 3
+      },
+      store,
+      localVue
+    });
     const colorFilterElement = colorWrapper.find(':scope > div:last-child .fl-item-color-tiles-container');
     expect(colorFilterElement.exists()).toBeTruthy();
     const colorTiles = colorWrapper.findAll('ul.fl-item-color-tiles-list li.fl-item-color-tiles-list-item');
@@ -359,7 +399,15 @@ describe('FindologicItemFilter', () => {
 
     UrlBuilder.updateSelectedFilters = jest.fn();
 
-    const wrapper = mount(FindologicItemFilter, { propsData: { facet, 'filtersPerRow': 3 }, store, localVue });
+    const wrapper = mount(FindologicItemFilter, {
+      stubs: { 'client-only': true },
+      propsData: {
+        facet,
+        'filtersPerRow': 3
+      },
+      store,
+      localVue
+    });
     const optionElement = wrapper.find(data.itemSelector);
     await optionElement.trigger('click');
     expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(1, facet, data.expectedFacetId, data.expectedFacetValue);

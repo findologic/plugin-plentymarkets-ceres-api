@@ -1,5 +1,24 @@
 # Release Notes für Findologic
 
+## 3.7.0 (2020-07-26)
+
+### Hinzugefügt
+
+* [PLENTY-346] Es gibt nun eine Option, welche es erlaubt die minimale Suchwortlänge einzustellen.
+
+### Geändert
+
+* [PLENTY-318] Die Performance auf Navigationsseiten wurde verbessert, da nun ein anderer Endpunkt, welcher
+  von Ceres zur Verfügung gestellt wurde, verwendet wird. Bitte beachten Sie, dass dadurch die minimale Ceres Version
+  5.0.26 vorausgesetzt wird.
+
+### Behoben
+
+* [PLENTY-345] Ein Fehler wurde behoben, wodurch Suchbegriffe abgeschnitten wurden, wenn diese ein `&`
+  Zeichen beinhalteten.
+* [PLENTY-351] Mehrere Fehler in Bezug zum Ceres Server-Side-Rendering wurden behoben.
+
+
 ## 3.6.1 (2020-05-31)
 
 ### Behoben

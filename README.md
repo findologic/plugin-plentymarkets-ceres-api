@@ -21,7 +21,7 @@
 
 Installation of Plentymarkets plugins:
 
-* [Ceres](https://marketplace.plentymarkets.com/ceres_4697) >= 5.0
+* [Ceres](https://marketplace.plentymarkets.com/ceres_4697) >= 5.0.26
 * [IO](https://marketplace.plentymarkets.com/io_4696) >= 5.0
 
 ### Installation

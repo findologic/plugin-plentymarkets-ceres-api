@@ -5,10 +5,12 @@
     <div class="row">
         <div class="col-12">
             <div class="list-wrapper">
-                <findologic-item-filter-list
+                <client-only>
+                    <findologic-item-filter-list
                         template-override="#vue-findologic-item-filter-list"
                         :all-facets="{{ facets | json_encode }}"
-                ></findologic-item-filter-list>
+                    ></findologic-item-filter-list>
+                </client-only>
             </div>
         </div>
     </div>

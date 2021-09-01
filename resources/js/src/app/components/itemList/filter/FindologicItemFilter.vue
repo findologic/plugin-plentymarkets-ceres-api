@@ -1,4 +1,5 @@
 <template>
+  <!-- SSR:template(findologic-item-filter) -->
   <!-- Additionally checking that min and max values aren't the same, because this would be a useless filter. -->
   <div
     v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))"
@@ -17,20 +18,26 @@
       />
     </div>
     <div v-if="facet.findologicFilterType === 'range-slider'">
-      <item-range-slider :facet="facet" />
+      <client-only>
+        <item-range-slider :facet="facet" />
+      </client-only>
     </div>
     <div v-else-if="facet.findologicFilterType === 'image'">
-      <item-filter-image
-        :facet="facet"
-        :fallback-image="fallbackImageImageFilter"
-      />
+      <client-only>
+        <item-filter-image
+          :facet="facet"
+          :fallback-image="fallbackImageImageFilter"
+        />
+      </client-only>
     </div>
     <div v-else-if="facet.findologicFilterType === 'color'">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-color-tiles
-          :facet="facet"
-          :fallback-image="fallbackImageColorFilter"
-        />
+        <client-only>
+          <item-color-tiles
+            :facet="facet"
+            :fallback-image="fallbackImageColorFilter"
+          />
+        </client-only>
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
@@ -39,10 +46,14 @@
     </div>
     <div v-else-if="facet.id === 'cat'">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-category-dropdown
-          v-if="facet.findologicFilterType === 'select'"
-          :facet="facet"
-        />
+        <div v-if="facet.findologicFilterType === 'select'">
+          <client-only>
+            <item-category-dropdown
+              v-if="facet.findologicFilterType === 'select'"
+              :facet="facet"
+            />
+          </client-only>
+        </div>
         <div
           v-for="value in facet.values"
           v-else
@@ -109,7 +120,9 @@
     </div>
     <div v-else-if="facet.findologicFilterType === 'select'">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-dropdown :facet="facet" />
+        <client-only>
+          <item-dropdown :facet="facet" />
+        </client-only>
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
@@ -143,6 +156,7 @@
       </div>
     </div>
   </div>
+  <!-- /SSR -->
 </template>
 
 <script lang="ts">
