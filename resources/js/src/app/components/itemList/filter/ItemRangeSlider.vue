@@ -1,4 +1,5 @@
 <template>
+  <!-- SSR:template(findologic-item-range-slider) -->
   <div class="fl-range-slider-container">
     <div class="row">
       <div class="col-md-6 col-xs-6">
@@ -49,6 +50,7 @@
       </div>
     </div>
   </div>
+  <!-- /SSR -->
 </template>
 
 <script lang="ts">

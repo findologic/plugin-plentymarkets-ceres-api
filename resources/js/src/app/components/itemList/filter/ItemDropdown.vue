@@ -1,4 +1,5 @@
 <template>
+  <!-- SSR:template(findologic-item-dropdown) -->
   <div class="fl-dropdown">
     <div
       v-for="value in facet.values.slice(0, facet.itemCount)"
@@ -67,6 +68,7 @@
       </ul>
     </div>
   </div>
+  <!-- /SSR -->
 </template>
 
 <script lang="ts">

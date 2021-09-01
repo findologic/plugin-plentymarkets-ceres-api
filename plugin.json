@@ -1,5 +1,5 @@
 {
-  "version": "3.7.1",
+  "version": "3.7.2",
   "name": "Findologic",
   "marketplaceName": {
     "de": "Findologic - Search & Navigation Platform",
@@ -22,8 +22,8 @@
   ],
   "type": "template",
   "require": {
-    "Ceres": ">=5.0.26",
-    "IO": "~5.0"
+    "Ceres": ">=5.0.35",
+    "IO": ">=5.0.35"
   },
   "namespace": "Findologic",
   "serviceProvider": "Findologic\\Providers\\FindologicServiceProvider",

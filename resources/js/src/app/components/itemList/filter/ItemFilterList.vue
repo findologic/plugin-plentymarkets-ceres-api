@@ -1,7 +1,3 @@
-<template>
-  <div>Hi Mom!</div>
-</template>
-
 <script lang="ts">
 import {
   Facet,
