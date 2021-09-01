@@ -85,7 +85,7 @@ Vue.component('item-search', {
         autocomplete(searchString)
         {
             // Nothing to do.
-        ,
+        },
         
         selectAutocompleteItem(item)
         {
