@@ -26,9 +26,7 @@ jobs:
         npm ci
 
     - name: Check linting rules
-      run: |
-        composer lint
-        npm run lint
+      run: npm run lint
 
     - name: Run tests
       run: |
