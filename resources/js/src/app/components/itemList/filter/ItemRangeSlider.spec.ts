@@ -84,7 +84,7 @@ describe('ItemRangeSlider', () => {
     });
 
     // TODO: reenable the test once the tested functionality works properly
-    xit('Disables the filter submit button if fields contain incorrect values', async () => {
+    it('Disables the filter submit button if fields contain incorrect values', async () => {
         const facet: Facet = {
             cssClass: '',
             findologicFilterType: 'range-slider',
