@@ -1,5 +1,14 @@
 # Release Notes für Findologic
 
+## 3.6.1 (2020-05-31)
+
+### Behoben
+
+* [PLENTY-340] Ein Fehler wurde behoben, wodurch Filterwerte hinter der Produktanzahl angezeigt wurden, wenn
+ die Filterwerte zu viele Zeichen beinhalteten.
+* [PLENTY-341] Ein Fehler wurde behoben, wodurch die Smart Suggest nur auf Suchseiten angezeigt wurde,
+ wenn Findologic auf Kategorieseiten deaktiviert wurde.
+
 ## 3.6.0 (2020-05-18)
 
 ### Hinzugefügt
