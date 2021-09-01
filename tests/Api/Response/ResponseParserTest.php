@@ -35,9 +35,18 @@ class ResponseParserTest extends TestCase
 
     public function setUp()
     {
-        $this->filterParser = $this->getMockBuilder(FiltersParser::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->filterParser = $this->getMockBuilder(FiltersParser::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->logger = $this->getMockBuilder(LoggerContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
 
@@ -46,7 +55,10 @@ class ResponseParserTest extends TestCase
      */
     public function testParse()
     {
-        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods(null)->getMock();
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
         /** @var ResponseParser|MockObject $responseParserMock */
         $responseParserMock = $this->getResponseParserMock(['createResponseObject', 'handleLandingPage']);
         $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
@@ -76,7 +88,10 @@ class ResponseParserTest extends TestCase
      */
     public function testQueryInfoMessageParsing(array $requestParams, string $response, $expectedResult)
     {
-        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods(null)->getMock();
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
         /** @var ResponseParser|MockObject $responseParserMock */
         $responseParserMock = $this->getResponseParserMock(['createResponseObject', 'handleLandingPage']);
         $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);

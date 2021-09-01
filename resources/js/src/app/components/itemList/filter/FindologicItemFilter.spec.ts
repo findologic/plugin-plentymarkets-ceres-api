@@ -59,7 +59,7 @@ describe('FindologicItemFilter', () => {
 
     const wrapper = shallowMount(FindologicItemFilter, { propsData: { 'facet': facet, 'filtersPerRow': 3 }, store, localVue });
 
-    const filterHeading = wrapper.find(':scope > div.h3').text();
+    const filterHeading = wrapper.find(':scope > div div.h3').text();
     expect(filterHeading).toBe('Facet name');
   });
 

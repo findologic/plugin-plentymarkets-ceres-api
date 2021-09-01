@@ -35,10 +35,6 @@ interface ItemFilterTagListProps extends TemplateOverridable {
   marginInlineStyles: string;
 }
 
-interface FacetNameAware extends Facet {
-  translated: string;
-}
-
 export default defineComponent({
   name: 'ItemFilterTagList',
   props: {
@@ -74,11 +70,14 @@ export default defineComponent({
       UrlBuilder.removeSelectedFilter(tag.id, tag?.name || '');
     };
 
+    const resetAllTags = () => UrlBuilder.removeAllAttribsAndRefresh();
+
     return {
       tagList,
       facetNames,
       removeTag,
-      TranslationService
+      TranslationService,
+      resetAllTags
     };
   }
 });

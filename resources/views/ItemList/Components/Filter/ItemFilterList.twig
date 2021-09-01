@@ -11,6 +11,7 @@
                             v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}"
                             v-bind:fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
                             v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+                            v-bind:show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
                             v-for="facet in facets"
                             v-if="facet.isMain"
                             :facet="facet"
@@ -38,8 +39,9 @@
                 <div class="card-columns row">
                     <findologic-item-filter
                             v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}"
-                            :fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
-                            :fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+                            v-bind:fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+                            v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+                            v-bind:show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
                             v-for="facet in facets"
                             v-if="!facet.isMain"
                             :facet="facet"

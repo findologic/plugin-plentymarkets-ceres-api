@@ -1,5 +1,44 @@
 # Release Notes for Findologic
 
+## 3.6.0 (2020-05-18)
+
+### Added
+
+* [PLENTY-310] The selected filter count is can now shown next to the name of the filter.
+  * [PLENTY-337] Added a configuration option, to enable/disable this feature.
+* [PLENTY-329] Added a `translation.json`, which allows storefront-translations to be customized.
+* [PLENTY-330] Added translations for all languages supported by Findologic.
+* [PLENTY-327] Parameters `shopType` and `shopVersion` are now sent to the Findologic API.
+
+### Fixed
+
+* [PLENTY-309] Fixed a bug that caused already selected filters, to show a frequency of `0`.
+
+## 3.5.3 (2020-04-22)
+
+### Fixed
+
+* [PLENTY-332] Fixed a bug that caused the Findologic plugin no longer to properly
+  handle search/navigation requests, when the IO plugin had a higher priority than the Findologic plugin.
+
+## 3.5.2 (2020-04-19)
+
+### Fixed
+
+* [PLENTY-332] Fixed a bug that caused the Findologic to be in an inactive State, when
+ the IO and the Findologic plugin have been assigned the same priority.
+
+## 3.5.1 (2021-04-19)
+
+### Changed
+
+* [PLENTY-307] Filters that have at least one selected filter, will now receive a `fl-active` CSS class.
+
+### Fixed
+
+* [PLENTY-314/PLENTY-324] Fixed a bug that caused an error, when a shop had multiple languages and only some of
+  them had a shopkey configured.
+
 ## 3.5.0 (2021-03-08)
 
 ### Changed

@@ -30,7 +30,7 @@ class SearchService implements SearchServiceInterface
 {
     use \Plenty\Plugin\Log\Loggable;
 
-    CONST DEFAULT_ITEMS_PER_PAGE = 25;
+    const DEFAULT_ITEMS_PER_PAGE = 25;
 
     /**
      * @var Client
@@ -77,6 +77,16 @@ class SearchService implements SearchServiceInterface
      */
     protected $configRepository;
 
+    /**
+     * @var bool|null
+     */
+    protected $aliveTestResult;
+
+    /**
+     * @var PluginInfoService
+     */
+    protected $pluginInfoService;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -84,7 +94,8 @@ class SearchService implements SearchServiceInterface
         ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
         FallbackSearchService $fallbackSearchService,
-        ConfigRepository $configRepository
+        ConfigRepository $configRepository,
+        PluginInfoService $pluginInfoService
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
@@ -96,6 +107,7 @@ class SearchService implements SearchServiceInterface
         );
         $this->fallbackSearchService = $fallbackSearchService;
         $this->configRepository = $configRepository;
+        $this->pluginInfoService = $pluginInfoService;
     }
 
     /**
@@ -109,11 +121,6 @@ class SearchService implements SearchServiceInterface
     public function getSearchFactory(): VariationSearchFactory
     {
         return pluginApp(VariationSearchFactory::class);
-    }
-
-    public function getPluginRepository(): PluginRepositoryContract
-    {
-        return pluginApp(PluginRepositoryContract::class);
     }
 
     /**
@@ -203,7 +210,9 @@ class SearchService implements SearchServiceInterface
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
 
         try {
-            if ($isCategoryPage && (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))) {
+            if ($isCategoryPage &&
+                (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))
+            ) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
@@ -261,10 +270,14 @@ class SearchService implements SearchServiceInterface
      */
     public function aliveTest()
     {
-        $request = $this->requestBuilder->buildAliveRequest();
-        $response = $this->client->call($request);
+        if ($this->aliveTestResult === null) {
+            $request = $this->requestBuilder->buildAliveRequest();
+            $response = $this->client->call($request);
 
-        return $response === Plugin::API_ALIVE_RESPONSE_BODY;
+            $this->aliveTestResult = ($response === Plugin::API_ALIVE_RESPONSE_BODY);
+        }
+
+        return $this->aliveTestResult;
     }
 
     public function handleProductRedirectUrl(string $url)
@@ -285,7 +298,7 @@ class SearchService implements SearchServiceInterface
         /** Custom version checking as Plentymarkets forbids using the version_compare function */
         $versionParts = explode('.', $ceresVersion);
 
-        if ($versionParts[0] > 5 ) {
+        if ($versionParts[0] > 5) {
             return false;
         }
 
@@ -397,8 +410,7 @@ class SearchService implements SearchServiceInterface
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
 
-            if (
-                strtolower($variation['number']) == $lowercasedQuery ||
+            if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
                 strtolower($variation['order']) == $lowercasedQuery
             ) {
@@ -424,12 +436,7 @@ class SearchService implements SearchServiceInterface
      */
     private function getCeresVersion()
     {
-        $pluginRepository = $this->getPluginRepository();
-        if (!$plugin = $pluginRepository->getPluginByName('ceres')) {
-            return null;
-        }
-
-        return $plugin->versionProductive;
+        return $this->pluginInfoService->getPluginVersion('ceres');
     }
 
     /**

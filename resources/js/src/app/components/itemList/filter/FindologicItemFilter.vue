@@ -5,10 +5,17 @@
     class="card"
     :class="[facet.cssClass, 'col-md-' + filtersPerRow]"
   >
-    <div
-      class="h3"
-      v-text="facet.name"
-    />
+    <div class="facet-title">
+      <div
+        class="h3"
+        v-text="facet.name"
+      />
+      <div
+        v-if="selectedValuesCount > 0 && showSelectedFiltersCount"
+        class="selected-values-count"
+        v-text="selectedValuesCount"
+      />
+    </div>
     <div v-if="facet.findologicFilterType === 'range-slider'">
       <item-range-slider :facet="facet" />
     </div>
@@ -156,7 +163,9 @@ import ItemFilterImage from './ItemFilterImage.vue';
 
 interface ItemFilterProps extends TemplateOverridable, FacetAware {
   filtersPerRow: number;
-  fallbackImage: string;
+  fallbackImageColorFilter: string;
+  fallbackImageImageFilter: string;
+  showSelectedFiltersCount: boolean;
 }
 
 export default defineComponent({
@@ -181,6 +190,10 @@ export default defineComponent({
     fallbackImageImageFilter: {
       type: String,
       default: ''
+    },
+    showSelectedFiltersCount: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -194,7 +207,7 @@ export default defineComponent({
     root.$options.template = props.template || '#vue-item-filter';
     const store = root.$store as PlentyVuexStore;
 
-    const selectedFacets = computed(() => store.itemList.selectedFacets);
+    const selectedFacets = computed(() => store.itemList?.selectedFacets);
     const isLoading = computed(() => store.itemList?.isLoading || false);
 
     const updateFacet = (facetValue: FacetValue): void => {
@@ -206,12 +219,22 @@ export default defineComponent({
         name: parentCategory.name + '_' + subCategory.name
       } as FacetValue;
     };
+    const selectedValuesCount = computed((): number => {
+      const facetValues = props.facet.values as FacetValue[];
+
+      const selectedFacets = facetValues.filter((value: FacetValue) => {
+        return value.selected;
+      });
+
+      return selectedFacets.length;
+    });
 
     return {
       selectedFacets,
       isLoading,
       updateFacet,
       getSubCategoryValue,
+      selectedValuesCount
     };
   }
 });

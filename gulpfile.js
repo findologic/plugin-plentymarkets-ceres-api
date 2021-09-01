@@ -20,6 +20,7 @@ gulp.task("js", () => {
     const builder = browserify({
         entries: [
             "app/components/itemList/filter/ItemFilter.js",
+            "app/components/itemList/filter/ItemFilterList.js",
             "app/components/itemList/filter/ItemFilterPrice.js",
             "app/components/itemList/filter/ItemFilterTagList.js",
             "app/components/itemList/filter/ItemRangeSlider.js",

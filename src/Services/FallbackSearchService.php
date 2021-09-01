@@ -21,8 +21,7 @@ class FallbackSearchService implements SearchServiceInterface
 
     public function __construct(
         ResponseParser $responseParser
-    )
-    {
+    ) {
         $this->responseParser = $responseParser;
     }
 
@@ -90,7 +89,7 @@ class FallbackSearchService implements SearchServiceInterface
      */
     private function setSearchDataProducts(array $searchResults, Response $response)
     {
-        $getObjectFromSearchResultItemsDocuments = function($document) {
+        $getObjectFromSearchResultItemsDocuments = function ($document) {
             return [
                 'id' => $document['id'],
                 'relevance' => $document['score'],
@@ -126,14 +125,16 @@ class FallbackSearchService implements SearchServiceInterface
      * @param array $dataResults
      * @param Response $response
      */
-    private function setFilters(array $dataResults, Response $response) {
+    private function setFilters(array $dataResults, Response $response)
+    {
         $response->setData(Response::DATA_FILTERS, $dataResults);
     }
 
     /**
      * @return void
      */
-    private function setTotal(int $totalCount, Response $response) {
+    private function setTotal(int $totalCount, Response $response)
+    {
         $response->setData(Response::DATA_RESULTS, ['count' => $totalCount]);
     }
 }

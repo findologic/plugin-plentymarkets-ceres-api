@@ -43,11 +43,23 @@ class ParametersBuilderTest extends TestCase
 
     public function setUp()
     {
-        $this->categoryService = $this->getMockBuilder(CategoryService::class)->disableOriginalConstructor()->setMethods(['get'])->getMock();
-        $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->categoryService = $this->getMockBuilder(CategoryService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $this->logger = $this->getMockBuilder(LoggerContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
-        $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->setMethods()->getMock();
+        $this->tagsHelper = $this->getMockBuilder(Tags::class)
+            ->disableOriginalConstructor()
+            ->setMethods()
+            ->getMock();
     }
 
     public function setSearchParamsProvider()
@@ -304,11 +316,17 @@ class ParametersBuilderTest extends TestCase
     {
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods(null)->getMock();
 
-        $httpRequestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $httpRequestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $httpRequestMock->expects($this->once())->method('all')->willReturn($parameters);
         $httpRequestMock->expects($this->any())->method('getUri')->willReturn($requestUri);
 
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $searchQueryMock->searchString = 'Test';
         $searchQueryMock->sorting = 'sorting.price.avg_asc';
         $searchQueryMock->itemsPerPage = 10;
@@ -330,7 +348,12 @@ class ParametersBuilderTest extends TestCase
             $searchQueryMock->categoryId = 2;
         }
 
-        $result = $parametersBuilderMock->setSearchParams($requestMock, $httpRequestMock, $searchQueryMock, $categoryMock);
+        $result = $parametersBuilderMock->setSearchParams(
+            $requestMock,
+            $httpRequestMock,
+            $searchQueryMock,
+            $categoryMock
+        );
 
         $this->assertEquals($expectedParameters, $result->getParams());
     }

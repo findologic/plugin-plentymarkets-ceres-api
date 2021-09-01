@@ -142,8 +142,9 @@ class Response
                     'hits' => $this->getResultsCount()
                 ]
             );
-        } else if ($dataQueryInfoMessage['currentQuery']
-            && !empty($dataQueryInfoMessage['currentQuery'])) {
+        } elseif ($dataQueryInfoMessage['currentQuery']
+            && !empty($dataQueryInfoMessage['currentQuery'])
+        ) {
             return $this->translator->trans(
                 'Findologic::Template.queryInfoMessageQuery',
                 [
@@ -151,7 +152,7 @@ class Response
                     'hits' => $this->getResultsCount()
                 ]
             );
-        } else if ($dataQueryInfoMessage['selectedCategoryName']) {
+        } elseif ($dataQueryInfoMessage['selectedCategoryName']) {
             return $this->translator->trans(
                 'Findologic::Template.queryInfoMessageCat',
                 [
@@ -160,7 +161,7 @@ class Response
                     'hits' => $this->getResultsCount()
                 ]
             );
-        } else if ($dataQueryInfoMessage['selectedVendorName']) {
+        } elseif ($dataQueryInfoMessage['selectedVendorName']) {
             return $this->translator->trans(
                 'Findologic::Template.queryInfoMessageVendor',
                 [
