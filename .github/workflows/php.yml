@@ -21,10 +21,14 @@ jobs:
       run: composer validate
 
     - name: Install dependencies
-      run: composer install
+      run: |
+        composer install
+        npm ci
 
     - name: Check linting rules
-      run: composer lint
+      run: npm run lint
 
     - name: Run tests
-      run: composer test
+      run: |
+        composer test
+        npm run test
