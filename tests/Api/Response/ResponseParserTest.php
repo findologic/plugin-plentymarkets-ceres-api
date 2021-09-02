@@ -2,6 +2,7 @@
 
 namespace Findologic\Tests\Api\Response;
 
+use Exception;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -100,12 +101,12 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->expectException(sprintf(
+        $this->expectException(new Exception(sprintf(
             '%s. Called in %s:%d',
             $errorResponse['error_msg'],
             $errorResponse['error_file'],
             $errorResponse['error_line']
-        ));
+        )));
         $responseParserMock->parse($requestMock, $errorResponse);
     }
 
