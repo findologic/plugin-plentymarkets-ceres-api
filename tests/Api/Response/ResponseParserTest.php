@@ -100,14 +100,13 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->logger
-            ->expects($this->once())
-            ->method('error')
-            ->with('Invalid response received from server.', ['response' => $errorResponse]);
-
-        $response = $responseParserMock->parse($requestMock, $errorResponse);
-
-        $this->assertEquals([], $response->getData());
+        $this->expectException(sprintf(
+            '%s. Called in %s:%d',
+            $errorResponse['error_msg'],
+            $errorResponse['error_file'],
+            $errorResponse['error_line']
+        ));
+        $responseParserMock->parse($requestMock, $errorResponse);
     }
 
     /**
