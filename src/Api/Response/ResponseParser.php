@@ -270,10 +270,15 @@ class ResponseParser
      * @param mixed $responseData
      * @throws Exception
      */
-    private function validateResponseData($responseData) {
+    private function validateResponseData($responseData)
+    {
         if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
-            throw new Exception(sprintf('%s. Called in %s:%d',
-                $responseData['error_msg'], $responseData['error_file'], $responseData['error_line']));
+            throw new Exception(sprintf(
+                '%s. Called in %s:%d',
+                $responseData['error_msg'],
+                $responseData['error_file'],
+                $responseData['error_line']
+            ));
         } elseif (!is_string($responseData)) {
             throw new Exception('Invalid response received from server. ' . $responseData);
         }
