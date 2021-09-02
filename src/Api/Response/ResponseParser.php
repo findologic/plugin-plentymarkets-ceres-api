@@ -36,14 +36,10 @@ class ResponseParser
 
     public function parse(HttpRequest $request, $responseData): Response
     {
+        $this->validateResponseData($responseData);
+
         /** @var Response $response */
         $response = $this->createResponseObject();
-
-        if (!is_string($responseData)) {
-            $this->logger->error('Invalid response received from server.', ['response' => $responseData]);
-
-            return $response;
-        }
 
         try {
             $data = $this->loadXml($responseData);
@@ -266,5 +262,20 @@ class ResponseParser
     private function getShoppingGuide(array $requestParams)
     {
         return $requestParams['attrib']['wizard'][0] ?? null;
+    }
+
+    /**
+     * Prevent non-string responses and let Ceres handle the exception
+     *
+     * @param mixed $responseData
+     * @throws Exception
+     */
+    private function validateResponseData($responseData) {
+        if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
+            throw new Exception(sprintf('%s. Called in %s:%d',
+                $responseData['error_msg'], $responseData['error_file'], $responseData['error_line']));
+        } elseif (!is_string($responseData)) {
+            throw new Exception('Invalid response received from server. ' . $responseData);
+        }
     }
 }
