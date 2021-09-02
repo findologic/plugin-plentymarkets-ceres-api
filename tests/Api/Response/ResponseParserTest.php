@@ -101,12 +101,12 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->expectException(new Exception(sprintf(
+        $this->expectExceptionMessage(sprintf(
             '%s. Called in %s:%d',
             $errorResponse['error_msg'],
             $errorResponse['error_file'],
             $errorResponse['error_line']
-        )));
+        ));
         $responseParserMock->parse($requestMock, $errorResponse);
     }
 
