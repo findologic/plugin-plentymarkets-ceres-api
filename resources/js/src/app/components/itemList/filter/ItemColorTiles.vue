@@ -1,4 +1,5 @@
 <template>
+  <!-- SSR:template(findologic-item-color-tiles) -->
   <div class="fl-item-color-tiles-container">
     <ul class="fl-item-color-tiles-list">
       <li
@@ -13,14 +14,20 @@
         >
           <div
             class="fl-color-tile-background"
-            :style="{backgroundColor: colorValue.hexValue, backgroundImage: 'url(' + colorValue.colorImageUrl + ')'}"
+            :style="{backgroundColor: colorValue.hexValue}"
             :title="colorValue.name"
           >
             <img
-              v-show="!colorValue.colorImageUrl && !colorValue.hexValue"
+              v-if="!colorValue.colorImageUrl && !colorValue.hexValue"
               class="fl-color-tile-image"
-              src="/images/no-picture.png"
               :alt="colorValue.name"
+              :src="fallbackImage"
+            >
+            <img
+              v-else-if="colorValue.colorImageUrl"
+              class="fl-color-tile-image"
+              :src="colorValue.colorImageUrl"
+              @error="handleImageError($event, colorValue)"
             >
             <div
               v-show="colorValue.selected"
@@ -37,15 +44,17 @@
       </li>
     </ul>
   </div>
+  <!-- /SSR -->
 </template>
 
 <script lang="ts">
-import { ColorFacet, FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
+import { ColorFacet, ColorFacetValue, FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import UrlBuilder from '../../../shared/UrlBuilder';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, nextTick, onMounted } from '@vue/composition-api';
 
 interface ItemColorTilesProps extends TemplateOverridable, FacetAware {
   facet: ColorFacet;
+  fallbackImage: string;
 }
 
 export default defineComponent({
@@ -55,20 +64,35 @@ export default defineComponent({
       type: Object,
       required: true
     },
+    fallbackImage: {
+      type: String,
+      default: ''
+    }
   },
   setup: (props: ItemColorTilesProps) => {
-    const isSelected = (facetValueName: string) => {
-      const facetValue = props.facet.values.filter((value: FacetValue) => value.name === facetValueName);
-
-      return facetValue.length && UrlBuilder.isValueSelected(props.facet, props.facet.id, facetValue[0].name);
-    };
     const tileClicked = (value: string) => {
       UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, value);
     };
+    const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
+      const target = event.target as HTMLImageElement;
+
+      if (!colorValue.hexValue) {
+        target.src = props.fallbackImage;
+      } else {
+        target.remove();
+      }
+    };
+
+    const injectSvgImages = async () => {
+      await nextTick();
+      window.SVGInjector($('img.fl-svg'));
+    };
+
+    onMounted(injectSvgImages);
 
     return {
-      isSelected,
-      tileClicked
+      tileClicked,
+      handleImageError
     };
   }
 });

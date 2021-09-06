@@ -23,6 +23,9 @@ jobs:
     - name: Install dependencies
       run: composer install
 
+    - name: Check linting rules
+      run: composer lint
+
     - name: Run tests
       run: composer test
 

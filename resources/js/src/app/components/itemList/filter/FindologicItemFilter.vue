@@ -1,61 +1,43 @@
 <template>
+  <!-- SSR:template(findologic-item-filter) -->
   <!-- Additionally checking that min and max values aren't the same, because this would be a useless filter. -->
   <div
     v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))"
     class="card"
     :class="[facet.cssClass, 'col-md-' + filtersPerRow]"
   >
-    <div
-      class="h3"
-      v-text="facet.name"
-    />
+    <div class="facet-title">
+      <div
+        class="h3"
+        v-text="facet.name"
+      />
+      <div
+        v-if="selectedValuesCount > 0 && showSelectedFiltersCount"
+        class="selected-values-count"
+        v-text="selectedValuesCount"
+      />
+    </div>
     <div v-if="facet.findologicFilterType === 'range-slider'">
-      <item-range-slider :facet="facet" />
+      <client-only>
+        <item-range-slider :facet="facet" />
+      </client-only>
     </div>
     <div v-else-if="facet.findologicFilterType === 'image'">
-      <div v-if="!facet.noAvailableFiltersText">
-        <div
-          v-for="value in facet.values"
-          :key="value.id"
-          class="form-check"
-        >
-          <input
-            :id="'option-' + value.id"
-            class="form-check-input hidden-xs-up"
-            type="checkbox"
-            :checked="value.selected"
-            :disabled="isLoading"
-            @change="updateFacet(value)"
-          >
-          <label
-            :for="'option-' + value.id"
-            class="form-check-label"
-            rel="nofollow"
-          >
-            <img
-              v-show="value.imageUrl"
-              :src="value.imageUrl"
-              width="80px"
-            >
-            <span
-              v-show="!value.imageUrl"
-              v-text="value.name"
-            />
-          </label>
-          <div
-            class="filter-badge"
-            v-text="value.count"
-          />
-        </div>
-      </div>
-      <p
-        v-if="facet.noAvailableFiltersText"
-        v-text="facet.noAvailableFiltersText"
-      />
+      <client-only>
+        <item-filter-image
+          :facet="facet"
+          :fallback-image="fallbackImageImageFilter"
+        />
+      </client-only>
     </div>
     <div v-else-if="facet.findologicFilterType === 'color'">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-color-tiles :facet="facet" />
+        <client-only>
+          <item-color-tiles
+            :facet="facet"
+            :fallback-image="fallbackImageColorFilter"
+          />
+        </client-only>
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
@@ -64,10 +46,14 @@
     </div>
     <div v-else-if="facet.id === 'cat'">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-category-dropdown
-          v-if="facet.findologicFilterType === 'select'"
-          :facet="facet"
-        />
+        <div v-if="facet.findologicFilterType === 'select'">
+          <client-only>
+            <item-category-dropdown
+              v-if="facet.findologicFilterType === 'select'"
+              :facet="facet"
+            />
+          </client-only>
+        </div>
         <div
           v-for="value in facet.values"
           v-else
@@ -134,7 +120,9 @@
     </div>
     <div v-else-if="facet.findologicFilterType === 'select'">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-dropdown :facet="facet" />
+        <client-only>
+          <item-dropdown :facet="facet" />
+        </client-only>
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
@@ -168,6 +156,7 @@
       </div>
     </div>
   </div>
+  <!-- /SSR -->
 </template>
 
 <script lang="ts">
@@ -184,9 +173,13 @@ import ItemColorTiles from './ItemColorTiles.vue';
 import ItemCategoryDropdown from './ItemCategoryDropdown.vue';
 import ItemDropdown from './ItemDropdown.vue';
 import UrlBuilder from '../../../shared/UrlBuilder';
+import ItemFilterImage from './ItemFilterImage.vue';
 
 interface ItemFilterProps extends TemplateOverridable, FacetAware {
   filtersPerRow: number;
+  fallbackImageColorFilter: string;
+  fallbackImageImageFilter: string;
+  showSelectedFiltersCount: boolean;
 }
 
 export default defineComponent({
@@ -203,19 +196,32 @@ export default defineComponent({
     filtersPerRow: {
       type: Number,
       required: true
+    },
+    fallbackImageColorFilter: {
+      type: String,
+      default: ''
+    },
+    fallbackImageImageFilter: {
+      type: String,
+      default: ''
+    },
+    showSelectedFiltersCount: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
     'item-range-slider': ItemRangeSlider,
     'item-color-tiles': ItemColorTiles,
     'item-category-dropdown': ItemCategoryDropdown,
-    'item-dropdown': ItemDropdown
+    'item-dropdown': ItemDropdown,
+    'item-filter-image': ItemFilterImage
   },
   setup: (props: ItemFilterProps, { root }) => {
     root.$options.template = props.template || '#vue-item-filter';
     const store = root.$store as PlentyVuexStore;
 
-    const selectedFacets = computed(() => store.itemList.selectedFacets);
+    const selectedFacets = computed(() => store.itemList?.selectedFacets);
     const isLoading = computed(() => store.itemList?.isLoading || false);
 
     const updateFacet = (facetValue: FacetValue): void => {
@@ -227,12 +233,22 @@ export default defineComponent({
         name: parentCategory.name + '_' + subCategory.name
       } as FacetValue;
     };
+    const selectedValuesCount = computed((): number => {
+      const facetValues = props.facet.values as FacetValue[];
+
+      const selectedFacets = facetValues.filter((value: FacetValue) => {
+        return value.selected;
+      });
+
+      return selectedFacets.length;
+    });
 
     return {
       selectedFacets,
       isLoading,
       updateFacet,
       getSubCategoryValue,
+      selectedValuesCount
     };
   }
 });

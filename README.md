@@ -21,8 +21,8 @@
 
 Installation of Plentymarkets plugins:
 
-* [Ceres](https://marketplace.plentymarkets.com/ceres_4697) >= 5.0
-* [IO](https://marketplace.plentymarkets.com/io_4696) >= 5.0
+* [Ceres](https://marketplace.plentymarkets.com/ceres_4697) >= 5.0.35
+* [IO](https://marketplace.plentymarkets.com/io_4696) >= 5.0.35
 
 ### Installation
 
@@ -160,7 +160,7 @@ composer test
 1. Go back to *Plugin overview* and click *Save & deploy plugin set*.
 1. Open the plugin again and click on *Upload to plentyMarketplace*.
 1. The plugin may not be available yet, Plentymarkets has to do a review on their side.
-1. After review was successful notify colleagues in [Basecamp Plugin Releases](https://basecamp.com/2574673/projects/5676139/messages/70951064).
+1. After review was successful notify colleagues in #releases.
 
 ## Versioning
 

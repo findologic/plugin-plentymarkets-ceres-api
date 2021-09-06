@@ -7,6 +7,7 @@ use Findologic\Api\Request\ParametersBuilder;
 use Findologic\Api\Request\Request;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Helpers\Tags;
+use Findologic\Services\PluginInfoService;
 use IO\Services\CategoryService;
 use IO\Services\WebstoreConfigurationService;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
@@ -54,15 +55,39 @@ class RequestBuilderTest extends TestCase
      */
     protected $tagsHelper;
 
+    /**
+     * @var PluginInfoService|MockObject
+     */
+    protected $pluginInfoService;
+
     public function setUp()
     {
-        $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->webstoreConfigurationService = $this->getMockBuilder(WebstoreConfigurationService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->logger = $this->getMockBuilder(LoggerContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->webstoreConfigurationService = $this->getMockBuilder(WebstoreConfigurationService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
         $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->setMethods()->getMock();
+        $this->pluginInfoService = $this->getMockBuilder(PluginInfoService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
     }
 
     public function buildAliveRequestProvider()
@@ -106,7 +131,9 @@ class RequestBuilderTest extends TestCase
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
-                    'revision' => '0.0.1'
+                    'revision' => '0.0.1',
+                    'shopType' => 'Plentymarkets',
+                    'shopVersion' => '5.0.30'
                 ]
             ],
             'Category page request' => [
@@ -117,7 +144,9 @@ class RequestBuilderTest extends TestCase
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
-                    'revision' => '0.0.1'
+                    'revision' => '0.0.1',
+                    'shopType' => 'Plentymarkets',
+                    'shopVersion' => '5.0.30'
                 ]
             ],
             'Search page request' => [
@@ -128,7 +157,9 @@ class RequestBuilderTest extends TestCase
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
                     'shopkey' => 'TESTSHOPKEY',
                     'userip' => '127.0.0.1',
-                    'revision' => '0.0.1'
+                    'revision' => '0.0.1',
+                    'shopType' => 'Plentymarkets',
+                    'shopVersion' => '5.0.30'
                 ]
             ]
         ];
@@ -149,10 +180,16 @@ class RequestBuilderTest extends TestCase
         array $expectedParams
     ) {
         /** @var HttpRequest|MockObject $httpRequestMock */
-        $httpRequestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $httpRequestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
 
         /** @var ExternalSearch|MockObject $searchQueryMock */
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $searchQueryMock->searchString = 'Test';
 
         $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('TESTSHOPKEY');
@@ -162,12 +199,17 @@ class RequestBuilderTest extends TestCase
         $requestBuilderMock->expects($this->any())->method('getUserIp')->willReturn($userIp);
         $requestBuilderMock->expects($this->any())->method('getPluginVersion')->willReturn('0.0.1');
 
+        $this->pluginInfoService->method('getPluginVersion')->with('ceres')->willReturn('5.0.30');
+
         $this->parametersBuilder->expects($this->any())->method('setSearchParams')->willReturnArgument(0);
 
         $categoryMock = null;
 
         if ($category) {
-            $categoryMock = $this->getMockBuilder(CategoryService::class)->disableOriginalConstructor()->setMethods([])->getMock();
+            $categoryMock = $this->getMockBuilder(CategoryService::class)
+                ->disableOriginalConstructor()
+                ->setMethods([])
+                ->getMock();
         }
 
         /** @var Request|MockObject $result */
@@ -207,7 +249,9 @@ class RequestBuilderTest extends TestCase
      */
     public function testGetUrl(string $domainSsl, string $domain, string $generatedUrl)
     {
-        $webstoreConfigMock = $this->getMockBuilder(WebstoreConfiguration::class)->disableOriginalConstructor()->getMock();
+        $webstoreConfigMock = $this->getMockBuilder(WebstoreConfiguration::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $webstoreConfigMock->domainSsl = $domainSsl;
         $webstoreConfigMock->domain = $domain;
 
@@ -232,7 +276,8 @@ class RequestBuilderTest extends TestCase
                 'pluginConfig' => $this->pluginConfig,
                 'loggerFactory' => $this->loggerFactory,
                 'webstoreConfigurationService' => $this->webstoreConfigurationService,
-                'tagsHelper' => $this->tagsHelper
+                'tagsHelper' => $this->tagsHelper,
+                'pluginInfoService' => $this->pluginInfoService
             ])
             ->setMethods($methods)
             ->getMock();

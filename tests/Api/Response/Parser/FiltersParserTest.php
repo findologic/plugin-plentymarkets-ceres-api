@@ -46,8 +46,6 @@ class FiltersParserTest extends TestCase
      */
     public function testParse($response, array $expectedResult)
     {
-        $this->imageService->method('isImageAccessible')->willReturn(true);
-
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 
@@ -64,7 +62,10 @@ class FiltersParserTest extends TestCase
     {
         $methods[] = 'createResponseObject';
 
-        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods(null)->getMock();
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
 
         $filtersParserMock = $this->getMockBuilder(FiltersParser::class)
             ->setConstructorArgs([
@@ -1217,7 +1218,7 @@ class FiltersParserTest extends TestCase
                                 'image' => 'https://www.etc-shop.de/layout/findologic/black.png',
                                 'id' => 36,
                                 'selected' => false,
-                                'colorImageUrl' => NULL,
+                                'colorImageUrl' => null,
                                 'hexValue' => '#000000',
                             ]
                         ]
@@ -1358,7 +1359,7 @@ class FiltersParserTest extends TestCase
                                 'image' => 'https://www.etc-shop.de/layout/findologic/black.png',
                                 'id' => 36,
                                 'selected' => false,
-                                'colorImageUrl' => NULL,
+                                'colorImageUrl' => null,
                                 'hexValue' => '#000000',
                             ]
                         ],

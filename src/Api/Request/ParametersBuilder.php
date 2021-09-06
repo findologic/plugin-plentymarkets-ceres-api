@@ -92,7 +92,8 @@ class ParametersBuilder
         }
 
         if (isset($parameters[Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY])
-            && $parameters[Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY] != false) {
+            && $parameters[Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY] != false
+        ) {
             $request->setParam(Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY, true);
         }
 
@@ -122,8 +123,7 @@ class ParametersBuilder
      */
     protected function setPagination(Request $request, ExternalSearch $externalSearch)
     {
-        if (
-            $externalSearch->categoryId !== null &&
+        if ($externalSearch->categoryId !== null &&
             !array_key_exists(Plugin::API_PARAMETER_ATTRIBUTES, $_GET)
         ) {
             $request->setParam(Plugin::API_PARAMETER_PAGINATION_START, 0);

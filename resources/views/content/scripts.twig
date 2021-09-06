@@ -1,49 +1,49 @@
 <script type="text/javascript">
-  function handleSmartSuggestClick(formElement, action) {
-    formElement.setAttribute('action', action);
-    formElement.submit();
-  }
+    document.addEventListener('flAutocompleteReady', function (e) {
+        e.detail.flAutocomplete.afterRendering = function () {
+            const inputElement = e.detail.flAutocompleteUiWidget.element[0];
+            const minimalSearchTermLength = inputElement.minLength;
+            const searchTerm = inputElement.value;
 
-  function handleSearchQuery(formElement, action) {
-    document.location = action + '?query=' + formElement.querySelector('input.search-input').value;
-  }
+            if (searchTerm.length < minimalSearchTermLength) {
+                e.detail.autocompleteUlElement.css({
+                    display: 'none'
+                });
 
-  function flSearchSubmitEventHandler(event, formElement) {
-    event.preventDefault();
+                return;
+            }
 
-    var action = '/search';
-    if (App.defaultLanguage !== App.language) {
-      action = '/' + App.language + '/search';
-    }
+            e.detail.autocompleteUlElement.css({
+                display: 'block'
+            });
+        };
+    }, false);
 
-    if (formElement.querySelector('input.search-input').value.trim() !== '') {
-      handleSearchQuery(formElement, action);
-    } else {
-      handleSmartSuggestClick(formElement, action);
-    }
-  }
+    window.flCeresConfig = {};
+    flCeresConfig.isSearchPage = {{ isSearchPage ? 'true' : 'false' }};
+    flCeresConfig.activeOnCatPage = {{ activeOnCatPage ? 'true' : 'false' }};
 
-  window.flCeresConfig = {};
-  flCeresConfig.isSearchPage = {{ isSearchPage ? 'true' : 'false' }};
-  flCeresConfig.activeOnCatPage = {{ activeOnCatPage ? 'true' : 'false' }};
-
-  (function (f,i,n,d,o,l,O,g,I,c){var V=[];var m=f.createElement("style");if(d){V.push(d)}if(c&&I.location.hash.indexOf("#search:")===0){V.push(c)}if(V.length>0){var Z=V.join(",");m.textContent=Z+"{opacity: 0;transition: opacity "+O+" ease-in-out;}."+o+" {opacity: 1 !important;}";I.flRevealContainers=function(){var a=f.querySelectorAll(Z);for(var T=0;T<a.length;T++){a[T].classList.add(o)}};setTimeout(I.flRevealContainers,l)}var W=g+"/static/"+i+"/main.js?usergrouphash="+n;var p=f.createElement("script");p.type="text/javascript";p.async=true;p.src=g+"/static/loader.min.js";var q=f.getElementsByTagName("script")[0];p.setAttribute("data-fl-main",W);q.parentNode.insertBefore(p,q);q.parentNode.insertBefore(m,p)})(document,'{{ shopkey }}','','.fl-navigation-result','fl-reveal',3000,'.3s','//cdn.findologic.com',window,'.fl-result');
+    document.addEventListener('DOMContentLoaded', function (e) {
+        // Ensure item-search template is available for Smart Suggest initialization
+        vueApp.$store.dispatch('loadComponent', 'item-search');
+        (function (f,i,n,d,o,l,O,g,I,c){var V=[];var m=f.createElement("style");if(d){V.push(d)}if(c&&I.location.hash.indexOf("#search:")===0){V.push(c)}if(V.length>0){var Z=V.join(",");m.textContent=Z+"{opacity: 0;transition: opacity "+O+" ease-in-out;}."+o+" {opacity: 1 !important;}";I.flRevealContainers=function(){var a=f.querySelectorAll(Z);for(var T=0;T<a.length;T++){a[T].classList.add(o)}};setTimeout(I.flRevealContainers,l)}var W=g+"/static/"+i+"/main.js?usergrouphash="+n;var p=f.createElement("script");p.type="text/javascript";p.async=true;p.src=g+"/static/loader.min.js";var q=f.getElementsByTagName("script")[0];p.setAttribute("data-fl-main",W);q.parentNode.insertBefore(p,q);q.parentNode.insertBefore(m,p)})(document,'{{ shopkey }}','','.fl-navigation-result','fl-reveal',3000,'.3s','//cdn.findologic.com',window,'.fl-result');
+    });
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-injector/1.1.3/svg-injector.min.js"></script>
 {#    <script src="{{ plugin_path("Findologic") }}/js/dist/findologic_ceres.js"></script>#}
 <script src="https://localhost:8080/findologic_ceres.js"></script>
 
-{% set flPublicScriptPath = plugin_path("Findologic") ~ '/js/dist/findologic_ceres.js' %}
+{% if isSearchPage or activeOnCatPage %}
+{#    <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component-min.js"></script>#}
+{#    <!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/filters-component-min.js') }}) -->#}
+{% endif %}
 
-<script>
-    $(function() {
-        SVGInjector($('img.fl-svg'));
-    });
-</script>
-
+<!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
-    <div class="findologic-filter-wrapper" :class="{'mb-5': facets.some(e => e.isMain === true)}" v-show="facets && facets.length > 0">
+    <div class="findologic-filter-wrapper"
+         :class="{'mb-5': facets.some(e => e.isMain === true)}"
+         v-show="facets && facets.length > 0">
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
         {{ component( "Ceres::ItemList.Components.Filter.ItemFilterPrice") }}
         {{ component( "Findologic::ItemList.Components.Filter.ItemRangeSlider") }}
@@ -51,21 +51,31 @@
         {{ component( "Findologic::ItemList.Components.Filter.ItemDropdown" ) }}
         {{ component( "Findologic::ItemList.Components.Filter.ItemCategoryDropdown" ) }}
         {{ component( "Findologic::ItemList.Components.Filter.ItemFilterPrice" ) }}
+        {{ component( "Findologic::ItemList.Components.Filter.ItemFilterImage" ) }}
 
         <div class="ml-0 main-filters">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <findologic-item-filter template-override="#vue-findologic-item-filter" v-for="facet in facets" :facet="facet" :key="facet.id"></findologic-item-filter>
+                    <client-only>
+                        <div class="w-100">
+                            <findologic-item-filter template-override="#vue-findologic-item-filter"
+                                                    v-for="facet in facets"
+                                                    :facet="facet"
+                                                    :key="facet.id"></findologic-item-filter>
+                        </div>
+                    </client-only>
                 </div>
             </div>
         </div>
     </div>
 </script>
+<!-- /SSR -->
 
+<!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
     {{ component( "Findologic::ItemList.Components.ItemSearch") }}
 
-    <form method="GET" action="/search" onsubmit="return flSearchSubmitEventHandler(event, this);">
+    <form method="GET" action="/search" @submit="search()">
         <div class="container-max">
             <div class="position-relative">
                 <div class="d-flex flex-grow-1 position-relative my-2">
@@ -73,13 +83,15 @@
                            type="search"
                            class="search-input flex-grow-1 px-3 py-2"
                            ref="searchInput"
-                           @keyup.enter="prepareSearch()"
+                           {% if minimalSearchTermLength > 0 %}
+                               minlength="{{ minimalSearchTermLength }}"
+                           {% endif %}
                            @keyup.down="keydown()"
                            @keyup.up="keyup()"
                            @focus="isSearchFocused = true"
                            @blur="setIsSearchFocused(false)"
                            autofocus>
-                    <button class="search-submit px-3" type="submit" @click="search()">
+                    <button class="search-submit px-3" type="submit">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
@@ -87,3 +99,4 @@
         </div>
     </form>
 </script>
+<!-- /SSR -->

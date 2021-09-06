@@ -21,8 +21,7 @@ class FallbackSearchService implements SearchServiceInterface
 
     public function __construct(
         ResponseParser $responseParser
-    )
-    {
+    ) {
         $this->responseParser = $responseParser;
     }
 
@@ -39,17 +38,12 @@ class FallbackSearchService implements SearchServiceInterface
     }
 
     /**
-     * @param Request $request
-     * @param ExternalSearch $externalSearch
-     * @return Response
+     * @inheritdoc
      */
     public function handleSearchQuery(Request $request, ExternalSearch $externalSearch)
     {
         $searchResults = $this->getSearchResults($request, $externalSearch);
-
-        $response = $this->responseParser->createResponseObject();
-        $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
-        $this->setFilters($searchResults['facets'], $response);
+        $response = $this->createResponseFromSearchResult($searchResults);
 
         return $response;
     }
@@ -59,7 +53,7 @@ class FallbackSearchService implements SearchServiceInterface
      * @param ExternalSearch $externalSearch
      * @return array
      */
-    private function getSearchResults(Request $request, ExternalSearch $externalSearch)
+    public function getSearchResults(Request $request, ExternalSearch $externalSearch)
     {
         $itemListOptions = [
             'page' => $externalSearch->page,
@@ -85,11 +79,25 @@ class FallbackSearchService implements SearchServiceInterface
 
     /**
      * @param array $searchResults
+     * @return Response
+     */
+    public function createResponseFromSearchResult(array $searchResults)
+    {
+        $response = $this->responseParser->createResponseObject();
+        $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
+        $this->setFilters($searchResults['facets'], $response);
+        $this->setTotal($searchResults['itemList']['total'], $response);
+
+        return $response;
+    }
+
+    /**
+     * @param array $searchResults
      * @param Response $response
      */
     private function setSearchDataProducts(array $searchResults, Response $response)
     {
-        $getObjectFromSearchResultItemsDocuments = function($document) {
+        $getObjectFromSearchResultItemsDocuments = function ($document) {
             return [
                 'id' => $document['id'],
                 'relevance' => $document['score'],
@@ -125,7 +133,16 @@ class FallbackSearchService implements SearchServiceInterface
      * @param array $dataResults
      * @param Response $response
      */
-    private function setFilters(array $dataResults, Response $response) {
+    private function setFilters(array $dataResults, Response $response)
+    {
         $response->setData(Response::DATA_FILTERS, $dataResults);
+    }
+
+    /**
+     * @return void
+     */
+    private function setTotal(int $totalCount, Response $response)
+    {
+        $response->setData(Response::DATA_RESULTS, ['count' => $totalCount]);
     }
 }

@@ -24,8 +24,8 @@
             }
             .card {
                 background-color: transparent;
+                vertical-align: top;
                 border: 0;
-
                 h3 {
                     text-transform: uppercase;
                     font-size: 1.2rem;
@@ -36,6 +36,13 @@
                 }
                 .form-check {
                     padding-left: 0;
+
+                    &:hover {
+                        background: $gray-100;
+                        color: $gray-700;
+                        transition: all 0.1s ease;
+                        padding-left: 0.5rem;
+                    }
 
                     .form-check-input {
                         &.hidden-xs-up {
@@ -59,6 +66,10 @@
                             }
                         }
 
+                        &:not(:checked) + label {
+                            width: calc(100% - 3.5rem);
+                        }
+
                         &:disabled + label {
                             cursor: not-allowed;
                         }
@@ -70,12 +81,6 @@
                         display: block;
                         transition: all 0.1s ease;
 
-                        &:hover {
-                            background: $gray-100;
-                            color: $gray-700;
-                            transition: all 0.1s ease;
-                            padding-left: 0.5rem;
-                        }
                         &::before {
                             font-family: "FontAwesome";
                             content: "\f046";
@@ -103,7 +108,7 @@
     }
     .selected-filters {
         .selected-filter {
-            margin: 0 0 10px 10px;
+            margin: 0 0 0 10px;
         }
     }
 }

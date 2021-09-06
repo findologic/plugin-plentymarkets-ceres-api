@@ -65,8 +65,12 @@ class Client
         $requestArray = [];
 
         $requestArray['url'] = $request->getRequestUrl();
-        $requestArray['connect_timeout'] = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
-        $requestArray['timeout'] = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT) ?? self::DEFAULT_CONNECTION_TIME_OUT;
+
+        $connectTimeout = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT);
+        $requestArray['connect_timeout'] = $connectTimeout ?? self::DEFAULT_CONNECTION_TIME_OUT;
+
+        $timeout = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT);
+        $requestArray['timeout'] = $timeout ?? self::DEFAULT_CONNECTION_TIME_OUT;
 
         return $requestArray;
     }

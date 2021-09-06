@@ -34,10 +34,16 @@ class ResponseParser
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
-    public function parse(HttpRequest $request, string $responseData): Response
+    public function parse(HttpRequest $request, $responseData): Response
     {
         /** @var Response $response */
         $response = $this->createResponseObject();
+
+        if (!is_string($responseData)) {
+            $this->logger->error('Invalid response received from server.', ['response' => $responseData]);
+
+            return $response;
+        }
 
         try {
             $data = $this->loadXml($responseData);
@@ -152,7 +158,7 @@ class ResponseParser
     {
         $promotion = [];
 
-        if (isset($data->promotion) && !empty($data->promotion->attributes()) ) {
+        if (isset($data->promotion) && !empty($data->promotion->attributes())) {
             $promotion['image'] = $data->promotion->attributes()->image->__toString();
             $promotion['link'] = $data->promotion->attributes()->link->__toString();
         }
@@ -168,7 +174,7 @@ class ResponseParser
     {
         $results = [];
 
-        if (!empty($data->results) ) {
+        if (!empty($data->results)) {
             $results['count'] = $data->results->count->__toString();
         }
 
@@ -183,7 +189,7 @@ class ResponseParser
     {
         $products = [];
 
-        if (!empty($data->products) ) {
+        if (!empty($data->products)) {
             foreach ($data->products->product as $product) {
                 $productData = [
                     'id' => $product['id']->__toString(),

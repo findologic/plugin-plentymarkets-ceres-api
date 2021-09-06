@@ -2,6 +2,7 @@
 
 namespace Findologic\Services;
 
+use Exception;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -17,6 +18,7 @@ use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Services\CategoryService;
@@ -28,9 +30,9 @@ use IO\Services\ItemSearch\Services\ItemSearchService;
  */
 class SearchService implements SearchServiceInterface
 {
-    use \Plenty\Plugin\Log\Loggable;
+    use Loggable;
 
-    CONST DEFAULT_ITEMS_PER_PAGE = 25;
+    const DEFAULT_ITEMS_PER_PAGE = 25;
 
     /**
      * @var Client
@@ -77,6 +79,16 @@ class SearchService implements SearchServiceInterface
      */
     protected $configRepository;
 
+    /**
+     * @var bool|null
+     */
+    protected $aliveTestResult;
+
+    /**
+     * @var PluginInfoService
+     */
+    protected $pluginInfoService;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -84,7 +96,8 @@ class SearchService implements SearchServiceInterface
         ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
         FallbackSearchService $fallbackSearchService,
-        ConfigRepository $configRepository
+        ConfigRepository $configRepository,
+        PluginInfoService $pluginInfoService
     ) {
         $this->client = $client;
         $this->requestBuilder = $requestBuilder;
@@ -96,6 +109,7 @@ class SearchService implements SearchServiceInterface
         );
         $this->fallbackSearchService = $fallbackSearchService;
         $this->configRepository = $configRepository;
+        $this->pluginInfoService = $pluginInfoService;
     }
 
     /**
@@ -109,11 +123,6 @@ class SearchService implements SearchServiceInterface
     public function getSearchFactory(): VariationSearchFactory
     {
         return pluginApp(VariationSearchFactory::class);
-    }
-
-    public function getPluginRepository(): PluginRepositoryContract
-    {
-        return pluginApp(PluginRepositoryContract::class);
     }
 
     /**
@@ -145,6 +154,10 @@ class SearchService implements SearchServiceInterface
     {
         $results = $this->search($request, $externalSearch);
 
+        if ($results->getResultsCount() == 0) {
+            return;
+        }
+
         if ($this->shouldFilterInvalidProducts()) {
             $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
         } else {
@@ -168,7 +181,8 @@ class SearchService implements SearchServiceInterface
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $response = $this->fallbackSearchService->handleSearchQuery($request, $externalSearch);
+        $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
+        $response = $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
 
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
@@ -177,10 +191,14 @@ class SearchService implements SearchServiceInterface
             $this->results = $response;
         }
 
-        $externalSearch->setResults(
-            $response->getVariationIds(),
-            $this->results->getData(Response::DATA_RESULTS)['count']
-        );
+        $parameters = (array) $request->all();
+        if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
+            $total = $this->results->getData(Response::DATA_RESULTS)['count'];
+        } else {
+            $total = $response->getData(Response::DATA_RESULTS)['count'];
+        }
+
+        $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
     }
 
     /**
@@ -192,12 +210,14 @@ class SearchService implements SearchServiceInterface
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
 
         try {
-            if ($isCategoryPage && (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))) {
+            if ($isCategoryPage &&
+                (!$hasSelectedFilters || !$this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED))
+            ) {
                 $this->doNavigation($request, $externalSearch);
             } else {
                 $this->doSearch($request, $externalSearch);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.');
             $this->logger->logException($e);
         }
@@ -212,7 +232,7 @@ class SearchService implements SearchServiceInterface
     {
         try {
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Exception while handling search options.');
             $this->logger->logException($e);
         }
@@ -250,10 +270,14 @@ class SearchService implements SearchServiceInterface
      */
     public function aliveTest()
     {
-        $request = $this->requestBuilder->buildAliveRequest();
-        $response = $this->client->call($request);
+        if ($this->aliveTestResult === null) {
+            $request = $this->requestBuilder->buildAliveRequest();
+            $response = $this->client->call($request);
 
-        return $response === Plugin::API_ALIVE_RESPONSE_BODY;
+            $this->aliveTestResult = ($response === Plugin::API_ALIVE_RESPONSE_BODY);
+        }
+
+        return $this->aliveTestResult;
     }
 
     public function handleProductRedirectUrl(string $url)
@@ -274,7 +298,7 @@ class SearchService implements SearchServiceInterface
         /** Custom version checking as Plentymarkets forbids using the version_compare function */
         $versionParts = explode('.', $ceresVersion);
 
-        if ($versionParts[0] > 5 ) {
+        if ($versionParts[0] > 5) {
             return false;
         }
 
@@ -386,8 +410,7 @@ class SearchService implements SearchServiceInterface
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
 
-            if (
-                strtolower($variation['number']) == $lowercasedQuery ||
+            if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
                 strtolower($variation['order']) == $lowercasedQuery
             ) {
@@ -413,12 +436,7 @@ class SearchService implements SearchServiceInterface
      */
     private function getCeresVersion()
     {
-        $pluginRepository = $this->getPluginRepository();
-        if (!$plugin = $pluginRepository->getPluginByName('ceres')) {
-            return null;
-        }
-
-        return $plugin->versionProductive;
+        return $this->pluginInfoService->getPluginVersion('ceres');
     }
 
     /**

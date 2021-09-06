@@ -1,5 +1,131 @@
 # Release Notes für Findologic
 
+## 3.7.2 (2021-08-30)
+
+### Geändert
+
+* [PLENTY-365] Die Minimalanforderungen von Ceres und IO sind nun `5.0.35`.
+
+### Behoben
+
+* [PLENTY-362] Ein Fehler wurde behoben, wodurch die gewählten Filter nicht korrekt gerendert wurden,
+wenn SSR aktiviert wurde.
+* [PLENTY-363] Ein Fehler wurde behoben, wodurch ein falscher Minimalpreis ausgegeben wurde, wenn
+der gesetzte Preis niedriger war, als durch den Bereichsslider möglich war.
+
+## 3.7.1 (2021-08-16)
+
+### Behoben
+
+* [PLENTY-357] Ein Fehler wurde behoben, wodurch der Filter Container nicht die gesamte breite verwendete,
+wenn server-side-rendering verwendet wurde.
+* [PLENTY-356] Ein Fehler wurde behoben, wodurch ein Fehler ausgegeben wurde, wenn die Findologic API
+von Plentymarkets nicht erreichbar war.
+
+## 3.7.0 (2021-07-26)
+
+### Hinzugefügt
+
+* [PLENTY-346] Es gibt nun eine Option, welche es erlaubt die minimale Suchwortlänge einzustellen.
+
+### Geändert
+
+* [PLENTY-318] Die Performance auf Navigationsseiten wurde verbessert, da nun ein anderer Endpunkt, welcher
+  von Ceres zur Verfügung gestellt wurde, verwendet wird. Bitte beachten Sie, dass dadurch die minimale Ceres Version
+  5.0.26 vorausgesetzt wird.
+
+### Behoben
+
+* [PLENTY-345] Ein Fehler wurde behoben, wodurch Suchbegriffe abgeschnitten wurden, wenn diese ein `&`
+  Zeichen beinhalteten.
+* [PLENTY-351] Mehrere Fehler in Bezug zum Ceres Server-Side-Rendering wurden behoben.
+
+
+## 3.6.1 (2021-05-31)
+
+### Behoben
+
+* [PLENTY-340] Ein Fehler wurde behoben, wodurch Filterwerte hinter der Produktanzahl angezeigt wurden, wenn
+ die Filterwerte zu viele Zeichen beinhalteten.
+* [PLENTY-341] Ein Fehler wurde behoben, wodurch die Smart Suggest nur auf Suchseiten angezeigt wurde,
+ wenn Findologic auf Kategorieseiten deaktiviert wurde.
+
+## 3.6.0 (2021-05-18)
+
+### Hinzugefügt
+
+* [PLENTY-310] Die Anzahl der selektierten Filter kann nun neben dem Namen des Filters ausgegeben werden.
+  * [PLENTY-337] Eine Konfigurationsoption wurde hinzugefügt um dieses Feature zu aktivieren/deaktivieren.
+* [PLENTY-329] Eine `translation.json` wurde hinzugefügt, welche es erlaubt Storefront-Übersetzungen anzupassen.
+* [PLENTY-330] Übersetzungen für alle von Findologic unterstützten Sprachen, wurden hinzugefügt.
+* [PLENTY-327] Parameter `shopType` und `shopVersion` werden nun an die Findologic API gesendet.
+
+### Behoben
+
+* [PLENTY-309] Ein Fehler wurde behoben, wodurch bei manchen selektierten Filtern, eine `0` als Produktanzahl
+  angezeigt wurde.
+
+## 3.5.3 (2021-04-22)
+
+### Behoben
+
+* [PLENTY-332] Ein Fehler wurde behoben, wodurch das Findologic plugin nicht korrekt Such-/Navigations-Anfragen
+bearbeitete, wenn das IO Plugin eine höhere Priorität als das Findologic Plugin gesetzt hat.
+
+## 3.5.2 (2021-04-19)
+
+### Behoben
+
+* [PLENTY-332] Ein Fehler wurde behoben, wodurch sich das Findologic Plugin in einem inaktiven Zustand
+ befand, wenn IO und Findologic derselben Priorität zugeordnet wurden.
+
+## 3.5.1 (2021-04-19)
+
+### Geändert
+
+* [PLENTY-307] Filter erhalten nun eine `fl-active` CSS Klasse, wenn zumindest ein Filter gewählt wurde.
+
+### Behoben
+
+* [PLENTY-314/PLENTY-324] Ein Fehler wurde behoben, wodurch ein Fehler ausgegeben wurde, wenn ein Shop
+ mehrere Sprachen angelegt hatte, jedoch manche davon keinen Shopkey hinterlegt hatten.
+
+## 3.5.0 (2021-03-08)
+
+### Geändert
+
+* [PLENTY-305] Die Benutzerfreundlichkeit des Bereichssliders wurde optimiert
+  * Die Währung/Einheit wird nun beim selektierten Filter ausgegeben.
+  * Eingegebene Kommas (`,`) werden nun mit Punkten (`.`) ersetzt.
+  * Nicht-Numerische Eingaben können nicht länger abgeschickt werden.
+* [PLENTY-313] Die Performance bei Seiten, die Herstellerbilder, oder Farbbilder Filter verwenden, wurde verbessert.
+
+### Behoben
+
+* [PLENTY-315] Ein Fehler wurde behoben, wodurch auf Suchseiten ohne Ergebnisse, eine lange Ladezeit entstand.
+* [PLENTY-316] Ein Fehler wurde behoben, wodurch die Annzahl der Proukte auf Kategorieseiten nicht
+ der tatsächlichen Anzahl der Produkte entsprach.
+
+## 3.4.0 (2021-02-15)
+
+### Hinzugefügt
+
+* [PLENTY-245] Die selektierten Filter enthalten nun auch den Namen des Filters.
+* [PLENTY-273] Der Kategoriefilter wird nun als Dropdown dargestellt, wenn der Filter in der Filterkonfiguration als
+  Dropdown konfiguriert wurde.
+* [PLENTY-308] Beim Halten des Mauszeigers über eine Farbfilter-Kachel wird nun der Name der Farbe als Titel angezeigt.
+
+### Geändert
+
+* [PLENTY-287] Anstatt der Container-Verknüpfung wird nun die Komponente für das Suchfeld global überschrieben.
+
+### Behoben
+
+* [PLENTY-311] Ein Fehler wurde behoben, welcher es erlaubte XSS auszuführen, wenn die Smart Did-You-Mean
+  Container-Verknüpfung verwendet wurde.
+* [PLENTY-299] Ein Fehler wurde behoben, wodurch Fehler in der Konsole ausgegeben wurden, wenn sowohl die
+  TopBar als auch Filter-Widgets auf der selben Seite verwendet wurden.
+
 ## 3.3.0 (2021-01-12)
 
 ### Hinzugefügt

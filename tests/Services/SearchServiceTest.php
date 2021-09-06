@@ -2,6 +2,7 @@
 
 namespace Findologic\Tests\Services;
 
+use Exception;
 use Findologic\Api\Client;
 use Findologic\Api\Request\Request;
 use Findologic\Api\Request\RequestBuilder;
@@ -9,9 +10,11 @@ use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
 use Findologic\Constants\Plugin;
 use Findologic\Services\FallbackSearchService;
+use Findologic\Services\PluginInfoService;
 use Findologic\Services\SearchService;
 use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
+use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use IO\Services\ItemSearch\Services\ItemSearchService;
@@ -27,7 +30,6 @@ use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Plenty\Repositories\Models\PaginatedResult;
 use ReflectionException;
 
 /**
@@ -36,6 +38,8 @@ use ReflectionException;
  */
 class SearchServiceTest extends TestCase
 {
+    use MockResponseHelper;
+
     /**
      * @var Client|MockObject
      */
@@ -76,17 +80,47 @@ class SearchServiceTest extends TestCase
      */
     protected $configRepository;
 
+    /**
+     * @var PluginInfoService|MockObject
+     */
+    private $pluginInfoService;
+
     public function setUp()
     {
         $this->client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->requestBuilder = $this->getMockBuilder(RequestBuilder::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->responseParser = $this->getMockBuilder(ResponseParser::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->searchParametersHandler = $this->getMockBuilder(ParametersHandler::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->logger = $this->getMockBuilder(LoggerContract::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->requestBuilder = $this->getMockBuilder(RequestBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->responseParser = $this->getMockBuilder(ResponseParser::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->searchParametersHandler = $this->getMockBuilder(ParametersHandler::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->logger = $this->getMockBuilder(LoggerContract::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
-        $this->fallbackSearchService = $this->getMockBuilder(FallbackSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->fallbackSearchService = $this->getMockBuilder(FallbackSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->pluginInfoService = $this->getMockBuilder(PluginInfoService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
     }
 
     public function testHandleSearchQuery()
@@ -97,18 +131,30 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn([1, 2, 3]);
+        $responseMock->expects($this->exactly(2))->method('getResultsCount')->willReturn(3);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $searchServiceMock = $this->getSearchServiceMock(['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']);
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $searchServiceMock = $this->getSearchServiceMock(
+            ['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']
+        );
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
 
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
 
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setResults'])
+            ->getMock();
         $searchQueryMock->categoryId = null;
 
-        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
 
         $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
     }
@@ -138,6 +184,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         if ($redirectUrl) {
             $responseMock->expects($this->exactly(2))->method('getData')
                 ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
@@ -150,10 +197,15 @@ class SearchServiceTest extends TestCase
         }
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)->disableOriginalConstructor()->setMethods(['getResult'])->getMock();
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getResult'])
+            ->getMock();
         $itemSearchServiceMock->expects($this->at(0))->method('getResult')->willReturn($itemSearchServiceResultsAll);
         if ($redirectUrl) {
-            $itemSearchServiceMock->expects($this->at(1))->method('getResult')->willReturn($variationSearchByItemIdResult);
+            $itemSearchServiceMock->expects($this->at(1))
+                ->method('getResult')
+                ->willReturn($variationSearchByItemIdResult);
         }
 
         $searchServiceMock = $this->getSearchServiceMock([
@@ -173,11 +225,17 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
 
         /** @var ExternalSearch|MockObject $searchQueryMock */
-        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)->disableOriginalConstructor()->setMethods(['setResults'])->getMock();
+        $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setResults'])
+            ->getMock();
         $searchQueryMock->categoryId = null;
 
         /** @var HttpRequest|MockObject $requestMock */
-        $requestMock = $this->getMockBuilder(HttpRequest::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $requestMock->expects($this->any())
             ->method('all')
             ->willReturn($attributes);
@@ -268,6 +326,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
@@ -355,7 +414,8 @@ class SearchServiceTest extends TestCase
                 'searchParametersHandler' => $this->searchParametersHandler,
                 'loggerFactory' => $this->loggerFactory,
                 'fallbackSearchService' => $this->fallbackSearchService,
-                'configRepository' => $this->configRepository
+                'configRepository' => $this->configRepository,
+                'pluginInfoService' => $this->pluginInfoService
             ])
             ->setMethods($methods);
 
@@ -1072,17 +1132,7 @@ class SearchServiceTest extends TestCase
     public function testFilterInvalidProductOnlyPriorToCertainVersion($version, bool $shouldFilter)
     {
         $searchServiceMock = $this->getSearchServiceMock(['getPluginRepository']);
-        $pluginRepositoryMock = $this->getMockBuilder(PluginRepositoryContract::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $pluginMock = $this->getMockBuilder(\Plenty\Modules\Plugin\Models\Plugin::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $searchServiceMock->method('getPluginRepository')->willReturn($pluginRepositoryMock);
-        $pluginRepositoryMock->method('getPluginByName')->willReturn($pluginMock);
-        $pluginMock->versionProductive = $version;
+        $this->pluginInfoService->method('getPluginVersion')->willReturn($version);
 
         $this->assertEquals($shouldFilter, $searchServiceMock->shouldFilterInvalidProducts());
     }
@@ -1107,6 +1157,76 @@ class SearchServiceTest extends TestCase
                 'shouldFilter' => false
             ]
         ];
+    }
+
+    public function testExternalSearchIsNotManipulatedOnNoResultPages()
+    {
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $externalSearchServiceMock->expects($this->never())->method('setResults');
+
+        $originalExternalSearchMock = clone $externalSearchServiceMock;
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+        $this->client->expects($this->once())
+            ->method('call')
+            ->willReturn($this->getMockResponse('noResults.xml'));
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doSearch($requestMock, $externalSearchServiceMock);
+
+        $this->assertEquals($originalExternalSearchMock, $externalSearchServiceMock);
+    }
+
+    public function testInitialNavigationPageGetsResultCountFromPlenty()
+    {
+        $plentyResultCount = 100;
+
+        $this->configRepository->expects($this->once())
+            ->method('get')
+            ->willReturn(true);
+
+        $mockedFallbackSearchResult = json_decode($this->getMockResponse('fallbackSearchResult.json'), true);
+        $this->fallbackSearchService->expects($this->once())
+            ->method('getSearchResults')
+            ->willReturn($mockedFallbackSearchResult);
+
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $responseMock->expects($this->any())
+            ->method('getData')
+            ->willReturn(['count' => $plentyResultCount]);
+
+        $this->fallbackSearchService->expects($this->once())
+            ->method('createResponseFromSearchResult')
+            ->willReturn($responseMock);
+
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $externalSearchServiceMock->expects($this->once())
+            ->method('setDocuments')
+            ->with($mockedFallbackSearchResult['itemList']['documents'], $plentyResultCount);
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+        $this->client->expects($this->once())
+            ->method('call')
+            ->willReturn($this->getMockResponse('someResultsWithFilters.xml'));
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doNavigation($requestMock, $externalSearchServiceMock);
     }
 
     /**
