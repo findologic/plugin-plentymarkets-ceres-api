@@ -40,17 +40,16 @@ class Client
      */
     public function call(Request $request)
     {
-        $response = false;
-
         try {
             $response = $this->libraryCallContract->call(
                 'Findologic::http_library',
                 ['request' => $this->requestToArray($request)]
             );
+
+            throw new \Exception('TEST EXCEPTION AT HTTP CALL');
         } catch (\Exception $e) {
             $this->logger->error('Exception while handling search query.');
-            $this->logger->logException($e);
-            return $response;
+            throw $e;
         }
 
         return $response;

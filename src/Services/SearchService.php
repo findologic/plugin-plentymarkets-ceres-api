@@ -219,7 +219,7 @@ class SearchService implements SearchServiceInterface
             }
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.');
-            $this->logger->logException($e);
+            throw $e;
         }
 
         return $this->results;
@@ -234,7 +234,7 @@ class SearchService implements SearchServiceInterface
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search options.');
-            $this->logger->logException($e);
+            throw $e;
         }
     }
 

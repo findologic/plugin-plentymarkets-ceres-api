@@ -156,6 +156,7 @@ class ParametersBuilder
             $categoryName = implode('_', $categoryTree);
         } catch (\Exception $e) {
             $this->logger->error('Could not get category name. ' . $e->getMessage(), $e->getTrace());
+            throw $e;
         }
 
         return $categoryName;

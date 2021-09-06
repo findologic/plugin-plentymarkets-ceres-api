@@ -61,7 +61,7 @@ class ResponseParser
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
         } catch (Exception $e) {
             $this->logger->warning('Could not parse response from server.');
-            $this->logger->logException($e);
+            throw $e;
         }
 
         return $response;
