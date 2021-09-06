@@ -272,6 +272,14 @@ class ResponseParser
      */
     private function validateResponseData($responseData)
     {
+        $responseData = [
+            'error' => true,
+            'error_no' => 0,
+            'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
+            'error_file' => '/findologic/http_request2/HTTP/Request2/Adapter/Curl.php',
+            'error_line' => 155
+        ];
+
         if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
             throw new Exception(sprintf(
                 '%s. Called in %s:%d',
@@ -279,8 +287,11 @@ class ResponseParser
                 $responseData['error_file'],
                 $responseData['error_line']
             ));
-        } elseif (!is_string($responseData)) {
-            throw new Exception('Invalid response received from server. ' . $responseData);
+        }
+
+        if (!is_string($responseData)) {
+            throw new Exception(
+                'Invalid response received from server. Expected string but was ' . gettype($responseData));
         }
     }
 }
