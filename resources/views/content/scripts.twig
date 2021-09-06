@@ -69,7 +69,7 @@
 <script type="x/template" data-component="item-search">
     {{ component( "Findologic::ItemList.Components.ItemSearch") }}
 
-    <form method="GET" action="/search" @submit="search()">
+    <form method="GET" action="{{ languagePath }}/search" @submit="search()">
         <div class="container-max">
             <div class="position-relative">
                 <div class="d-flex flex-grow-1 position-relative my-2">
