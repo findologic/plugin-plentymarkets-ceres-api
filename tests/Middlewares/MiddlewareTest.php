@@ -82,6 +82,14 @@ class MiddlewareTest extends TestCase
         $classInstances[PluginConfigurationValidator::class] = $this->pluginConfigurationValidatorMock;
     }
 
+    public function tearDown()
+    {
+        global $classInstances;
+        $classInstances = [];
+        
+        parent::tearDown();
+    }
+
     public function testBootShopKeyNotSet()
     {
         $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('');
