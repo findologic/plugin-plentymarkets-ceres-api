@@ -150,7 +150,7 @@ class Middleware extends PlentyMiddleware
         return $validator->validate();
     }
 
-    private function getLanguagePath(): string
+    public function getLanguagePath(): string
     {
         $defaultLanguage = Utils::getDefaultLang();
         $usedLanguage = Utils::getLang();

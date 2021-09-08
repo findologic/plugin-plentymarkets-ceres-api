@@ -6,9 +6,11 @@ use Findologic\Constants\Plugin;
 use Findologic\Services\SearchService;
 use Findologic\Validators\PluginConfigurationValidator;
 use IO\Services\SessionStorageService;
-use Plenty\Log\Contracts\LoggerContract;
+use IO\Services\WebstoreConfigurationService;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Plenty\Modules\System\Models\WebstoreConfiguration;
+use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\Http\Request;
@@ -294,12 +296,12 @@ class MiddlewareTest extends TestCase
             'search shopkey for current language and another language is configured' => [
                 'lang' => 'fr',
                 'rawShopkeyConfig' => "de: ABCDABCDABCDABCDABCDABCDABCDABCD\nfr: 12341234123412341234123412341234",
-                'currentPage' => 'https://your-shop.com/search?query=blub'
+                'currentPage' => 'https://your-shop.com/fr/search?query=blub'
             ],
             'navigation shopkey for current language and another language is configured' => [
                 'lang' => 'fr',
                 'rawShopkeyConfig' => "de: ABCDABCDABCDABCDABCDABCDABCDABCD\nfr: 12341234123412341234123412341234",
-                'currentPage' => 'https://your-shop.com/chairs-and-stools'
+                'currentPage' => 'https://your-shop.com/fr/chairs-and-stools'
             ],
         ];
     }
@@ -369,6 +371,68 @@ class MiddlewareTest extends TestCase
         $middleware->before($requestMock);
     }
 
+    public function testLanguagePathIsSetWhenNotDefaultLanguage()
+    {
+        $webstoreConfigMock = $this->getMockBuilder(WebstoreConfiguration::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getWebstoreConfig'])
+            ->getMock();
+        $webstoreConfigMock->defaultLanguage = 'de';
+
+        $webstoreConfigurationServiceMock = $this->getMockBuilder(WebstoreConfigurationService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $webstoreConfigurationServiceMock->expects($this->once())->method('getWebstoreConfig')->willReturn(
+            $webstoreConfigMock
+        );
+
+        $localizationRepositoryMock = $this->getMockBuilder(LocalizationRepositoryContract::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $localizationRepositoryMock->expects($this->once())->method('getLanguage')->willReturn('fr');
+
+        /** COPIED */
+        $lang = 'fr';
+        $rawShopkeyConfig = "de: ABCDABCDABCDABCDABCDABCDABCDABCD\nfr: 12341234123412341234123412341234";
+
+        $configRepositoryMock = $this->getMockBuilder(ConfigRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $configRepositoryMock->expects($this->any())
+            ->method('get')
+            ->withConsecutive([Plugin::CONFIG_SHOPKEY], [Plugin::CONFIG_NAVIGATION_ENABLED])
+            ->willReturn($rawShopkeyConfig, true);
+
+        $sessionStorageServiceMock = $this->getMockBuilder(SessionStorageService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $sessionStorageServiceMock->expects($this->any())
+            ->method('getLang')
+            ->with()
+            ->willReturn($lang);
+
+        $pluginConfig = new PluginConfig($configRepositoryMock, $sessionStorageServiceMock);
+
+        $searchServiceMock = $this->getMockBuilder(SearchService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $searchServiceMock->expects($this->once())
+            ->method('aliveTest')
+            ->willReturn(true);
+
+        $eventDispatcherMock = $this->getMockBuilder(Dispatcher::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
+        var_dump($middleware->getLanguagePath());
+    }
+
     protected function runBefore()
     {
         $this->middleware = $this->getMockBuilder(Middleware::class)
@@ -379,15 +443,12 @@ class MiddlewareTest extends TestCase
             ])
             ->setMethods(
                 [
-                    'getLoggerObject'
+                    'getLanguagePath'
                 ]
             )
             ->getMock();
-        $loggerMock = $this->getMockBuilder(LoggerContract::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->middleware->method('getLoggerObject')->willReturn($loggerMock);
+
+        $this->middleware->method('getLanguagePath')->willReturn('');
 
         $this->middleware->before(
             $this->request
