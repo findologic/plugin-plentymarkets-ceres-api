@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
 use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\Http\Request;
@@ -378,12 +379,12 @@ class MiddlewareTest extends TestCase
             ->getMock();
         $webstoreConfigMock->defaultLanguage = 'de';
 
-        $webstoreConfigurationServiceMock = $this->getMockBuilder(WebstoreConfigurationService::class)
+        $webstoreConfigurationRepositoryMock =
+            $this->getMockBuilder(WebstoreConfigurationRepositoryContract::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebstoreConfiguration'])
             ->getMock();
 
-        $webstoreConfigurationServiceMock->expects($this->once())
+        $webstoreConfigurationRepositoryMock->expects($this->once())
             ->method('getWebstoreConfiguration')
             ->willReturn($webstoreConfigMock);
 
