@@ -123,14 +123,6 @@ Vue.component("item-search", {
     methods: {
         search: function search() {
             $('#searchBox').collapse('hide');
-
-            var searchBaseURL = '/search?query=';
-
-            if (App.defaultLanguage !== App.language) {
-                searchBaseURL = "/" + App.language + "/search?query=";
-            }
-
-            window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
         autocomplete: function autocomplete(searchString) {},
         selectAutocompleteItem: function selectAutocompleteItem(item) {},

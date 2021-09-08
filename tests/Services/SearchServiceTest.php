@@ -123,6 +123,14 @@ class SearchServiceTest extends TestCase
             ->getMock();
     }
 
+    public function tearDown()
+    {
+        global $classInstances;
+        $classInstances = [];
+        
+        parent::tearDown();
+    }
+
     public function testHandleSearchQuery()
     {
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
