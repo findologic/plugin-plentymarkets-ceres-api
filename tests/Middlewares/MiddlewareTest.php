@@ -375,18 +375,17 @@ class MiddlewareTest extends TestCase
     {
         $webstoreConfigMock = $this->getMockBuilder(WebstoreConfiguration::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebstoreConfig'])
             ->getMock();
         $webstoreConfigMock->defaultLanguage = 'de';
 
         $webstoreConfigurationServiceMock = $this->getMockBuilder(WebstoreConfigurationService::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['getWebstoreConfiguration'])
             ->getMock();
 
-        $webstoreConfigurationServiceMock->expects($this->once())->method('getWebstoreConfig')->willReturn(
-            $webstoreConfigMock
-        );
+        $webstoreConfigurationServiceMock->expects($this->once())
+            ->method('getWebstoreConfiguration')
+            ->willReturn($webstoreConfigMock);
 
         $localizationRepositoryMock = $this->getMockBuilder(LocalizationRepositoryContract::class)
             ->disableOriginalConstructor()
