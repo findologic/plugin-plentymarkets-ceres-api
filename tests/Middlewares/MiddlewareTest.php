@@ -370,7 +370,8 @@ class MiddlewareTest extends TestCase
         $middleware->before($requestMock);
     }
 
-    public function languageProvider() {
+    public function languageProvider()
+    {
         return [
             'Default language used' => [
                 'defaultLanguage' => 'de',
