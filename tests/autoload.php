@@ -1,5 +1,10 @@
 <?php
 
+if (PHP_VERSION_ID >= 70400) {
+    echo sprintf('You are running PHP version %s, but PHPUnit tests require a PHP version lower than 7.4.0', PHP_VERSION) . PHP_EOL;
+    exit(1);
+}
+
 include_once __DIR__ . '/../vendor/autoload.php';
 
 use Composer\Autoload\ClassLoader;

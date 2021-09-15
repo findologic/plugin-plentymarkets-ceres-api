@@ -9,7 +9,7 @@
     <file>tests</file>
     <exclude-pattern>*/tests/build/*</exclude-pattern>
     <exclude-pattern>*/tests/autoload.php</exclude-pattern>
-
+    <exclude-pattern>*/*.js</exclude-pattern>
 
     <arg name="colors"/>
     <arg value="p"/>

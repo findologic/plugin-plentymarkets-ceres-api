@@ -1,7 +1,7 @@
 module.exports = {
     preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
     testMatch: [
-        "**/resources/js/src/**/*.spec.[jt]s?(x)",
+        '**/resources/js/src/**/*.spec.[jt]s?(x)',
     ],
     verbose: true,
     moduleFileExtensions: [
