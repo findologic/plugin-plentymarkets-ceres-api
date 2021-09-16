@@ -165,8 +165,10 @@ class SearchService implements SearchServiceInterface
         }
 
         if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
-            if ($redirectUrl = $this->getProductDetailUrl($results)) {
-                $this->handleProductRedirectUrl($redirectUrl);
+            if ($landingPageUrl = $results->getLandingPage()) {
+                $this->handleRedirectUrl($landingPageUrl);
+            } elseif ($redirectUrl = $this->getProductDetailUrl($results)) {
+                $this->handleRedirectUrl($redirectUrl);
             }
         }
 
@@ -280,7 +282,7 @@ class SearchService implements SearchServiceInterface
         return $this->aliveTestResult;
     }
 
-    public function handleProductRedirectUrl(string $url)
+    public function handleRedirectUrl(string $url)
     {
         header('Location: ' . $url);
     }
