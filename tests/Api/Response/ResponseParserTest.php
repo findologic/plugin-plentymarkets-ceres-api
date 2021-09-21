@@ -50,9 +50,6 @@ class ResponseParserTest extends TestCase
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testParse()
     {
         $responseMock = $this->getMockBuilder(Response::class)
@@ -60,11 +57,8 @@ class ResponseParserTest extends TestCase
             ->setMethods(null)
             ->getMock();
         /** @var ResponseParser|MockObject $responseParserMock */
-        $responseParserMock = $this->getResponseParserMock(['createResponseObject', 'handleLandingPage']);
+        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
         $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
-        $responseParserMock->expects($this->once())
-            ->method('handleLandingPage')
-            ->with('http://www.example.com/imprint');
 
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();

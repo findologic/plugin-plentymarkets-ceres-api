@@ -220,14 +220,14 @@ class SearchServiceTest extends TestCase
             'getCategoryService',
             'getItemSearchService',
             'getSearchFactory',
-            'handleProductRedirectUrl',
+            'handleRedirectUrl',
             'getPluginRepository'
         ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
         if ($redirectUrl) {
-            $searchServiceMock->expects($this->once())->method('handleProductRedirectUrl')->with($redirectUrl);
+            $searchServiceMock->expects($this->once())->method('handleRedirectUrl')->with($redirectUrl);
         } else {
-            $searchServiceMock->expects($this->never())->method('handleProductRedirectUrl');
+            $searchServiceMock->expects($this->never())->method('handleRedirectUrl');
         }
 
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
