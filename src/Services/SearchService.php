@@ -348,7 +348,7 @@ class SearchService implements SearchServiceInterface
         return $findologicIds;
     }
 
-    private function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
+    protected function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
     {
         if (count($productsIds) !== 1) {
             return false;
@@ -377,6 +377,11 @@ class SearchService implements SearchServiceInterface
         $itemSearchService = $this->getItemSearchService();
 
         $productId = $response->getProductsIds()[0];
+
+        if (strpos($productId, "_")) {
+            $productId = explode("_", $productId)[0];
+        }
+
         $result = $itemSearchService->getResult(
             $this->getSearchFactory()->hasItemId($productId)
         );
