@@ -167,7 +167,7 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
     }
 
-    public function testIfExtractsTrueItemIdWhenItIsReturnedFromFindologicSearchWithVariantIdForRedirectUrlGeneration()
+    public function testItemVariantIdExtractingForRedirectUrlGeneration()
     {
         $requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
