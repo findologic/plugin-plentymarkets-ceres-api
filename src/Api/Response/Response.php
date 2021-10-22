@@ -231,6 +231,14 @@ class Response
     /**
      * @return string|null
      */
+    public function getLandingPage()
+    {
+        return $this->getData(self::DATA_LANDING_PAGE);
+    }
+
+    /**
+     * @return string|null
+     */
     private function getCategoryFilterName()
     {
         if (empty($filters = $this->getData(Response::DATA_FILTERS))) {

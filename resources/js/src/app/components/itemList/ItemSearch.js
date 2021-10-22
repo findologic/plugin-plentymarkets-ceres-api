@@ -62,15 +62,6 @@ Vue.component("item-search", {
         search()
         {
             $('#searchBox').collapse('hide');
-
-            let searchBaseURL = '/search?query=';
-
-            if (App.defaultLanguage !== App.language)
-            {
-                searchBaseURL = `/${App.language}/search?query=`;
-            }
-
-            window.open(searchBaseURL + this.$refs.searchInput.value, '_self', false);
         },
 
         autocomplete(searchString)

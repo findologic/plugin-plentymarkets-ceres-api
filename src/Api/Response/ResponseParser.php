@@ -47,10 +47,8 @@ class ResponseParser
 
         try {
             $data = $this->loadXml($responseData);
-            $landingPageData = $this->parseLandingPage($data);
-            if ($landingPageData) {
-                $this->handleLandingPage($landingPageData);
-            }
+
+            $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data));
             $response->setData(Response::DATA_SERVERS, $this->parseServers($data));
             $response->setData(Response::DATA_QUERY, $this->parseQuery($data));
             $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data));
@@ -80,14 +78,6 @@ class ResponseParser
         }
 
         return $parsedXml;
-    }
-
-    /**
-     * @param string $landingPageData
-     */
-    public function handleLandingPage($landingPageData)
-    {
-        header('Location: ' . $landingPageData);
     }
 
     /**
