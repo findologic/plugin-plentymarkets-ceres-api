@@ -38,10 +38,7 @@ class ResponseParser
     {
         /** @var Response $response */
         $response = $this->createResponseObject();
-
-        if (!is_string($responseData)) {
-            $this->logger->error('Invalid response received from server.', ['response' => $responseData]);
-
+        if (!$this->validateResponseData($responseData)) {
             return $response;
         }
 
@@ -257,4 +254,43 @@ class ResponseParser
     {
         return $requestParams['attrib']['wizard'][0] ?? null;
     }
+
+    /**
+     * Prevent non-string responses and let Ceres handle the exception
+     *
+     * @param mixed $responseData
+     * @return bool
+     * @throws Exception
+     */
+    private function validateResponseData($responseData)
+    {
+/*        $responseData = [
+            'error' => true,
+            'error_no' => 0,
+            'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
+            'error_file' => '/findologic/http_request2/HTTP/Request2/Adapter/Curl.php',
+            'error_line' => 155
+        ];*/
+
+        $valid = true;
+        
+        if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
+            $msg = sprintf(
+                '%s. Called in %s:%d',
+                $responseData['error_msg'],
+                $responseData['error_file'],
+                $responseData['error_line']
+            );
+            $this->logger->error($msg, ['response' => $responseData]);
+            $valid = false;
+        }
+
+        if (!is_string($responseData)) {
+            $this->logger->error($msg, ['response' => $responseData]);
+            $valid = false;
+        }
+
+        return $valid;
+    }
+
 }
