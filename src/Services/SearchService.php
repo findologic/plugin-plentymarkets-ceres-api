@@ -378,7 +378,7 @@ class SearchService implements SearchServiceInterface
 
         $productId = $response->getProductsIds()[0];
 
-        if (strpos($productId, "_")) {
+        if (strpos($productId, '_')) {
             $productId = explode("_", $productId)[0];
         }
 
