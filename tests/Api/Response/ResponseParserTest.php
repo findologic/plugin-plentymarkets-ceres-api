@@ -2,6 +2,7 @@
 
 namespace Findologic\Tests\Api\Response;
 
+use Exception;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -94,14 +95,13 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->logger
-            ->expects($this->once())
-            ->method('error')
-            ->with('Invalid response received from server.', ['response' => $errorResponse]);
-
-        $response = $responseParserMock->parse($requestMock, $errorResponse);
-
-        $this->assertEquals([], $response->getData());
+        $this->expectExceptionMessage(sprintf(
+            '%s. Called in %s:%d',
+            $errorResponse['error_msg'],
+            $errorResponse['error_file'],
+            $errorResponse['error_line']
+        ));
+        $responseParserMock->parse($requestMock, $errorResponse);
     }
 
     /**
