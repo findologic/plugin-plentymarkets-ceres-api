@@ -167,6 +167,52 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
     }
 
+    public function testItemVariantIdExtractingForRedirectUrlGeneration()
+    {
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $responseMock->method('getResultsCount')->willReturn(1);
+        $responseMock->method('getVariationIds')->willReturn([456]);
+        $responseMock->method('getLandingPage')->willReturn(null);
+        $responseMock->method('getProductsIds')->willReturn(['123_456']);
+
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $searchFactoryMock = $this->getSearchFactoryMock();
+
+        $searchServiceMock = $this->getSearchServiceMock([
+            'search',
+            'shouldFilterInvalidProducts',
+            'getResults',
+            'shouldRedirectToProductDetailPage',
+            'getItemSearchService',
+            'getSearchFactory'
+        ]);
+        $searchServiceMock->method('search')->willReturn($responseMock);
+        $searchServiceMock->method('getResults')->willReturn($responseMock);
+        $searchServiceMock->method('shouldFilterInvalidProducts')->willReturn(false);
+        $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(true);
+        $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
+        $searchServiceMock->expects($this->once())->method('getSearchFactory')->willReturn($searchFactoryMock);
+
+        $searchFactoryMock->expects($this->once())->method('hasItemId')->with('123');
+
+        $searchServiceMock->doSearch($requestMock, $externalSearchServiceMock);
+    }
+
     /**
      * @dataProvider redirectToProductPageOnDoSearchProvider
      */
