@@ -10,7 +10,7 @@ class Plugin
 {
     const PLUGIN_NAMESPACE = 'Findologic';
     const PLUGIN_IDENTIFIER = 'findologic-plugin-api';
-    const PLUGIN_VERSION = '3.7.2';
+    const PLUGIN_VERSION = '3.7.3';
 
     const PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'items';
 
