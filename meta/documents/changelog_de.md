@@ -1,5 +1,16 @@
 # Release Notes für Findologic
 
+## 3.7.3 (2021-10-27)
+
+### Geändert
+
+* [PLENTY-383] Die Weiterleitung zur Produktdetailseite parsed nun die ids, die von der Findologic-Antwort geliefert werden, um zu überprüfen, ob diese auch die id der Variante enthält.
+
+### Behoben
+
+* [PLENTY-373] Ein Fehler wurde behoben, wodurch beim Abschicken der Suche die Sprache nicht berücksichtigt wurde, was dazu führte, dass die Suchergebnisseite der Standardsprache des Shops entsprach.
+* [PLENTY-371] Ein Fehler wurde behoben, wodurch die Weiterleitung auf die Produktdetailseite vor der Weiterleitung einer Landingpage durchgeführt wurde.
+
 ## 3.7.2 (2021-08-30)
 
 ### Geändert

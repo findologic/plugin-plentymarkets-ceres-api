@@ -1,5 +1,16 @@
 # Release Notes for Findologic
 
+## 3.7.3 (2021-10-27)
+
+### Changed
+
+* [PLENTY-383] The redirect to the product detail page will now properly parse ids, when the sent id also contains the id of the variant.
+
+### Fixed
+
+* [PLENTY-373] Fixed a bug that caused the search submission, to not take the language into consideration, which resulted in a search result page of a different language.
+* [PLENTY-371] Fixed a bug that caused the redirect to the product detail page, to have precedence over the landingpage redirect.
+
 ## 3.7.2 (2021-08-30)
 
 ### Changed
