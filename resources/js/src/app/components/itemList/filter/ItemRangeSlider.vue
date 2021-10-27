@@ -136,6 +136,51 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss">
+// These styles are explicitly not scoped, as the noUiSlider is dynamically injected.
+.fl-range-slider-container {
+  display: inline-block;
 
+  .fl-range-slider {
+    margin: 20px 0.7em 0 0.6em;
+  }
+  .noUi-connect {
+    background: #eee;
+  }
+  .fl-range-input {
+    width: 50%;
+    height: 35px;
+    padding: 5px;
+    display: inline;
+  }
+  .fl-range-slider-row {
+    margin-left: -7px;
+    margin-right: -23px;
+  }
+  .fl-unit {
+    margin-left: 5px;
+  }
+  .fl-range-slider-submit-btn {
+    margin-top: 15px;
+  }
+}
+
+@media screen and (max-width: 543px) {
+  .row .fl-range-slider-container {
+    .fl-range-slider-submit-btn {
+      width: 100%;
+
+      & > .fa {
+        float: none;
+      }
+    }
+    .fl-range-slider {
+      margin-right: 2em;
+    }
+    .fl-range-slider-submit-btn-container {
+      padding-left: 0.7em;
+      padding-right: 2em;
+    }
+  }
+}
 </style>

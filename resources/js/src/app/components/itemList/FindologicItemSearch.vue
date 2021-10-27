@@ -132,6 +132,10 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.search-box-inner {
+  .autocomplete-suggestions {
+    display: none !important;
+  }
+}
 </style>

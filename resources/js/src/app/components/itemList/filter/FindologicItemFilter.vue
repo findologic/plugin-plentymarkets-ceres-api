@@ -254,6 +254,31 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../../../../../../vendor/plentymarkets/plugin-ceres/resources/scss/ceres/variables';
 
+.sub-category-container {
+  padding-left: 15px;
+}
+
+.card {
+  .facet-title {
+    margin-bottom: 0.5rem;
+
+    .h3, .selected-values-count {
+      display: inline-block;
+      vertical-align: middle;
+      margin-bottom: 0;
+    }
+
+    .selected-values-count {
+      background-color: $gray-200;
+      width: 23px;
+      height: 23px;
+      text-align: center;
+      border-radius: 12px;
+      line-height: 23px;
+    }
+  }
+}
 </style>

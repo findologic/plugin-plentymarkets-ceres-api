@@ -131,3 +131,64 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="scss">
+.list-controls {
+  #filterCollapse,.main-filters {
+    .page-content .card .fl-dropdown-container.fl-category-dropdown-container {
+      .fl-dropdown-label {
+        padding-left: 1rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+        vertical-align: middle;
+      }
+
+      .fl-dropdown-content {
+        .fl-dropdown-item {
+          &.form-check-label {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            align-items: baseline;
+
+            .filter-badge {
+              margin-right: 10px;
+              right: unset;
+              left: unset;
+              top: unset;
+              float: none;
+              transform: unset;
+            }
+          }
+
+          .form-check-input:checked + label {
+            padding-left: 1.25rem;
+
+            &::before {
+              left: 0;
+              display: inline-block;
+              position: relative;
+              width: 1.25rem;
+            }
+          }
+
+          ul.subcategories {
+            list-style-type: none;
+
+            .fl-dropdown-item.form-check-label{
+              padding: 0.25rem 0;
+            }
+
+            .form-check-input:checked + label, label {
+              padding-left: 3rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</style>
