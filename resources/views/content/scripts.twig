@@ -36,10 +36,9 @@
 
 {% if isSearchPage or activeOnCatPage %}
 {#    <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component-min.js"></script>#}
-{#    <!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/filters-component-min.js') }}) -->#}
+<!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/findologic_ceres.js') }}) -->
 {% endif %}
 
-<!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
     <div class="findologic-filter-wrapper"
          :class="{'mb-5': facets.some(e => e.isMain === true)}"
@@ -56,20 +55,20 @@
         <div class="ml-0 main-filters">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <client-only>
-                        <div class="w-100">
+                    <div class="w-100">
+                        <!-- SSR:template(findologic-item-filter) -->
                             <findologic-item-filter template-override="#vue-findologic-item-filter"
                                                     v-for="facet in facets"
                                                     :facet="facet"
                                                     :key="facet.id"></findologic-item-filter>
-                        </div>
-                    </client-only>
+                        <!-- /SSR -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </script>
-<!-- /SSR -->
+
 
 <!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
@@ -99,4 +98,5 @@
         </div>
     </form>
 </script>
+<!-- /SSR -->
 <!-- /SSR -->

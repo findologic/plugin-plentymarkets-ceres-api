@@ -18,26 +18,20 @@
       />
     </div>
     <div v-if="facet.findologicFilterType === 'range-slider'">
-      <client-only>
-        <item-range-slider :facet="facet" />
-      </client-only>
+      <item-range-slider :facet="facet" />
     </div>
     <div v-else-if="facet.findologicFilterType === 'image'">
-      <client-only>
-        <item-filter-image
-          :facet="facet"
-          :fallback-image="fallbackImageImageFilter"
-        />
-      </client-only>
+      <item-filter-image
+        :facet="facet"
+        :fallback-image="fallbackImageImageFilter"
+      />
     </div>
     <div v-else-if="facet.findologicFilterType === 'color'">
       <div v-if="!facet.noAvailableFiltersText">
-        <client-only>
-          <item-color-tiles
-            :facet="facet"
-            :fallback-image="fallbackImageColorFilter"
-          />
-        </client-only>
+        <item-color-tiles
+          :facet="facet"
+          :fallback-image="fallbackImageColorFilter"
+        />
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
@@ -47,12 +41,10 @@
     <div v-else-if="facet.id === 'cat'">
       <div v-if="!facet.noAvailableFiltersText">
         <div v-if="facet.findologicFilterType === 'select'">
-          <client-only>
-            <item-category-dropdown
-              v-if="facet.findologicFilterType === 'select'"
-              :facet="facet"
-            />
-          </client-only>
+          <item-category-dropdown
+            v-if="facet.findologicFilterType === 'select'"
+            :facet="facet"
+          />
         </div>
         <div
           v-for="value in facet.values"
@@ -120,9 +112,7 @@
     </div>
     <div v-else-if="facet.findologicFilterType === 'select'">
       <div v-if="!facet.noAvailableFiltersText">
-        <client-only>
-          <item-dropdown :facet="facet" />
-        </client-only>
+        <item-dropdown :facet="facet" />
       </div>
       <p
         v-if="facet.noAvailableFiltersText"

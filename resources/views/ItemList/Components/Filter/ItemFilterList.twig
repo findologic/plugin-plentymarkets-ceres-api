@@ -11,7 +11,6 @@
         <div class="ml-0 main-filters" v-if="facets.some(e => e.isMain === true)">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <client-only>
                         <div class="w-100">
                             <findologic-item-filter
                                 v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}"
@@ -24,7 +23,6 @@
                                 :key="facet.id"
                             ></findologic-item-filter>
                         </div>
-                    </client-only>
                 </div>
                 <div class="row">
                     <a class="btn btn-link filter-toggle" data-toggle="collapse" href="#filterCollapse"
@@ -49,7 +47,6 @@
         <div class="ml-0 filter-collapse collapse" id="filterCollapse">
             <div class="container-max component-loading page-content mb-5" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <client-only>
                         <div class="w-100">
                             <findologic-item-filter
                                 v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}"
@@ -62,7 +59,6 @@
                                 :key="facet.id"
                             ></findologic-item-filter>
                         </div>
-                    </client-only>
                 </div>
             </div>
         </div>

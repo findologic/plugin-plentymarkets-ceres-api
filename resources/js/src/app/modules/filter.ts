@@ -12,7 +12,15 @@ import ItemFilterTagList from '../components/itemList/filter/ItemFilterTagList.v
 import ItemFilterImage from '../components/itemList/filter/ItemFilterImage.vue';
 import ItemFilterList from '../components/itemList/filter/ItemFilterList.vue';
 
-if (window.flCeresConfig.isSearchPage || window.flCeresConfig.activeOnCatPage) {
+function isPageWhereComponentsShouldBeLoaded(): boolean {
+    if (typeof window === 'undefined') {
+        return true;
+    }
+
+    return window.flCeresConfig.isSearchPage || window.flCeresConfig.activeOnCatPage;
+}
+
+if (isPageWhereComponentsShouldBeLoaded()) {
     // @ts-ignore
     const plentyVue = Vue as VueConstructor;
 

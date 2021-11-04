@@ -74,10 +74,6 @@ export default defineComponent({
     const valueTo = ref();
     const facet = props.facet;
 
-    const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
-    valueFrom.value = (values ? values.min : props.facet.minValue) || '';
-    valueTo.value = (values ? values.max : props.facet.maxValue) || '';
-
     const isLoading = computed(() => root.$store.state.isLoading);
     const sanitizedFacetId = computed(() => {
       return 'fl-range-slider-' + props.facet.id
@@ -103,6 +99,10 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
+      valueFrom.value = (values ? values.min : props.facet.minValue) || '';
+      valueTo.value = (values ? values.max : props.facet.maxValue) || '';
+
       $(document).ready(function () {
         const element = document.getElementById(sanitizedFacetId.value);
 

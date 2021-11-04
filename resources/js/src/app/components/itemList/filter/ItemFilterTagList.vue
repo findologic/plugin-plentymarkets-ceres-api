@@ -1,5 +1,6 @@
 <template>
   <div class="selected-filters clearfix">
+    <h1>This should be rendered on the server</h1>
     <span
       v-for="tag in tagList"
       :key="tag.id"

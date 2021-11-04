@@ -55,7 +55,7 @@ export default defineComponent({
     },
     forwardToSingleItem: {
       type: Boolean,
-      default: window.App.config.search.forwardToSingleItem
+      default: false
     }
   },
   setup: (props: ItemSearchProps, { root }) => {
@@ -112,6 +112,8 @@ export default defineComponent({
         searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
       });
     });
+
+    props.forwardToSingleItem = window.App.config.search.forwardToSingleItem;
 
     return {
       promiseCount,
