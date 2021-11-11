@@ -106,7 +106,8 @@ export default defineComponent({
       $(document).ready(function () {
         const element = document.getElementById(sanitizedFacetId.value);
 
-        const slider = window.noUiSlider.create(element, {
+        // TODO: Add noUiSlider element interface.
+        const slider = element.noUiSlider ? element.noUiSlider : window.noUiSlider.create(element, {
           step: props.facet.step,
           start: [valueFrom.value, valueTo.value],
           connect: true,
