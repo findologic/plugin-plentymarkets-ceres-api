@@ -56,19 +56,19 @@
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
                     <div class="w-100">
-                        <!-- SSR:template(findologic-item-filter) -->
-                            <findologic-item-filter template-override="#vue-findologic-item-filter"
-                                                    v-for="facet in facets"
-                                                    :facet="facet"
-                                                    :key="facet.id"></findologic-item-filter>
-                        <!-- /SSR -->
+                        <findologic-item-filter template-override="#vue-findologic-item-filter"
+                                                v-bind:filtersPerRow="{{ config("Findologic.filters_per_row") }}"
+                                                v-bind:fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+                                                v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+                                                v-for="facet in facets"
+                                                :facet="facet"
+                                                :key="facet.id"></findologic-item-filter>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </script>
-
 
 <!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
@@ -98,5 +98,4 @@
         </div>
     </form>
 </script>
-<!-- /SSR -->
 <!-- /SSR -->
