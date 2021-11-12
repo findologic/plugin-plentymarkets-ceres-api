@@ -39,6 +39,7 @@
 <!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/findologic_ceres.js') }}) -->
 {% endif %}
 
+<!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
     <div class="findologic-filter-wrapper"
          :class="{'mb-5': facets.some(e => e.isMain === true)}"
@@ -69,6 +70,7 @@
         </div>
     </div>
 </script>
+<!-- /SSR -->
 
 <!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
