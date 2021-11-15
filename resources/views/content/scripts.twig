@@ -44,9 +44,6 @@
     <div class="findologic-filter-wrapper"
          :class="{'mb-5': facets.some(e => e.isMain === true)}"
          v-show="facets && facets.length > 0">
-        {{ component( "Ceres::ItemList.Components.Filter.ItemFilterList") }}
-        {{ component( "Ceres::ItemList.Components.Filter.ItemFilterPrice") }}
-        {{ component( "Ceres::ItemList.Components.Filter.ItemFilterTagList") }}
 
         <div class="ml-0 main-filters">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
