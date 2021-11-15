@@ -44,15 +44,9 @@
     <div class="findologic-filter-wrapper"
          :class="{'mb-5': facets.some(e => e.isMain === true)}"
          v-show="facets && facets.length > 0">
-        {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
+        {{ component( "Ceres::ItemList.Components.Filter.ItemFilterList") }}
         {{ component( "Ceres::ItemList.Components.Filter.ItemFilterPrice") }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemRangeSlider") }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemColorTiles" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemDropdown" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemCategoryDropdown" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemFilterPrice" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemFilterImage" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemFilterTagList" ) }}
+        {{ component( "Ceres::ItemList.Components.Filter.ItemFilterTagList") }}
 
         <div class="ml-0 main-filters">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
