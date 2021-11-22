@@ -43,7 +43,7 @@ export default defineComponent({
   props: {
     template: {
       type: String,
-      default: '#vue-item-filter-tag-list',
+      default: '#item-filter-tag-list',
     },
     marginClasses: {
       type: String,
@@ -55,7 +55,7 @@ export default defineComponent({
     },
   },
   setup: (props: ItemFilterTagListProps, { root }) => {
-    root.$options.template = props.template || '#vue-item-filter-tag-list';
+    root.$options.template = props.template || '#item-filter-tag-list';
     const store = root.$store as PlentyVuexStore;
 
     const tagList = computed((): Facet[] => UrlBuilder.getSelectedFilters(store));

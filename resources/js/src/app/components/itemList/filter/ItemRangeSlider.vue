@@ -104,9 +104,11 @@ export default defineComponent({
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
 
       $(document).ready(function () {
+
         const element = document.getElementById(sanitizedFacetId.value);
 
         // TODO: Add noUiSlider element interface.
+        // @ts-ignore
         const slider = element.noUiSlider ? element.noUiSlider : window.noUiSlider.create(element, {
           step: props.facet.step,
           start: [valueFrom.value, valueTo.value],
