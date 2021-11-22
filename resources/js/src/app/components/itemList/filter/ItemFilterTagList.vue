@@ -1,4 +1,5 @@
 <template>
+  <!-- SSR:template(item-filter-tag-list) -->
   <div class="selected-filters clearfix">
     <h1>This should be rendered on the server</h1>
     <span
@@ -23,6 +24,7 @@
       {{ TranslationService.translate('Ceres::Template.itemFilterReset') }}
     </span>
   </div>
+  <!-- /SSR -->
 </template>
 
 <script lang="ts">
