@@ -1,5 +1,11 @@
 # Release Notes for Findologic
 
+## 3.7.4 (2021-11-30)
+
+### Fixed
+
+* [PLENTY-388] Fixed a bug that caused Assisted Suggest to be shown on initial page load, due to an `autofocus` attribute on the search field.
+
 ## 3.7.3 (2021-10-27)
 
 ### Changed

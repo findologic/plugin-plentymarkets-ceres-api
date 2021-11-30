@@ -1,5 +1,11 @@
 # Release Notes für Findologic
 
+## 3.7.4 (2021-11-30)
+
+### Behoben
+
+* [PLENTY-388] Ein Fehler wurde behoben, wodurch Assisted Suggest beim initialen Seiten-Aufruf automatisch geöffnet wurde, da das `autofocus` Attribut am Suchfeld gesetzt wurde.
+
 ## 3.7.3 (2021-10-27)
 
 ### Geändert
