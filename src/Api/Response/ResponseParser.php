@@ -38,7 +38,7 @@ class ResponseParser
     {
         $response = $this->createResponseObject();
 
-        if(!is_string($responseData)) {
+        if (!is_string($responseData)) {
             return $response;
         }
 

@@ -486,7 +486,8 @@ class SearchService implements SearchServiceInterface
             $responseData = $this->client->call($request);
 
             if (is_array($responseData) && array_key_exists('error', $responseData)) {
-                $msg = sprintf('Plentymarkets returned error response - Retry %d/%d takes place',
+                $msg = sprintf(
+                    'Plentymarkets returned error response - Retry %d/%d takes place',
                     $i + 1,
                     self::MAX_RETRIES
                 );

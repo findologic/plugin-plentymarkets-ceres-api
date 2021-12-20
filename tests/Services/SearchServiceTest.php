@@ -1310,10 +1310,12 @@ class SearchServiceTest extends TestCase
             ->willReturnOnConsecutiveCalls($plentyErrorResponse, $nonStringErrorResponse, $validResponse);
 
         $this->logger->expects($this->at(0))->method('error')->with(
-            'Plentymarkets returned error response - Retry 1/2 takes place', ['response' => $plentyErrorResponse]
+            'Plentymarkets returned error response - Retry 1/2 takes place',
+            ['response' => $plentyErrorResponse]
         );
         $this->logger->expects($this->at(1))->method('error')->with(
-            'Invalid response received from server - Retry 2/2 takes place', ['response' => $nonStringErrorResponse]
+            'Invalid response received from server - Retry 2/2 takes place',
+            ['response' => $nonStringErrorResponse]
         );
 
         $searchService = $this->getSearchServiceMock();
