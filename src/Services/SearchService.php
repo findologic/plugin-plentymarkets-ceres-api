@@ -154,7 +154,7 @@ class SearchService implements SearchServiceInterface
     {
         $results = $this->search($request, $externalSearch);
 
-        if ($results->getResultsCount() == 0) {
+        if ($results->getResultsCount() == 0 && !$results->getLandingPage()) {
             return;
         }
 
