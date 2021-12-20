@@ -153,8 +153,11 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $results = $this->search($request, $externalSearch);
+        if ($landingPageUrl = $results->getLandingPage()) {
+            $this->doPageRedirect($landingPageUrl);
+        }
 
-        if ($results->getResultsCount() == 0 && !$results->getLandingPage()) {
+        if ($results->getResultsCount() == 0) {
             return;
         }
 
@@ -173,17 +176,13 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * In case a redirect should happen, this will return the redirect URL. Redirects may be caused by a
-     * Landingpage or when a search only yields a single result.
+     * In case a redirect should happen, this will return the redirect URL. Redirects may be caused when
+     * a search only yields a single result.
      *
      * @return string|null
      */
     public function getRedirectUrl(HttpRequest $request, Response $response, array $variationIds)
     {
-        if ($landingPageUrl = $response->getLandingPage()) {
-            return $landingPageUrl;
-        }
-
         if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
             return $this->getProductDetailUrl($response);
         }
