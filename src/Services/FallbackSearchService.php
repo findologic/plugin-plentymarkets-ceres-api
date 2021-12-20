@@ -83,7 +83,7 @@ class FallbackSearchService implements SearchServiceInterface
      */
     public function createResponseFromSearchResult(array $searchResults)
     {
-        $response = Response::getInstance();
+        $response = $this->responseParser->createResponseObject();
         $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
         $this->setFilters($searchResults['facets'], $response);
         $this->setTotal($searchResults['itemList']['total'], $response);

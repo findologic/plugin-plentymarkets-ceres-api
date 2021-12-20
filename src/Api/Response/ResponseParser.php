@@ -36,8 +36,7 @@ class ResponseParser
 
     public function parse(HttpRequest $request, $responseData): Response
     {
-        /** @var Response $response */
-        $response = Response::getInstance();
+        $response = $this->createResponseObject();
 
         try {
             $data = $this->loadXml($responseData);
@@ -72,6 +71,11 @@ class ResponseParser
         }
 
         return $parsedXml;
+    }
+
+    public function createResponseObject(): Response
+    {
+        return pluginApp(Response::class);
     }
 
     /**

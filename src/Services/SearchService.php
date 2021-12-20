@@ -265,8 +265,7 @@ class SearchService implements SearchServiceInterface
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
 
-        $response = $this->requestWithRetry($apiRequest);
-        $this->results = $this->responseParser->parse($request, $response);
+        $this->results = $this->responseParser->parse($request, $this->requestWithRetry($apiRequest));
 
         return $this->results;
     }
@@ -477,6 +476,10 @@ class SearchService implements SearchServiceInterface
         }
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     private function requestWithRetry(Request $request)
     {
         for ($i = 1; $i <= self::MAX_RETRIES; $i++) {
@@ -492,5 +495,7 @@ class SearchService implements SearchServiceInterface
                 return $responseData;
             }
         }
+
+        throw new Exception(sprintf('Exception: No valid response after %d retries', self::MAX_RETRIES));
     }
 }
