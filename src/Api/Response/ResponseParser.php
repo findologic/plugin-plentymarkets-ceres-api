@@ -38,6 +38,10 @@ class ResponseParser
     {
         $response = $this->createResponseObject();
 
+        if(!is_string($responseData)) {
+            return $response;
+        }
+
         try {
             $data = $this->loadXml($responseData);
             $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data));

@@ -1283,6 +1283,43 @@ class SearchServiceTest extends TestCase
         $searchService->doNavigation($requestMock, $externalSearchServiceMock);
     }
 
+    public function testRetryMechanismAndEnsureItGetsLogged()
+    {
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $externalSearchServiceMock->expects($this->never())->method('setResults');
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+
+        $plentyErrorResponse = [
+            'error' => true,
+            'error_msg' => 'no services found',
+            'error_file' => '/var/www/SdkRestApi.php',
+        ];
+        $nonStringErrorResponse = false;
+        $validResponse = $this->getMockResponse('someResultsWithFilters.xml');
+
+        $this->client->expects($this->exactly(3))
+            ->method('call')
+            ->willReturnOnConsecutiveCalls($plentyErrorResponse, $nonStringErrorResponse, $validResponse);
+
+        $this->logger->expects($this->at(0))->method('error')->with(
+            'Plentymarkets returned error response - Retry 1/2 takes place', ['response' => $plentyErrorResponse]
+        );
+        $this->logger->expects($this->at(1))->method('error')->with(
+            'Invalid response received from server - Retry 2/2 takes place', ['response' => $nonStringErrorResponse]
+        );
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doSearch($requestMock, $externalSearchServiceMock);
+    }
+
     /**
      * @param string $shopUrl
      * @param string $defaultLanguage
