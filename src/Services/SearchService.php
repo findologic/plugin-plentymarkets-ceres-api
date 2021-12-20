@@ -483,27 +483,22 @@ class SearchService implements SearchServiceInterface
     private function requestWithRetry(Request $request)
     {
         for ($i = 0; $i <= self::MAX_RETRIES; $i++) {
+            $errorMsg = '';
             $responseData = $this->client->call($request);
-
+            
             if (is_array($responseData) && array_key_exists('error', $responseData)) {
-                $msg = sprintf(
-                    'Plentymarkets returned error response - Retry %d/%d takes place',
-                    $i + 1,
-                    self::MAX_RETRIES
-                );
-                $this->logger->error($msg, ['response' => $responseData]);
+                $errorMsg = 'Plentymarkets returned error response';
             } elseif (!is_string($responseData)) {
-                $msg = sprintf(
-                    'Invalid response received from server - Retry %d/%d takes place',
-                    $i + 1,
-                    self::MAX_RETRIES
-                );
-                $this->logger->error($msg, ['response' => $responseData]);
-            } else {
-                return $responseData;
+                $errorMsg = 'Invalid response received from server';
             }
-        }
 
-        return $responseData;
+            if (!empty($errorMsg) && $i !== self::MAX_RETRIES) {
+                $logLine = sprintf('%s - Retry %d/%d takes place', $errorMsg, $i + 1, self::MAX_RETRIES);
+                $this->logger->error($logLine, ['response' => $responseData]);
+                continue;
+            }
+
+            return $responseData;
+        }
     }
 }
