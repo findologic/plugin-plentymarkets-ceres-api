@@ -153,6 +153,9 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $results = $this->search($request, $externalSearch);
+        if ($landingPageUrl = $results->getLandingPage()) {
+            $this->doPageRedirect($landingPageUrl);
+        }
 
         if ($results->getResultsCount() == 0) {
             return;
@@ -164,16 +167,27 @@ class SearchService implements SearchServiceInterface
             $variationIds = $results->getVariationIds();
         }
 
-        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
-            if ($landingPageUrl = $results->getLandingPage()) {
-                $this->handleRedirectUrl($landingPageUrl);
-            } elseif ($redirectUrl = $this->getProductDetailUrl($results)) {
-                $this->handleRedirectUrl($redirectUrl);
-            }
+        if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
+            $this->doPageRedirect($redirectUrl);
         }
 
         /** @var ExternalSearch $searchQuery */
         $externalSearch->setResults($variationIds, $results->getResultsCount());
+    }
+
+    /**
+     * In case a redirect should happen, this will return the redirect URL. Redirects may be caused when
+     * a search only yields a single result.
+     *
+     * @return string|null
+     */
+    public function getRedirectUrl(HttpRequest $request, Response $response, array $variationIds)
+    {
+        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
+            return $this->getProductDetailUrl($response);
+        }
+
+        return null;
     }
 
     /**
@@ -282,7 +296,7 @@ class SearchService implements SearchServiceInterface
         return $this->aliveTestResult;
     }
 
-    public function handleRedirectUrl(string $url)
+    public function doPageRedirect(string $url)
     {
         header('Location: ' . $url);
     }
@@ -379,7 +393,7 @@ class SearchService implements SearchServiceInterface
         $productId = $response->getProductsIds()[0];
 
         if (strpos($productId, '_')) {
-            $productId = explode("_", $productId)[0];
+            $productId = explode('_', $productId)[0];
         }
 
         $result = $itemSearchService->getResult(
