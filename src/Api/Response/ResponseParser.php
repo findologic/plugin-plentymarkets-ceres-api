@@ -37,13 +37,7 @@ class ResponseParser
     public function parse(HttpRequest $request, $responseData): Response
     {
         /** @var Response $response */
-        $response = $this->createResponseObject();
-
-        if (!is_string($responseData)) {
-            $this->logger->error('Invalid response received from server.', ['response' => $responseData]);
-
-            return $response;
-        }
+        $response = Response::getInstance();
 
         try {
             $data = $this->loadXml($responseData);
@@ -78,14 +72,6 @@ class ResponseParser
         }
 
         return $parsedXml;
-    }
-
-    /**
-     * @return Response
-     */
-    public function createResponseObject()
-    {
-        return pluginApp(Response::class);
     }
 
     /**

@@ -39,6 +39,14 @@ class Response
     }
 
     /**
+     * @return Response
+     */
+    public static function getInstance()
+    {
+        return pluginApp(self::class);
+    }
+
+    /**
      * @param $key
      * @param $value
      * @return $this

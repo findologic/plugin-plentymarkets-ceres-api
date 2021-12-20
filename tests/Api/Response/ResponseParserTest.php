@@ -54,15 +54,15 @@ class ResponseParserTest extends TestCase
     {
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->setMethods(['getInstance'])
             ->getMock();
-        /** @var ResponseParser|MockObject $responseParserMock */
-        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
-        $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
+        $responseMock->expects($this->any())->method('getInstance')->willReturn($responseMock);
 
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
+        /** @var ResponseParser|MockObject $responseParserMock */
+        $responseParserMock = $this->getResponseParserMock();
         $results = $responseParserMock->parse($requestMock, $this->getResponse());
         $this->assertEquals(3, $results->getResultsCount());
 
@@ -85,20 +85,23 @@ class ResponseParserTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->setMethods(['getInstance'])
             ->getMock();
-        /** @var ResponseParser|MockObject $responseParserMock */
-        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
-        $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
+        $responseMock->expects($this->any())->method('getInstance')->willReturn($responseMock);
 
         /** @var Request|MockObject $requestMock */
-        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
+        $requestMock = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
 
         $this->logger
             ->expects($this->once())
             ->method('error')
             ->with('Invalid response received from server.', ['response' => $errorResponse]);
 
+        /** @var ResponseParser|MockObject $responseParserMock */
+        $responseParserMock = $this->getResponseParserMock();
         $response = $responseParserMock->parse($requestMock, $errorResponse);
 
         $this->assertEquals([], $response->getData());

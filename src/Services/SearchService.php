@@ -3,6 +3,7 @@
 namespace Findologic\Services;
 
 use Exception;
+use Findologic\Api\Request\Request;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -33,6 +34,7 @@ class SearchService implements SearchServiceInterface
     use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
+    const MAX_RETRIES = 2;
 
     /**
      * @var Client
@@ -262,7 +264,9 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
-        $this->results = $this->responseParser->parse($request, $this->client->call($apiRequest));
+
+        $response = $this->requestWithRetry($apiRequest);
+        $this->results = $this->responseParser->parse($request, $response);
 
         return $this->results;
     }
@@ -470,6 +474,23 @@ class SearchService implements SearchServiceInterface
             return $url->append(
                 $urlBuilderRepository->getSuffix($itemId, $variationId, $withVariationId)
             )->toRelativeUrl($includeLanguage);
+        }
+    }
+
+    private function requestWithRetry(Request $request)
+    {
+        for ($i = 1; $i <= self::MAX_RETRIES; $i++) {
+            $responseData = $this->client->call($request);
+
+            if (is_array($responseData) && array_key_exists('error', $responseData) ) {
+                $msg = sprintf('Plentymarkets returned error response, retry %d/%d takes place', $i, self::MAX_RETRIES);
+                $this->logger->error($msg, ['response' => $responseData]);
+            } elseif (!is_string($responseData)) {
+                $msg = sprintf('Invalid response received from server, retry %d/%d takes place', $i, self::MAX_RETRIES);
+                $this->logger->error($msg, ['response' => $responseData]);
+            } else {
+                return $responseData;
+            }
         }
     }
 }
