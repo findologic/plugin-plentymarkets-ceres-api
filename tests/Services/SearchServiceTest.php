@@ -1299,8 +1299,11 @@ class SearchServiceTest extends TestCase
 
         $plentyErrorResponse = [
             'error' => true,
+            'error_code' => 404,
             'error_msg' => 'no services found',
             'error_file' => '/var/www/SdkRestApi.php',
+            'error_line' => 127,
+            'error_host' => '127.0.0.1'
         ];
         $nonStringErrorResponse = false;
         $validResponse = $this->getMockResponse('someResultsWithFilters.xml');
@@ -1309,13 +1312,15 @@ class SearchServiceTest extends TestCase
             ->method('call')
             ->willReturnOnConsecutiveCalls($plentyErrorResponse, $nonStringErrorResponse, $validResponse);
 
-        $this->logger->expects($this->at(0))->method('error')->with(
-            'Plentymarkets returned error response - Retry 1/2 takes place',
-            ['response' => $plentyErrorResponse]
-        );
-        $this->logger->expects($this->at(1))->method('error')->with(
-            'Invalid response received from server - Retry 2/2 takes place',
-            ['response' => $nonStringErrorResponse]
+        $this->logger->expects($this->exactly(2))->method('error')->withConsecutive(
+            [
+                'Plentymarkets SDK returned an error response - Retry 1/2 takes place',
+                ['response' => $plentyErrorResponse]
+            ],
+            [
+                'Invalid response received from server - Retry 2/2 takes place',
+                ['response' => $nonStringErrorResponse]
+            ]
         );
 
         $searchService = $this->getSearchServiceMock();

@@ -265,7 +265,7 @@ class SearchService implements SearchServiceInterface
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
 
-        $this->results = $this->responseParser->parse($request, $this->requestWithRetry($apiRequest));
+        $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
 
         return $this->results;
     }
@@ -477,28 +477,41 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @param Request $request
      * @return mixed
      */
-    private function requestWithRetry(Request $request)
+    private function requestWithRetries(Request $request)
     {
-        for ($i = 0; $i <= self::MAX_RETRIES; $i++) {
-            $errorMsg = '';
+        $i = 0;
+        do {
             $responseData = $this->client->call($request);
             
-            if (is_array($responseData) && array_key_exists('error', $responseData)) {
-                $errorMsg = 'Plentymarkets returned error response';
-            } elseif (!is_string($responseData)) {
-                $errorMsg = 'Invalid response received from server';
+            $error = $this->validateResponse($responseData);
+            if (!$error) {
+                return $responseData;
             }
 
-            if (!empty($errorMsg) && $i !== self::MAX_RETRIES) {
-                $logLine = sprintf('%s - Retry %d/%d takes place', $errorMsg, $i + 1, self::MAX_RETRIES);
-                $this->logger->error($logLine, ['response' => $responseData]);
-                continue;
-            }
+            $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i + 1, self::MAX_RETRIES);
+            $this->logger->error($logLine, ['response' => $responseData]);
 
-            return $responseData;
+            $i++;
+        } while ($i <= self::MAX_RETRIES);
+
+        return $responseData;
+    }
+
+    /**
+     * @param mixed $responseData
+     * @return string|null
+     */
+    private function validateResponse($responseData)
+    {
+        $errorMsg = null;
+        if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
+            $errorMsg = 'Plentymarkets SDK returned an error response';
+        } elseif (!is_string($responseData)) {
+            $errorMsg = 'Invalid response received from server';
         }
+
+        return $errorMsg;
     }
 }
