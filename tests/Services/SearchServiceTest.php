@@ -215,6 +215,7 @@ class SearchServiceTest extends TestCase
 
     /**
      * @dataProvider redirectToProductPageOnDoSearchProvider
+     * @runInSeparateProcess
      */
     public function testRedirectToProductPageOnDoSearch(
         array $query,
@@ -266,14 +267,14 @@ class SearchServiceTest extends TestCase
             'getCategoryService',
             'getItemSearchService',
             'getSearchFactory',
-            'handleRedirectUrl',
+            'doPageRedirect',
             'getPluginRepository'
         ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
         if ($redirectUrl) {
-            $searchServiceMock->expects($this->once())->method('handleRedirectUrl')->with($redirectUrl);
+            $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($redirectUrl);
         } else {
-            $searchServiceMock->expects($this->never())->method('handleRedirectUrl');
+            $searchServiceMock->expects($this->never())->method('doPageRedirect');
         }
 
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
