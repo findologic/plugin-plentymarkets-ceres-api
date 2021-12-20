@@ -486,16 +486,23 @@ class SearchService implements SearchServiceInterface
             $responseData = $this->client->call($request);
 
             if (is_array($responseData) && array_key_exists('error', $responseData)) {
-                $msg = sprintf('Plentymarkets returned error response, retry %d/%d takes place', $i, self::MAX_RETRIES);
+                $msg = sprintf('Plentymarkets returned error response - Retry %d/%d takes place',
+                    $i,
+                    self::MAX_RETRIES
+                );
                 $this->logger->error($msg, ['response' => $responseData]);
             } elseif (!is_string($responseData)) {
-                $msg = sprintf('Invalid response received from server, retry %d/%d takes place', $i, self::MAX_RETRIES);
+                $msg = sprintf(
+                    'Invalid response received from server - Retry %d/%d takes place',
+                    $i,
+                    self::MAX_RETRIES
+                );
                 $this->logger->error($msg, ['response' => $responseData]);
             } else {
                 return $responseData;
             }
         }
 
-        throw new Exception(sprintf('Exception: No valid response after %d retries', self::MAX_RETRIES));
+        return $responseData;
     }
 }

@@ -40,7 +40,6 @@ class ResponseParser
 
         try {
             $data = $this->loadXml($responseData);
-
             $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data));
             $response->setData(Response::DATA_SERVERS, $this->parseServers($data));
             $response->setData(Response::DATA_QUERY, $this->parseQuery($data));
