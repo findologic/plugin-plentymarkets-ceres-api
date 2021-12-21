@@ -5,6 +5,7 @@ namespace Findologic\Api\Response;
 use Exception;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Constants\Plugin;
+use Findologic\Services\SearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
 use SimpleXMLElement;
@@ -39,6 +40,11 @@ class ResponseParser
         $response = $this->createResponseObject();
 
         if (!is_string($responseData)) {
+            $msg = sprintf(
+                'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
+                SearchService::MAX_RETRIES
+            );
+            $this->logger->error($msg, ['response' => $responseData]);
             return $response;
         }
 
