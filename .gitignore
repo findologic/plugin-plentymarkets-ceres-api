@@ -4,3 +4,4 @@ build/
 .idea/
 src/index.php
 src/Mocks
+tests/build

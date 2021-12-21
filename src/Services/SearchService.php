@@ -3,6 +3,7 @@
 namespace Findologic\Services;
 
 use Exception;
+use Findologic\Api\Request\Request;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -33,6 +34,7 @@ class SearchService implements SearchServiceInterface
     use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
+    const MAX_RETRIES = 2;
 
     /**
      * @var Client
@@ -276,7 +278,8 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
-        $this->results = $this->responseParser->parse($request, $this->client->call($apiRequest));
+
+        $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
 
         return $this->results;
     }
@@ -485,5 +488,44 @@ class SearchService implements SearchServiceInterface
                 $urlBuilderRepository->getSuffix($itemId, $variationId, $withVariationId)
             )->toRelativeUrl($includeLanguage);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function requestWithRetries(Request $request)
+    {
+        $i = 0;
+        do {
+            $responseData = $this->client->call($request);
+            
+            $error = $this->validateResponse($responseData);
+            if (!$error) {
+                return $responseData;
+            }
+
+            $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i + 1, self::MAX_RETRIES);
+            $this->logger->error($logLine, ['response' => $responseData]);
+
+            $i++;
+        } while ($i <= self::MAX_RETRIES);
+
+        return $responseData;
+    }
+
+    /**
+     * @param mixed $responseData
+     * @return string|null
+     */
+    private function validateResponse($responseData)
+    {
+        $errorMsg = null;
+        if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
+            $errorMsg = 'Plentymarkets SDK returned an error response';
+        } elseif (!is_string($responseData)) {
+            $errorMsg = 'Invalid response received from server';
+        }
+
+        return $errorMsg;
     }
 }
