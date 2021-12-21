@@ -1,5 +1,16 @@
 # Release Notes for Findologic
 
+## 3.7.5 (2021-12-21)
+
+### Changed
+
+* [PLENTY-403] Marketplace name and description have been changed.
+* [PLENTY-411] In case a request to the Plentymarkets SDK fails, two more retries are being done, before a fallback is triggered.
+
+### Fixed
+
+* [PLENTY-412] Fixed a bug that caused the Landingpage redirect to no longer work as expected.
+
 ## 3.7.4 (2021-11-30)
 
 ### Fixed
