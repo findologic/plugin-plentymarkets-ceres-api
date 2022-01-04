@@ -76,6 +76,7 @@ class ResponseParser
     {
         $parsedXml = simplexml_load_string($xmlString);
         if (!$parsedXml) {
+            $this->logger->error('Parsing xml failed', ['xmlString' => $xmlString]);
             throw new Exception('Error while parsing xmlString to xmlElement');
         }
 
