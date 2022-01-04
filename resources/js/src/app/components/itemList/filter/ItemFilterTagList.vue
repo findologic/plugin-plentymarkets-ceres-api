@@ -2,6 +2,7 @@
   <!-- SSR:template(item-filter-tag-list) -->
   <div class="selected-filters clearfix">
     <h1>This should be rendered on the server</h1>
+    {{ tagList }}
     <span
       v-for="tag in tagList"
       :key="tag.id"
