@@ -73,16 +73,24 @@ class ResponseParserTest extends TestCase
         ]);
     }
 
-    public function testHandleErrorResponse()
-    {
-        $errorResponse = [
-            'error' => true,
-            'error_no' => 0,
-            'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
-            'error_file' => '/findologic/http_request2/HTTP/Request2/Adapter/Curl.php',
-            'error_line' => 155
+    public function responseDataProvider() {
+        return [
+            'errorResponse' => [
+                'error' => true,
+                'error_no' => 0,
+                'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
+                'error_file' => '/findologic/http_request2/HTTP/Request2/Adapter/Curl.php',
+                'error_line' => 155
+            ],
+            'emptyResponse' => [''],
         ];
+    }
 
+    /**
+     * @dataProvider responseDataProvider
+     */
+    public function testHandleErrorResponse($response)
+    {
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
@@ -96,10 +104,45 @@ class ResponseParserTest extends TestCase
 
         $this->logger->expects($this->once())->method('error')->with(
             'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
-            ['response' => $errorResponse]
+            ['response' => $response]
         );
 
-        $response = $responseParserMock->parse($requestMock, $errorResponse);
+        $responseParserResult = $responseParserMock->parse($requestMock, $response);
+        $this->assertEquals([], $responseParserResult->getData());
+    }
+
+    public function testInvalidXmlResponse()
+    {
+        $invalidXml = 'invalid-xml';
+
+        $libXmlError = new \LibXMLError();
+        $libXmlError->level = 3;
+        $libXmlError->code = 4;
+        $libXmlError->column = 1;
+        $libXmlError->message = "Start tag expected, '<' not found\n";
+        $libXmlError->file = '';
+        $libXmlError->line = 1;
+
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+        /** @var ResponseParser|MockObject $responseParserMock */
+        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
+        $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
+
+        /** @var Request|MockObject $requestMock */
+        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
+
+        $this->logger->expects($this->once())->method('error')->with(
+            'Parsing XML failed',
+            [
+                'errors' => [$libXmlError],
+                'xmlString' => $invalidXml,
+            ]
+        );
+
+        $response = $responseParserMock->parse($requestMock, $invalidXml);
         $this->assertEquals([], $response->getData());
     }
 
