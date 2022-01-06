@@ -73,7 +73,8 @@ class ResponseParserTest extends TestCase
         ]);
     }
 
-    public function responseDataProvider() {
+    public function responseDataProvider()
+    {
         return [
             'errorResponse' => [
                 'error' => true,
