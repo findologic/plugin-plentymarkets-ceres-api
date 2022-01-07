@@ -61,7 +61,7 @@ class ResponseParser
             $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->filters));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
         } catch (Exception $e) {
-            $this->logger->warning('Could not parse response from server.');
+            $this->logger->error('Parsing XML failed', ['xmlString' => $responseData]);
             $this->logger->logException($e);
         }
 
@@ -78,7 +78,6 @@ class ResponseParser
         $parsedXml = simplexml_load_string($xmlString);
 
         if (!$parsedXml) {
-            $this->logger->error('Parsing XML failed', ['xmlString' => $xmlString]);
             throw new Exception('Error while parsing XML');
         }
 
