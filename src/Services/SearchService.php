@@ -524,7 +524,7 @@ class SearchService implements SearchServiceInterface
             $errorMsg = 'Plentymarkets SDK returned an error response';
         } elseif (!is_string($responseData)) {
             $errorMsg = 'Invalid response received from server';
-        } elseif($responseData === '') {
+        } elseif ($responseData === '') {
             $errorMsg = 'Plentymarkets SDK returned empty response';
         }
 
