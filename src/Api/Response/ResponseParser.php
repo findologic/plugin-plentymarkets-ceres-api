@@ -77,7 +77,7 @@ class ResponseParser
         libxml_use_internal_errors(true);
         $parsedXml = simplexml_load_string($xmlString);
 
-        if ($parsedXml === false) {
+        if (!$parsedXml) {
             $this->logger->error('Parsing XML failed', [
                 'errors' => libxml_get_errors(),
                 'xmlString' => $xmlString
