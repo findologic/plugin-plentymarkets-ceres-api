@@ -1,6 +1,8 @@
 {{ component( "Findologic::ItemList.Components.Filter.ItemFilterList") }}
 {{ component( "Findologic::ItemList.Components.Filter.ItemFilterTagList") }}
 
+Query-Params: {{ queryParams }}
+
 <div class="list-controls">
     <div class="row">
         <div class="col-12">
@@ -8,6 +10,7 @@
                 <findologic-item-filter-list
                     template-override="#vue-findologic-item-filter-list"
                     :all-facets="{{ facets | json_encode }}"
+                    :query-params="'{{ queryParams }}'"
                 ></findologic-item-filter-list>
             </div>
         </div>

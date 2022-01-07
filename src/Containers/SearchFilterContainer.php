@@ -20,11 +20,15 @@ class SearchFilterContainer
 
         $searchResults = $searchService->getResults();
 
+        $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $parsedUrl = parse_url($url);
+
         return $twig->render(
             'Findologic::Category.Item.Partials.SearchFilters',
             [
                 'resultsCount' => $searchResults->getResultsCount(),
-                'facets' => $searchResults->getData(Response::DATA_FILTERS)
+                'facets' => $searchResults->getData(Response::DATA_FILTERS),
+                'queryParams' => $parsedUrl['query'],
             ]
         );
     }

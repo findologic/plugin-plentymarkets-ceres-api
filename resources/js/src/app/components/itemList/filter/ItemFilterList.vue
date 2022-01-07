@@ -11,6 +11,7 @@ interface ItemColorTilesProps extends TemplateOverridable, FacetAware {
   allFacets: Facet[];
   facets: Facet[];
   allowedFacetsTypes: string[];
+  queryParams: string;
 }
 
 export default defineComponent({
@@ -23,6 +24,10 @@ export default defineComponent({
     allowedFacetsTypes: {
       type: Array,
       default: () => []
+    },
+    queryParams: {
+      type: String,
+      default: '',
     }
   },
   setup: (props: ItemColorTilesProps, { root }) => {

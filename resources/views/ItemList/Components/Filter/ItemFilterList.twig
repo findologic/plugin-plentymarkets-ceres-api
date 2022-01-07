@@ -8,6 +8,7 @@
          :class="{'mb-5': facets.some(e => e.isMain === true)}"
          v-show="facets && facets.length > 0"
     >
+        Query-Params: {{ queryParams }}
         <div class="ml-0 main-filters" v-if="facets.some(e => e.isMain === true)">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
