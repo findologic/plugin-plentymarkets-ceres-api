@@ -45,6 +45,7 @@ class ResponseParser
                 SearchService::MAX_RETRIES
             );
             $this->logger->error($msg, ['response' => $responseData]);
+
             return $response;
         }
 
@@ -74,17 +75,12 @@ class ResponseParser
      */
     public function loadXml($xmlString = '')
     {
-        libxml_use_internal_errors(true);
         $parsedXml = simplexml_load_string($xmlString);
 
         if (!$parsedXml) {
-            $this->logger->error('Parsing XML failed', [
-                'errors' => libxml_get_errors(),
-                'xmlString' => $xmlString
-            ]);
+            $this->logger->error('Parsing XML failed', ['xmlString' => $xmlString]);
             throw new Exception('Error while parsing XML');
         }
-        libxml_clear_errors();
 
         return $parsedXml;
     }
