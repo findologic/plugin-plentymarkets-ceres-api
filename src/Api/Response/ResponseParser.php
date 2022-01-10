@@ -39,12 +39,13 @@ class ResponseParser
     {
         $response = $this->createResponseObject();
 
-        if (!is_string($responseData)) {
+        if (!is_string($responseData) || $responseData === '') {
             $msg = sprintf(
                 'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
                 SearchService::MAX_RETRIES
             );
             $this->logger->error($msg, ['response' => $responseData]);
+
             return $response;
         }
 
@@ -60,7 +61,7 @@ class ResponseParser
             $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->filters));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
         } catch (Exception $e) {
-            $this->logger->warning('Could not parse response from server.');
+            $this->logger->error('Parsing XML failed', ['xmlString' => $responseData]);
             $this->logger->logException($e);
         }
 
@@ -75,8 +76,9 @@ class ResponseParser
     public function loadXml($xmlString = '')
     {
         $parsedXml = simplexml_load_string($xmlString);
+
         if (!$parsedXml) {
-            throw new Exception('Error while parsing xmlString to xmlElement');
+            throw new Exception('Error while parsing XML');
         }
 
         return $parsedXml;

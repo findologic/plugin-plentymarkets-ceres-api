@@ -73,9 +73,9 @@ class ResponseParserTest extends TestCase
         ]);
     }
 
-    public function testHandleErrorResponse()
+    public function responseDataProvider()
     {
-        $errorResponse = [
+        $plentyErrorResponse = [
             'error' => true,
             'error_no' => 0,
             'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
@@ -83,6 +83,36 @@ class ResponseParserTest extends TestCase
             'error_line' => 155
         ];
 
+        return [
+            'Plentymarkets error response' => [
+                'response' => $plentyErrorResponse,
+                'errorMessage' =>
+                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                'errorContext' => ['response' => $plentyErrorResponse],
+            ],
+            'Empty response' => [
+                'response' => '',
+                'errorMessage' =>
+                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                'errorContext' => ['response' => ''],
+            ],
+            'Invalid XML response' => [
+                'response' => 'invalid-xml',
+                'errorMessage' => 'Parsing XML failed',
+                'errorContext' => ['xmlString' => 'invalid-xml'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider responseDataProvider
+     *
+     * @param string|array $response
+     * @param string $errorMessage
+     * @param array $errorContext
+     */
+    public function testHandleInvalidResponse($response, string $errorMessage, array $errorContext)
+    {
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
@@ -94,13 +124,12 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->logger->expects($this->once())->method('error')->with(
-            'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
-            ['response' => $errorResponse]
-        );
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with($errorMessage, $errorContext);
 
-        $response = $responseParserMock->parse($requestMock, $errorResponse);
-        $this->assertEquals([], $response->getData());
+        $responseParserResult = $responseParserMock->parse($requestMock, $response);
+        $this->assertEquals([], $responseParserResult->getData());
     }
 
     /**
