@@ -86,36 +86,32 @@ class ResponseParserTest extends TestCase
         return [
             'Plentymarkets error response' => [
                 'response' => $plentyErrorResponse,
-                'expectedLog' => [
-                    'message' =>
-                        'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
-                    'context' => ['response' => $plentyErrorResponse],
-                ]
+                'errorMessage' =>
+                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                'errorContext' => ['response' => $plentyErrorResponse],
             ],
             'Empty response' => [
                 'response' => '',
-                'expectedLog' => [
-                    'message' =>
-                        'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
-                    'context' => ['response' => ''],
-                ]
+                'errorMessage' =>
+                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                'errorContext' => ['response' => ''],
             ],
             'Invalid XML response' => [
                 'response' => 'invalid-xml',
-                'expectedLog' => [
-                    'message' => 'Parsing XML failed',
-                    'context' => ['xmlString' => 'invalid-xml'],
-                ]
+                'errorMessage' => 'Parsing XML failed',
+                'errorContext' => ['xmlString' => 'invalid-xml'],
             ],
         ];
     }
 
     /**
      * @dataProvider responseDataProvider
+     *
      * @param string|array $response
-     * @param array $expectedLogData
+     * @param string $errorMessage
+     * @param array $errorContext
      */
-    public function testHandleInvalidResponse($response, array $expectedLogData)
+    public function testHandleInvalidResponse($response, string $errorMessage, array $errorContext)
     {
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
@@ -130,7 +126,7 @@ class ResponseParserTest extends TestCase
 
         $this->logger->expects($this->once())
             ->method('error')
-            ->with($expectedLogData['message'], $expectedLogData['context']);
+            ->with($errorMessage, $errorContext);
 
         $responseParserResult = $responseParserMock->parse($requestMock, $response);
         $this->assertEquals([], $responseParserResult->getData());
