@@ -87,22 +87,24 @@ class ResponseParserTest extends TestCase
             'Plentymarkets error response' => [
                 'response' => $plentyErrorResponse,
                 'expectedLog' => [
-                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
-                    ['response' => $plentyErrorResponse],
+                    'message' =>
+                        'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                    'context' => ['response' => $plentyErrorResponse],
                 ]
             ],
             'Empty response' => [
                 'response' => '',
                 'expectedLog' => [
-                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
-                    ['response' => ''],
+                    'message' =>
+                        'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                    'context' => ['response' => ''],
                 ]
             ],
             'Invalid XML response' => [
                 'response' => 'invalid-xml',
                 'expectedLog' => [
-                    'Parsing XML failed',
-                    ['xmlString' => 'invalid-xml'],
+                    'message' => 'Parsing XML failed',
+                    'context' => ['xmlString' => 'invalid-xml'],
                 ]
             ],
         ];
@@ -110,8 +112,10 @@ class ResponseParserTest extends TestCase
 
     /**
      * @dataProvider responseDataProvider
+     * @param string|array $response
+     * @param array $expectedLogData
      */
-    public function testHandleInvalidResponse($response, $expectedLog)
+    public function testHandleInvalidResponse($response, array $expectedLogData)
     {
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
@@ -124,7 +128,9 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->logger->expects($this->once())->method('error')->with($expectedLog[0], $expectedLog[1]);
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with($expectedLogData['message'], $expectedLogData['context']);
 
         $responseParserResult = $responseParserMock->parse($requestMock, $response);
         $this->assertEquals([], $responseParserResult->getData());
