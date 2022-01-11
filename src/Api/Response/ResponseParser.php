@@ -37,8 +37,6 @@ class ResponseParser
 
     public function parse(HttpRequest $request, $responseData): Response
     {
-        $this->validateResponseData($responseData);
-
         /** @var Response $response */
         $response = $this->createResponseObject();
 
@@ -258,36 +256,5 @@ class ResponseParser
     private function getShoppingGuide(array $requestParams)
     {
         return $requestParams['attrib']['wizard'][0] ?? null;
-    }
-
-    /**
-     * Prevent non-string responses and let Ceres handle the exception
-     *
-     * @param mixed $responseData
-     * @throws Exception
-     */
-    private function validateResponseData($responseData)
-    {
-        $responseData = [
-            'error' => true,
-            'error_no' => 0,
-            'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
-            'error_file' => '/findologic/http_request2/HTTP/Request2/Adapter/Curl.php',
-            'error_line' => 155
-        ];
-
-        if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
-            throw new Exception(sprintf(
-                '%s. Called in %s:%d',
-                $responseData['error_msg'],
-                $responseData['error_file'],
-                $responseData['error_line']
-            ));
-        }
-
-        if (!is_string($responseData)) {
-            throw new Exception(
-                'Invalid response received from server. Expected string but was ' . gettype($responseData));
-        }
     }
 }
