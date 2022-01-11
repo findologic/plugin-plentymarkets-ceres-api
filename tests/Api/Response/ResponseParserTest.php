@@ -10,7 +10,6 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use SimpleXMLElement;
 
 /**
  * Class ResponseParserTest

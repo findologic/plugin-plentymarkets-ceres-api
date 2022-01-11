@@ -37,6 +37,7 @@ class ResponseParser
 
     public function parse(HttpRequest $request, $responseData): Response
     {
+        /** @var Response $response */
         $response = $this->createResponseObject();
 
         if (!is_string($responseData) || $responseData === '') {
