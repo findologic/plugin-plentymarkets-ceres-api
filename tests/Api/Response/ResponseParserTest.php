@@ -2,7 +2,6 @@
 
 namespace Findologic\Tests\Api\Response;
 
-use Exception;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -11,7 +10,6 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use SimpleXMLElement;
 
 /**
  * Class ResponseParserTest
