@@ -167,8 +167,55 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->handleSearchQuery($requestMock, $searchQueryMock);
     }
 
+    public function testItemVariantIdExtractingForRedirectUrlGeneration()
+    {
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $responseMock = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $responseMock->method('getResultsCount')->willReturn(1);
+        $responseMock->method('getVariationIds')->willReturn([456]);
+        $responseMock->method('getLandingPage')->willReturn(null);
+        $responseMock->method('getProductsIds')->willReturn(['123_456']);
+
+        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $searchFactoryMock = $this->getSearchFactoryMock();
+
+        $searchServiceMock = $this->getSearchServiceMock([
+            'search',
+            'shouldFilterInvalidProducts',
+            'getResults',
+            'shouldRedirectToProductDetailPage',
+            'getItemSearchService',
+            'getSearchFactory'
+        ]);
+        $searchServiceMock->method('search')->willReturn($responseMock);
+        $searchServiceMock->method('getResults')->willReturn($responseMock);
+        $searchServiceMock->method('shouldFilterInvalidProducts')->willReturn(false);
+        $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(true);
+        $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
+        $searchServiceMock->expects($this->once())->method('getSearchFactory')->willReturn($searchFactoryMock);
+
+        $searchFactoryMock->expects($this->once())->method('hasItemId')->with('123');
+
+        $searchServiceMock->doSearch($requestMock, $externalSearchServiceMock);
+    }
+
     /**
      * @dataProvider redirectToProductPageOnDoSearchProvider
+     * @runInSeparateProcess
      */
     public function testRedirectToProductPageOnDoSearch(
         array $query,
@@ -220,14 +267,14 @@ class SearchServiceTest extends TestCase
             'getCategoryService',
             'getItemSearchService',
             'getSearchFactory',
-            'handleRedirectUrl',
+            'doPageRedirect',
             'getPluginRepository'
         ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
         if ($redirectUrl) {
-            $searchServiceMock->expects($this->once())->method('handleRedirectUrl')->with($redirectUrl);
+            $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($redirectUrl);
         } else {
-            $searchServiceMock->expects($this->never())->method('handleRedirectUrl');
+            $searchServiceMock->expects($this->never())->method('doPageRedirect');
         }
 
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
@@ -1235,6 +1282,50 @@ class SearchServiceTest extends TestCase
 
         $searchService = $this->getSearchServiceMock();
         $searchService->doNavigation($requestMock, $externalSearchServiceMock);
+    }
+
+    public function testRetryMechanismAndEnsureItGetsLogged()
+    {
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $externalSearchServiceMock->expects($this->never())->method('setResults');
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+
+        $plentyErrorResponse = [
+            'error' => true,
+            'error_code' => 404,
+            'error_msg' => 'no services found',
+            'error_file' => '/var/www/SdkRestApi.php',
+            'error_line' => 127,
+            'error_host' => '127.0.0.1'
+        ];
+        $nonStringErrorResponse = false;
+        $validResponse = $this->getMockResponse('someResultsWithFilters.xml');
+
+        $this->client->expects($this->exactly(3))
+            ->method('call')
+            ->willReturnOnConsecutiveCalls($plentyErrorResponse, $nonStringErrorResponse, $validResponse);
+
+        $this->logger->expects($this->exactly(2))->method('error')->withConsecutive(
+            [
+                'Plentymarkets SDK returned an error response - Retry 1/2 takes place',
+                ['response' => $plentyErrorResponse]
+            ],
+            [
+                'Invalid response received from server - Retry 2/2 takes place',
+                ['response' => $nonStringErrorResponse]
+            ]
+        );
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doSearch($requestMock, $externalSearchServiceMock);
     }
 
     /**

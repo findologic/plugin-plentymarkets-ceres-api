@@ -3,6 +3,7 @@
 namespace Findologic\Services;
 
 use Exception;
+use Findologic\Api\Request\Request;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -33,6 +34,7 @@ class SearchService implements SearchServiceInterface
     use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
+    const MAX_RETRIES = 2;
 
     /**
      * @var Client
@@ -153,6 +155,9 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $results = $this->search($request, $externalSearch);
+        if ($landingPageUrl = $results->getLandingPage()) {
+            $this->doPageRedirect($landingPageUrl);
+        }
 
         if ($results->getResultsCount() == 0) {
             return;
@@ -164,16 +169,27 @@ class SearchService implements SearchServiceInterface
             $variationIds = $results->getVariationIds();
         }
 
-        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
-            if ($landingPageUrl = $results->getLandingPage()) {
-                $this->handleRedirectUrl($landingPageUrl);
-            } elseif ($redirectUrl = $this->getProductDetailUrl($results)) {
-                $this->handleRedirectUrl($redirectUrl);
-            }
+        if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
+            $this->doPageRedirect($redirectUrl);
         }
 
         /** @var ExternalSearch $searchQuery */
         $externalSearch->setResults($variationIds, $results->getResultsCount());
+    }
+
+    /**
+     * In case a redirect should happen, this will return the redirect URL. Redirects may be caused when
+     * a search only yields a single result.
+     *
+     * @return string|null
+     */
+    public function getRedirectUrl(HttpRequest $request, Response $response, array $variationIds)
+    {
+        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
+            return $this->getProductDetailUrl($response);
+        }
+
+        return null;
     }
 
     /**
@@ -262,7 +278,8 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
-        $this->results = $this->responseParser->parse($request, $this->client->call($apiRequest));
+
+        $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
 
         return $this->results;
     }
@@ -282,7 +299,7 @@ class SearchService implements SearchServiceInterface
         return $this->aliveTestResult;
     }
 
-    public function handleRedirectUrl(string $url)
+    public function doPageRedirect(string $url)
     {
         header('Location: ' . $url);
     }
@@ -348,7 +365,7 @@ class SearchService implements SearchServiceInterface
         return $findologicIds;
     }
 
-    private function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
+    protected function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
     {
         if (count($productsIds) !== 1) {
             return false;
@@ -377,6 +394,11 @@ class SearchService implements SearchServiceInterface
         $itemSearchService = $this->getItemSearchService();
 
         $productId = $response->getProductsIds()[0];
+
+        if (strpos($productId, '_')) {
+            $productId = explode('_', $productId)[0];
+        }
+
         $result = $itemSearchService->getResult(
             $this->getSearchFactory()->hasItemId($productId)
         );
@@ -466,5 +488,44 @@ class SearchService implements SearchServiceInterface
                 $urlBuilderRepository->getSuffix($itemId, $variationId, $withVariationId)
             )->toRelativeUrl($includeLanguage);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function requestWithRetries(Request $request)
+    {
+        $i = 0;
+        do {
+            $responseData = $this->client->call($request);
+            
+            $error = $this->validateResponse($responseData);
+            if (!$error) {
+                return $responseData;
+            }
+
+            $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i + 1, self::MAX_RETRIES);
+            $this->logger->error($logLine, ['response' => $responseData]);
+
+            $i++;
+        } while ($i <= self::MAX_RETRIES);
+
+        return $responseData;
+    }
+
+    /**
+     * @param mixed $responseData
+     * @return string|null
+     */
+    private function validateResponse($responseData)
+    {
+        $errorMsg = null;
+        if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
+            $errorMsg = 'Plentymarkets SDK returned an error response';
+        } elseif (!is_string($responseData)) {
+            $errorMsg = 'Invalid response received from server';
+        }
+
+        return $errorMsg;
     }
 }

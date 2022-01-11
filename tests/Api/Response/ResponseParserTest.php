@@ -95,13 +95,13 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->expectExceptionMessage(sprintf(
-            '%s. Called in %s:%d',
-            $errorResponse['error_msg'],
-            $errorResponse['error_file'],
-            $errorResponse['error_line']
-        ));
-        $responseParserMock->parse($requestMock, $errorResponse);
+        $this->logger->expects($this->once())->method('error')->with(
+            'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+            ['response' => $errorResponse]
+        );
+
+        $response = $responseParserMock->parse($requestMock, $errorResponse);
+        $this->assertEquals([], $response->getData());
     }
 
     /**

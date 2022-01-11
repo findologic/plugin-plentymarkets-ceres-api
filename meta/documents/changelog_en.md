@@ -1,5 +1,33 @@
 # Release Notes for Findologic
 
+## 3.7.5 (2021-12-21)
+
+### Changed
+
+* [PLENTY-403] Marketplace name and description have been changed.
+* [PLENTY-411] In case a request to the Plentymarkets SDK fails, two more retries are being done, before a fallback is triggered.
+
+### Fixed
+
+* [PLENTY-412] Fixed a bug that caused the Landingpage redirect to no longer work as expected.
+
+## 3.7.4 (2021-11-30)
+
+### Fixed
+
+* [PLENTY-388] Fixed a bug that caused Assisted Suggest to be shown on initial page load, due to an `autofocus` attribute on the search field.
+
+## 3.7.3 (2021-10-27)
+
+### Changed
+
+* [PLENTY-383] The redirect to the product detail page will now properly parse ids, when the sent id also contains the id of the variant.
+
+### Fixed
+
+* [PLENTY-373] Fixed a bug that caused the search submission, to not take the language into consideration, which resulted in a search result page of a different language.
+* [PLENTY-371] Fixed a bug that caused the redirect to the product detail page, to have precedence over the landingpage redirect.
+
 ## 3.7.2 (2021-08-30)
 
 ### Changed

@@ -5,6 +5,7 @@ namespace Findologic\Api\Response;
 use Exception;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Constants\Plugin;
+use Findologic\Services\SearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
 use SimpleXMLElement;
@@ -41,9 +42,17 @@ class ResponseParser
         /** @var Response $response */
         $response = $this->createResponseObject();
 
+        if (!is_string($responseData)) {
+            $msg = sprintf(
+                'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
+                SearchService::MAX_RETRIES
+            );
+            $this->logger->error($msg, ['response' => $responseData]);
+            return $response;
+        }
+
         try {
             $data = $this->loadXml($responseData);
-
             $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data));
             $response->setData(Response::DATA_SERVERS, $this->parseServers($data));
             $response->setData(Response::DATA_QUERY, $this->parseQuery($data));
@@ -76,10 +85,7 @@ class ResponseParser
         return $parsedXml;
     }
 
-    /**
-     * @return Response
-     */
-    public function createResponseObject()
+    public function createResponseObject(): Response
     {
         return pluginApp(Response::class);
     }
