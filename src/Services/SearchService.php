@@ -236,8 +236,8 @@ class SearchService implements SearchServiceInterface
                 $this->doSearch($request, $externalSearch);
             }
         } catch (Exception $e) {
-            $this->logger->error('Exception while handling search query.');
-            throw $e;
+            $this->logger->error('Exception while handling search query.', ['URL' => $request->getRequestUri()]);
+            $this->logger->logException($e);
         }
 
         return $this->results;
@@ -251,8 +251,16 @@ class SearchService implements SearchServiceInterface
         try {
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
         } catch (Exception $e) {
-            $this->logger->error('Exception while handling search options.');
-            throw $e;
+            $this->logger->error('Exception while handling search options.', [
+                'URL' => $request->getRequestUri(),
+                'searchOptions' => [
+                    'itemsPerPage' => $searchOptions->getItemsPerPage(),
+                    'defaultItemsPerPage' => $searchOptions->getDefaultItemsPerPage(),
+                    'sortingOptions' => $searchOptions->getSortingOptions(),
+                    'defaultSortingOptions' => $searchOptions->getDefaultSortingOption()
+                ]
+            ]);
+            $this->logger->logException($e);
         }
     }
 

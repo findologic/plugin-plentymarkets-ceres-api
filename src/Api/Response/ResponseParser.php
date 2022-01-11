@@ -64,7 +64,6 @@ class ResponseParser
         } catch (Exception $e) {
             $this->logger->error('Parsing XML failed', ['xmlString' => $responseData]);
             $this->logger->logException($e);
-            throw $e;
         }
 
         return $response;

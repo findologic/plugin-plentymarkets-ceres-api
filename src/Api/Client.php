@@ -2,6 +2,7 @@
 
 namespace Findologic\Api;
 
+use Exception;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Request\Request;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
@@ -40,15 +41,16 @@ class Client
      */
     public function call(Request $request)
     {
+        $requestArray = [];
+        $response = false;
+
         try {
             $requestArray = $this->requestToArray($request);
             $response = $this->libraryCallContract->call(
                 'Findologic::http_library',
                 ['request' => $requestArray]
             );
-
-            throw new \Exception("Test exception in http call");
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.', ['request' => $requestArray]);
             $this->logger->logException($e);
         }
