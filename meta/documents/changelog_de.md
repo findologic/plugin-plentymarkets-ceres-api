@@ -1,5 +1,13 @@
 # Release Notes für Findologic
 
+## 3.7.6 (2022-01-11)
+
+### Geändert
+
+* [PLENTY-414] Logging wurde verbessert wenn die XML Antwort nicht verarbeitet werden kann.
+* [PLENTY-366] Im Fehlerfall beinhalten Log Einträge mehr Daten für die weitere Analyse.
+
+
 ## 3.7.5 (2021-12-21)
 
 ### Geändert

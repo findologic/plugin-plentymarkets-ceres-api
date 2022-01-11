@@ -1,5 +1,12 @@
 # Release Notes for Findologic
 
+## 3.7.6 (2022-01-11)
+
+### Changed
+
+* [PLENTY-414] Logging for non-parsable XML strings has been improved.
+* [PLENTY-366] Log messages contain more debug information, in case an error occurs.
+
 ## 3.7.5 (2021-12-21)
 
 ### Changed
