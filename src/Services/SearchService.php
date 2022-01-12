@@ -503,7 +503,7 @@ class SearchService implements SearchServiceInterface
      */
     private function requestWithRetries(Request $request)
     {
-        $i = 0;
+        $i = 1;
         do {
             $responseData = $this->client->call($request);
             
@@ -512,7 +512,7 @@ class SearchService implements SearchServiceInterface
                 return $responseData;
             }
 
-            $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i + 1, self::MAX_RETRIES);
+            $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i, self::MAX_RETRIES);
             $this->logger->error($logLine, ['response' => $responseData]);
 
             $i++;
@@ -532,7 +532,7 @@ class SearchService implements SearchServiceInterface
             $errorMsg = 'Plentymarkets SDK returned an error response';
         } elseif (!is_string($responseData)) {
             $errorMsg = 'Invalid response received from server';
-        } elseif ($responseData === '') {
+        } elseif (empty($responseData)) {
             $errorMsg = 'Plentymarkets SDK returned empty response';
         }
 
