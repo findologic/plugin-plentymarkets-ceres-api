@@ -503,7 +503,7 @@ class SearchService implements SearchServiceInterface
      */
     private function requestWithRetries(Request $request)
     {
-        $i = 1;
+        $i = 0;
         do {
             $responseData = $this->client->call($request);
             
@@ -512,10 +512,12 @@ class SearchService implements SearchServiceInterface
                 return $responseData;
             }
 
-            $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i, self::MAX_RETRIES);
-            $this->logger->error($logLine, ['response' => $responseData]);
-
             $i++;
+            
+            if ($i <= self::MAX_RETRIES) {
+                $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i, self::MAX_RETRIES);
+                $this->logger->error($logLine, ['response' => $responseData]);
+            }
         } while ($i <= self::MAX_RETRIES);
 
         return $responseData;
