@@ -1319,7 +1319,7 @@ class SearchServiceTest extends TestCase
                 ['response' => $plentyErrorResponse]
             ],
             [
-                'Invalid response received from server - Retry 2/2 takes place',
+                'Plentymarkets SDK returned invalid response - Expected string - Retry 2/2 takes place',
                 ['response' => $nonStringErrorResponse]
             ]
         );
