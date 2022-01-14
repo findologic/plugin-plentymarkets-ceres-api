@@ -511,11 +511,12 @@ class SearchService implements SearchServiceInterface
             if (!$error) {
                 return $responseData;
             }
-
-            $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i + 1, self::MAX_RETRIES);
-            $this->logger->error($logLine, ['response' => $responseData]);
-
             $i++;
+
+            if ($i <= self::MAX_RETRIES) {
+                $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i, self::MAX_RETRIES);
+                $this->logger->error($logLine, ['response' => $responseData]);
+            }
         } while ($i <= self::MAX_RETRIES);
 
         return $responseData;
@@ -531,8 +532,8 @@ class SearchService implements SearchServiceInterface
         if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
             $errorMsg = 'Plentymarkets SDK returned an error response';
         } elseif (!is_string($responseData)) {
-            $errorMsg = 'Invalid response received from server';
-        } elseif ($responseData === '') {
+            $errorMsg = 'Plentymarkets SDK returned invalid response - Expected string';
+        } elseif (empty($responseData)) {
             $errorMsg = 'Plentymarkets SDK returned empty response';
         }
 
