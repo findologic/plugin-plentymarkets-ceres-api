@@ -423,7 +423,7 @@ class SearchService implements SearchServiceInterface
             $productData['variation']['id'] = $variationId;
         }
 
-        return $this->buildItemURL($productData, false);
+        return $this->buildItemURL($productData);
     }
 
     /**
@@ -444,7 +444,8 @@ class SearchService implements SearchServiceInterface
 
             if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
-                strtolower($variation['order']) == $lowercasedQuery
+                strtolower($variation['order']) == $lowercasedQuery ||
+                strtolower($variation['id']) == $lowercasedQuery
             ) {
                 return $variation['id'];
             }
