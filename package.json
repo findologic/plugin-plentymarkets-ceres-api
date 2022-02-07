@@ -30,6 +30,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
-    "nouislider": "^14.6.1"
+    "nouislider": "^14.6.1",
+    "svg-injector": "^1.1.3"
   }
 }
