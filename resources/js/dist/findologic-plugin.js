@@ -3920,4 +3920,4 @@ exports.default = {
 },{"../constants":21}]},{},[15,17,18,19,20,13,14,12,16,8,10,11,9,22])
 
 
-//# sourceMappingURL=filters-component.js.map
+//# sourceMappingURL=findologic-plugin.js.map
