@@ -1,5 +1,5 @@
-import url from '../../../mixins/url';
-import SVGInjector from 'svg-injector';
+import url from '../../../mixins/url'
+import SVGInjector from '@tanem/svg-injector'
 
 Vue.component("item-color-tiles", {
     mixins: [url],

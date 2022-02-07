@@ -1,470 +1,1121 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-/**
- * SVGInjector v1.1.3 - Fast, caching, dynamic inline SVG DOM injection library
- * https://github.com/iconic/SVGInjector
- *
- * Copyright (c) 2014-2015 Waybury <hello@waybury.com>
- * @license MIT
- */
+(function (process){(function (){
+'use strict'
 
-(function (window, document) {
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./svg-injector.cjs.production.js')
+} else {
+  module.exports = require('./svg-injector.cjs.development.js')
+}
 
-  'use strict';
+}).call(this)}).call(this,require('_process'))
 
-  // Environment
-  var isLocal = window.location.protocol === 'file:';
-  var hasSvgSupport = document.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#BasicStructure', '1.1');
+},{"./svg-injector.cjs.development.js":2,"./svg-injector.cjs.production.js":3,"_process":5}],2:[function(require,module,exports){
+'use strict';
 
-  function uniqueClasses(list) {
-    list = list.split(' ');
+Object.defineProperty(exports, '__esModule', { value: true });
 
-    var hash = {};
-    var i = list.length;
-    var out = [];
+var tslib = require('tslib');
+var contentType = require('content-type');
 
-    while (i--) {
-      if (!hash.hasOwnProperty(list[i])) {
-        hash[list[i]] = 1;
-        out.unshift(list[i]);
+var cache = new Map();
+
+var cloneSvg = function cloneSvg(sourceSvg) {
+  return sourceSvg.cloneNode(true);
+};
+
+var isLocal = function isLocal() {
+  return window.location.protocol === 'file:';
+};
+
+var makeAjaxRequest = function makeAjaxRequest(url, httpRequestWithCredentials, callback) {
+  var httpRequest = new XMLHttpRequest();
+
+  httpRequest.onreadystatechange = function () {
+    try {
+      if (!/\.svg/i.test(url) && httpRequest.readyState === 2) {
+        var contentType$1 = httpRequest.getResponseHeader('Content-Type');
+
+        if (!contentType$1) {
+          throw new Error('Content type not found');
+        }
+
+        var type = contentType.parse(contentType$1).type;
+
+        if (!(type === 'image/svg+xml' || type === 'text/plain')) {
+          throw new Error("Invalid content type: ".concat(type));
+        }
+      }
+
+      if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 404 || httpRequest.responseXML === null) {
+          throw new Error(isLocal() ? 'Note: SVG injection ajax calls do not work locally without ' + 'adjusting security settings in your browser. Or consider ' + 'using a local webserver.' : 'Unable to load SVG file: ' + url);
+        }
+
+        if (httpRequest.status === 200 || isLocal() && httpRequest.status === 0) {
+          callback(null, httpRequest);
+        } else {
+          throw new Error('There was a problem injecting the SVG: ' + httpRequest.status + ' ' + httpRequest.statusText);
+        }
+      }
+    } catch (error) {
+      httpRequest.abort();
+
+      if (error instanceof Error) {
+        callback(error, httpRequest);
+      } else {
+        throw error;
       }
     }
+  };
 
-    return out.join(' ');
+  httpRequest.open('GET', url);
+  httpRequest.withCredentials = httpRequestWithCredentials;
+
+  if (httpRequest.overrideMimeType) {
+    httpRequest.overrideMimeType('text/xml');
   }
 
-  /**
-   * cache (or polyfill for <= IE8) Array.forEach()
-   * source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
-   */
-  var forEach = Array.prototype.forEach || function (fn, scope) {
-    if (this === void 0 || this === null || typeof fn !== 'function') {
-      throw new TypeError();
-    }
+  httpRequest.send();
+};
 
-    /* jshint bitwise: false */
-    var i, len = this.length >>> 0;
-    /* jshint bitwise: true */
+var requestQueue = {};
+var queueRequest = function queueRequest(url, callback) {
+  requestQueue[url] = requestQueue[url] || [];
+  requestQueue[url].push(callback);
+};
+var processRequestQueue = function processRequestQueue(url) {
+  var _loop_1 = function _loop_1(i, len) {
+    setTimeout(function () {
+      if (Array.isArray(requestQueue[url])) {
+        var cacheValue = cache.get(url);
+        var callback = requestQueue[url][i];
 
-    for (i = 0; i < len; ++i) {
-      if (i in this) {
-        fn.call(scope, this[i], i, this);
+        if (cacheValue instanceof SVGSVGElement) {
+          callback(null, cloneSvg(cacheValue));
+        }
+
+        if (cacheValue instanceof Error) {
+          callback(cacheValue);
+        }
+
+        if (i === requestQueue[url].length - 1) {
+          delete requestQueue[url];
+        }
       }
-    }
+    }, 0);
   };
 
-  // SVG Cache
-  var svgCache = {};
+  for (var i = 0, len = requestQueue[url].length; i < len; i++) {
+    _loop_1(i);
+  }
+};
 
-  var injectCount = 0;
-  var injectedElements = [];
+var loadSvgCached = function loadSvgCached(url, httpRequestWithCredentials, callback) {
+  if (cache.has(url)) {
+    var cacheValue = cache.get(url);
 
-  // Request Queue
-  var requestQueue = [];
-
-  // Script running status
-  var ranScripts = {};
-
-  var cloneSvg = function (sourceSvg) {
-    return sourceSvg.cloneNode(true);
-  };
-
-  var queueRequest = function (url, callback) {
-    requestQueue[url] = requestQueue[url] || [];
-    requestQueue[url].push(callback);
-  };
-
-  var processRequestQueue = function (url) {
-    for (var i = 0, len = requestQueue[url].length; i < len; i++) {
-      // Make these calls async so we avoid blocking the page/renderer
-      /* jshint loopfunc: true */
-      (function (index) {
-        setTimeout(function () {
-          requestQueue[url][index](cloneSvg(svgCache[url]));
-        }, 0);
-      })(i);
-      /* jshint loopfunc: false */
-    }
-  };
-
-  var loadSvg = function (url, callback) {
-    if (svgCache[url] !== undefined) {
-      if (svgCache[url] instanceof SVGSVGElement) {
-        // We already have it in cache, so use it
-        callback(cloneSvg(svgCache[url]));
-      }
-      else {
-        // We don't have it in cache yet, but we are loading it, so queue this request
-        queueRequest(url, callback);
-      }
-    }
-    else {
-
-      if (!window.XMLHttpRequest) {
-        callback('Browser does not support XMLHttpRequest');
-        return false;
-      }
-
-      // Seed the cache to indicate we are loading this URL already
-      svgCache[url] = {};
+    if (cacheValue === undefined) {
       queueRequest(url, callback);
-
-      var httpRequest = new XMLHttpRequest();
-
-      httpRequest.onreadystatechange = function () {
-        // readyState 4 = complete
-        if (httpRequest.readyState === 4) {
-
-          // Handle status
-          if (httpRequest.status === 404 || httpRequest.responseXML === null) {
-            callback('Unable to load SVG file: ' + url);
-
-            if (isLocal) callback('Note: SVG injection ajax calls do not work locally without adjusting security setting in your browser. Or consider using a local webserver.');
-
-            callback();
-            return false;
-          }
-
-          // 200 success from server, or 0 when using file:// protocol locally
-          if (httpRequest.status === 200 || (isLocal && httpRequest.status === 0)) {
-
-            /* globals Document */
-            if (httpRequest.responseXML instanceof Document) {
-              // Cache it
-              svgCache[url] = httpRequest.responseXML.documentElement;
-            }
-            /* globals -Document */
-
-            // IE9 doesn't create a responseXML Document object from loaded SVG,
-            // and throws a "DOM Exception: HIERARCHY_REQUEST_ERR (3)" error when injected.
-            //
-            // So, we'll just create our own manually via the DOMParser using
-            // the the raw XML responseText.
-            //
-            // :NOTE: IE8 and older doesn't have DOMParser, but they can't do SVG either, so...
-            else if (DOMParser && (DOMParser instanceof Function)) {
-              var xmlDoc;
-              try {
-                var parser = new DOMParser();
-                xmlDoc = parser.parseFromString(httpRequest.responseText, 'text/xml');
-              }
-              catch (e) {
-                xmlDoc = undefined;
-              }
-
-              if (!xmlDoc || xmlDoc.getElementsByTagName('parsererror').length) {
-                callback('Unable to parse SVG file: ' + url);
-                return false;
-              }
-              else {
-                // Cache it
-                svgCache[url] = xmlDoc.documentElement;
-              }
-            }
-
-            // We've loaded a new asset, so process any requests waiting for it
-            processRequestQueue(url);
-          }
-          else {
-            callback('There was a problem injecting the SVG: ' + httpRequest.status + ' ' + httpRequest.statusText);
-            return false;
-          }
-        }
-      };
-
-      httpRequest.open('GET', url);
-
-      // Treat and parse the response as XML, even if the
-      // server sends us a different mimetype
-      if (httpRequest.overrideMimeType) httpRequest.overrideMimeType('text/xml');
-
-      httpRequest.send();
-    }
-  };
-
-  // Inject a single element
-  var injectElement = function (el, evalScripts, pngFallback, callback) {
-
-    // Grab the src or data-src attribute
-    var imgUrl = el.getAttribute('data-src') || el.getAttribute('src');
-
-    // We can only inject SVG
-    if (!(/\.svg/i).test(imgUrl)) {
-      callback('Attempted to inject a file with a non-svg extension: ' + imgUrl);
       return;
     }
 
-    // If we don't have SVG support try to fall back to a png,
-    // either defined per-element via data-fallback or data-png,
-    // or globally via the pngFallback directory setting
-    if (!hasSvgSupport) {
-      var perElementFallback = el.getAttribute('data-fallback') || el.getAttribute('data-png');
+    if (cacheValue instanceof SVGSVGElement) {
+      callback(null, cloneSvg(cacheValue));
+      return;
+    }
+  }
 
-      // Per-element specific PNG fallback defined, so use that
-      if (perElementFallback) {
-        el.setAttribute('src', perElementFallback);
-        callback(null);
-      }
-      // Global PNG fallback directoriy defined, use the same-named PNG
-      else if (pngFallback) {
-        el.setAttribute('src', pngFallback + '/' + imgUrl.split('/').pop().replace('.svg', '.png'));
-        callback(null);
-      }
-      // um...
-      else {
-        callback('This browser does not support SVG and no PNG fallback was defined.');
-      }
+  cache.set(url, undefined);
+  queueRequest(url, callback);
+  makeAjaxRequest(url, httpRequestWithCredentials, function (error, httpRequest) {
+    if (error) {
+      cache.set(url, error);
+    } else if (httpRequest.responseXML instanceof Document && httpRequest.responseXML.documentElement && httpRequest.responseXML.documentElement instanceof SVGSVGElement) {
+      cache.set(url, httpRequest.responseXML.documentElement);
+    }
 
+    processRequestQueue(url);
+  });
+};
+
+var loadSvgUncached = function loadSvgUncached(url, httpRequestWithCredentials, callback) {
+  makeAjaxRequest(url, httpRequestWithCredentials, function (error, httpRequest) {
+    if (error) {
+      callback(error);
+    } else if (httpRequest.responseXML instanceof Document && httpRequest.responseXML.documentElement && httpRequest.responseXML.documentElement instanceof SVGSVGElement) {
+      callback(null, httpRequest.responseXML.documentElement);
+    }
+  });
+};
+
+var idCounter = 0;
+
+var uniqueId = function uniqueId() {
+  return ++idCounter;
+};
+
+var injectedElements = [];
+var ranScripts = {};
+var svgNamespace = 'http://www.w3.org/2000/svg';
+var xlinkNamespace = 'http://www.w3.org/1999/xlink';
+
+var injectElement = function injectElement(el, evalScripts, renumerateIRIElements, cacheRequests, httpRequestWithCredentials, beforeEach, callback) {
+  var elUrl = el.getAttribute('data-src') || el.getAttribute('src');
+
+  if (!elUrl) {
+    callback(new Error('Invalid data-src or src attribute'));
+    return;
+  }
+
+  if (injectedElements.indexOf(el) !== -1) {
+    injectedElements.splice(injectedElements.indexOf(el), 1);
+    el = null;
+    return;
+  }
+
+  injectedElements.push(el);
+  el.setAttribute('src', '');
+  var loadSvg = cacheRequests ? loadSvgCached : loadSvgUncached;
+  loadSvg(elUrl, httpRequestWithCredentials, function (error, svg) {
+    if (!svg) {
+      injectedElements.splice(injectedElements.indexOf(el), 1);
+      el = null;
+      callback(error);
       return;
     }
 
-    // Make sure we aren't already in the process of injecting this element to
-    // avoid a race condition if multiple injections for the same element are run.
-    // :NOTE: Using indexOf() only _after_ we check for SVG support and bail,
-    // so no need for IE8 indexOf() polyfill
-    if (injectedElements.indexOf(el) !== -1) {
-      return;
+    var elId = el.getAttribute('id');
+
+    if (elId) {
+      svg.setAttribute('id', elId);
     }
 
-    // Remember the request to inject this element, in case other injection
-    // calls are also trying to replace this element before we finish
-    injectedElements.push(el);
+    var elTitle = el.getAttribute('title');
 
-    // Try to avoid loading the orginal image src if possible.
-    el.setAttribute('src', '');
+    if (elTitle) {
+      svg.setAttribute('title', elTitle);
+    }
 
-    // Load it up
-    loadSvg(imgUrl, function (svg) {
+    var elWidth = el.getAttribute('width');
 
-      if (typeof svg === 'undefined' || typeof svg === 'string') {
-        callback(svg);
-        return false;
+    if (elWidth) {
+      svg.setAttribute('width', elWidth);
+    }
+
+    var elHeight = el.getAttribute('height');
+
+    if (elHeight) {
+      svg.setAttribute('height', elHeight);
+    }
+
+    var mergedClasses = Array.from(new Set(tslib.__spreadArray(tslib.__spreadArray(tslib.__spreadArray([], (svg.getAttribute('class') || '').split(' '), true), ['injected-svg'], false), (el.getAttribute('class') || '').split(' '), true))).join(' ').trim();
+    svg.setAttribute('class', mergedClasses);
+    var elStyle = el.getAttribute('style');
+
+    if (elStyle) {
+      svg.setAttribute('style', elStyle);
+    }
+
+    svg.setAttribute('data-src', elUrl);
+    var elData = [].filter.call(el.attributes, function (at) {
+      return /^data-\w[\w-]*$/.test(at.name);
+    });
+    Array.prototype.forEach.call(elData, function (dataAttr) {
+      if (dataAttr.name && dataAttr.value) {
+        svg.setAttribute(dataAttr.name, dataAttr.value);
       }
+    });
 
-      var imgId = el.getAttribute('id');
-      if (imgId) {
-        svg.setAttribute('id', imgId);
-      }
-
-      var imgTitle = el.getAttribute('title');
-      if (imgTitle) {
-        svg.setAttribute('title', imgTitle);
-      }
-
-      // Concat the SVG classes + 'injected-svg' + the img classes
-      var classMerge = [].concat(svg.getAttribute('class') || [], 'injected-svg', el.getAttribute('class') || []).join(' ');
-      svg.setAttribute('class', uniqueClasses(classMerge));
-
-      var imgStyle = el.getAttribute('style');
-      if (imgStyle) {
-        svg.setAttribute('style', imgStyle);
-      }
-
-      // Copy all the data elements to the svg
-      var imgData = [].filter.call(el.attributes, function (at) {
-        return (/^data-\w[\w\-]*$/).test(at.name);
-      });
-      forEach.call(imgData, function (dataAttr) {
-        if (dataAttr.name && dataAttr.value) {
-          svg.setAttribute(dataAttr.name, dataAttr.value);
-        }
-      });
-
-      // Make sure any internally referenced clipPath ids and their
-      // clip-path references are unique.
-      //
-      // This addresses the issue of having multiple instances of the
-      // same SVG on a page and only the first clipPath id is referenced.
-      //
-      // Browsers often shortcut the SVG Spec and don't use clipPaths
-      // contained in parent elements that are hidden, so if you hide the first
-      // SVG instance on the page, then all other instances lose their clipping.
-      // Reference: https://bugzilla.mozilla.org/show_bug.cgi?id=376027
-
-      // Handle all defs elements that have iri capable attributes as defined by w3c: http://www.w3.org/TR/SVG/linking.html#processingIRI
-      // Mapping IRI addressable elements to the properties that can reference them:
-      var iriElementsAndProperties = {
-        'clipPath': ['clip-path'],
+    if (renumerateIRIElements) {
+      var iriElementsAndProperties_1 = {
+        clipPath: ['clip-path'],
         'color-profile': ['color-profile'],
-        'cursor': ['cursor'],
-        'filter': ['filter'],
-        'linearGradient': ['fill', 'stroke'],
-        'marker': ['marker', 'marker-start', 'marker-mid', 'marker-end'],
-        'mask': ['mask'],
-        'pattern': ['fill', 'stroke'],
-        'radialGradient': ['fill', 'stroke']
+        cursor: ['cursor'],
+        filter: ['filter'],
+        linearGradient: ['fill', 'stroke'],
+        marker: ['marker', 'marker-start', 'marker-mid', 'marker-end'],
+        mask: ['mask'],
+        path: [],
+        pattern: ['fill', 'stroke'],
+        radialGradient: ['fill', 'stroke']
       };
+      var element_1;
+      var elements_1;
+      var properties_1;
+      var currentId_1;
+      var newId_1;
+      Object.keys(iriElementsAndProperties_1).forEach(function (key) {
+        element_1 = key;
+        properties_1 = iriElementsAndProperties_1[key];
+        elements_1 = svg.querySelectorAll(element_1 + '[id]');
 
-      var element, elementDefs, properties, currentId, newId;
-      Object.keys(iriElementsAndProperties).forEach(function (key) {
-        element = key;
-        properties = iriElementsAndProperties[key];
-
-        elementDefs = svg.querySelectorAll('defs ' + element + '[id]');
-        for (var i = 0, elementsLen = elementDefs.length; i < elementsLen; i++) {
-          currentId = elementDefs[i].id;
-          newId = currentId + '-' + injectCount;
-
-          // All of the properties that can reference this element type
+        var _loop_1 = function _loop_1(a, elementsLen) {
+          currentId_1 = elements_1[a].id;
+          newId_1 = currentId_1 + '-' + uniqueId();
           var referencingElements;
-          forEach.call(properties, function (property) {
-            // :NOTE: using a substring match attr selector here to deal with IE "adding extra quotes in url() attrs"
-            referencingElements = svg.querySelectorAll('[' + property + '*="' + currentId + '"]');
-            for (var j = 0, referencingElementLen = referencingElements.length; j < referencingElementLen; j++) {
-              referencingElements[j].setAttribute(property, 'url(#' + newId + ')');
+          Array.prototype.forEach.call(properties_1, function (property) {
+            referencingElements = svg.querySelectorAll('[' + property + '*="' + currentId_1 + '"]');
+
+            for (var b = 0, referencingElementLen = referencingElements.length; b < referencingElementLen; b++) {
+              var attrValue = referencingElements[b].getAttribute(property);
+
+              if (attrValue && !attrValue.match(new RegExp('url\\("?#' + currentId_1 + '"?\\)'))) {
+                continue;
+              }
+
+              referencingElements[b].setAttribute(property, 'url(#' + newId_1 + ')');
             }
           });
+          var allLinks = svg.querySelectorAll('[*|href]');
+          var links = [];
 
-          elementDefs[i].id = newId;
+          for (var c = 0, allLinksLen = allLinks.length; c < allLinksLen; c++) {
+            var href = allLinks[c].getAttributeNS(xlinkNamespace, 'href');
+
+            if (href && href.toString() === '#' + elements_1[a].id) {
+              links.push(allLinks[c]);
+            }
+          }
+
+          for (var d = 0, linksLen = links.length; d < linksLen; d++) {
+            links[d].setAttributeNS(xlinkNamespace, 'href', '#' + newId_1);
+          }
+
+          elements_1[a].id = newId_1;
+        };
+
+        for (var a = 0, elementsLen = elements_1.length; a < elementsLen; a++) {
+          _loop_1(a);
         }
       });
+    }
 
-      // Remove any unwanted/invalid namespaces that might have been added by SVG editing tools
-      svg.removeAttribute('xmlns:a');
+    svg.removeAttribute('xmlns:a');
+    var scripts = svg.querySelectorAll('script');
+    var scriptsToEval = [];
+    var script;
+    var scriptType;
 
-      // Post page load injected SVGs don't automatically have their script
-      // elements run, so we'll need to make that happen, if requested
+    for (var i = 0, scriptsLen = scripts.length; i < scriptsLen; i++) {
+      scriptType = scripts[i].getAttribute('type');
 
-      // Find then prune the scripts
-      var scripts = svg.querySelectorAll('script');
-      var scriptsToEval = [];
-      var script, scriptType;
+      if (!scriptType || scriptType === 'application/ecmascript' || scriptType === 'application/javascript' || scriptType === 'text/javascript') {
+        script = scripts[i].innerText || scripts[i].textContent;
 
-      for (var k = 0, scriptsLen = scripts.length; k < scriptsLen; k++) {
-        scriptType = scripts[k].getAttribute('type');
-
-        // Only process javascript types.
-        // SVG defaults to 'application/ecmascript' for unset types
-        if (!scriptType || scriptType === 'application/ecmascript' || scriptType === 'application/javascript') {
-
-          // innerText for IE, textContent for other browsers
-          script = scripts[k].innerText || scripts[k].textContent;
-
-          // Stash
+        if (script) {
           scriptsToEval.push(script);
-
-          // Tidy up and remove the script element since we don't need it anymore
-          svg.removeChild(scripts[k]);
-        }
-      }
-
-      // Run/Eval the scripts if needed
-      if (scriptsToEval.length > 0 && (evalScripts === 'always' || (evalScripts === 'once' && !ranScripts[imgUrl]))) {
-        for (var l = 0, scriptsToEvalLen = scriptsToEval.length; l < scriptsToEvalLen; l++) {
-
-          // :NOTE: Yup, this is a form of eval, but it is being used to eval code
-          // the caller has explictely asked to be loaded, and the code is in a caller
-          // defined SVG file... not raw user input.
-          //
-          // Also, the code is evaluated in a closure and not in the global scope.
-          // If you need to put something in global scope, use 'window'
-          new Function(scriptsToEval[l])(window); // jshint ignore:line
         }
 
-        // Remember we already ran scripts for this svg
-        ranScripts[imgUrl] = true;
+        svg.removeChild(scripts[i]);
+      }
+    }
+
+    if (scriptsToEval.length > 0 && (evalScripts === 'always' || evalScripts === 'once' && !ranScripts[elUrl])) {
+      for (var l = 0, scriptsToEvalLen = scriptsToEval.length; l < scriptsToEvalLen; l++) {
+        new Function(scriptsToEval[l])(window);
       }
 
-      // :WORKAROUND:
-      // IE doesn't evaluate <style> tags in SVGs that are dynamically added to the page.
-      // This trick will trigger IE to read and use any existing SVG <style> tags.
-      //
-      // Reference: https://github.com/iconic/SVGInjector/issues/23
-      var styleTags = svg.querySelectorAll('style');
-      forEach.call(styleTags, function (styleTag) {
-        styleTag.textContent += '';
-      });
+      ranScripts[elUrl] = true;
+    }
 
-      // Replace the image with the svg
-      el.parentNode.replaceChild(svg, el);
-
-      // Now that we no longer need it, drop references
-      // to the original element so it can be GC'd
-      delete injectedElements[injectedElements.indexOf(el)];
-      el = null;
-
-      // Increment the injected count
-      injectCount++;
-
-      callback(svg);
+    var styleTags = svg.querySelectorAll('style');
+    Array.prototype.forEach.call(styleTags, function (styleTag) {
+      styleTag.textContent += '';
     });
-  };
+    svg.setAttribute('xmlns', svgNamespace);
+    svg.setAttribute('xmlns:xlink', xlinkNamespace);
+    beforeEach(svg);
 
-  /**
-   * SVGInjector
-   *
-   * Replace the given elements with their full inline SVG DOM elements.
-   *
-   * :NOTE: We are using get/setAttribute with SVG because the SVG DOM spec differs from HTML DOM and
-   * can return other unexpected object types when trying to directly access svg properties.
-   * ex: "className" returns a SVGAnimatedString with the class value found in the "baseVal" property,
-   * instead of simple string like with HTML Elements.
-   *
-   * @param {mixes} Array of or single DOM element
-   * @param {object} options
-   * @param {function} callback
-   * @return {object} Instance of SVGInjector
-   */
-  var SVGInjector = function (elements, options, done) {
+    if (!el.parentNode) {
+      injectedElements.splice(injectedElements.indexOf(el), 1);
+      el = null;
+      callback(new Error('Parent node is null'));
+      return;
+    }
 
-    // Options & defaults
-    options = options || {};
+    el.parentNode.replaceChild(svg, el);
+    injectedElements.splice(injectedElements.indexOf(el), 1);
+    el = null;
+    callback(null, svg);
+  });
+};
 
-    // Should we run the scripts blocks found in the SVG
-    // 'always' - Run them every time
-    // 'once' - Only run scripts once for each SVG
-    // [false|'never'] - Ignore scripts
-    var evalScripts = options.evalScripts || 'always';
+var SVGInjector = function SVGInjector(elements, _a) {
+  var _b = _a === void 0 ? {} : _a,
+      _c = _b.afterAll,
+      afterAll = _c === void 0 ? function () {
+    return undefined;
+  } : _c,
+      _d = _b.afterEach,
+      afterEach = _d === void 0 ? function () {
+    return undefined;
+  } : _d,
+      _e = _b.beforeEach,
+      beforeEach = _e === void 0 ? function () {
+    return undefined;
+  } : _e,
+      _f = _b.cacheRequests,
+      cacheRequests = _f === void 0 ? true : _f,
+      _g = _b.evalScripts,
+      evalScripts = _g === void 0 ? 'never' : _g,
+      _h = _b.httpRequestWithCredentials,
+      httpRequestWithCredentials = _h === void 0 ? false : _h,
+      _j = _b.renumerateIRIElements,
+      renumerateIRIElements = _j === void 0 ? true : _j;
 
-    // Location of fallback pngs, if desired
-    var pngFallback = options.pngFallback || false;
+  if (elements && 'length' in elements) {
+    var elementsLoaded_1 = 0;
 
-    // Callback to run during each SVG injection, returning the SVG injected
-    var eachCallback = options.each;
+    for (var i = 0, j = elements.length; i < j; i++) {
+      injectElement(elements[i], evalScripts, renumerateIRIElements, cacheRequests, httpRequestWithCredentials, beforeEach, function (error, svg) {
+        afterEach(error, svg);
 
-    // Do the injection...
-    if (elements.length !== undefined) {
-      var elementsLoaded = 0;
-      forEach.call(elements, function (element) {
-        injectElement(element, evalScripts, pngFallback, function (svg) {
-          if (eachCallback && typeof eachCallback === 'function') eachCallback(svg);
-          if (done && elements.length === ++elementsLoaded) done(elementsLoaded);
-        });
+        if (elements && 'length' in elements && elements.length === ++elementsLoaded_1) {
+          afterAll(elementsLoaded_1);
+        }
       });
+    }
+  } else if (elements) {
+    injectElement(elements, evalScripts, renumerateIRIElements, cacheRequests, httpRequestWithCredentials, beforeEach, function (error, svg) {
+      afterEach(error, svg);
+      afterAll(1);
+      elements = null;
+    });
+  } else {
+    afterAll(0);
+  }
+};
+
+exports.SVGInjector = SVGInjector;
+
+
+},{"content-type":4,"tslib":6}],3:[function(require,module,exports){
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var tslib=require("tslib"),contentType=require("content-type"),cache=new Map,cloneSvg=function(e){return e.cloneNode(!0)},isLocal=function(){return"file:"===window.location.protocol},makeAjaxRequest=function(e,t,r){var n=new XMLHttpRequest;n.onreadystatechange=function(){try{if(!/\.svg/i.test(e)&&2===n.readyState){var t=n.getResponseHeader("Content-Type");if(!t)throw new Error("Content type not found");var i=contentType.parse(t).type;if("image/svg+xml"!==i&&"text/plain"!==i)throw new Error("Invalid content type: ".concat(i))}if(4===n.readyState){if(404===n.status||null===n.responseXML)throw new Error(isLocal()?"Note: SVG injection ajax calls do not work locally without adjusting security settings in your browser. Or consider using a local webserver.":"Unable to load SVG file: "+e);if(!(200===n.status||isLocal()&&0===n.status))throw new Error("There was a problem injecting the SVG: "+n.status+" "+n.statusText);r(null,n)}}catch(e){if(n.abort(),!(e instanceof Error))throw e;r(e,n)}},n.open("GET",e),n.withCredentials=t,n.overrideMimeType&&n.overrideMimeType("text/xml"),n.send()},requestQueue={},queueRequest=function(e,t){requestQueue[e]=requestQueue[e]||[],requestQueue[e].push(t)},processRequestQueue=function(e){for(var t=function(t,r){setTimeout((function(){if(Array.isArray(requestQueue[e])){var r=cache.get(e),n=requestQueue[e][t];r instanceof SVGSVGElement&&n(null,cloneSvg(r)),r instanceof Error&&n(r),t===requestQueue[e].length-1&&delete requestQueue[e]}}),0)},r=0,n=requestQueue[e].length;r<n;r++)t(r)},loadSvgCached=function(e,t,r){if(cache.has(e)){var n=cache.get(e);if(void 0===n)return void queueRequest(e,r);if(n instanceof SVGSVGElement)return void r(null,cloneSvg(n))}cache.set(e,void 0),queueRequest(e,r),makeAjaxRequest(e,t,(function(t,r){t?cache.set(e,t):r.responseXML instanceof Document&&r.responseXML.documentElement&&r.responseXML.documentElement instanceof SVGSVGElement&&cache.set(e,r.responseXML.documentElement),processRequestQueue(e)}))},loadSvgUncached=function(e,t,r){makeAjaxRequest(e,t,(function(e,t){e?r(e):t.responseXML instanceof Document&&t.responseXML.documentElement&&t.responseXML.documentElement instanceof SVGSVGElement&&r(null,t.responseXML.documentElement)}))},idCounter=0,uniqueId=function(){return++idCounter},injectedElements=[],ranScripts={},svgNamespace="http://www.w3.org/2000/svg",xlinkNamespace="http://www.w3.org/1999/xlink",injectElement=function(e,t,r,n,i,a,o){var s=e.getAttribute("data-src")||e.getAttribute("src");if(s){if(-1!==injectedElements.indexOf(e))return injectedElements.splice(injectedElements.indexOf(e),1),void(e=null);injectedElements.push(e),e.setAttribute("src",""),(n?loadSvgCached:loadSvgUncached)(s,i,(function(n,i){if(!i)return injectedElements.splice(injectedElements.indexOf(e),1),e=null,void o(n);var l=e.getAttribute("id");l&&i.setAttribute("id",l);var u=e.getAttribute("title");u&&i.setAttribute("title",u);var c=e.getAttribute("width");c&&i.setAttribute("width",c);var d=e.getAttribute("height");d&&i.setAttribute("height",d);var f=Array.from(new Set(tslib.__spreadArray(tslib.__spreadArray(tslib.__spreadArray([],(i.getAttribute("class")||"").split(" "),!0),["injected-svg"],!1),(e.getAttribute("class")||"").split(" "),!0))).join(" ").trim();i.setAttribute("class",f);var p=e.getAttribute("style");p&&i.setAttribute("style",p),i.setAttribute("data-src",s);var m=[].filter.call(e.attributes,(function(e){return/^data-\w[\w-]*$/.test(e.name)}));if(Array.prototype.forEach.call(m,(function(e){e.name&&e.value&&i.setAttribute(e.name,e.value)})),r){var v,h,g,A,b={clipPath:["clip-path"],"color-profile":["color-profile"],cursor:["cursor"],filter:["filter"],linearGradient:["fill","stroke"],marker:["marker","marker-start","marker-mid","marker-end"],mask:["mask"],path:[],pattern:["fill","stroke"],radialGradient:["fill","stroke"]};Object.keys(b).forEach((function(e){h=b[e];for(var t=function(e,t){var r;A=(g=v[e].id)+"-"+uniqueId(),Array.prototype.forEach.call(h,(function(e){for(var t=0,n=(r=i.querySelectorAll("["+e+'*="'+g+'"]')).length;t<n;t++){var a=r[t].getAttribute(e);a&&!a.match(new RegExp('url\\("?#'+g+'"?\\)'))||r[t].setAttribute(e,"url(#"+A+")")}}));for(var n=i.querySelectorAll("[*|href]"),a=[],o=0,s=n.length;o<s;o++){var l=n[o].getAttributeNS(xlinkNamespace,"href");l&&l.toString()==="#"+v[e].id&&a.push(n[o])}for(var u=0,c=a.length;u<c;u++)a[u].setAttributeNS(xlinkNamespace,"href","#"+A);v[e].id=A},r=0,n=(v=i.querySelectorAll(e+"[id]")).length;r<n;r++)t(r)}))}i.removeAttribute("xmlns:a");for(var E,y,w=i.querySelectorAll("script"),S=[],q=0,j=w.length;q<j;q++)(y=w[q].getAttribute("type"))&&"application/ecmascript"!==y&&"application/javascript"!==y&&"text/javascript"!==y||((E=w[q].innerText||w[q].textContent)&&S.push(E),i.removeChild(w[q]));if(S.length>0&&("always"===t||"once"===t&&!ranScripts[s])){for(var x=0,k=S.length;x<k;x++)new Function(S[x])(window);ranScripts[s]=!0}var G=i.querySelectorAll("style");if(Array.prototype.forEach.call(G,(function(e){e.textContent+=""})),i.setAttribute("xmlns",svgNamespace),i.setAttribute("xmlns:xlink",xlinkNamespace),a(i),!e.parentNode)return injectedElements.splice(injectedElements.indexOf(e),1),e=null,void o(new Error("Parent node is null"));e.parentNode.replaceChild(i,e),injectedElements.splice(injectedElements.indexOf(e),1),e=null,o(null,i)}))}else o(new Error("Invalid data-src or src attribute"))},SVGInjector=function(e,t){var r=void 0===t?{}:t,n=r.afterAll,i=void 0===n?function(){}:n,a=r.afterEach,o=void 0===a?function(){}:a,s=r.beforeEach,l=void 0===s?function(){}:s,u=r.cacheRequests,c=void 0===u||u,d=r.evalScripts,f=void 0===d?"never":d,p=r.httpRequestWithCredentials,m=void 0!==p&&p,v=r.renumerateIRIElements,h=void 0===v||v;if(e&&"length"in e)for(var g=0,A=0,b=e.length;A<b;A++)injectElement(e[A],f,h,c,m,l,(function(t,r){o(t,r),e&&"length"in e&&e.length===++g&&i(g)}));else e?injectElement(e,f,h,c,m,l,(function(t,r){o(t,r),i(1),e=null})):i(0)};exports.SVGInjector=SVGInjector;
+
+
+},{"content-type":4,"tslib":6}],4:[function(require,module,exports){
+/*!
+ * content-type
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * RegExp to match *( ";" parameter ) in RFC 7231 sec 3.1.1.1
+ *
+ * parameter     = token "=" ( token / quoted-string )
+ * token         = 1*tchar
+ * tchar         = "!" / "#" / "$" / "%" / "&" / "'" / "*"
+ *               / "+" / "-" / "." / "^" / "_" / "`" / "|" / "~"
+ *               / DIGIT / ALPHA
+ *               ; any VCHAR, except delimiters
+ * quoted-string = DQUOTE *( qdtext / quoted-pair ) DQUOTE
+ * qdtext        = HTAB / SP / %x21 / %x23-5B / %x5D-7E / obs-text
+ * obs-text      = %x80-FF
+ * quoted-pair   = "\" ( HTAB / SP / VCHAR / obs-text )
+ */
+var PARAM_REGEXP = /; *([!#$%&'*+.^_`|~0-9A-Za-z-]+) *= *("(?:[\u000b\u0020\u0021\u0023-\u005b\u005d-\u007e\u0080-\u00ff]|\\[\u000b\u0020-\u00ff])*"|[!#$%&'*+.^_`|~0-9A-Za-z-]+) */g
+var TEXT_REGEXP = /^[\u000b\u0020-\u007e\u0080-\u00ff]+$/
+var TOKEN_REGEXP = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/
+
+/**
+ * RegExp to match quoted-pair in RFC 7230 sec 3.2.6
+ *
+ * quoted-pair = "\" ( HTAB / SP / VCHAR / obs-text )
+ * obs-text    = %x80-FF
+ */
+var QESC_REGEXP = /\\([\u000b\u0020-\u00ff])/g
+
+/**
+ * RegExp to match chars that must be quoted-pair in RFC 7230 sec 3.2.6
+ */
+var QUOTE_REGEXP = /([\\"])/g
+
+/**
+ * RegExp to match type in RFC 7231 sec 3.1.1.1
+ *
+ * media-type = type "/" subtype
+ * type       = token
+ * subtype    = token
+ */
+var TYPE_REGEXP = /^[!#$%&'*+.^_`|~0-9A-Za-z-]+\/[!#$%&'*+.^_`|~0-9A-Za-z-]+$/
+
+/**
+ * Module exports.
+ * @public
+ */
+
+exports.format = format
+exports.parse = parse
+
+/**
+ * Format object to media type.
+ *
+ * @param {object} obj
+ * @return {string}
+ * @public
+ */
+
+function format (obj) {
+  if (!obj || typeof obj !== 'object') {
+    throw new TypeError('argument obj is required')
+  }
+
+  var parameters = obj.parameters
+  var type = obj.type
+
+  if (!type || !TYPE_REGEXP.test(type)) {
+    throw new TypeError('invalid type')
+  }
+
+  var string = type
+
+  // append parameters
+  if (parameters && typeof parameters === 'object') {
+    var param
+    var params = Object.keys(parameters).sort()
+
+    for (var i = 0; i < params.length; i++) {
+      param = params[i]
+
+      if (!TOKEN_REGEXP.test(param)) {
+        throw new TypeError('invalid parameter name')
+      }
+
+      string += '; ' + param + '=' + qstring(parameters[param])
+    }
+  }
+
+  return string
+}
+
+/**
+ * Parse media type to object.
+ *
+ * @param {string|object} string
+ * @return {Object}
+ * @public
+ */
+
+function parse (string) {
+  if (!string) {
+    throw new TypeError('argument string is required')
+  }
+
+  // support req/res-like objects as argument
+  var header = typeof string === 'object'
+    ? getcontenttype(string)
+    : string
+
+  if (typeof header !== 'string') {
+    throw new TypeError('argument string is required to be a string')
+  }
+
+  var index = header.indexOf(';')
+  var type = index !== -1
+    ? header.substr(0, index).trim()
+    : header.trim()
+
+  if (!TYPE_REGEXP.test(type)) {
+    throw new TypeError('invalid media type')
+  }
+
+  var obj = new ContentType(type.toLowerCase())
+
+  // parse parameters
+  if (index !== -1) {
+    var key
+    var match
+    var value
+
+    PARAM_REGEXP.lastIndex = index
+
+    while ((match = PARAM_REGEXP.exec(header))) {
+      if (match.index !== index) {
+        throw new TypeError('invalid parameter format')
+      }
+
+      index += match[0].length
+      key = match[1].toLowerCase()
+      value = match[2]
+
+      if (value[0] === '"') {
+        // remove quotes and escapes
+        value = value
+          .substr(1, value.length - 2)
+          .replace(QESC_REGEXP, '$1')
+      }
+
+      obj.parameters[key] = value
+    }
+
+    if (index !== header.length) {
+      throw new TypeError('invalid parameter format')
+    }
+  }
+
+  return obj
+}
+
+/**
+ * Get content-type from req/res objects.
+ *
+ * @param {object}
+ * @return {Object}
+ * @private
+ */
+
+function getcontenttype (obj) {
+  var header
+
+  if (typeof obj.getHeader === 'function') {
+    // res-like
+    header = obj.getHeader('content-type')
+  } else if (typeof obj.headers === 'object') {
+    // req-like
+    header = obj.headers && obj.headers['content-type']
+  }
+
+  if (typeof header !== 'string') {
+    throw new TypeError('content-type header is missing from object')
+  }
+
+  return header
+}
+
+/**
+ * Quote a string if necessary.
+ *
+ * @param {string} val
+ * @return {string}
+ * @private
+ */
+
+function qstring (val) {
+  var str = String(val)
+
+  // no need to quote tokens
+  if (TOKEN_REGEXP.test(str)) {
+    return str
+  }
+
+  if (str.length > 0 && !TEXT_REGEXP.test(str)) {
+    throw new TypeError('invalid parameter value')
+  }
+
+  return '"' + str.replace(QUOTE_REGEXP, '\\$1') + '"'
+}
+
+/**
+ * Class to represent a content type.
+ * @private
+ */
+function ContentType (type) {
+  this.parameters = Object.create(null)
+  this.type = type
+}
+
+},{}],5:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],6:[function(require,module,exports){
+(function (global){(function (){
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global global, define, System, Reflect, Promise */
+var __extends;
+var __assign;
+var __rest;
+var __decorate;
+var __param;
+var __metadata;
+var __awaiter;
+var __generator;
+var __exportStar;
+var __values;
+var __read;
+var __spread;
+var __spreadArrays;
+var __spreadArray;
+var __await;
+var __asyncGenerator;
+var __asyncDelegator;
+var __asyncValues;
+var __makeTemplateObject;
+var __importStar;
+var __importDefault;
+var __classPrivateFieldGet;
+var __classPrivateFieldSet;
+var __createBinding;
+(function (factory) {
+    var root = typeof global === "object" ? global : typeof self === "object" ? self : typeof this === "object" ? this : {};
+    if (typeof define === "function" && define.amd) {
+        define("tslib", ["exports"], function (exports) { factory(createExporter(root, createExporter(exports))); });
+    }
+    else if (typeof module === "object" && typeof module.exports === "object") {
+        factory(createExporter(root, createExporter(module.exports)));
     }
     else {
-      if (elements) {
-        injectElement(elements, evalScripts, pngFallback, function (svg) {
-          if (eachCallback && typeof eachCallback === 'function') eachCallback(svg);
-          if (done) done(1);
-          elements = null;
-        });
-      }
-      else {
-        if (done) done(0);
-      }
+        factory(createExporter(root));
     }
-  };
+    function createExporter(exports, previous) {
+        if (exports !== root) {
+            if (typeof Object.create === "function") {
+                Object.defineProperty(exports, "__esModule", { value: true });
+            }
+            else {
+                exports.__esModule = true;
+            }
+        }
+        return function (id, v) { return exports[id] = previous ? previous(id, v) : v; };
+    }
+})
+(function (exporter) {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
 
-  /* global module, exports: true, define */
-  // Node.js or CommonJS
-  if (typeof module === 'object' && typeof module.exports === 'object') {
-    module.exports = exports = SVGInjector;
-  }
-  // AMD support
-  else if (typeof define === 'function' && define.amd) {
-    define(function () {
-      return SVGInjector;
+    __extends = function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+
+    __assign = Object.assign || function (t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+
+    __rest = function (s, e) {
+        var t = {};
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+            t[p] = s[p];
+        if (s != null && typeof Object.getOwnPropertySymbols === "function")
+            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                    t[p[i]] = s[p[i]];
+            }
+        return t;
+    };
+
+    __decorate = function (decorators, target, key, desc) {
+        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+
+    __param = function (paramIndex, decorator) {
+        return function (target, key) { decorator(target, key, paramIndex); }
+    };
+
+    __metadata = function (metadataKey, metadataValue) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+    };
+
+    __awaiter = function (thisArg, _arguments, P, generator) {
+        function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+            step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+    };
+
+    __generator = function (thisArg, body) {
+        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        function verb(n) { return function (v) { return step([n, v]); }; }
+        function step(op) {
+            if (f) throw new TypeError("Generator is already executing.");
+            while (_) try {
+                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+                if (y = 0, t) op = [op[0] & 2, t.value];
+                switch (op[0]) {
+                    case 0: case 1: t = op; break;
+                    case 4: _.label++; return { value: op[1], done: false };
+                    case 5: _.label++; y = op[1]; op = [0]; continue;
+                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                    default:
+                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                        if (t[2]) _.ops.pop();
+                        _.trys.pop(); continue;
+                }
+                op = body.call(thisArg, _);
+            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+        }
+    };
+
+    __exportStar = function(m, o) {
+        for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+    };
+
+    __createBinding = Object.create ? (function(o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    }) : (function(o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        o[k2] = m[k];
     });
-  }
-  // Otherwise, attach to window as global
-  else if (typeof window === 'object') {
-    window.SVGInjector = SVGInjector;
-  }
-  /* global -module, -exports, -define */
 
-}(window, document));
+    __values = function (o) {
+        var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+        if (m) return m.call(o);
+        if (o && typeof o.length === "number") return {
+            next: function () {
+                if (o && i >= o.length) o = void 0;
+                return { value: o && o[i++], done: !o };
+            }
+        };
+        throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+    };
 
-},{}],2:[function(require,module,exports){
+    __read = function (o, n) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator];
+        if (!m) return o;
+        var i = m.call(o), r, ar = [], e;
+        try {
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+        }
+        catch (error) { e = { error: error }; }
+        finally {
+            try {
+                if (r && !r.done && (m = i["return"])) m.call(i);
+            }
+            finally { if (e) throw e.error; }
+        }
+        return ar;
+    };
+
+    /** @deprecated */
+    __spread = function () {
+        for (var ar = [], i = 0; i < arguments.length; i++)
+            ar = ar.concat(__read(arguments[i]));
+        return ar;
+    };
+
+    /** @deprecated */
+    __spreadArrays = function () {
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var r = Array(s), k = 0, i = 0; i < il; i++)
+            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                r[k] = a[j];
+        return r;
+    };
+
+    __spreadArray = function (to, from, pack) {
+        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+            if (ar || !(i in from)) {
+                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                ar[i] = from[i];
+            }
+        }
+        return to.concat(ar || Array.prototype.slice.call(from));
+    };
+
+    __await = function (v) {
+        return this instanceof __await ? (this.v = v, this) : new __await(v);
+    };
+
+    __asyncGenerator = function (thisArg, _arguments, generator) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var g = generator.apply(thisArg, _arguments || []), i, q = [];
+        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
+        function fulfill(value) { resume("next", value); }
+        function reject(value) { resume("throw", value); }
+        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+    };
+
+    __asyncDelegator = function (o) {
+        var i, p;
+        return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+    };
+
+    __asyncValues = function (o) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var m = o[Symbol.asyncIterator], i;
+        return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+        function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+    };
+
+    __makeTemplateObject = function (cooked, raw) {
+        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        return cooked;
+    };
+
+    var __setModuleDefault = Object.create ? (function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+    }) : function(o, v) {
+        o["default"] = v;
+    };
+
+    __importStar = function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+
+    __importDefault = function (mod) {
+        return (mod && mod.__esModule) ? mod : { "default": mod };
+    };
+
+    __classPrivateFieldGet = function (receiver, state, kind, f) {
+        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+        return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+    };
+
+    __classPrivateFieldSet = function (receiver, state, value, kind, f) {
+        if (kind === "m") throw new TypeError("Private method is not writable");
+        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+    };
+
+    exporter("__extends", __extends);
+    exporter("__assign", __assign);
+    exporter("__rest", __rest);
+    exporter("__decorate", __decorate);
+    exporter("__param", __param);
+    exporter("__metadata", __metadata);
+    exporter("__awaiter", __awaiter);
+    exporter("__generator", __generator);
+    exporter("__exportStar", __exportStar);
+    exporter("__createBinding", __createBinding);
+    exporter("__values", __values);
+    exporter("__read", __read);
+    exporter("__spread", __spread);
+    exporter("__spreadArrays", __spreadArrays);
+    exporter("__spreadArray", __spreadArray);
+    exporter("__await", __await);
+    exporter("__asyncGenerator", __asyncGenerator);
+    exporter("__asyncDelegator", __asyncDelegator);
+    exporter("__asyncValues", __asyncValues);
+    exporter("__makeTemplateObject", __makeTemplateObject);
+    exporter("__importStar", __importStar);
+    exporter("__importDefault", __importDefault);
+    exporter("__classPrivateFieldGet", __classPrivateFieldGet);
+    exporter("__classPrivateFieldSet", __classPrivateFieldSet);
+});
+
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{}],7:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../mixins/url");
@@ -524,7 +1175,7 @@ Vue.component("item-list-sorting", {
     }
 });
 
-},{"../../constants":15,"../../mixins/url":18}],3:[function(require,module,exports){
+},{"../../constants":20,"../../mixins/url":23}],8:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../mixins/url");
@@ -607,7 +1258,7 @@ Vue.component("item-search", {
     }
 });
 
-},{"../../mixins/url":18}],4:[function(require,module,exports){
+},{"../../mixins/url":23}],9:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../mixins/url");
@@ -667,7 +1318,7 @@ Vue.component("items-per-page", {
     }
 });
 
-},{"../../constants":15,"../../mixins/url":18}],5:[function(require,module,exports){
+},{"../../constants":20,"../../mixins/url":23}],10:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -743,7 +1394,7 @@ var options = {
 Vue.component('pagination', options);
 Vue.component('custom-pagination', options);
 
-},{"../../mixins/url":18}],6:[function(require,module,exports){
+},{"../../mixins/url":23}],11:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../../mixins/url");
@@ -784,7 +1435,7 @@ Vue.component("item-category-dropdown", {
     }
 });
 
-},{"../../../mixins/baseDropdown":17,"../../../mixins/url":18}],7:[function(require,module,exports){
+},{"../../../mixins/baseDropdown":22,"../../../mixins/url":23}],12:[function(require,module,exports){
 'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -793,7 +1444,7 @@ var _url = require('../../../mixins/url');
 
 var _url2 = _interopRequireDefault(_url);
 
-var _svgInjector = require('svg-injector');
+var _svgInjector = require('@tanem/svg-injector');
 
 var _svgInjector2 = _interopRequireDefault(_svgInjector);
 
@@ -846,7 +1497,7 @@ Vue.component("item-color-tiles", {
     }
 });
 
-},{"../../../mixins/url":18,"svg-injector":1}],8:[function(require,module,exports){
+},{"../../../mixins/url":23,"@tanem/svg-injector":1}],13:[function(require,module,exports){
 'use strict';
 
 var _url = require('../../../mixins/url');
@@ -863,7 +1514,7 @@ Vue.component("item-dropdown", {
     mixins: [_url2.default, _baseDropdown2.default]
 });
 
-},{"../../../mixins/baseDropdown":17,"../../../mixins/url":18}],9:[function(require,module,exports){
+},{"../../../mixins/baseDropdown":22,"../../../mixins/url":23}],14:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -943,7 +1594,7 @@ Vue.component("findologic-item-filter", {
     }
 });
 
-},{"../../../mixins/url":18}],10:[function(require,module,exports){
+},{"../../../mixins/url":23}],15:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -980,7 +1631,7 @@ Vue.component("item-filter-image", {
     }
 });
 
-},{"../../../mixins/url":18}],11:[function(require,module,exports){
+},{"../../../mixins/url":23}],16:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1031,7 +1682,7 @@ Vue.component("findologic-item-filter-list", {
     }
 });
 
-},{}],12:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1093,7 +1744,7 @@ Vue.component("item-filter-price", {
     }
 });
 
-},{"../../../mixins/url":18}],13:[function(require,module,exports){
+},{"../../../mixins/url":23}],18:[function(require,module,exports){
 "use strict";
 
 var _url = require("../../../mixins/url");
@@ -1146,7 +1797,7 @@ Vue.component("item-filter-tag-list", {
     }
 });
 
-},{"../../../mixins/url":18}],14:[function(require,module,exports){
+},{"../../../mixins/url":23}],19:[function(require,module,exports){
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -1260,7 +1911,7 @@ Vue.component("item-range-slider", {
     }
 });
 
-},{"../../../mixins/url":18}],15:[function(require,module,exports){
+},{"../../../mixins/url":23}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1278,7 +1929,7 @@ exports.default = {
     PARAMETER_ITEMS: PARAMETER_ITEMS
 };
 
-},{}],16:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 Vue.directive("render-category", {
@@ -1291,7 +1942,7 @@ Vue.directive("render-category", {
     }
 });
 
-},{}],17:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1335,7 +1986,7 @@ exports.default = {
     }
 };
 
-},{}],18:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1805,7 +2456,7 @@ exports.default = {
     }
 };
 
-},{"../constants":15}]},{},[9,11,12,13,14,7,8,6,10,2,4,5,3,16])
+},{"../constants":20}]},{},[14,16,17,18,19,12,13,11,15,7,9,10,8,21])
 
 
 //# sourceMappingURL=filters-component.js.map
