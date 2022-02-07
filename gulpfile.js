@@ -50,7 +50,12 @@ gulp.task("js", () => {
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(concat(OUTPUT_NAME + ".js"))
-        .pipe(minify())
+        .pipe(minify({
+            ext: {
+                min: '.min.js'
+            },
+            noSource: true
+        }))
         .pipe(
             sourcemaps.write(".", {
                 includeContent: false,
