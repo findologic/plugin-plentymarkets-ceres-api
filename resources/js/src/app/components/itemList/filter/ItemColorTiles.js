@@ -1,5 +1,6 @@
 import url from '../../../mixins/url'
-import SVGInjector from '@tanem/svg-injector'
+import { SVGInjector } from '@tanem/svg-injector'
+import DOMPurify from 'dompurify'
 
 Vue.component("item-color-tiles", {
     mixins: [url],
@@ -22,8 +23,15 @@ Vue.component("item-color-tiles", {
 
     mounted() {
         this.$nextTick(function () {
-            SVGInjector($('img.fl-svg'));
-        })
+            SVGInjector(document.getElementsByClassName('fl-svg'), {
+                beforeEach(svg) {
+                    DOMPurify.sanitize(svg, {
+                        IN_PLACE: true,
+                        USE_PROFILES: { svg: true, svgFilters: true }
+                    })
+                }
+            })
+        });
     },
 
     methods: {
