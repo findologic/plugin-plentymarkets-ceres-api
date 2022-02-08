@@ -91,7 +91,7 @@ class SearchService implements SearchServiceInterface
      */
     protected $pluginInfoService;
 
-    /** @var bool $useToRollback */
+    /** @var bool $useMainVariationAsFallback */
     protected $useMainVariationAsFallback = false;
 
     public function __construct(
