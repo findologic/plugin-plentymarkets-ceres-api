@@ -419,32 +419,50 @@ class SearchService implements SearchServiceInterface
 
         $productData = $result['documents'][0]['data'];
         $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
+
         if ($variationId !== $productId) {
             $productData['variation']['id'] = $variationId;
         }
 
-        return $this->buildItemURL($productData, false);
+        $withVariationId = false;
+        $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled('Ceres');
+
+        if (!$showPleaseSelect && $variationId) {
+            $withVariationId = true;
+        }
+
+        return $this->buildItemURL($productData, $withVariationId);
     }
 
     /**
      * Returns a variation id to be used for redirecting in searches with single result.
-     * If a variation has an identifier matching the query, its id is returned. Otherwise the main variation is used.
+     * If a variation has an identifier matching the query, its id is returned.
+     * Otherwise the main or cheapest variation is used.
      *
      * @param string $query
      * @param array $documents
-     * @return string
+     * @return ?string
      */
     private function getVariationIdForRedirect(string $query, array $documents)
     {
         $lowercasedQuery = strtolower($query);
         $mainVariationId = null;
+        $cheapestVariationId = null;
+        $cheapestVariationPrice = null;
+
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
+            $price = (float)$document['data']['salesPrices'][0]['price'];
+
+            if ($price == 0) {
+                continue;
+            }
 
             if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
-                strtolower($variation['order']) == $lowercasedQuery
+                strtolower($variation['order']) == $lowercasedQuery ||
+                strtolower($variation['id']) == $lowercasedQuery
             ) {
                 return $variation['id'];
             }
@@ -458,9 +476,16 @@ class SearchService implements SearchServiceInterface
             if ($variation['isMain'] === true) {
                 $mainVariationId = $variation['id'];
             }
+
+            if ($cheapestVariationPrice && $price >= $cheapestVariationPrice) {
+                continue;
+            }
+
+            $cheapestVariationPrice = $price;
+            $cheapestVariationId = $variation['id'];
         }
 
-        return $mainVariationId;
+        return (!$mainVariationId) ? $cheapestVariationId : $mainVariationId;
     }
 
     /**

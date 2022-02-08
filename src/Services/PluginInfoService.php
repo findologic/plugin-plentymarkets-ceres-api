@@ -11,6 +11,8 @@ class PluginInfoService
 {
     const PLUGIN_VERSION_CACHE_KEY_PREFIX = 'plugin_version_';
 
+    const OPTION_SHOW_PLEASE_SELECT_CACHE_KEY_PREFIX = 'show_please_select_';
+
     const DEFAULT_PLUGIN_VERSION = '0.0.0';
 
     /**
@@ -65,6 +67,43 @@ class PluginInfoService
         $this->cache->put(self::PLUGIN_VERSION_CACHE_KEY_PREFIX . $pluginName, $plugin->versionProductive, 60*24);
 
         return $plugin->versionProductive;
+    }
+
+    public function isOptionShowPleaseSelectEnabled(string $pluginName)
+    {
+        $cachedVersion = $this->cache->get(self::OPTION_SHOW_PLEASE_SELECT_CACHE_KEY_PREFIX . $pluginName);
+//        if ($cachedVersion !== null) {
+//            return $cachedVersion;
+//        }
+
+        if (!$plugin = $this->getPlugin($pluginName)) {
+            return null;
+        }
+
+        if (!$plugin->versionProductive || $plugin->versionProductive == self::DEFAULT_PLUGIN_VERSION) {
+            $pluginSetId = $this->pluginSetRepository->getCurrentPluginSetId();
+            $plugin = $this->pluginRepository->decoratePlugin($plugin, $pluginSetId);
+        }
+
+        $value = false;
+
+        foreach ($plugin->configurations as $configuration) {
+            if ($configuration->key !== 'item.show_please_select') {
+                continue;
+            }
+
+            $value = filter_var($configuration->value, FILTER_VALIDATE_BOOLEAN);
+
+            break;
+        }
+
+        $this->cache->put(
+            self::OPTION_SHOW_PLEASE_SELECT_CACHE_KEY_PREFIX . $pluginName,
+            $value,
+            60*24
+        );
+
+        return $value;
     }
 
     /**
