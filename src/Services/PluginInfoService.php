@@ -72,9 +72,9 @@ class PluginInfoService
     public function isOptionShowPleaseSelectEnabled(string $pluginName)
     {
         $cachedVersion = $this->cache->get(self::OPTION_SHOW_PLEASE_SELECT_CACHE_KEY_PREFIX . $pluginName);
-//        if ($cachedVersion !== null) {
-//            return $cachedVersion;
-//        }
+        if ($cachedVersion !== null) {
+            return $cachedVersion;
+        }
 
         if (!$plugin = $this->getPlugin($pluginName)) {
             return null;

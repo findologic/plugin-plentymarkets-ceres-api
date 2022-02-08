@@ -91,6 +91,9 @@ class SearchService implements SearchServiceInterface
      */
     protected $pluginInfoService;
 
+    /** @var bool $useToRollback */
+    protected $useMainVariationAsFallback = false;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -427,7 +430,7 @@ class SearchService implements SearchServiceInterface
         $withVariationId = false;
         $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled('Ceres');
 
-        if (!$showPleaseSelect && $variationId) {
+        if (!$showPleaseSelect && $variationId && !$this->useMainVariationAsFallback) {
             $withVariationId = true;
         }
 
@@ -441,7 +444,7 @@ class SearchService implements SearchServiceInterface
      *
      * @param string $query
      * @param array $documents
-     * @return ?string
+     * @return string
      */
     private function getVariationIdForRedirect(string $query, array $documents)
     {
@@ -449,11 +452,16 @@ class SearchService implements SearchServiceInterface
         $mainVariationId = null;
         $cheapestVariationId = null;
         $cheapestVariationPrice = null;
+        $mainVariationIdForFallback = null;
 
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
             $price = (float)$document['data']['salesPrices'][0]['price'];
+
+            if ($variation['isMain'] === true) {
+                $mainVariationIdForFallback = $variation['id'];
+            }
 
             if ($price == 0) {
                 continue;
@@ -485,7 +493,17 @@ class SearchService implements SearchServiceInterface
             $cheapestVariationId = $variation['id'];
         }
 
-        return (!$mainVariationId) ? $cheapestVariationId : $mainVariationId;
+        if ($mainVariationId) {
+            return $mainVariationId;
+        }
+
+        if (!$cheapestVariationId) {
+            $this->useMainVariationAsFallback = true;
+
+            return $mainVariationIdForFallback;
+        }
+
+        return $cheapestVariationId;
     }
 
     /**

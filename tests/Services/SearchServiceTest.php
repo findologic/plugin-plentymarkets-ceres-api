@@ -215,7 +215,7 @@ class SearchServiceTest extends TestCase
 
     /**
      * @dataProvider redirectToProductPageOnDoSearchProvider
-     *
+     * @runInSeparateProcess
      */
     public function testRedirectToProductPageOnDoSearch(
         array $query,
@@ -898,7 +898,7 @@ class SearchServiceTest extends TestCase
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
-                'redirectUrl' => '/test-product',
+                'redirectUrl' => '/test-product_11',
                 'attributes' => [
                     'page' => 1
                 ],
