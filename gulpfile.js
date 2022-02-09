@@ -2,7 +2,7 @@ require("babel-polyfill");
 
 const JS_SRC = "./resources/js/src/";
 const DIST = "./resources/js/dist/";
-const OUTPUT_PREFIX = "filters";
+const OUTPUT_NAME = "findologic-plugin";
 
 const babelify = require("babelify");
 const browserify = require("browserify");
@@ -46,11 +46,16 @@ gulp.task("js", () => {
             console.log(err.toString());
             this.emit("end")
         })
-        .pipe(source(OUTPUT_PREFIX + "-component.js"))
+        .pipe(source(OUTPUT_NAME + ".js"))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(concat(OUTPUT_PREFIX + "-component.js"))
-        .pipe(minify())
+        .pipe(concat(OUTPUT_NAME + ".js"))
+        .pipe(minify({
+            ext: {
+                min: '.min.js'
+            },
+            noSource: true
+        }))
         .pipe(
             sourcemaps.write(".", {
                 includeContent: false,

@@ -30,6 +30,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
+    "@tanem/svg-injector": "^10.1.16",
     "nouislider": "^14.6.1"
   }
 }
