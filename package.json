@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@tanem/svg-injector": "^10.1.16",
-    "dompurify": "^2.3.5",
     "nouislider": "^14.6.1"
   }
 }

@@ -23,14 +23,7 @@ Vue.component("item-color-tiles", {
 
     mounted() {
         this.$nextTick(function () {
-            SVGInjector(document.getElementsByClassName('fl-svg'), {
-                beforeEach(svg) {
-                    DOMPurify.sanitize(svg, {
-                        IN_PLACE: true,
-                        USE_PROFILES: { svg: true, svgFilters: true }
-                    })
-                }
-            })
+            SVGInjector(document.getElementsByClassName('fl-svg'));
         });
     },
 
