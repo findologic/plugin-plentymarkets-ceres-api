@@ -427,20 +427,31 @@ class SearchService implements SearchServiceInterface
             $productData['variation']['id'] = $variationId;
         }
 
-        $withVariationId = false;
-        $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled('Ceres');
-
-        if (!$showPleaseSelect && $variationId && !$this->useMainVariationAsFallback) {
-            $withVariationId = true;
-        }
+        $withVariationId = $this->shouldExportWithVariationId($variationId);
 
         return $this->buildItemURL($productData, $withVariationId);
     }
 
     /**
+     * @return bool
+     */
+    private function shouldExportWithVariationId(int $variationId)
+    {
+        $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled('Ceres');
+
+        if (!$showPleaseSelect && $variationId && !$this->useMainVariationAsFallback) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Returns a variation id to be used for redirecting in searches with single result.
      * If a variation has an identifier matching the query, its id is returned.
-     * Otherwise the main or cheapest variation is used.
+     * If item main variation price is 0 and have a variation
+     * with the lowest price, the lowest price variation id is returned
+     * If all variations prices are 0, the main variation id is returned
      *
      * @param string $query
      * @param array $documents
@@ -457,13 +468,13 @@ class SearchService implements SearchServiceInterface
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
-            $price = (float)$document['data']['salesPrices'][0]['price'];
+            $variationPrice = $this->getVariationPrice($document);
 
             if ($variation['isMain'] === true) {
                 $mainVariationIdForFallback = $variation['id'];
             }
 
-            if ($price == 0) {
+            if ($variationPrice == 0) {
                 continue;
             }
 
@@ -485,11 +496,11 @@ class SearchService implements SearchServiceInterface
                 $mainVariationId = $variation['id'];
             }
 
-            if ($cheapestVariationPrice && $price >= $cheapestVariationPrice) {
+            if ($cheapestVariationPrice && $variationPrice >= $cheapestVariationPrice) {
                 continue;
             }
 
-            $cheapestVariationPrice = $price;
+            $cheapestVariationPrice = $variationPrice;
             $cheapestVariationId = $variation['id'];
         }
 
@@ -504,6 +515,26 @@ class SearchService implements SearchServiceInterface
         }
 
         return $cheapestVariationId;
+    }
+
+    /**
+     * @return float|null
+     */
+    private function getVariationPrice($document)
+    {
+        $variationPrice = 0.0;
+
+        foreach ($document['data']['salesPrices'] as $salesPrice) {
+            if ($salesPrice['price'] == 0 ||
+                $variationPrice > 0 && $variationPrice <= $salesPrice['price']
+            ) {
+                continue;
+            }
+
+            $variationPrice = $salesPrice['price'];
+        }
+
+        return $variationPrice;
     }
 
     /**
