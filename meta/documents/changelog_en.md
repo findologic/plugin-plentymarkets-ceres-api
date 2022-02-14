@@ -1,5 +1,12 @@
 # Release Notes for Findologic
 
+## 3.8.0 (2022-02-14)
+
+### Changed
+
+* [PLENTY-423] The third-party library SVG-Injector is no longer loaded via Cloudflare, but is now bundled with the plugin assets.
+* [PLENTY-420] The redirect to the PDP in case there is only one result, now uses a similar logic to the item URL in the export.
+
 ## 3.7.6 (2022-01-11)
 
 ### Changed

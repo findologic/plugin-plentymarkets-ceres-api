@@ -1,5 +1,12 @@
 # Release Notes für Findologic
 
+## 3.8.0 (2022-02-14)
+
+### Geändert
+
+* [PLENTY-423] Die Drittanbieter Bibliothek "SVG-Injector" wird nicht länger von Cloudflare geladen, sondern stattdessen mit den Plugin-Assets ausgeliefert.
+* [PLENTY-420] Die Weiterleitung zur Produktdetailseite wenn nur ein Produkt gefunden wird, verwendet nun eine ähnliche Logik wie die exportierte Item-URL.
+
 ## 3.7.6 (2022-01-11)
 
 ### Geändert
