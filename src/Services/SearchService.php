@@ -91,6 +91,9 @@ class SearchService implements SearchServiceInterface
      */
     protected $pluginInfoService;
 
+    /** @var bool $useMainVariationAsFallback */
+    protected $useMainVariationAsFallback = false;
+
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
@@ -419,16 +422,33 @@ class SearchService implements SearchServiceInterface
 
         $productData = $result['documents'][0]['data'];
         $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
+
         if ($variationId !== $productId) {
             $productData['variation']['id'] = $variationId;
         }
 
-        return $this->buildItemURL($productData, false);
+        $withVariationId = $this->shouldExportWithVariationId($variationId);
+
+        return $this->buildItemURL($productData, $withVariationId);
+    }
+
+    private function shouldExportWithVariationId(int $variationId): bool
+    {
+        $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled('Ceres');
+
+        if (!$showPleaseSelect && $variationId && !$this->useMainVariationAsFallback) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Returns a variation id to be used for redirecting in searches with single result.
-     * If a variation has an identifier matching the query, its id is returned. Otherwise the main variation is used.
+     * If a variation has an identifier matching the query, its id is returned.
+     * If item main variation price is 0 and have a variation
+     * with the lowest price, the lowest price variation id is returned
+     * If all variations prices are 0, the main variation id is returned
      *
      * @param string $query
      * @param array $documents
@@ -438,13 +458,27 @@ class SearchService implements SearchServiceInterface
     {
         $lowercasedQuery = strtolower($query);
         $mainVariationId = null;
+        $cheapestVariationId = null;
+        $cheapestVariationPrice = null;
+        $mainVariationIdForFallback = null;
+
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
+            $variationPrice = $this->getCheapestPrice($document['data']['salesPrices']);
+
+            if ($variation['isMain'] === true) {
+                $mainVariationIdForFallback = $variation['id'];
+            }
+
+            if ($variationPrice == 0) {
+                continue;
+            }
 
             if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
-                strtolower($variation['order']) == $lowercasedQuery
+                strtolower($variation['order']) == $lowercasedQuery ||
+                strtolower($variation['id']) == $lowercasedQuery
             ) {
                 return $variation['id'];
             }
@@ -458,9 +492,43 @@ class SearchService implements SearchServiceInterface
             if ($variation['isMain'] === true) {
                 $mainVariationId = $variation['id'];
             }
+
+            if ($cheapestVariationPrice && $variationPrice >= $cheapestVariationPrice) {
+                continue;
+            }
+
+            $cheapestVariationPrice = $variationPrice;
+            $cheapestVariationId = $variation['id'];
         }
 
-        return $mainVariationId;
+        if ($mainVariationId) {
+            return $mainVariationId;
+        }
+
+        if (!$cheapestVariationId) {
+            $this->useMainVariationAsFallback = true;
+
+            return $mainVariationIdForFallback;
+        }
+
+        return $cheapestVariationId;
+    }
+
+    private function getCheapestPrice(array $salesPrices): float
+    {
+        $variationPrice = 0.0;
+
+        foreach ($salesPrices as $salesPrice) {
+            if ($salesPrice['price'] == 0 ||
+                $variationPrice > 0 && $variationPrice <= $salesPrice['price']
+            ) {
+                continue;
+            }
+
+            $variationPrice = $salesPrice['price'];
+        }
+
+        return $variationPrice;
     }
 
     /**
