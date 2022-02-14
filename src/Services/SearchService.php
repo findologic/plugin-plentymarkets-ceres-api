@@ -432,10 +432,7 @@ class SearchService implements SearchServiceInterface
         return $this->buildItemURL($productData, $withVariationId);
     }
 
-    /**
-     * @return bool
-     */
-    private function shouldExportWithVariationId(int $variationId)
+    private function shouldExportWithVariationId(int $variationId): bool
     {
         $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled('Ceres');
 
@@ -468,7 +465,7 @@ class SearchService implements SearchServiceInterface
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
-            $variationPrice = $this->getVariationPrice($document);
+            $variationPrice = $this->getCheapestPrice($document['data']['salesPrices']);
 
             if ($variation['isMain'] === true) {
                 $mainVariationIdForFallback = $variation['id'];
@@ -517,14 +514,11 @@ class SearchService implements SearchServiceInterface
         return $cheapestVariationId;
     }
 
-    /**
-     * @return float|null
-     */
-    private function getVariationPrice($document)
+    private function getCheapestPrice(array $salesPrices): float
     {
         $variationPrice = 0.0;
 
-        foreach ($document['data']['salesPrices'] as $salesPrice) {
+        foreach ($salesPrices as $salesPrice) {
             if ($salesPrice['price'] == 0 ||
                 $variationPrice > 0 && $variationPrice <= $salesPrice['price']
             ) {
