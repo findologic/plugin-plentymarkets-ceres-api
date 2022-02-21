@@ -1,6 +1,5 @@
 import url from '../../../mixins/url'
 import { SVGInjector } from '@tanem/svg-injector'
-import DOMPurify from 'dompurify'
 
 Vue.component("item-color-tiles", {
     mixins: [url],
