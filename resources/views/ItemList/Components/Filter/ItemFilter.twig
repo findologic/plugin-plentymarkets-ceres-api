@@ -41,20 +41,20 @@
                         <input :id="'option-' + value.id"
                                class="form-check-input hidden-xs-up"
                                type="checkbox"
-                               :checked="value.selected"
+                               :checked="isSelected"
                                @change="updateFacet(value)"
                                :disabled="isLoading"
                         >
                         <label :for="'option-' + value.id" class="form-check-label" v-text="value.name" rel="nofollow"></label>
                         <div class="filter-badge" v-text="value.count"></div>
                     </div>
-                    <div v-if="value.selected">
+                    <div v-if="isSelected">
                         <div class="sub-category-container" v-if="value.items.length > 0">
                             <div class="form-check" v-for="subCategory in value.items" :key="subCategory.id">
                                 <input :id="'option-' + subCategory.id"
                                        class="form-check-input hidden-xs-up"
                                        type="checkbox"
-                                       :checked="subCategory.selected"
+                                       :checked="categorySelected(subCategory)"
                                        @change="updateFacet(getSubCategoryValue(value, subCategory))"
                                        :disabled="isLoading"
                                 >

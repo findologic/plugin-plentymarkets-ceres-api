@@ -19,12 +19,24 @@ Vue.component("item-category-dropdown", {
             }
 
             return label;
-        }
+        },
+
+        isSelected() {
+            if (this.facet.id === 'cat' && this.facet.values.length === 1) {
+                return true;
+            }
+
+            return typeof this.getSelectedFilters().find(element => element.id == this.facet.id) !== 'undefined';
+        },
     },
 
     methods: {
         getSubCategoryName(parentCategory, subCategory) {
             return parentCategory.name + '_' + subCategory.name;
+        },
+
+        categorySelected(category) {
+            return this.isCategorySelected(category);
         }
     }
 });
