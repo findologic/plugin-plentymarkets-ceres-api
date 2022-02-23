@@ -18,6 +18,7 @@ use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use IO\Services\ItemSearch\Services\ItemSearchService;
+use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
@@ -85,6 +86,11 @@ class SearchServiceTest extends TestCase
      */
     private $pluginInfoService;
 
+    /**
+     * @var TemplateConfigService|MockObject
+     */
+    private $templateConfigService;
+
     public function setUp()
     {
         $this->client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -121,6 +127,13 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+        $this->templateConfigService = $this->getMockBuilder(TemplateConfigService::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        global $classInstances;
+        $classInstances[TemplateConfigService::class] = $this->templateConfigService;
     }
 
     public function tearDown()
@@ -229,7 +242,7 @@ class SearchServiceTest extends TestCase
         array $attributes,
         string $language = 'de',
         string $defaultLanguage = 'de',
-        bool $isOptionShowPleaseSelectEnabled = true
+        int $optionShowPleaseSelect = 1
     ) {
         $this->setUpPlentyInternalSearchMocks($shopUrl, $defaultLanguage, $language);
 
@@ -238,9 +251,10 @@ class SearchServiceTest extends TestCase
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
-        $this->pluginInfoService->expects($this->any())
-            ->method('isOptionShowPleaseSelectEnabled')
-            ->willReturn($isOptionShowPleaseSelectEnabled);
+        $this->templateConfigService->expects($this->any())
+            ->method('getInteger')
+            ->with('item.show_please_select')
+            ->willReturn($optionShowPleaseSelect);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
@@ -713,7 +727,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'optionShowPleaseSelect' => 0
             ],
             'One product with three variations, main variation without price, no query matches' => [
                 'query' => ['query' => 'this is the query'],
@@ -761,7 +775,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'optionShowPleaseSelect' => 0
             ],
             'One product with three variations redirects to main variant because no variation matches the query' => [
                 'query' => ['query' => 'this is the query'],
@@ -809,7 +823,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'optionShowPleaseSelect' => 0
             ],
             'One product with three variations redirects to variation with an id matching the query' => [
                 'query' => ['query' => '1012'],
@@ -857,7 +871,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'optionShowPleaseSelect' => 0
             ],
             'One product found' => [
                 'query' => ['query' => 'this is the text that was searched for'],
