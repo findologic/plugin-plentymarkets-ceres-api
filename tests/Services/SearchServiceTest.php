@@ -242,7 +242,7 @@ class SearchServiceTest extends TestCase
         array $attributes,
         string $language = 'de',
         string $defaultLanguage = 'de',
-        int $optionShowPleaseSelect = 1
+        bool $optionShowPleaseSelect = true
     ) {
         $this->setUpPlentyInternalSearchMocks($shopUrl, $defaultLanguage, $language);
 
@@ -252,7 +252,7 @@ class SearchServiceTest extends TestCase
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
         $this->templateConfigService->expects($this->any())
-            ->method('getInteger')
+            ->method('getBoolean')
             ->with('item.show_please_select')
             ->willReturn($optionShowPleaseSelect);
 
@@ -727,7 +727,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => 0
+                'optionShowPleaseSelect' => false
             ],
             'One product with three variations, main variation without price, no query matches' => [
                 'query' => ['query' => 'this is the query'],
@@ -775,7 +775,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => 0
+                'optionShowPleaseSelect' => false
             ],
             'One product with three variations redirects to main variant because no variation matches the query' => [
                 'query' => ['query' => 'this is the query'],
@@ -823,7 +823,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => 0
+                'optionShowPleaseSelect' => false
             ],
             'One product with three variations redirects to variation with an id matching the query' => [
                 'query' => ['query' => '1012'],
@@ -871,7 +871,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => 0
+                'optionShowPleaseSelect' => false
             ],
             'One product found' => [
                 'query' => ['query' => 'this is the text that was searched for'],

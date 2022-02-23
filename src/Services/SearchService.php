@@ -437,7 +437,7 @@ class SearchService implements SearchServiceInterface
     {
         /** @var TemplateConfigService $templateConfigService */
         $templateConfigService = pluginApp(TemplateConfigService::class);
-        $showPleaseSelect = $templateConfigService->getInteger('item.show_please_select') === 1;
+        $showPleaseSelect = $templateConfigService->getBoolean('item.show_please_select');
 
         if (!$showPleaseSelect && $variationId && !$this->useMainVariationAsFallback) {
             return true;
