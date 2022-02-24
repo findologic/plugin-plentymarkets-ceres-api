@@ -127,13 +127,6 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->templateConfigService = $this->getMockBuilder(TemplateConfigService::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        global $classInstances;
-        $classInstances[TemplateConfigService::class] = $this->templateConfigService;
     }
 
     public function tearDown()
@@ -242,7 +235,7 @@ class SearchServiceTest extends TestCase
         array $attributes,
         string $language = 'de',
         string $defaultLanguage = 'de',
-        bool $optionShowPleaseSelect = true
+        bool $isOptionShowPleaseSelectEnabled = true
     ) {
         $this->setUpPlentyInternalSearchMocks($shopUrl, $defaultLanguage, $language);
 
@@ -251,10 +244,9 @@ class SearchServiceTest extends TestCase
         $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
         $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
 
-        $this->templateConfigService->expects($this->any())
-            ->method('getBoolean')
-            ->with('item.show_please_select')
-            ->willReturn($optionShowPleaseSelect);
+        $this->pluginInfoService->expects($this->any())
+            ->method('isOptionShowPleaseSelectEnabled')
+            ->willReturn($isOptionShowPleaseSelectEnabled);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
@@ -727,7 +719,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product with three variations, main variation without price, no query matches' => [
                 'query' => ['query' => 'this is the query'],
@@ -775,7 +767,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product with three variations redirects to main variant because no variation matches the query' => [
                 'query' => ['query' => 'this is the query'],
@@ -823,7 +815,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product with three variations redirects to variation with an id matching the query' => [
                 'query' => ['query' => '1012'],
@@ -871,7 +863,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                'optionShowPleaseSelect' => false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product found' => [
                 'query' => ['query' => 'this is the text that was searched for'],
