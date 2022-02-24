@@ -2,9 +2,10 @@
 
 ## 3.8.1 (2022-02-24)
 
-### Geändert
-
+### Behoben
 * [PLENTY-426] Für Preisfilter mit Typ Text muss ein min und max Wert gegeben sein
+
+### Geändert
 * [PLENTY-428] Plentymarkets Review Version 3.8.0
 
 
