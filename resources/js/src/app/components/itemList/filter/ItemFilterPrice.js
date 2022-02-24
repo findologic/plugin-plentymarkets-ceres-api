@@ -21,10 +21,14 @@ Vue.component("item-filter-price", {
     created() {
         this.$options.template = this.template || "#vue-item-filter-price";
 
+        this.MIN_PRICE = 0;
+        this.MAX_PRICE = Number.MAX_SAFE_INTEGER;
+
         const values = this.getSelectedFilterValue(this.facet.id);
 
         this.priceMin = values ? values.min : "";
         this.priceMax = values ? values.max : "";
+
     },
 
     computed: {
@@ -51,7 +55,7 @@ Vue.component("item-filter-price", {
         triggerFilter() {
             if (!this.isDisabled) {
                 let facetValue = {
-                    min: this.priceMin ? this.priceMin : 0,
+                    min: this.priceMin ? this.priceMin : this.MIN_PRICE,
                     max: this.priceMax ? this.priceMax : this.getMaxPrice()
                 };
 
@@ -60,9 +64,9 @@ Vue.component("item-filter-price", {
         },
 
         getMaxPrice() {
-            let maxPrice = this.facet.values[this.facet.values.length -1].name.split(' - ')[1];
+            const maxPrice = this.facet.values[this.facet.values.length -1].name.split(' - ')[1];
 
-            return maxPrice ? maxPrice : Number.MAX_SAFE_INTEGER;
+            return maxPrice ? maxPrice : this.MAX_PRICE;
         }
     }
 });
