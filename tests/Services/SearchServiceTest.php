@@ -18,6 +18,7 @@ use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
 use IO\Services\ItemSearch\Services\ItemSearchService;
+use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
@@ -84,6 +85,11 @@ class SearchServiceTest extends TestCase
      * @var PluginInfoService|MockObject
      */
     private $pluginInfoService;
+
+    /**
+     * @var TemplateConfigService|MockObject
+     */
+    private $templateConfigService;
 
     public function setUp()
     {
@@ -713,7 +719,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product with three variations, main variation without price, no query matches' => [
                 'query' => ['query' => 'this is the query'],
@@ -761,7 +767,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product with three variations redirects to main variant because no variation matches the query' => [
                 'query' => ['query' => 'this is the query'],
@@ -809,7 +815,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product with three variations redirects to variation with an id matching the query' => [
                 'query' => ['query' => '1012'],
@@ -857,7 +863,7 @@ class SearchServiceTest extends TestCase
                 ],
                 'language' => 'de',
                 'defaultLanguage' => 'de',
-                false
+                'isOptionShowPleaseSelectEnabled' => false
             ],
             'One product found' => [
                 'query' => ['query' => 'this is the text that was searched for'],
