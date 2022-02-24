@@ -15,7 +15,7 @@ use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
-use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use IO\Services\TemplateConfigService;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
@@ -434,7 +434,7 @@ class SearchService implements SearchServiceInterface
 
     private function shouldExportWithVariationId(int $variationId): bool
     {
-        $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled('Ceres');
+        $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled();
 
         if (!$showPleaseSelect && $variationId && !$this->useMainVariationAsFallback) {
             return true;

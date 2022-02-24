@@ -151,10 +151,17 @@ export default {
             let attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
             if (facetId === 'price' || this.facet.findologicFilterType === 'range-slider') {
-                attributes[facetId] = {
-                    min: facetValue.min,
-                    max: facetValue.max
-                };
+                if (facetValue.max !== Number.MAX_SAFE_INTEGER) {
+                    attributes[facetId] = {
+                        min: facetValue.min,
+                        max: facetValue.max
+                    };
+                } else {
+                    attributes[facetId] = {
+                        min: facetValue.min,
+                    };
+                }
+
             } else if (this.facet.select === 'single') {
                 if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetValue)) {
                     if (this.facet.id === 'cat' && facetValue.includes('_') ) {
