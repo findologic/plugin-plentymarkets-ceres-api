@@ -1,5 +1,11 @@
 # Release Notes for Findologic
 
+## 3.8.1 (2022-02-24)
+
+### Changed
+
+* [PLENTY-428] Plentymarkets Review Version 3.8.0
+
 ## 3.8.0 (2022-02-14)
 
 ### Changed
