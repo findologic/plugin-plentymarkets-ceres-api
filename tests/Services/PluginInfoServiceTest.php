@@ -49,7 +49,8 @@ class PluginInfoServiceTest extends TestCase
         $this->pluginSetRepositoryMock = $this->getMockForAbstractClass(PluginSetRepositoryContract::class);
         $this->cacheMock = $this->getMockForAbstractClass(CachingRepository::class);
         $this->pluginMock = $this->getMockForAbstractClass(Plugin::class);
-        $this->templateConfigServiceMock = $this->getMockBuilder(TemplateConfigService::class);
+        $this->templateConfigServiceMock = $this->getMockBuilder(TemplateConfigService::class)
+            ->disableOriginalConstructor()->getMock();
 
         $this->pluginInfoService = new PluginInfoService(
             $this->pluginRepositoryMock,

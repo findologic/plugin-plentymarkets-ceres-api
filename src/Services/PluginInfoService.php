@@ -42,7 +42,7 @@ class PluginInfoService
         PluginRepositoryContract $pluginRepository,
         PluginSetRepositoryContract $pluginSetRepository,
         CachingRepository $cache,
-        $templateConfigService
+        TemplateConfigService $templateConfigService
     ) {
         $this->pluginRepository = $pluginRepository;
         $this->pluginSetRepository = $pluginSetRepository;
