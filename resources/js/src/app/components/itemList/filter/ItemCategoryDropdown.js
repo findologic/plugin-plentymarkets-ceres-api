@@ -7,6 +7,11 @@ Vue.component("item-category-dropdown", {
     computed: {
         dropdownLabel() {
             let selectedFilters = this.getSelectedFilters();
+
+            if (selectedFilters.length === 0 && this.facet.id === 'cat' && this.facet.values.length === 1) {
+                return this.facet.values[0].name;
+            }
+
             let label = null;
 
             for (let i = 0; i < selectedFilters.length; i++) {
