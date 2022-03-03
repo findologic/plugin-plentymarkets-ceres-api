@@ -14,8 +14,7 @@ use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
-use IO\Services\ItemSearch\Factories\VariationSearchFactory;
-use IO\Services\TemplateConfigService;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
@@ -23,7 +22,7 @@ use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Services\CategoryService;
-use IO\Services\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 
 /**
  * Class SearchService

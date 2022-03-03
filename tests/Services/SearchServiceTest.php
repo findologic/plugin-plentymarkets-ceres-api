@@ -2,7 +2,6 @@
 
 namespace Findologic\Tests\Services;
 
-use Exception;
 use Findologic\Api\Client;
 use Findologic\Api\Request\Request;
 use Findologic\Api\Request\RequestBuilder;
@@ -16,12 +15,11 @@ use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
-use IO\Services\ItemSearch\Factories\VariationSearchFactory;
-use IO\Services\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
-use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
