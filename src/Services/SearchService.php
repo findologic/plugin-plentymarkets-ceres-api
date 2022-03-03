@@ -344,9 +344,8 @@ class SearchService implements SearchServiceInterface
 
     private function filterInvalidVariationIds(array $ids): array
     {
-        $results = $this->getItemSearchService()->getResult(
-            $this->getSearchFactory()->hasVariationIds($ids)->isActive()
-        );
+        $variationSearchFactory = $this->getSearchFactory()->hasVariationIds($ids)->isActive();
+        $results = $this->getItemSearchService()->getResults([$variationSearchFactory]);
 
         $variationIds = [];
 
@@ -409,9 +408,8 @@ class SearchService implements SearchServiceInterface
             $productId = explode('_', $productId)[0];
         }
 
-        $result = $itemSearchService->getResult(
-            $this->getSearchFactory()->hasItemId($productId)
-        );
+        $variationSearchFactory = $this->getSearchFactory()->hasItemId($productId);
+        $result = $itemSearchService->getResults([$variationSearchFactory]);
 
         if (!$result['success'] || empty($result['documents'][0])) {
             return null;
