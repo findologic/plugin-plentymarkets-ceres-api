@@ -172,8 +172,6 @@ class SearchService implements SearchServiceInterface
             $variationIds = $results->getVariationIds();
         }
 
-        $this->logger->error("doSearch - product ids", $results->getProductsIds());
-
         if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
         }
@@ -345,6 +343,10 @@ class SearchService implements SearchServiceInterface
         return true;
     }
 
+    public function loadResultFieldTemplate(string $template) {
+        return ResultFieldTemplate::load($template);
+    }
+
     private function filterInvalidVariationIds(array $ids): array
     {
         $variationSearchFactory = $this->getVariationSearchFactory();
@@ -416,7 +418,7 @@ class SearchService implements SearchServiceInterface
         }
 
         // Necessary to retrieve variation data and prices
-        $resultFields = ResultFieldTemplate::load(ResultFieldTemplate::TEMPLATE_LIST_ITEM);
+        $resultFields = $this->loadResultFieldTemplate(ResultFieldTemplate::TEMPLATE_LIST_ITEM);
 
         $variationSearchFactory = $this->getVariationSearchFactory();
         $result = $itemSearchService->getResults([
@@ -482,8 +484,6 @@ class SearchService implements SearchServiceInterface
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
-            //$variationPrice = $this->getCheapestPrice($document['data']['salesPrices']);
-
             $variationPrice = $document['data']['prices']['default']['price']['value'] ?: 0;
 
             if ($variation['isMain'] === true) {
@@ -531,23 +531,6 @@ class SearchService implements SearchServiceInterface
         }
 
         return $cheapestVariationId;
-    }
-
-    private function getCheapestPrice(array $salesPrices): float
-    {
-        $variationPrice = 0.0;
-
-        foreach ($salesPrices as $salesPrice) {
-            if ($salesPrice['price'] == 0 ||
-                $variationPrice > 0 && $variationPrice <= $salesPrice['price']
-            ) {
-                continue;
-            }
-
-            $variationPrice = $salesPrice['price'];
-        }
-
-        return $variationPrice;
     }
 
     /**

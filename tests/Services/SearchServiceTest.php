@@ -16,6 +16,7 @@ use Ceres\Helper\ExternalSearch;
 use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
 use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
@@ -151,11 +152,10 @@ class SearchServiceTest extends TestCase
             ->willReturn($this->getDefaultResultsForItemSearchService());
 
         $searchServiceMock = $this->getSearchServiceMock(
-            ['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']
+            ['getCategoryService', 'getItemSearchService', 'getVariationSearchFactory', 'getPluginRepository']
         );
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
-
-        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+        $searchServiceMock->method('getVariationSearchFactory')->willReturn($this->getVariationSearchFactoryMock());
 
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
             ->disableOriginalConstructor()
@@ -200,7 +200,7 @@ class SearchServiceTest extends TestCase
             ->setMethods([])
             ->getMock();
 
-        $searchFactoryMock = $this->getSearchFactoryMock();
+        $searchFactoryMock = $this->getVariationSearchFactoryMock();
 
         $searchServiceMock = $this->getSearchServiceMock([
             'search',
@@ -208,11 +208,15 @@ class SearchServiceTest extends TestCase
             'getResults',
             'shouldRedirectToProductDetailPage',
             'getItemSearchService',
-            'getSearchFactory',
-            'doPageRedirect'
+            'getVariationSearchFactory',
+            'doPageRedirect',
+            'loadResultFieldTemplate'
         ]);
 
         $searchServiceMock->method('search')->willReturn($responseMock);
+        $searchServiceMock->expects($this->once())
+            ->method('loadResultFieldTemplate')
+            ->with(ResultFieldTemplate::TEMPLATE_LIST_ITEM);
 
         $mainVariationId = 1011;
         $itemSearchServiceMock->method('getResults')->willReturn([
@@ -231,7 +235,7 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->method('shouldFilterInvalidProducts')->willReturn(false);
         $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(true);
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
-        $searchServiceMock->expects($this->once())->method('getSearchFactory')->willReturn($searchFactoryMock);
+        $searchServiceMock->expects($this->once())->method('getVariationSearchFactory')->willReturn($searchFactoryMock);
         $expectedRedirectUrl = $shopUrl . '/test-product_11_' . $mainVariationId;
         $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($expectedRedirectUrl);
 
@@ -296,9 +300,10 @@ class SearchServiceTest extends TestCase
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',
             'getItemSearchService',
-            'getSearchFactory',
+            'getVariationSearchFactory',
             'doPageRedirect',
-            'getPluginRepository'
+            'getPluginRepository',
+            'loadResultFieldTemplate'
         ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
         if ($redirectUrl) {
@@ -307,7 +312,7 @@ class SearchServiceTest extends TestCase
             $searchServiceMock->expects($this->never())->method('doPageRedirect');
         }
 
-        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+        $searchServiceMock->method('getVariationSearchFactory')->willReturn($this->getVariationSearchFactoryMock());
 
         /** @var ExternalSearch|MockObject $searchQueryMock */
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
@@ -398,7 +403,7 @@ class SearchServiceTest extends TestCase
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',
             'getItemSearchService',
-            'getSearchFactory',
+            'getVariationSearchFactory',
             'handleProductRedirectUrl',
             'getPluginRepository',
             'shouldRedirectToProductDetailPage'
@@ -407,7 +412,7 @@ class SearchServiceTest extends TestCase
             ->method('getItemSearchService')
             ->willReturn($itemSearchServiceMock);
 
-        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+        $searchServiceMock->method('getVariationSearchFactory')->willReturn($this->getVariationSearchFactoryMock());
         $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(false);
 
         $this->configRepository->expects($this->once())->method('get')
@@ -503,9 +508,11 @@ class SearchServiceTest extends TestCase
                     'number' => (array_key_exists('number', $variation)) ? $variation['number'] :'number',
                     'order' => (array_key_exists('order', $variation)) ? $variation['order'] : 'model'
                 ],
-                'salesPrices' => [
-                    [
-                        'price' => $variation['price']
+                'prices' => [
+                    'default' => [
+                        'price' => [
+                            'value' => $variation['price']
+                        ]
                     ]
                 ],
                 'barcodes' => (array_key_exists('barcodes', $variation)) ? $variation['barcodes'] : []
@@ -1448,19 +1455,13 @@ class SearchServiceTest extends TestCase
         $classInstances[UrlBuilderRepositoryContract::class] = $urlBuilderMock;
     }
 
-    /**
-     * @return MockObject|VariationSearchFactory
-     */
-    private function getSearchFactoryMock(): VariationSearchFactory
+    private function getVariationSearchFactoryMock(): MockObject
     {
-        $searchServiceFactoryMock = $this->getMockBuilder(VariationSearchFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $searchServiceFactoryMock->method('hasVariationIds')->willReturnSelf();
-        $searchServiceFactoryMock->method('hasItemId')->willReturnSelf();
+        $variationSearchFactoryMock = $this->getMockForAbstractClass(VariationSearchFactory::class);
+        $variationSearchFactoryMock->method('hasVariationIds')->willReturnSelf();
+        $variationSearchFactoryMock->method('hasItemId')->willReturnSelf();
 
-        return $searchServiceFactoryMock;
+        return $variationSearchFactoryMock;
     }
 
     private function getDefaultResultsForItemSearchService(): array
