@@ -343,7 +343,8 @@ class SearchService implements SearchServiceInterface
         return true;
     }
 
-    public function loadResultFieldTemplate(string $template) {
+    public function loadResultFieldTemplate(string $template)
+    {
         return ResultFieldTemplate::load($template);
     }
 

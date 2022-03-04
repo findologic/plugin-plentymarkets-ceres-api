@@ -238,7 +238,7 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->expects($this->once())->method('getVariationSearchFactory')->willReturn($searchFactoryMock);
         $expectedRedirectUrl = $shopUrl . '/test-product_11_' . $mainVariationId;
         $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($expectedRedirectUrl);
-
+        
         $searchFactoryMock->expects($this->once())->method('hasItemId')->with('123');
 
         $searchServiceMock->doSearch($requestMock, $externalSearchServiceMock);
