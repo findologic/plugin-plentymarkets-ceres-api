@@ -146,10 +146,10 @@ class SearchServiceTest extends TestCase
         $responseMock->expects($this->exactly(2))->method('getResultsCount')->willReturn(3);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
+        $itemSearchServiceMock->method('getResults')
+            ->willReturn($this->getDefaultResultsForItemSearchService());
+
         $searchServiceMock = $this->getSearchServiceMock(
             ['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']
         );
@@ -173,6 +173,9 @@ class SearchServiceTest extends TestCase
 
     public function testItemVariantIdExtractingForRedirectUrlGeneration()
     {
+        $shopUrl = 'myshop.de';
+        $this->setUpPlentyInternalSearchMocks($shopUrl, 'de', 'de');
+
         $requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -190,6 +193,8 @@ class SearchServiceTest extends TestCase
         $responseMock->method('getLandingPage')->willReturn(null);
         $responseMock->method('getProductsIds')->willReturn(['123_456']);
 
+        $responseMock->expects($this->once())->method('getData')->willReturn(['query' => 'search term']);
+
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -203,14 +208,32 @@ class SearchServiceTest extends TestCase
             'getResults',
             'shouldRedirectToProductDetailPage',
             'getItemSearchService',
-            'getSearchFactory'
+            'getSearchFactory',
+            'doPageRedirect'
         ]);
+
         $searchServiceMock->method('search')->willReturn($responseMock);
-        $searchServiceMock->method('getResults')->willReturn($responseMock);
+
+        $mainVariationId = 1011;
+        $itemSearchServiceMock->method('getResults')->willReturn([
+            'success' => true,
+            'total' => 1,
+            'documents' => $this->getMultipleItemsDocuments(
+                    [
+                        '0' => [
+                            'id' => $mainVariationId,
+                            'price' => 10.00,
+                            'isMain' => true
+                        ]
+                    ]
+                )
+        ]);
         $searchServiceMock->method('shouldFilterInvalidProducts')->willReturn(false);
         $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(true);
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
         $searchServiceMock->expects($this->once())->method('getSearchFactory')->willReturn($searchFactoryMock);
+        $expectedRedirectUrl = $shopUrl . '/test-product_11_' . $mainVariationId;
+        $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($expectedRedirectUrl);
 
         $searchFactoryMock->expects($this->once())->method('hasItemId')->with('123');
 
@@ -261,14 +284,12 @@ class SearchServiceTest extends TestCase
         }
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResult'])
-            ->getMock();
-        $itemSearchServiceMock->expects($this->at(0))->method('getResult')->willReturn($itemSearchServiceResultsAll);
+
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
+        $itemSearchServiceMock->expects($this->at(0))->method('getResults')->willReturn($itemSearchServiceResultsAll);
         if ($redirectUrl) {
             $itemSearchServiceMock->expects($this->at(1))
-                ->method('getResult')
+                ->method('getResults')
                 ->willReturn($variationSearchByItemIdResult);
         }
 
@@ -314,15 +335,7 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [
                     1011, 1012
                 ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'attributes' => [],
                 'configuredSearchCategory' => 1234,
                 'searchedCategory' => 1234,
@@ -332,15 +345,7 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'attributes' => [
                     'attrib' => [
                         'cat' => 'Blubbergurken'
@@ -354,15 +359,7 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'attributes' => [
                     'attrib' => [
                         'cat' => 'Blubbergurken'
@@ -393,11 +390,9 @@ class SearchServiceTest extends TestCase
         $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemSearchServiceMock->expects($this->at(0))
-            ->method('getResult')
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
+        $itemSearchServiceMock->expects($this->once())
+            ->method('getResults')
             ->willReturn($itemSearchServiceResultsAll);
 
         $searchServiceMock = $this->getSearchServiceMock([
@@ -405,13 +400,15 @@ class SearchServiceTest extends TestCase
             'getItemSearchService',
             'getSearchFactory',
             'handleProductRedirectUrl',
-            'getPluginRepository'
+            'getPluginRepository',
+            'shouldRedirectToProductDetailPage'
         ]);
         $searchServiceMock->expects($this->any())
             ->method('getItemSearchService')
             ->willReturn($itemSearchServiceMock);
 
         $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+        $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(false);
 
         $this->configRepository->expects($this->once())->method('get')
             ->with('IO.routing.category_search')
@@ -534,15 +531,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'test query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -581,15 +570,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => '1012'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -628,15 +609,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -675,15 +648,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -723,15 +688,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -771,15 +728,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -819,15 +768,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => '1012'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -867,15 +808,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
@@ -898,15 +831,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
@@ -930,15 +855,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
@@ -963,15 +880,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -1004,15 +913,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -1045,15 +946,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -1086,15 +979,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -1131,15 +1016,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 2,
@@ -1175,15 +1052,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
@@ -1267,15 +1136,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
@@ -1304,15 +1165,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
@@ -1341,15 +1194,7 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     'success' => true,
                     'total' => 1,
@@ -1616,5 +1461,17 @@ class SearchServiceTest extends TestCase
         $searchServiceFactoryMock->method('hasItemId')->willReturnSelf();
 
         return $searchServiceFactoryMock;
+    }
+
+    private function getDefaultResultsForItemSearchService() {
+        return [
+            'success' => true,
+            'total' => 1,
+            'documents' => [
+                [
+                    'id' => 1011
+                ]
+            ]
+        ];
     }
 }
