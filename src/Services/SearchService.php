@@ -16,6 +16,7 @@ use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
 use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
+use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\Loggable;
@@ -124,7 +125,7 @@ class SearchService implements SearchServiceInterface
         return pluginApp(ItemSearchService::class);
     }
 
-    public function getSearchFactory(): VariationSearchFactory
+    public function getVariationSearchFactory(): VariationSearchFactory
     {
         return pluginApp(VariationSearchFactory::class);
     }
@@ -170,6 +171,8 @@ class SearchService implements SearchServiceInterface
         } else {
             $variationIds = $results->getVariationIds();
         }
+
+        $this->logger->error("doSearch - product ids", $results->getProductsIds());
 
         if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
@@ -344,12 +347,16 @@ class SearchService implements SearchServiceInterface
 
     private function filterInvalidVariationIds(array $ids): array
     {
-        $variationSearchFactory = $this->getSearchFactory()->hasVariationIds($ids)->isActive();
-        $results = $this->getItemSearchService()->getResults([$variationSearchFactory]);
+        $variationSearchFactory = $this->getVariationSearchFactory();
+        $results = $this->getItemSearchService()->getResults([
+            $variationSearchFactory
+                ->isVisibleForClient()
+                ->isActive()
+                ->hasVariationIds($ids)
+        ]);
 
         $variationIds = [];
-
-        if ($results['success'] && $results['total'] > 0) {
+        if ($results['total'] > 0) {
             foreach ($results['documents'] as $document) {
                 $variationIds[] = $document['id'];
             }
@@ -408,10 +415,23 @@ class SearchService implements SearchServiceInterface
             $productId = explode('_', $productId)[0];
         }
 
-        $variationSearchFactory = $this->getSearchFactory()->hasItemId($productId);
-        $result = $itemSearchService->getResults([$variationSearchFactory]);
+        // Necessary to retrieve variation data and prices
+        $resultFields = ResultFieldTemplate::load(ResultFieldTemplate::TEMPLATE_LIST_ITEM);
 
-        if (!$result['success'] || empty($result['documents'][0])) {
+        $variationSearchFactory = $this->getVariationSearchFactory();
+        $result = $itemSearchService->getResults([
+            $variationSearchFactory
+                ->withVariationProperties()
+                ->withPrices()
+                ->isVisibleForClient()
+                ->isActive()
+                ->withResultFields($resultFields)
+                ->hasItemId($productId)
+        ]);
+
+        $this->logger->error('result', $result);
+
+        if (empty($result['documents'][0])) {
             return null;
         }
 
@@ -462,7 +482,9 @@ class SearchService implements SearchServiceInterface
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
-            $variationPrice = $this->getCheapestPrice($document['data']['salesPrices']);
+            //$variationPrice = $this->getCheapestPrice($document['data']['salesPrices']);
+
+            $variationPrice = $document['data']['prices']['default']['price']['value'] ?: 0;
 
             if ($variation['isMain'] === true) {
                 $mainVariationIdForFallback = $variation['id'];
