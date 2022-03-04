@@ -219,14 +219,14 @@ class SearchServiceTest extends TestCase
             'success' => true,
             'total' => 1,
             'documents' => $this->getMultipleItemsDocuments(
-                    [
+                [
                         '0' => [
                             'id' => $mainVariationId,
                             'price' => 10.00,
                             'isMain' => true
                         ]
                     ]
-                )
+            )
         ]);
         $searchServiceMock->method('shouldFilterInvalidProducts')->willReturn(false);
         $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(true);
@@ -1463,7 +1463,8 @@ class SearchServiceTest extends TestCase
         return $searchServiceFactoryMock;
     }
 
-    private function getDefaultResultsForItemSearchService() {
+    private function getDefaultResultsForItemSearchService(): array
+    {
         return [
             'success' => true,
             'total' => 1,
