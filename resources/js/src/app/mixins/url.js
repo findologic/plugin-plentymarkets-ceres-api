@@ -278,12 +278,12 @@ export default {
         },
 
         /**
-         * @param category
+         * @param {Object} category
          * @returns {boolean}
          */
         isCategorySelected(category) {
-            let selectedFilters = this.getSelectedFilters(),
-                splitedSelectedCategories = [];
+            let selectedFilters = this.getSelectedFilters();
+            let splitedSelectedCategories = [];
 
             for (let i = 0; i < selectedFilters.length; i++) {
                 if (selectedFilters[i].id !== this.facet.id) {

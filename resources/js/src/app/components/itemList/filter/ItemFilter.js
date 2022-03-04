@@ -66,10 +66,6 @@ Vue.component("findologic-item-filter", {
                 id: subCategory.id,
                 name: parentCategory.name + '_' + subCategory.name
             };
-        },
-
-        categorySelected(category) {
-            return this.isCategorySelected(category);
         }
     }
 });

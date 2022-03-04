@@ -8,7 +8,7 @@ Vue.component("item-category-dropdown", {
         dropdownLabel() {
             let selectedFilters = this.getSelectedFilters();
 
-            if (selectedFilters.length === 0 && this.facet.id === 'cat' && this.facet.values.length === 1) {
+            if (this.isSingleCategoryExistsAndNoFilterIsSelected(selectedFilters.length)) {
                 return this.facet.values[0].name;
             }
 
@@ -26,13 +26,16 @@ Vue.component("item-category-dropdown", {
             return label;
         },
 
+        /**
+         * @returns {boolean}
+         */
         isSelected() {
             if (this.facet.id === 'cat' && this.facet.values.length === 1) {
                 return true;
             }
 
-            return typeof this.getSelectedFilters().find(element => element.id == this.facet.id) !== 'undefined';
-        },
+            return typeof this.getSelectedFilters().find(element => element.id === this.facet.id) !== 'undefined';
+        }
     },
 
     methods: {
@@ -40,8 +43,12 @@ Vue.component("item-category-dropdown", {
             return parentCategory.name + '_' + subCategory.name;
         },
 
-        categorySelected(category) {
-            return this.isCategorySelected(category);
+        /**
+         * @param {int} selectedFiltersCount
+         * @returns {boolean}
+         */
+        isSingleCategoryExistsAndNoFilterIsSelected(selectedFiltersCount) {
+            return (selectedFiltersCount === 0 && this.facet.id === 'cat' && this.facet.values.length === 1);
         }
     }
 });

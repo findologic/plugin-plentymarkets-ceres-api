@@ -54,7 +54,7 @@
                                 <input :id="'option-' + subCategory.id"
                                        class="form-check-input hidden-xs-up"
                                        type="checkbox"
-                                       :checked="categorySelected(subCategory)"
+                                       :checked="isCategorySelected(subCategory)"
                                        @change="updateFacet(getSubCategoryValue(value, subCategory))"
                                        :disabled="isLoading"
                                 >

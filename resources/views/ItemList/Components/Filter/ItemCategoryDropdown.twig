@@ -8,12 +8,12 @@
                 <li v-for="value in facet.values" @click.stop="close(); selected(value.name);" class="fl-dropdown-item" :class="{'form-check-label': !isSelected}" rel="nofollow">
                     <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="isSelected" :disabled="isLoading">
                     <label :for="'option-' + value.id" :class="{'form-check-label': isSelected}" v-text="value.name" rel="nofollow"></label>
-                    <div class="filter-badge" v-if="!isCategorySelected && value.count" v-text="value.count"></div>
+                    <div class="filter-badge" v-if="!isCategorySelected(value) && value.count" v-text="value.count"></div>
                     <ul v-if="isSelected && value.items.length > 0" class="form-check subcategories">
-                        <li v-for="subcategory in value.items" :key="subcategory.id" @click.stop="close(); selected(getSubCategoryName(value, subcategory));" class="fl-dropdown-item" :class="{'form-check-label': !categorySelected(subcategory)}">
-                            <input :id="'option-' + subcategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="categorySelected(subcategory)" :disabled="isLoading">
-                            <label :for="'option-' + subcategory.id" :class="{'form-check-label': categorySelected(subcategory)}" v-text="subcategory.name" rel="nofollow"></label>
-                            <div class="filter-badge" v-if="!categorySelected(subcategory) && subcategory.count" v-text="subcategory.count"></div>
+                        <li v-for="subcategory in value.items" :key="subcategory.id" @click.stop="close(); selected(getSubCategoryName(value, subcategory));" class="fl-dropdown-item" :class="{'form-check-label': !isCategorySelected(subcategory)}">
+                            <input :id="'option-' + subcategory.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="isCategorySelected(subcategory)" :disabled="isLoading">
+                            <label :for="'option-' + subcategory.id" :class="{'form-check-label': isCategorySelected(subcategory)}" v-text="subcategory.name" rel="nofollow"></label>
+                            <div class="filter-badge" v-if="!isCategorySelected(subcategory) && subcategory.count" v-text="subcategory.count"></div>
                         </li>
                     </ul>
                 </li>
