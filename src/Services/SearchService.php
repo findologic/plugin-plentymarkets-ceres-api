@@ -421,15 +421,14 @@ class SearchService implements SearchServiceInterface
         // Necessary to retrieve variation data and prices
         $resultFields = $this->loadResultFieldTemplate(ResultFieldTemplate::TEMPLATE_LIST_ITEM);
 
-        $variationSearchFactory = $this->getVariationSearchFactory();
         $result = $itemSearchService->getResults([
-            $variationSearchFactory
+            $this->getVariationSearchFactory()
+                ->hasItemId($productId)
                 ->withVariationProperties()
                 ->withPrices()
                 ->isVisibleForClient()
                 ->isActive()
                 ->withResultFields($resultFields)
-                ->hasItemId($productId)
         ]);
 
         $this->logger->error('result', $result);

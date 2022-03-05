@@ -238,7 +238,7 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->expects($this->once())->method('getVariationSearchFactory')->willReturn($searchFactoryMock);
         $expectedRedirectUrl = $shopUrl . '/test-product_11_' . $mainVariationId;
         $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($expectedRedirectUrl);
-        
+
         $searchFactoryMock->expects($this->once())->method('hasItemId')->with('123');
 
         $searchServiceMock->doSearch($requestMock, $externalSearchServiceMock);
@@ -1458,6 +1458,10 @@ class SearchServiceTest extends TestCase
     private function getVariationSearchFactoryMock(): MockObject
     {
         $variationSearchFactoryMock = $this->getMockForAbstractClass(VariationSearchFactory::class);
+        $variationSearchFactoryMock->method('withVariationProperties')->willReturnSelf();
+        $variationSearchFactoryMock->method('withPrices')->willReturnSelf();
+        $variationSearchFactoryMock->method('isActive')->willReturnSelf();
+        $variationSearchFactoryMock->method('withResultFields')->willReturnSelf();
         $variationSearchFactoryMock->method('hasVariationIds')->willReturnSelf();
         $variationSearchFactoryMock->method('hasItemId')->willReturnSelf();
 
