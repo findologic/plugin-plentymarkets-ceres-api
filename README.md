@@ -134,10 +134,8 @@ From the [PlentyDevTool description](https://marketplace.plentymarkets.com/en/pl
 Before pushing you may run build to ensure your JS/CSS is built.
 
 ```
-npm run-script build
+npm run build
 ```
-
-Alternatively if you have `gulp` installed globally, simply run `gulp`.
 
 ### Running unit-tests locally
 
