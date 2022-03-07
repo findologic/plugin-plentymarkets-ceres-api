@@ -1,7 +1,7 @@
 import Url from '../../mixins/url';
 import Vue from 'vue';
 
-Vue.component('item-search', {
+Vue.component('ItemSearch', {
     mixins: [Url],
 
     props: {

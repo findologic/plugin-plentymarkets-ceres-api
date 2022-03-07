@@ -2,7 +2,7 @@ import Url from '../../mixins/url';
 import Constants from '../../shared/constants';
 import Vue from 'vue';
 
-Vue.component('items-per-page', {
+Vue.component('ItemsPerPage', {
 
     delimiters: ['${', '}'],
     mixins: [Url],

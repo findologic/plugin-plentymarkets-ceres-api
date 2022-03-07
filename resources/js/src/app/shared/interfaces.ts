@@ -71,5 +71,5 @@ export interface PlentyVuexStore extends Store<StoreState> {
 }
 
 export interface JQuery {
-    collapse: () => {};
+    collapse: () => void;
 }

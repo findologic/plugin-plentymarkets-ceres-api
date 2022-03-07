@@ -30,7 +30,7 @@ interface BaseDropdownInterface {
     }
 })
 export default class BaseDropdown extends Mixins<Vue, BaseDropdownInterface>(Vue, BaseDropdownProps) {
-    protected isOpen = false
+    protected isOpen = false;
 
     get facetData(): Facet {
         return this.facet;

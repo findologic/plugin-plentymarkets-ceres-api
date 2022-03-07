@@ -59,6 +59,7 @@ const options = {
 };
 
 if (window.flCeresConfig.isSearchPage || window.flCeresConfig.activeOnCatPage) {
-    Vue.component('pagination', options);
-    Vue.component('custom-pagination', options);
+    // eslint-disable-next-line
+    Vue.component('Pagination', options);
+    Vue.component('CustomPagination', options);
 }

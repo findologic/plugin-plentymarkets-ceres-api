@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 // @ts-nocheck
 import Constants from '../shared/constants';
 import Component from 'vue-class-component';

@@ -37,6 +37,12 @@ the plugin has been installed via the marketplace.
 Plentymarkets is a cloud hosted shop system, this means that it's not possible to setup on a local machine.
 Create separate plugin sets in the Plentymarkets for development or debugging purposes.
 
+### Requirements
+* PHP 7.1, 7.2 or 7.3 (7.4 and greater **is not supported**)
+* Composer
+* nodejs 16
+* npm 8
+
 ### Create SSL certificates
 
 ```bash
@@ -48,9 +54,6 @@ openssl x509 -in private.crt -out private.pem -outform PEM
 
 ### Installing dependencies
 
-This project contains PHP and Javascript dependencies.
-Make sure you have [Composer](https://getcomposer.org/) >= 1.8 as well as [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) installed.
-
 Install PHP dependencies:
 ```bash
 composer install
@@ -59,12 +62,6 @@ composer install
 Install JS dependencies:
 ```
 npm install
-```
-
-Running the following command, will enable a Git hook, which prevents you from pushing
-your code, in case you have made JS/CSS changes, but did not build them:
-```
-gulp install-hooks
 ```
 
 ### Development cycle

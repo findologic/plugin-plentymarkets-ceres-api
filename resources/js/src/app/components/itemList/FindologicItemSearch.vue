@@ -72,6 +72,7 @@ export default defineComponent({
     const prepareSearch = () => {
       const searchBox = jQuery('#searchBox');
 
+      // eslint-disable-next-line
       // @ts-ignore
       searchBox.collapse('hide');
     };
@@ -113,6 +114,7 @@ export default defineComponent({
       });
     });
 
+    // eslint-disable-next-line
     props.forwardToSingleItem = window.App.config.search.forwardToSingleItem;
 
     return {

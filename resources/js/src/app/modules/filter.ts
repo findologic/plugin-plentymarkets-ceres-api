@@ -8,7 +8,7 @@ import ItemCategoryDropdown from '../components/itemList/filter/ItemCategoryDrop
 import ItemDropdown from '../components/itemList/filter/ItemDropdown.vue';
 import ItemRangeSlider from '../components/itemList/filter/ItemRangeSlider.vue';
 import FindologicItemFilter from '../components/itemList/filter/FindologicItemFilter.vue';
-import ItemFilterTagList from '../components/itemList/filter/ItemFilterTagList.vue';
+import FindologicItemFilterTagList from '../components/itemList/filter/FindologicItemFilterTagList.vue';
 import ItemFilterImage from '../components/itemList/filter/ItemFilterImage.vue';
 import ItemFilterList from '../components/itemList/filter/ItemFilterList.vue';
 
@@ -21,17 +21,18 @@ function isPageWhereComponentsShouldBeLoaded(): boolean {
 }
 
 if (isPageWhereComponentsShouldBeLoaded()) {
+    // eslint-disable-next-line
     // @ts-ignore
     const plentyVue = Vue as VueConstructor;
 
-    plentyVue.component('test-component', TestComponent);
-    plentyVue.component('item-list-sorting', ItemListSorting);
-    plentyVue.component('item-color-tiles', ItemColorTiles);
-    plentyVue.component('item-category-dropdown', ItemCategoryDropdown);
-    plentyVue.component('item-dropdown', ItemDropdown);
-    plentyVue.component('item-range-slider', ItemRangeSlider);
-    plentyVue.component('item-filter-image', ItemFilterImage);
-    plentyVue.component('findologic-item-filter-list', ItemFilterList);
-    plentyVue.component('findologic-item-filter', FindologicItemFilter);
-    plentyVue.component('item-filter-tag-list', ItemFilterTagList);
+    plentyVue.component('TestComponent', TestComponent);
+    plentyVue.component('ItemListSorting', ItemListSorting);
+    plentyVue.component('ItemColorTiles', ItemColorTiles);
+    plentyVue.component('ItemCategoryDropdown', ItemCategoryDropdown);
+    plentyVue.component('ItemDropdown', ItemDropdown);
+    plentyVue.component('ItemRangeSlider', ItemRangeSlider);
+    plentyVue.component('ItemFilterImage', ItemFilterImage);
+    plentyVue.component('FindologicItemFilterList', ItemFilterList);
+    plentyVue.component('FindologicItemFilter', FindologicItemFilter);
+    plentyVue.component('FindologicItemFilterTagList', FindologicItemFilterTagList);
 }

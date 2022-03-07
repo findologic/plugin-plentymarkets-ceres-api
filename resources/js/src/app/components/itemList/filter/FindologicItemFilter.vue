@@ -174,6 +174,13 @@ interface ItemFilterProps extends TemplateOverridable, FacetAware {
 
 export default defineComponent({
   name: 'FindologicItemFilter',
+  components: {
+    'item-range-slider': ItemRangeSlider,
+    'item-color-tiles': ItemColorTiles,
+    'item-category-dropdown': ItemCategoryDropdown,
+    'item-dropdown': ItemDropdown,
+    'item-filter-image': ItemFilterImage
+  },
   props: {
     template: {
       type: String,
@@ -199,13 +206,6 @@ export default defineComponent({
       type: Boolean,
       default: false
     }
-  },
-  components: {
-    'item-range-slider': ItemRangeSlider,
-    'item-color-tiles': ItemColorTiles,
-    'item-category-dropdown': ItemCategoryDropdown,
-    'item-dropdown': ItemDropdown,
-    'item-filter-image': ItemFilterImage
   },
   setup: (props: ItemFilterProps, { root }) => {
     root.$options.template = props.template || '#vue-item-filter';

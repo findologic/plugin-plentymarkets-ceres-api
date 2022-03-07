@@ -36,7 +36,7 @@ interface ItemFilterTagListProps extends TemplateOverridable {
 }
 
 export default defineComponent({
-  name: 'ItemFilterTagList',
+  name: 'FindologicItemFilterTagList',
   props: {
     template: {
       type: String,
