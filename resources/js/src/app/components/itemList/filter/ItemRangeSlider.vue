@@ -58,6 +58,7 @@ import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
+import * as noUiSlider from 'noUiSlider';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
 
@@ -104,9 +105,7 @@ export default defineComponent({
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
 
       $(document).ready(function () {
-        const element = document.getElementById(sanitizedFacetId.value);
-
-        // TODO: Add noUiSlider element interface.
+        const element: noUiSlider.Instance = document.getElementById(sanitizedFacetId.value) as noUiSlider.Instance;
         const slider = element.noUiSlider ? element.noUiSlider : window.noUiSlider.create(element, {
           step: props.facet.step,
           start: [valueFrom.value, valueTo.value],
