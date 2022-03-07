@@ -388,7 +388,7 @@ describe('FindologicItemFilter', () => {
     ];
   }
 
-  it.each(filterClickRedirectionTestProvider())('Redirects to page with filter params applied after a filter value is clicke', async (data) => {
+  it.each(filterClickRedirectionTestProvider())('Redirects to page with filter params applied after a filter value is clicked', async (data) => {
     const facet = data.facet;
 
     store.state.itemList = {
