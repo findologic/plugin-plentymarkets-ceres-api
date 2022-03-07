@@ -15,7 +15,6 @@
     "resources/js/types"
   ],
   "dependencies": {
-    "@types/jqueryui": "^1.12.15",
     "@vue/composition-api": "^1.0.0-rc.5",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
@@ -28,6 +27,7 @@
     "@babel/preset-env": "^7.16.11",
     "@types/jest": "^27.4.1",
     "@types/jquery": "^3.5.14",
+    "@types/jqueryui": "^1.12.16",
     "@types/node": "^17.0.21",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",

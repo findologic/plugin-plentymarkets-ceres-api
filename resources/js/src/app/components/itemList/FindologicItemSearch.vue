@@ -36,6 +36,7 @@
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api';
 import { TemplateOverridable } from '../../shared/interfaces';
 import UrlBuilder from '../../shared/UrlBuilder';
+import * as jQuery from 'jquery';
 
 interface ItemSearchProps extends TemplateOverridable {
   showItemImages: boolean;
@@ -70,10 +71,8 @@ export default defineComponent({
     const selectedAutocompleteItem = computed(() => null);
 
     const prepareSearch = () => {
-      const searchBox = jQuery('#searchBox');
+      const searchBox = $('#searchBox') as unknown as jQuery.Accordion;
 
-      // eslint-disable-next-line
-      // @ts-ignore
       searchBox.collapse('hide');
     };
     const search = () => {
@@ -114,8 +113,7 @@ export default defineComponent({
       });
     });
 
-    // eslint-disable-next-line
-    props.forwardToSingleItem = window.App.config.search.forwardToSingleItem;
+    root.$props.forwardToSingleItem = window.App.config.search.forwardToSingleItem;
 
     return {
       promiseCount,
