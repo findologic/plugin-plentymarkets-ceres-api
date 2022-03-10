@@ -282,7 +282,7 @@ export default {
          * @returns {boolean}
          */
         isCategorySelected(category) {
-            let selectedFilters = this.getSelectedFilters();
+            const selectedFilters = this.getSelectedFilters();
             let splitedSelectedCategories = [];
 
             for (let i = 0; i < selectedFilters.length; i++) {
