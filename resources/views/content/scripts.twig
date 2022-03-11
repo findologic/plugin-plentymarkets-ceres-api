@@ -30,9 +30,8 @@
     });
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg-injector/1.1.3/svg-injector.min.js"></script>
-{#    <script src="{{ plugin_path("Findologic") }}/js/dist/findologic_ceres.js"></script>#}
-<script src="https://localhost:8080/findologic_ceres.js"></script>
+    <script src="{{ plugin_path("Findologic") }}/js/dist/findologic_ceres.js"></script>
+{#<script src="https://localhost:8080/findologic_ceres.js"></script>#}
 
 {% if isSearchPage or activeOnCatPage %}
 {#    <script src="{{ plugin_path("Findologic") }}/js/dist/filters-component-min.js"></script>#}
@@ -74,7 +73,7 @@
 <script type="x/template" data-component="item-search">
     {{ component( "Findologic::ItemList.Components.ItemSearch") }}
 
-    <form method="GET" action="/search" @submit="search()">
+    <form method="GET" action="{{ languagePath }}/search" @submit="search()">
         <div class="container-max">
             <div class="position-relative">
                 <div class="d-flex flex-grow-1 position-relative my-2">
@@ -88,8 +87,7 @@
                            @keyup.down="keydown()"
                            @keyup.up="keyup()"
                            @focus="isSearchFocused = true"
-                           @blur="setIsSearchFocused(false)"
-                           autofocus>
+                           @blur="setIsSearchFocused(false)">
                     <button class="search-submit px-3" type="submit">
                         <i class="fa fa-search"></i>
                     </button>
@@ -98,5 +96,4 @@
         </div>
     </form>
 </script>
-<!-- /SSR -->
 <!-- /SSR -->

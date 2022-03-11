@@ -1,20 +1,22 @@
 {
   "name": "findologic",
   "version": "1.0.0",
-  "private": true,
-  "description": "Findologic integration for plentymarkets system",
   "author": "FINDOLOGIC GmbH",
+  "description": "Findologic integration for plentymarkets system",
+  "license": "AGPL-3.0",
+  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve resources/js/src/index.ts --https --key private.key --cert private.pem --disable-host-check --hot",
-    "dev": "vue-cli-service build resources/js/src/index.ts --mode=development",
+    "dev": "vue-cli-service build resources/js/src/index.ts --mode=development --modern",
     "lint": "vue-cli-service lint resources/js/src",
-    "build": "vue-cli-service build resources/js/src/index.ts",
+    "build": "vue-cli-service build resources/js/src/index.ts --mode=production",
     "test": "jest --coverageDirectory=jest"
   },
   "files": [
     "resources/js/types"
   ],
   "dependencies": {
+    "@tanem/svg-injector": "^10.1.19",
     "@vue/composition-api": "^1.0.0-rc.5",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
@@ -73,7 +75,5 @@
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
-  },
-  "_id": "findologic@1.0.0",
-  "license": "ISC"
+  }
 }

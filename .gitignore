@@ -5,6 +5,10 @@
 /node_modules/
 /vendor/
 
+# Unit-Tests
+/tests/build
+/build/
+
 # Local SSL certificates
 private.crt
 private.csr

@@ -3,6 +3,7 @@
 namespace Findologic\Services;
 
 use Exception;
+use Findologic\Api\Request\Request;
 use Findologic\Api\Request\RequestBuilder;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\ResponseParser;
@@ -14,7 +15,7 @@ use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
 use IO\Services\ItemSearch\Factories\VariationSearchFactory;
-use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use IO\Services\TemplateConfigService;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
@@ -33,6 +34,7 @@ class SearchService implements SearchServiceInterface
     use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
+    const MAX_RETRIES = 2;
 
     /**
      * @var Client
@@ -88,6 +90,9 @@ class SearchService implements SearchServiceInterface
      * @var PluginInfoService
      */
     protected $pluginInfoService;
+
+    /** @var bool $useMainVariationAsFallback */
+    protected $useMainVariationAsFallback = false;
 
     public function __construct(
         Client $client,
@@ -153,6 +158,9 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $results = $this->search($request, $externalSearch);
+        if ($landingPageUrl = $results->getLandingPage()) {
+            $this->doPageRedirect($landingPageUrl);
+        }
 
         if ($results->getResultsCount() == 0) {
             return;
@@ -164,14 +172,27 @@ class SearchService implements SearchServiceInterface
             $variationIds = $results->getVariationIds();
         }
 
-        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
-            if ($redirectUrl = $this->getProductDetailUrl($results)) {
-                $this->handleProductRedirectUrl($redirectUrl);
-            }
+        if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
+            $this->doPageRedirect($redirectUrl);
         }
 
         /** @var ExternalSearch $searchQuery */
         $externalSearch->setResults($variationIds, $results->getResultsCount());
+    }
+
+    /**
+     * In case a redirect should happen, this will return the redirect URL. Redirects may be caused when
+     * a search only yields a single result.
+     *
+     * @return string|null
+     */
+    public function getRedirectUrl(HttpRequest $request, Response $response, array $variationIds)
+    {
+        if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
+            return $this->getProductDetailUrl($response);
+        }
+
+        return null;
     }
 
     /**
@@ -218,7 +239,7 @@ class SearchService implements SearchServiceInterface
                 $this->doSearch($request, $externalSearch);
             }
         } catch (Exception $e) {
-            $this->logger->error('Exception while handling search query.');
+            $this->logger->error('Exception while handling search query.', ['url' => $request->getRequestUri()]);
             $this->logger->logException($e);
         }
 
@@ -233,7 +254,15 @@ class SearchService implements SearchServiceInterface
         try {
             $this->searchParametersHandler->handlePaginationAndSorting($searchOptions, $request);
         } catch (Exception $e) {
-            $this->logger->error('Exception while handling search options.');
+            $this->logger->error('Exception while handling search options.', [
+                'url' => $request->getRequestUri(),
+                'searchOptions' => [
+                    'itemsPerPage' => $searchOptions->getItemsPerPage(),
+                    'defaultItemsPerPage' => $searchOptions->getDefaultItemsPerPage(),
+                    'sortingOptions' => $searchOptions->getSortingOptions(),
+                    'defaultSortingOptions' => $searchOptions->getDefaultSortingOption()
+                ]
+            ]);
             $this->logger->logException($e);
         }
     }
@@ -260,7 +289,8 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
-        $this->results = $this->responseParser->parse($request, $this->client->call($apiRequest));
+
+        $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
 
         return $this->results;
     }
@@ -280,7 +310,7 @@ class SearchService implements SearchServiceInterface
         return $this->aliveTestResult;
     }
 
-    public function handleProductRedirectUrl(string $url)
+    public function doPageRedirect(string $url)
     {
         header('Location: ' . $url);
     }
@@ -346,7 +376,7 @@ class SearchService implements SearchServiceInterface
         return $findologicIds;
     }
 
-    private function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
+    protected function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
     {
         if (count($productsIds) !== 1) {
             return false;
@@ -375,6 +405,11 @@ class SearchService implements SearchServiceInterface
         $itemSearchService = $this->getItemSearchService();
 
         $productId = $response->getProductsIds()[0];
+
+        if (strpos($productId, '_')) {
+            $productId = explode('_', $productId)[0];
+        }
+
         $result = $itemSearchService->getResult(
             $this->getSearchFactory()->hasItemId($productId)
         );
@@ -387,16 +422,33 @@ class SearchService implements SearchServiceInterface
 
         $productData = $result['documents'][0]['data'];
         $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
+
         if ($variationId !== $productId) {
             $productData['variation']['id'] = $variationId;
         }
 
-        return $this->buildItemURL($productData, false);
+        $withVariationId = $this->shouldExportWithVariationId($variationId);
+
+        return $this->buildItemURL($productData, $withVariationId);
+    }
+
+    private function shouldExportWithVariationId(int $variationId): bool
+    {
+        $showPleaseSelect = $this->pluginInfoService->isOptionShowPleaseSelectEnabled();
+
+        if (!$showPleaseSelect && $variationId && !$this->useMainVariationAsFallback) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Returns a variation id to be used for redirecting in searches with single result.
-     * If a variation has an identifier matching the query, its id is returned. Otherwise the main variation is used.
+     * If a variation has an identifier matching the query, its id is returned.
+     * If item main variation price is 0 and have a variation
+     * with the lowest price, the lowest price variation id is returned
+     * If all variations prices are 0, the main variation id is returned
      *
      * @param string $query
      * @param array $documents
@@ -406,13 +458,27 @@ class SearchService implements SearchServiceInterface
     {
         $lowercasedQuery = strtolower($query);
         $mainVariationId = null;
+        $cheapestVariationId = null;
+        $cheapestVariationPrice = null;
+        $mainVariationIdForFallback = null;
+
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
             $barcodes = $document['data']['barcodes'] ?? [];
+            $variationPrice = $this->getCheapestPrice($document['data']['salesPrices']);
+
+            if ($variation['isMain'] === true) {
+                $mainVariationIdForFallback = $variation['id'];
+            }
+
+            if ($variationPrice == 0) {
+                continue;
+            }
 
             if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
-                strtolower($variation['order']) == $lowercasedQuery
+                strtolower($variation['order']) == $lowercasedQuery ||
+                strtolower($variation['id']) == $lowercasedQuery
             ) {
                 return $variation['id'];
             }
@@ -426,9 +492,43 @@ class SearchService implements SearchServiceInterface
             if ($variation['isMain'] === true) {
                 $mainVariationId = $variation['id'];
             }
+
+            if ($cheapestVariationPrice && $variationPrice >= $cheapestVariationPrice) {
+                continue;
+            }
+
+            $cheapestVariationPrice = $variationPrice;
+            $cheapestVariationId = $variation['id'];
         }
 
-        return $mainVariationId;
+        if ($mainVariationId) {
+            return $mainVariationId;
+        }
+
+        if (!$cheapestVariationId) {
+            $this->useMainVariationAsFallback = true;
+
+            return $mainVariationIdForFallback;
+        }
+
+        return $cheapestVariationId;
+    }
+
+    private function getCheapestPrice(array $salesPrices): float
+    {
+        $variationPrice = 0.0;
+
+        foreach ($salesPrices as $salesPrice) {
+            if ($salesPrice['price'] == 0 ||
+                $variationPrice > 0 && $variationPrice <= $salesPrice['price']
+            ) {
+                continue;
+            }
+
+            $variationPrice = $salesPrice['price'];
+        }
+
+        return $variationPrice;
     }
 
     /**
@@ -464,5 +564,47 @@ class SearchService implements SearchServiceInterface
                 $urlBuilderRepository->getSuffix($itemId, $variationId, $withVariationId)
             )->toRelativeUrl($includeLanguage);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function requestWithRetries(Request $request)
+    {
+        $i = 0;
+        do {
+            $responseData = $this->client->call($request);
+            
+            $error = $this->validateResponse($responseData);
+            if (!$error) {
+                return $responseData;
+            }
+            $i++;
+
+            if ($i <= self::MAX_RETRIES) {
+                $logLine = sprintf('%s - Retry %d/%d takes place', $error, $i, self::MAX_RETRIES);
+                $this->logger->error($logLine, ['response' => $responseData]);
+            }
+        } while ($i <= self::MAX_RETRIES);
+
+        return $responseData;
+    }
+
+    /**
+     * @param mixed $responseData
+     * @return string|null
+     */
+    private function validateResponse($responseData)
+    {
+        $errorMsg = null;
+        if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
+            $errorMsg = 'Plentymarkets SDK returned an error response';
+        } elseif (!is_string($responseData)) {
+            $errorMsg = 'Plentymarkets SDK returned invalid response - Expected string';
+        } elseif (empty($responseData)) {
+            $errorMsg = 'Plentymarkets SDK returned empty response';
+        }
+
+        return $errorMsg;
     }
 }

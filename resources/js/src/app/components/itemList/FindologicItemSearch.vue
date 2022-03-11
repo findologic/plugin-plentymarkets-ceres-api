@@ -70,20 +70,10 @@ export default defineComponent({
 
     const selectedAutocompleteItem = computed(() => null);
 
-    const prepareSearch = () => {
+    const search = () => {
       const searchBox = $('#searchBox') as unknown as jQuery.Accordion;
 
       searchBox.collapse('hide');
-    };
-    const search = () => {
-      let searchBaseURL = '/search?query=';
-
-      if (window.App.defaultLanguage !== window.App.language)
-      {
-        searchBaseURL = `/${window.App.language}/search?query=`;
-      }
-
-      window.open(searchBaseURL + searchInput.value, '_self');
     };
 
     // Implement methods required by the Ceres template.
@@ -122,7 +112,6 @@ export default defineComponent({
       isSearchFocused,
       searchInput,
       selectedAutocompleteItem,
-      prepareSearch,
       search,
       autocomplete,
       selectAutocompleteItem,

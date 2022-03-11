@@ -11,7 +11,7 @@ module.exports = {
     chunkFilename: 'findologic_ceres.js'
   },
   plugins: [
-    // Uncomment if you want to check the bundle size:
+    // Uncomment the next line to check the bundle size
     // new BundleAnalyzerPlugin()
   ],
   externals: {

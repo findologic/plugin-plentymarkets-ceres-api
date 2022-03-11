@@ -2,6 +2,7 @@
 
 namespace Findologic\Api\Request;
 
+use Exception;
 use Findologic\Constants\Plugin;
 use Findologic\Helpers\Tags;
 use Plenty\Log\Contracts\LoggerContract;
@@ -154,8 +155,9 @@ class ParametersBuilder
         try {
             $categoryTree = $this->getCategoryTree($category);
             $categoryName = implode('_', $categoryTree);
-        } catch (\Exception $e) {
-            $this->logger->error('Could not get category name. ' . $e->getMessage(), $e->getTrace());
+        } catch (Exception $e) {
+            $this->logger->error('Could not get category name', ['category' => $category->toArray()]);
+            $this->logger->logException($e);
         }
 
         return $categoryName;
