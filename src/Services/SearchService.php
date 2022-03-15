@@ -431,8 +431,6 @@ class SearchService implements SearchServiceInterface
                 ->withResultFields($resultFields)
         ]);
 
-        $this->logger->error('result', $result);
-
         if (empty($result['documents'][0])) {
             return null;
         }

@@ -220,7 +220,6 @@ class SearchServiceTest extends TestCase
 
         $mainVariationId = 1011;
         $itemSearchServiceMock->method('getResults')->willReturn([
-            'success' => true,
             'total' => 1,
             'documents' => $this->getMultipleItemsDocuments(
                 [
@@ -540,7 +539,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -579,7 +577,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -618,7 +615,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -657,7 +653,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -697,7 +692,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -737,7 +731,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -777,7 +770,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -817,7 +809,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 1,
                     'documents' => [
                         $this->getRowItemDocument([
@@ -840,7 +831,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 1,
                     'documents' => [
                         $this->getRowItemDocument([
@@ -864,7 +854,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 1,
                     'documents' => [
                         $this->getRowItemDocument([
@@ -889,7 +878,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -922,7 +910,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -955,7 +942,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -988,7 +974,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -1025,7 +1010,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => $this->getMultipleItemsDocuments(
                         [
@@ -1061,7 +1045,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 1,
                     'documents' => [
                         [
@@ -1093,7 +1076,6 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => [
                         [
@@ -1105,7 +1087,6 @@ class SearchServiceTest extends TestCase
                     ]
                 ],
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 2,
                     'documents' => [
                         [
@@ -1145,7 +1126,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 1,
                     'documents' => [
                         [
@@ -1174,7 +1154,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 1,
                     'documents' => [
                         [
@@ -1203,7 +1182,6 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
                     'total' => 1,
                     'documents' => [
                         [
@@ -1471,7 +1449,6 @@ class SearchServiceTest extends TestCase
     private function getDefaultResultsForItemSearchService(): array
     {
         return [
-            'success' => true,
             'total' => 1,
             'documents' => [
                 [
