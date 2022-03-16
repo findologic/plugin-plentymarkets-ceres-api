@@ -224,12 +224,12 @@ class SearchServiceTest extends TestCase
                 'total' => 1,
                 'documents' => $this->getMultipleItemsDocuments(
                     [
-                            '0' => [
-                                'id' => $mainVariationId,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ]
+                        '0' => [
+                            'id' => $mainVariationId,
+                            'price' => 10.00,
+                            'isMain' => true
                         ]
+                    ]
                 )
             ]
         ]);
@@ -542,7 +542,7 @@ class SearchServiceTest extends TestCase
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     [
-                        'total' => 2,
+                        'total' => 3,
                         'documents' => $this->getMultipleItemsDocuments(
                             [
                                 '0' => [
@@ -583,7 +583,7 @@ class SearchServiceTest extends TestCase
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     [
-                        'total' => 2,
+                        'total' => 3,
                         'documents' => $this->getMultipleItemsDocuments(
                             [
                                 '0' => [
@@ -623,7 +623,7 @@ class SearchServiceTest extends TestCase
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     [
-                        'total' => 2,
+                        'total' => 3,
                         'documents' => $this->getMultipleItemsDocuments(
                             [
                                 '0' => [
@@ -663,7 +663,7 @@ class SearchServiceTest extends TestCase
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
                     [
-                        'total' => 2,
+                        'total' => 3,
                         'documents' => $this->getMultipleItemsDocuments(
                             [
                                 '0' => [
