@@ -220,16 +220,18 @@ class SearchServiceTest extends TestCase
 
         $mainVariationId = 1011;
         $itemSearchServiceMock->method('getResults')->willReturn([
-            'total' => 1,
-            'documents' => $this->getMultipleItemsDocuments(
-                [
-                        '0' => [
-                            'id' => $mainVariationId,
-                            'price' => 10.00,
-                            'isMain' => true
+            [
+                'total' => 1,
+                'documents' => $this->getMultipleItemsDocuments(
+                    [
+                            '0' => [
+                                'id' => $mainVariationId,
+                                'price' => 10.00,
+                                'isMain' => true
+                            ]
                         ]
-                    ]
-            )
+                )
+            ]
         ]);
         $searchServiceMock->method('shouldFilterInvalidProducts')->willReturn(false);
         $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(true);
@@ -539,26 +541,29 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
+
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -577,26 +582,28 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -615,26 +622,28 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -653,26 +662,28 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 0.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 0.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 0.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 0.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 0.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 0.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -692,26 +703,28 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 0.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 12.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 15.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 0.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 12.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 15.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -731,26 +744,28 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -770,26 +785,28 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 20.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 20.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -809,13 +826,15 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 1,
-                    'documents' => [
-                        $this->getRowItemDocument([
-                            'id' => 1011,
-                            'price' => 20.00,
-                            'isMain' => true,
-                        ])
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
                     ]
                 ],
                 'shopUrl' => 'https://www.test.com',
@@ -831,13 +850,15 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 1,
-                    'documents' => [
-                        $this->getRowItemDocument([
-                            'id' => 1011,
-                            'price' => 20.00,
-                            'isMain' => true,
-                        ])
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
                     ]
                 ],
                 'shopUrl' => 'https://www.test.com',
@@ -854,13 +875,15 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 1,
-                    'documents' => [
-                        $this->getRowItemDocument([
-                            'id' => 1011,
-                            'price' => 20.00,
-                            'isMain' => true,
-                        ])
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
                     ]
                 ],
                 'shopUrl' => 'https://www.test.com',
@@ -878,22 +901,24 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'model' => 'this is the text that was searched for'
-                            ],
-                        ]
-                    )
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                    'model' => 'this is the text that was searched for'
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -910,22 +935,24 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                                'number' => 'THIS IS THE TEXT THAT WAS SEARCHED FOR'
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                            ],
-                        ]
-                    )
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true,
+                                    'number' => 'THIS IS THE TEXT THAT WAS SEARCHED FOR'
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -942,22 +969,24 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'order' => 'this is the text that was searched for'
-                            ],
-                        ]
-                    )
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true,
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                    'order' => 'this is the text that was searched for'
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -974,26 +1003,28 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'barcodes' =>  [
-                                    ['code' => '123123123'],
-                                    ['code' => 'this is the text that was searched for'],
-                                    ['code' => '321321321']
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true,
                                 ],
-                            ],
-                        ]
-                    )
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                    'barcodes' =>  [
+                                        ['code' => '123123123'],
+                                        ['code' => 'this is the text that was searched for'],
+                                        ['code' => '321321321']
+                                    ],
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -1010,25 +1041,27 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'barcodes' => [
-                                    ['code' => '123123123'],
-                                    ['code' => '321321321']
-                                ]
-                            ],
-                        ]
-                    )
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true,
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                    'barcodes' => [
+                                        ['code' => '123123123'],
+                                        ['code' => '321321321']
+                                    ]
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
@@ -1045,18 +1078,20 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    [
-                                        'urlPath' => 'test-product'
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        [
+                                            'urlPath' => 'test-product'
+                                        ]
+                                    ],
+                                    'item' => [
+                                        'id' => 11
                                     ]
-                                ],
-                                'item' => [
-                                    'id' => 11
                                 ]
                             ]
                         ]
@@ -1076,38 +1111,42 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
-                    'total' => 2,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ],
-                        [
-                            'id' => 1022
+                    [
+                        'total' => 2,
+                        'documents' => [
+                            [
+                                'id' => 1011
+                            ],
+                            [
+                                'id' => 1022
+                            ]
                         ]
                     ]
                 ],
                 'variationSearchByItemIdResult' => [
-                    'total' => 2,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 2,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
-                            ]
-                        ],
-                        [
-                            'id' => 1022,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                            ],
+                            [
+                                'id' => 1022,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1126,16 +1165,18 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1154,16 +1195,18 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1182,16 +1225,18 @@ class SearchServiceTest extends TestCase
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1449,10 +1494,12 @@ class SearchServiceTest extends TestCase
     private function getDefaultResultsForItemSearchService(): array
     {
         return [
-            'total' => 1,
-            'documents' => [
-                [
-                    'id' => 1011
+            [
+                'total' => 1,
+                'documents' => [
+                    [
+                        'id' => 1011
+                    ]
                 ]
             ]
         ];

@@ -356,7 +356,7 @@ class SearchService implements SearchServiceInterface
                 ->isVisibleForClient()
                 ->isActive()
                 ->hasVariationIds($ids)
-        ]);
+        ])[0];
 
         $variationIds = [];
         if ($results['total'] > 0) {
