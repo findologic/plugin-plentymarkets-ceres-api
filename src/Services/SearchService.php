@@ -384,9 +384,9 @@ class SearchService implements SearchServiceInterface
         return $findologicIds;
     }
 
-    protected function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
+    protected function shouldRedirectToProductDetailPage(array $variationIds, HttpRequest $request): bool
     {
-        if (count($productsIds) !== 1) {
+        if (count($variationIds) !== 1) {
             return false;
         }
 
@@ -429,24 +429,25 @@ class SearchService implements SearchServiceInterface
                 ->isVisibleForClient()
                 ->isActive()
                 ->withResultFields($resultFields)
-        ]);
+        ])[0];
 
-        if (empty($result['documents'][0])) {
+        if ($result['total'] === 0 || empty($result['documents'])) {
             return null;
         }
 
-        $query = $response->getData(Response::DATA_QUERY)['query'];
+        $resultDocuments = $result['documents'];
+        $firstResultData = $resultDocuments[0]['data'];
 
-        $productData = $result['documents'][0]['data'];
-        $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
+        $query = $response->getData(Response::DATA_QUERY)['query'];
+        $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
 
         if ($variationId !== $productId) {
-            $productData['variation']['id'] = $variationId;
+            $firstResultData['variation']['id'] = $variationId;
         }
 
         $withVariationId = $this->shouldExportWithVariationId($variationId);
 
-        return $this->buildItemURL($productData, $withVariationId);
+        return $this->buildItemURL($firstResultData, $withVariationId);
     }
 
     private function shouldExportWithVariationId(int $variationId): bool
