@@ -8,7 +8,10 @@
                 <client-only>
                     <findologic-item-filter-list template-override="#vue-findologic-item-filter-list"
                                                  :facet-data="{{ facets | json_encode }}"
-                                                 :show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"></findologic-item-filter-list>
+                                                 :show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
+                                                 :current-category="{{ currentCategory | json_encode }}"
+                    ></findologic-item-filter-list
+                    >
                 </client-only>
             </div>
         </div>

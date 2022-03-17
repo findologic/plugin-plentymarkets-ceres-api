@@ -7,7 +7,8 @@ Vue.component("findologic-item-filter", {
 
     props: [
         "template",
-        "facet"
+        "facet",
+        "currentCategory"
     ],
 
     data() {

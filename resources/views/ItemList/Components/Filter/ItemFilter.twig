@@ -33,7 +33,7 @@
             <div v-if="!facet.noAvailableFiltersText">
                 <div v-if="facet.findologicFilterType === 'select'">
                     <client-only>
-                        <item-category-dropdown v-if="facetType === 'select'" template-override="#vue-findologic-item-category-dropdown" :facet="facet"></item-category-dropdown>
+                        <item-category-dropdown v-if="facetType === 'select'" template-override="#vue-findologic-item-category-dropdown" :currentCategory="currentCategory" :facet="facet"></item-category-dropdown>
                     </client-only>
                 </div>
                 <div v-else class="form-check" v-for="value in facet.values" :key="value.id">

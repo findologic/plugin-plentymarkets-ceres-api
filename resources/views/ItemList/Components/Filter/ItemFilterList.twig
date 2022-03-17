@@ -49,7 +49,7 @@
                     <client-only>
                         <div class="w-100">
                             <findologic-item-filter template-override="#vue-findologic-item-filter" v-for="facet in facets"
-                                                    v-if="!facet.isMain" :facet="facet"
+                                                    v-if="!facet.isMain" :facet="facet" :currentCategory="currentCategory"
                                                     :key="facet.id"></findologic-item-filter>
                         </div>
                     </client-only>

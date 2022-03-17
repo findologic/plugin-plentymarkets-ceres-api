@@ -35,8 +35,10 @@ class ResponseParser
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
-    public function parse(HttpRequest $request, $responseData): Response
+    public function parse(HttpRequest $request, $responseData, $apiRequest): Response
     {
+
+        $this->logger->error('api Request in pares', ['request' => $apiRequest]);
         /** @var Response $response */
         $response = $this->createResponseObject();
 

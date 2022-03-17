@@ -285,6 +285,10 @@ export default {
             const selectedFilters = this.getSelectedFilters();
             let splitedSelectedCategories = [];
 
+            if (category.name === this.currentCategory[0].name) {
+                return true;
+            }
+
             for (let i = 0; i < selectedFilters.length; i++) {
                 if (selectedFilters[i].id !== this.facet.id) {
                     continue;
