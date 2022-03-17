@@ -1,5 +1,10 @@
 # Release Notes for Findologic
 
+## 3.9.0 (2022-03-17)
+
+### Changed
+* [PLENTY-429] Using new Plentymarkets API for searching variations to ensure compatibility for upcoming plentyShop version 5.0.47.
+
 ## 3.8.1 (2022-02-24)
 
 ### Fixed
