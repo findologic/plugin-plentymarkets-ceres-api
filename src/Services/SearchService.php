@@ -356,6 +356,7 @@ class SearchService implements SearchServiceInterface
                 ->isVisibleForClient()
                 ->isActive()
                 ->hasVariationIds($ids)
+                ->withLinkToContent() // To be discussed
         ])[0];
 
         $variationIds = [];
@@ -424,11 +425,12 @@ class SearchService implements SearchServiceInterface
         $result = $itemSearchService->getResults([
             $this->getVariationSearchFactory()
                 ->hasItemId($productId)
-                ->withVariationProperties()
+                //->withVariationProperties()
                 ->withPrices()
                 ->isVisibleForClient()
                 ->isActive()
                 ->withResultFields($resultFields)
+                ->withLinkToContent() // To be discussed
         ])[0];
 
         if ($result['total'] === 0 || empty($result['documents'])) {
@@ -437,6 +439,8 @@ class SearchService implements SearchServiceInterface
 
         $resultDocuments = $result['documents'];
         $firstResultData = $resultDocuments[0]['data'];
+
+        $this->logger->error("result", $result);
 
         $query = $response->getData(Response::DATA_QUERY)['query'];
         $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
@@ -482,6 +486,8 @@ class SearchService implements SearchServiceInterface
 
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
+            $this->logger->error("variation", $variation);
+
             $barcodes = $document['data']['barcodes'] ?? [];
             $variationPrice = $document['data']['prices']['default']['price']['value'] ?: 0;
 
