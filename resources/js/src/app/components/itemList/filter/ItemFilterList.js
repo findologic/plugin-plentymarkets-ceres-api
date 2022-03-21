@@ -15,6 +15,10 @@ Vue.component("findologic-item-filter-list", {
         showSelectedFiltersCount: {
             type: Boolean,
             default: false
+        },
+        showCategoryFilter: {
+            type: Boolean,
+            default: true
         }
     },
 

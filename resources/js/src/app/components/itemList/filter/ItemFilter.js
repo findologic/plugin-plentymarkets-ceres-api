@@ -8,7 +8,8 @@ Vue.component("findologic-item-filter", {
     props: [
         "template",
         "facet",
-        "currentCategory"
+        "currentCategory",
+        "showCategoryFilter"
     ],
 
     data() {
@@ -67,6 +68,20 @@ Vue.component("findologic-item-filter", {
                 id: subCategory.id,
                 name: parentCategory.name + '_' + subCategory.name
             };
+        },
+
+        /**
+         * @returns {boolean}
+         */
+        shouldShowFilter() {
+            return this.facet.id !== 'cat' ||
+                this.facet.id === 'cat' && typeof this.showCategoryFilter === 'undefined' ||
+                this.facet.id === 'cat' && this.showCategoryFilter;
+        },
+
+        shouldShowCategoryFilter() {
+            return this.facet.id === 'cat' && typeof this.showCategoryFilter === 'undefined' ||
+                this.facet.id === 'cat' && this.showCategoryFilter;
         }
     }
 });

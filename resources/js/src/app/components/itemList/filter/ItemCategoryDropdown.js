@@ -7,11 +7,6 @@ Vue.component("item-category-dropdown", {
     computed: {
         dropdownLabel() {
             let selectedFilters = this.getSelectedFilters();
-
-            if (this.isSingleCategoryExistsAndNoFilterIsSelected(selectedFilters.length)) {
-                return this.facet.values[0].name;
-            }
-
             let label = null;
 
             for (let i = 0; i < selectedFilters.length; i++) {
@@ -30,25 +25,59 @@ Vue.component("item-category-dropdown", {
          * @returns {boolean}
          */
         isSelected() {
-            if (this.facet.id === 'cat' && this.facet.values.length === 1) {
-                return true;
+            if (typeof this.currentCategory !== 'undefined' && this.isParentCategorySelected()) {
+                return false;
             }
 
             return typeof this.getSelectedFilters().find(element => element.id === this.facet.id) !== 'undefined';
+        },
+
+        /**
+         * @returns {DataTransferItemList}
+         */
+        getCategories() {
+            if (
+                typeof this.currentCategory !== 'undefined' &&
+                this.facet.values[0].name === this.currentCategory[0].name
+            ) {
+                return this.facet.values[0].items;
+            }
+
+            return this.facet.values;
+        },
+
+        /**
+         * If not in category page, then currentCategory property is undefined.
+         * @returns {boolean}
+         */
+        isInCategoryPage() {
+            return typeof this.currentCategory !== 'undefined';
         }
     },
 
     methods: {
         getSubCategoryName(parentCategory, subCategory) {
-            return parentCategory.name + '_' + subCategory.name;
+            return this.getParentCategoryName(parentCategory) + '_' + subCategory.name;
         },
 
         /**
-         * @param {int} selectedFiltersCount
+         * @param {Object} category
+         * @returns {string}
+         */
+        getParentCategoryName(category) {
+            if (typeof this.currentCategory === 'undefined' || this.currentCategory[0].name === category.name) {
+                return category.name;
+            }
+
+            return this.currentCategory[0].name + '_' + category.name;
+        },
+
+        /**
          * @returns {boolean}
          */
-        isSingleCategoryExistsAndNoFilterIsSelected(selectedFiltersCount) {
-            return (selectedFiltersCount === 0 && this.facet.id === 'cat' && this.facet.values.length === 1);
+        isParentCategorySelected() {
+            return typeof this.getSelectedFilters().find(element => (
+                element.id === this.facet.id && element.name === this.currentCategory[0].name)) !== 'undefined'
         }
     }
 });
