@@ -343,11 +343,6 @@ class SearchService implements SearchServiceInterface
         return true;
     }
 
-    public function loadResultFieldTemplate(string $template)
-    {
-        return ResultFieldTemplate::load($template);
-    }
-
     private function filterInvalidVariationIds(array $ids): array
     {
         $variationSearchFactory = $this->getVariationSearchFactory();
@@ -356,7 +351,6 @@ class SearchService implements SearchServiceInterface
                 ->isVisibleForClient()
                 ->isActive()
                 ->hasVariationIds($ids)
-                ->withLinkToContent() // To be discussed
         ])[0];
 
         $variationIds = [];
@@ -419,19 +413,20 @@ class SearchService implements SearchServiceInterface
             $productId = explode('_', $productId)[0];
         }
 
-        // Necessary to retrieve variation data and prices
-        $resultFields = $this->loadResultFieldTemplate(ResultFieldTemplate::TEMPLATE_LIST_ITEM);
-
-        $result = $itemSearchService->getResults([
-            $this->getVariationSearchFactory()
-                ->hasItemId($productId)
-                //->withVariationProperties()
-                ->withPrices()
-                ->isVisibleForClient()
-                ->isActive()
-                ->withResultFields($resultFields)
-                ->withLinkToContent() // To be discussed
-        ])[0];
+        $variationSearchFactory = $this->getVariationSearchFactory()
+            ->hasItemId($productId)
+            ->isVisibleForClient()
+            ->isActive()
+            ->withResultFields([
+                'item.id',
+                'variation.id',
+                'variation.number',
+                'variation.model',
+                'variation.isMain',
+                'salesPrices',
+                'barcodes.*', // to be discussed
+            ]);
+        $result = $itemSearchService->getResults([$variationSearchFactory])[0];
 
         if ($result['total'] === 0 || empty($result['documents'])) {
             return null;
@@ -486,10 +481,8 @@ class SearchService implements SearchServiceInterface
 
         foreach ($documents as $document) {
             $variation = $document['data']['variation'];
-            $this->logger->error("variation", $variation);
-
             $barcodes = $document['data']['barcodes'] ?? [];
-            $variationPrice = $document['data']['prices']['default']['price']['value'] ?: 0;
+            $variationPrice = $this->getCheapestPrice($document['data']['salesPrices']);
 
             if ($variation['isMain'] === true) {
                 $mainVariationIdForFallback = $variation['id'];
@@ -501,7 +494,6 @@ class SearchService implements SearchServiceInterface
 
             if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
-                strtolower($variation['order']) == $lowercasedQuery ||
                 strtolower($variation['id']) == $lowercasedQuery
             ) {
                 return $variation['id'];
@@ -536,6 +528,23 @@ class SearchService implements SearchServiceInterface
         }
 
         return $cheapestVariationId;
+    }
+
+    private function getCheapestPrice(array $salesPrices): float
+    {
+        $variationPrice = 0.0;
+
+        foreach ($salesPrices as $salesPrice) {
+            if ($salesPrice['price'] == 0 ||
+                $variationPrice > 0 && $variationPrice <= $salesPrice['price']
+            ) {
+                continue;
+            }
+
+            $variationPrice = $salesPrice['price'];
+        }
+
+        return $variationPrice;
     }
 
     /**
