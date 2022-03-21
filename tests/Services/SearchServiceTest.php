@@ -210,13 +210,9 @@ class SearchServiceTest extends TestCase
             'getItemSearchService',
             'getVariationSearchFactory',
             'doPageRedirect',
-            'loadResultFieldTemplate'
         ]);
 
         $searchServiceMock->method('search')->willReturn($responseMock);
-        $searchServiceMock->expects($this->once())
-            ->method('loadResultFieldTemplate')
-            ->with(ResultFieldTemplate::TEMPLATE_LIST_ITEM);
 
         $mainVariationId = 1011;
         $itemSearchServiceMock->method('getResults')->willReturn([
