@@ -424,7 +424,7 @@ class SearchService implements SearchServiceInterface
                 'variation.model',
                 'variation.isMain',
                 'salesPrices',
-                'barcodes.*', // to be discussed
+                'barcodes.*',
             ]);
         $result = $itemSearchService->getResults([$variationSearchFactory])[0];
 
@@ -434,9 +434,7 @@ class SearchService implements SearchServiceInterface
 
         $resultDocuments = $result['documents'];
         $firstResultData = $resultDocuments[0]['data'];
-
-        $this->logger->error("result", $result);
-
+        
         $query = $response->getData(Response::DATA_QUERY)['query'];
         $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
 
