@@ -1,5 +1,13 @@
 # Release Notes für Findologic
 
+## 3.9.1 (2022-03-22)
+
+### Behoben
+* [PLENTY-434] Ein Fehler wurde behoben, wodurch nicht auf eine konfigurierte Landinpage weitergeleitet wurde sondern auf die Produktdetailseite wenn es ein einziges Suchresultat gab.
+
+### Geändert
+* [PLENTY-428] Plentymarkets Review Version 3.9.0
+
 ## 3.9.0 (2022-03-17)
 
 ### Geändert

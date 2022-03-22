@@ -1,5 +1,13 @@
 # Release Notes for Findologic
 
+## 3.9.1 (2022-03-22)
+
+### Fixed
+* [PLENTY-434] A bug has been fixed, where a configured landingpage had not precedence over the redirect of one search result.
+
+### Changed
+* [PLENTY-428] Plentymarkets Review Version 3.9.0
+
 ## 3.9.0 (2022-03-17)
 
 ### Changed
