@@ -160,6 +160,7 @@ class SearchService implements SearchServiceInterface
         $results = $this->search($request, $externalSearch);
         if ($landingPageUrl = $results->getLandingPage()) {
             $this->doPageRedirect($landingPageUrl);
+            return;
         }
 
         if ($results->getResultsCount() == 0) {
@@ -174,6 +175,7 @@ class SearchService implements SearchServiceInterface
 
         if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
+            return;
         }
 
         /** @var ExternalSearch $searchQuery */
@@ -575,7 +577,7 @@ class SearchService implements SearchServiceInterface
         $i = 0;
         do {
             $responseData = $this->client->call($request);
-            
+
             $error = $this->validateResponse($responseData);
             if (!$error) {
                 return $responseData;

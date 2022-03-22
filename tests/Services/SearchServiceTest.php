@@ -132,7 +132,7 @@ class SearchServiceTest extends TestCase
     {
         global $classInstances;
         $classInstances = [];
-        
+
         parent::tearDown();
     }
 
@@ -246,10 +246,10 @@ class SearchServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider redirectToProductPageOnDoSearchProvider
+     * @dataProvider redirectToProductPageOrLandingpageOnDoSearchProvider
      * @runInSeparateProcess
      */
-    public function testRedirectToProductPageOnDoSearch(
+    public function testRedirectToProductPageOrLandingpageOnDoSearch(
         array $query,
         array $responseVariationIds,
         array $responseProductIds,
@@ -258,6 +258,7 @@ class SearchServiceTest extends TestCase
         string $shopUrl,
         array $dataQueryInfoMessage,
         $redirectUrl,
+        $landingPageUrl,
         array $attributes,
         string $language = 'de',
         string $defaultLanguage = 'de',
@@ -275,28 +276,36 @@ class SearchServiceTest extends TestCase
             ->willReturn($isOptionShowPleaseSelectEnabled);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
         $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
-        if ($redirectUrl) {
-            $responseMock->expects($this->exactly(2))->method('getData')
-                ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
-                ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
-            $responseMock->expects($this->once())->method('getProductsIds')->willReturn($responseProductIds);
-        } elseif ($dataQueryInfoMessage['queryStringType'] != 'notImprovedOrCorrected') {
-            $responseMock->expects($this->once())->method('getData')
-                ->with(Response::DATA_QUERY_INFO_MESSAGE)
-                ->willReturn($dataQueryInfoMessage);
-        }
-        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
-
 
         $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
-        $itemSearchServiceMock->expects($this->at(0))->method('getResults')->willReturn($itemSearchServiceResultsAll);
-        if ($redirectUrl) {
-            $itemSearchServiceMock->expects($this->at(1))
+
+        if ($landingPageUrl) {
+            $responseMock->expects($this->once())->method('getLandingPage')
+                ->willReturn($landingPageUrl);
+        } else {
+            $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+            $itemSearchServiceMock->expects($this->at(0))
                 ->method('getResults')
-                ->willReturn($variationSearchByItemIdResult);
+                ->willReturn($itemSearchServiceResultsAll);
+
+            if ($redirectUrl) {
+                $responseMock->expects($this->exactly(2))->method('getData')
+                    ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
+                    ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
+                $responseMock->expects($this->once())->method('getProductsIds')->willReturn($responseProductIds);
+
+                $itemSearchServiceMock->expects($this->at(1))
+                    ->method('getResults')
+                    ->willReturn($variationSearchByItemIdResult);
+            } elseif ($dataQueryInfoMessage['queryStringType'] != 'notImprovedOrCorrected') {
+                $responseMock->expects($this->once())->method('getData')
+                    ->with(Response::DATA_QUERY_INFO_MESSAGE)
+                    ->willReturn($dataQueryInfoMessage);
+            }
         }
+
+        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',
@@ -307,7 +316,9 @@ class SearchServiceTest extends TestCase
             'loadResultFieldTemplate'
         ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
-        if ($redirectUrl) {
+        if ($landingPageUrl) {
+            $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($landingPageUrl);
+        } elseif ($redirectUrl) {
             $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($redirectUrl);
         } else {
             $searchServiceMock->expects($this->never())->method('doPageRedirect');
@@ -532,7 +543,7 @@ class SearchServiceTest extends TestCase
         return $documents;
     }
 
-    public function redirectToProductPageOnDoSearchProvider(): array
+    public function redirectToProductPageOrLandingpageOnDoSearchProvider(): array
     {
         return [
             'Show please select config is set, cheapest variation found, no variation information in redirect url' => [
@@ -570,6 +581,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -610,6 +622,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -650,6 +663,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -690,6 +704,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -731,6 +746,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11_1012',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -772,6 +788,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11_1011',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -813,6 +830,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11_1012',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -842,6 +860,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product with another language found' => [
@@ -866,6 +885,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/en/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [],
                 'language' => 'en'
             ],
@@ -891,6 +911,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -925,6 +946,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -959,6 +981,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -993,6 +1016,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -1031,6 +1055,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -1068,6 +1093,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -1102,6 +1128,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 2
                 ]
@@ -1157,6 +1184,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product found and query string type is corrected' => [
@@ -1187,6 +1215,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'corrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product found and query string type is improved' => [
@@ -1217,6 +1246,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'improved'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product found but filters are set' => [
@@ -1247,12 +1277,38 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => [
                     'attrib' => [
                         'cat' => 'Blubbergurken'
                     ]
                 ]
             ],
+            'One product found but landing page match exists' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
+                'variationSearchByItemIdResult' => [
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => 'https://www.test.com/AGB',
+                'attributes' => []
+            ]
         ];
     }
 
