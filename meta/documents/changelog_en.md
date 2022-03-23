@@ -1,9 +1,24 @@
 # Release Notes for Findologic
 
-## 3.8.1 (2022-02-24)
+## 3.9.1 (2022-03-22)
+
+### Fixed
+* [PLENTY-434] A bug has been fixed, where a configured landingpage had no precedence over the redirect of one search result.
 
 ### Changed
+* [PLENTY-428] Plentymarkets Review Version 3.9.0
 
+## 3.9.0 (2022-03-17)
+
+### Changed
+* [PLENTY-429] Using new Plentymarkets API for searching variations to ensure compatibility for upcoming plentyShop version 5.0.47.
+
+## 3.8.1 (2022-02-24)
+
+### Fixed
+* [PLENTY-426] For price filter with type text a min and max value must be given.
+
+### Changed
 * [PLENTY-428] Plentymarkets Review Version 3.8.0
 
 ## 3.8.0 (2022-02-14)
