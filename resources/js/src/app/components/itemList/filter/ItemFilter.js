@@ -79,6 +79,9 @@ Vue.component("findologic-item-filter", {
                 this.facet.id === 'cat' && this.showCategoryFilter;
         },
 
+        /**
+         * @returns {boolean}
+         */
         shouldShowCategoryFilter() {
             return this.facet.id === 'cat' && typeof this.showCategoryFilter === 'undefined' ||
                 this.facet.id === 'cat' && this.showCategoryFilter;

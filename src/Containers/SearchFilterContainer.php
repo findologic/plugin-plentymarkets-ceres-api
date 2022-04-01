@@ -24,7 +24,7 @@ class SearchFilterContainer
         $currentCategory = $searchService->getCategoryService()->getCurrentCategory();
         $showCategoryFilter = true;
 
-        if (null !== $currentCategory && $currentCategory->level !== 1) {
+        if ($currentCategory !== null && $currentCategory->level > 1) {
             $showCategoryFilter = false;
         }
 
