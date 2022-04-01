@@ -2,7 +2,7 @@
 <script type="x/template" id="vue-findologic-item-filter">
     {# Additionally checking that min and max values aren't the same, because this would be a useless filter. #}
     <div v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))" class="card col-md-{{ config('Findologic.filters_per_row') }}" :class="[isSelected ? 'fl-active' : '', facet.cssClass]">
-        <div v-if="shouldShowFilter()" class="facet-title">
+        <div v-if="facet.id !== 'cat' || shouldShowCategoryFilter()" class="facet-title">
             <div class="h3" v-text="facet.name"></div>
             <div class="selected-values-count" v-if="selectedValuesCount > 0 && this.$parent.showSelectedFiltersCount" v-text="selectedValuesCount"></div>
         </div>
@@ -72,7 +72,7 @@
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>
-        <div v-else-if="facetType === 'select' && shouldShowFilter()">
+        <div v-else-if="facetType === 'select' && (facet.id !== 'cat' || shouldShowCategoryFilter())">
             <div v-if="!facet.noAvailableFiltersText">
                 <client-only>
                     <item-dropdown template-override="#vue-findologic-item-dropdown" :facet="facet"></item-dropdown>
@@ -80,7 +80,7 @@
             </div>
             <p v-if="facet.noAvailableFiltersText" v-text="facet.noAvailableFiltersText"></p>
         </div>
-        <div v-else-if="shouldShowFilter()">
+        <div v-else-if="facet.id !== 'cat' || shouldShowCategoryFilter()">
             <div class="form-check" v-for="value in facet.values" :key="value.id">
                 <input :id="'option-' + value.id" class="form-check-input hidden-xs-up" type="checkbox" :checked="value.selected" @change="updateFacet(value)" :disabled="isLoading">
                 <label :for="'option-' + value.id" class="form-check-label" v-text="value.name" rel="nofollow"></label>
