@@ -19,7 +19,7 @@ Vue.component("item-filter-price", {
     },
 
     created() {
-        this.$options.template = this.template || "#vue-item-filter-price";
+        this.$options.template = this.template || "#findologic-item-price";
 
         this.MIN_PRICE = 0;
         this.MAX_PRICE = Number.MAX_SAFE_INTEGER;

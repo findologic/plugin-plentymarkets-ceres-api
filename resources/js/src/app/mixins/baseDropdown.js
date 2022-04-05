@@ -4,7 +4,7 @@ export default {
         "facet"
     ],
 
-    data: function () {
+    data() {
         return {
             isOpen: false
         }

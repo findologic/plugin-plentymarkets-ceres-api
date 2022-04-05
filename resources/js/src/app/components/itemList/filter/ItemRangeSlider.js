@@ -18,7 +18,7 @@ Vue.component("item-range-slider", {
     created() {
         let self = this;
 
-        this.$options.template = this.template || "#vue-item-range-slider";
+        this.$options.template = this.template || "#findologic-item-range-slider";
 
         const values = this.getSelectedFilterValue(this.facet.id);
 

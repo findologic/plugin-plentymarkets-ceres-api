@@ -10,7 +10,7 @@ Vue.component("item-filter-image", {
     ],
 
     created() {
-        this.$options.template = this.template || "#vue-findologic-item-filter-image";
+        this.$options.template = this.template || "#findologic-item-filter-image";
     },
 
     computed: {

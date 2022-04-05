@@ -5,15 +5,16 @@ Vue.component("findologic-item-filter", {
 
     delimiters: ["${", "}"],
 
-    props: [
-        "template",
-        "facet"
-    ],
-
-    data() {
-        return {
-            facetType: null
-        }
+    props: {
+        template:
+        {
+            type: String,
+            default: "#findologic-item-filter"
+        },
+        facet:
+        {
+            type: Object
+        },
     },
 
     computed: {
@@ -49,6 +50,8 @@ Vue.component("findologic-item-filter", {
 
     created() {
         this.$options.template = this.template || "#vue-item-filter";
+        console.log("Template: " + this.$options.template);
+
         this.facetType = (typeof this.facet.findologicFilterType !== 'undefined') ? this.facet.findologicFilterType : this.facet.type;
     },
 

@@ -11,7 +11,7 @@ Vue.component("item-color-tiles", {
     ],
 
     created() {
-        this.$options.template = this.template || "#vue-item-color-tiles";
+        this.$options.template = this.template || "#findologic-item-color-tiles";
     },
 
     computed: {

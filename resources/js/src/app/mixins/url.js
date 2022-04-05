@@ -434,6 +434,8 @@ export default {
         getFacetIdInfoMap() {
             const map = {};
 
+            console.log(this.$store.state.itemList.facets);
+
             this.$store.state.itemList.facets.forEach(facet => {
                 map[facet.id] = facet;
             });

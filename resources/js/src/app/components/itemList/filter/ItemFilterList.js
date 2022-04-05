@@ -1,5 +1,10 @@
 Vue.component("findologic-item-filter-list", {
     props: {
+        template:
+        {
+            type: String,
+            default: "#findologic-item-filter-list"
+        },
         facetData: {
             type: Array,
             default: () => []
@@ -30,6 +35,7 @@ Vue.component("findologic-item-filter-list", {
     },
 
     created() {
+        this.$options.template = this.template || "#vue-item-filter-list";
         this.$store.commit("addFacets", this.facetData);
     }
 });

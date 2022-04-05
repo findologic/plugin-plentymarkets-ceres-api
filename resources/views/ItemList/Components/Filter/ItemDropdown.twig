@@ -1,5 +1,5 @@
 <!-- SSR:template(findologic-item-dropdown) -->
-<script type="x/template" id="vue-findologic-item-dropdown">
+<script type="x/template" id="findologic-item-dropdown">
     <div class="fl-dropdown">
         <div v-for="value in facet.values.slice(0, facet.itemCount)" class="form-check">
             <input :id="'option-' + value.id" :disabled="isLoading" :checked="value.selected"  @change="selected(value.name)" class="form-check-input hidden-xs-up" type="checkbox"/>

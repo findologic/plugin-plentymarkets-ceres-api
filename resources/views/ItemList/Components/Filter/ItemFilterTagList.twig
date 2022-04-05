@@ -1,8 +1,8 @@
-<!-- SSR:template(item-filter-tag-list) -->
+<!-- SSR:template(vue-item-filter-tag-list) -->
 <script type="x/template" id="vue-item-filter-tag-list">
     <div class="selected-filters clearfix">
         <span :class="'selected-filter filter-' + tag.id" v-for="tag in tagList" @click="removeTag(tag)" rel="nofollow">
-            <span v-if="facetInfo[tag.id]">
+            <span v-if="facetInfo && facetInfo[tag.id]">
                 <i class="fa fa-times" aria-hidden="true"></i> ${ facetInfo[tag.id].name }: ${ tag.name }
             </span>
             <span v-else>
