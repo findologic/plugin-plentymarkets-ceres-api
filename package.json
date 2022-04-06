@@ -8,7 +8,7 @@
   "scripts": {
     "serve": "vue-cli-service serve resources/js/src/index.ts --https --key private.key --cert private.pem --disable-host-check --hot",
     "dev": "vue-cli-service build resources/js/src/index.ts --mode=development --modern",
-    "lint": "vue-cli-service lint resources/js/src",
+    "lint": "vue-cli-service lint resources/js/src resources/js/types",
     "build": "vue-cli-service build resources/js/src/index.ts --mode=production",
     "test": "jest --coverageDirectory=jest"
   },
