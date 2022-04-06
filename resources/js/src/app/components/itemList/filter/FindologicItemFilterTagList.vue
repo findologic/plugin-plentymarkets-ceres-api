@@ -56,7 +56,7 @@ export default defineComponent({
     const store = root.$store as PlentyVuexStore;
 
     const tagList = computed((): Facet[] => UrlBuilder.getSelectedFilters(store));
-    const facetInfo = computed(() => {
+    const facetNames = computed(() => {
       const map: {[key: string]: string} = {};
 
       store.state.itemList.facets.forEach((facet: Facet) => {
@@ -74,7 +74,7 @@ export default defineComponent({
 
     return {
       tagList,
-      facetNames: facetInfo,
+      facetNames,
       removeTag,
       TranslationService,
       resetAllTags

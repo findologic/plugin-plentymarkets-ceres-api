@@ -54,14 +54,16 @@
         <div class="ml-0 main-filters">
             <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
                 <div class="card-columns row">
-                    <div class="w-100">
-                        <!-- SSR:template(findologic-item-filter) -->
-                            <findologic-item-filter template-override="#vue-findologic-item-filter"
-                                                    v-for="facet in facets"
-                                                    :facet="facet"
-                                                    :key="facet.id"></findologic-item-filter>
-                        <!-- /SSR -->
-                    </div>
+                    <client-only>
+                        <div class="w-100">
+                            <!-- SSR:template(findologic-item-filter) -->
+                                <findologic-item-filter template-override="#vue-findologic-item-filter"
+                                                        v-for="facet in facets"
+                                                        :facet="facet"
+                                                        :key="facet.id"></findologic-item-filter>
+                            <!-- /SSR -->
+                        </div>
+                    </client-only>
                 </div>
             </div>
         </div>
@@ -73,27 +75,29 @@
 <script type="x/template" data-component="item-search">
     {{ component( "Findologic::ItemList.Components.ItemSearch") }}
 
-    <form method="GET" action="{{ languagePath }}/search" @submit="search()">
-        <div class="container-max">
-            <div class="position-relative">
-                <div class="d-flex flex-grow-1 position-relative my-2">
-                    <input name="query"
-                           type="search"
-                           class="search-input flex-grow-1 px-3 py-2"
-                           ref="searchInput"
-                           {% if minimalSearchTermLength > 0 %}
-                               minlength="{{ minimalSearchTermLength }}"
-                           {% endif %}
-                           @keyup.down="keydown()"
-                           @keyup.up="keyup()"
-                           @focus="isSearchFocused = true"
-                           @blur="setIsSearchFocused(false)">
-                    <button class="search-submit px-3" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
+    <client-only>
+        <form method="GET" action="{{ languagePath }}/search" @submit="search()">
+            <div class="container-max">
+                <div class="position-relative">
+                    <div class="d-flex flex-grow-1 position-relative my-2">
+                        <input name="query"
+                               type="search"
+                               class="search-input flex-grow-1 px-3 py-2"
+                               ref="searchInput"
+                               {% if minimalSearchTermLength > 0 %}
+                                   minlength="{{ minimalSearchTermLength }}"
+                               {% endif %}
+                               @keyup.down="keydown()"
+                               @keyup.up="keyup()"
+                               @focus="isSearchFocused = true"
+                               @blur="setIsSearchFocused(false)">
+                        <button class="search-submit px-3" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </client-only>
 </script>
 <!-- /SSR -->
