@@ -7,7 +7,7 @@ import {
 } from '../../../shared/interfaces';
 import { computed, defineComponent } from '@vue/composition-api';
 
-interface ItemColorTilesProps extends TemplateOverridable, FacetAware {
+interface ItemFilterListProps extends TemplateOverridable, FacetAware {
   allFacets: Facet[];
   facets: Facet[];
   allowedFacetsTypes: string[];
@@ -25,7 +25,7 @@ export default defineComponent({
       default: () => []
     }
   },
-  setup: (props: ItemColorTilesProps, { root }) => {
+  setup: (props: ItemFilterListProps, { root }) => {
     const store = root.$store as PlentyVuexStore;
 
     const facets = computed(() => {
