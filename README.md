@@ -43,15 +43,6 @@ Create separate plugin sets in the Plentymarkets for development or debugging pu
 * nodejs 16
 * npm 8
 
-### Create SSL certificates
-
-```bash
-openssl genrsa -out private.key 4096
-openssl req -new -sha256 -out private.csr -key private.key
-openssl x509 -req -days 3650 -in private.csr -signkey private.key -out private.crt -extensions req_ext
-openssl x509 -in private.crt -out private.pem -outform PEM
-```
-
 ### Installing dependencies
 
 Install PHP dependencies:
@@ -136,6 +127,71 @@ Before pushing you may run build to ensure your JS/CSS is built.
 ```
 npm run build
 ```
+
+### Local TS and Vue development
+
+When developing you can also run a local test server, where your compiled JS and CSS is being fetched from your local system. The following things have to be done in order to serve files locally:
+
+* Create SSL certificates
+* Start local development server
+* Update views to serve files locally
+* Accept certificates in your browser
+
+**Create SSL certificates**
+
+Simply run these commands, which automatically create `private.crt`, `private.csr`, `private.key` and `private.pem`. They will be automatically used later by the development server to serve the resources.
+
+These certificates have to be only generated once and are valid for 10 years.
+
+```bash
+openssl genrsa -out private.key 4096
+openssl req -new -sha256 -out private.csr -key private.key
+openssl x509 -req -days 3650 -in private.csr -signkey private.key -out private.crt -extensions req_ext
+openssl x509 -in private.crt -out private.pem -outform PEM
+```
+
+**Starting local development server**
+
+You can start your local development server anytime with this command.
+
+```bash
+npm run serve
+```
+
+**Serve files locally**
+
+In order to serve the files locally, simply update the views responsible for loading them.
+
+**`resources/views/content/scripts.twig`**
+
+```twig
+{# Old #}
+<script src="{{ plugin_path("Findologic") }}/js/dist/findologic_ceres.js"></script>
+
+{# Replace old with this #}
+<script src="https://localhost:8080/findologic_ceres.js"></script>
+```
+
+**`resources/views/content/styles.twig`**
+
+```twig
+{# Old #}
+<link rel="stylesheet" href="{{ plugin_path("Findologic") }}/js/dist/findologic_ceres.css" />
+
+{# Replace old with this #}
+<link rel="stylesheet" href="https://localhost:8080/findologic_ceres.css" />
+```
+
+Push these changes to your Plugin-Set using the PlentyDevTool.
+
+**Accept certificates in your browser**
+
+Open the storefront of your Plugin-Set and open the browser devtools. Search in your network-tab for the JS and CSS file that should be failing to load.
+Right-click them and open them in a new tab. There click on **Advanced** and accept to load the resource. Once done for both, simply reload the storefront page. That's it,
+the files are now served from your local system. You also have the benefits of HMR, which will automatically refresh your components,
+without having to manually reload the page after each change.
+
+This has to be done usually once per development session.
 
 ### Running unit-tests locally
 
