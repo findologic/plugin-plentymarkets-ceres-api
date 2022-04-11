@@ -1,5 +1,12 @@
 # Release Notes for Findologic
 
+## 3.9.2 (2022-04-11)
+
+### Fixed
+* [PLENTY-427] A bug has been fixed, where the category filter on navigation didn't show sub-categories.
+* [PLENTY-437] A bug has been fixed, where an error in ItemFilterTagList occured when using a filter on navigation with plentyShop 5.0.48 and active SSR.
+
+
 ## 3.9.1 (2022-03-22)
 
 ### Fixed
