@@ -278,6 +278,27 @@ export default {
         },
 
         /**
+         * @param {Object} category
+         * @returns {boolean}
+         */
+        isCategorySelected(category) {
+            const selectedFilters = this.getSelectedFilters();
+            let splitedSelectedCategories = [];
+
+            for (let i = 0; i < selectedFilters.length; i++) {
+                if (selectedFilters[i].id !== this.facet.id) {
+                    continue;
+                }
+
+                splitedSelectedCategories = selectedFilters[i].name.split('>');
+
+                break;
+            }
+
+            return typeof splitedSelectedCategories.find(categoryName => categoryName.trim() === category.name) !== 'undefined';
+        },
+
+        /**
          * @param attributeValue
          * @returns {boolean}
          */
