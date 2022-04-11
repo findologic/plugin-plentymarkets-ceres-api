@@ -1,7 +1,8 @@
 export default {
     props: [
         "template",
-        "facet"
+        "facet",
+        "currentCategory"
     ],
 
     data: function () {

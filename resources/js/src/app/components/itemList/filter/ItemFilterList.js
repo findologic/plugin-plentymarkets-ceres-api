@@ -4,6 +4,10 @@ Vue.component("findologic-item-filter-list", {
             type: Array,
             default: () => []
         },
+        currentCategory: {
+            type: Array,
+            default: () => []
+        },
         allowedFacetsTypes: {
             type: Array,
             default: () => []
@@ -11,6 +15,10 @@ Vue.component("findologic-item-filter-list", {
         showSelectedFiltersCount: {
             type: Boolean,
             default: false
+        },
+        showCategoryFilter: {
+            type: Boolean,
+            default: true
         }
     },
 
