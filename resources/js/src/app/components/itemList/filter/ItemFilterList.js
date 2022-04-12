@@ -38,6 +38,9 @@ Vue.component("findologic-item-filter-list", {
     },
 
     created() {
-        this.$store.commit("addFacets", this.facetData);
+        const facets = this.$store.state.itemList.facets;
+        if (!facets && !facets.length) {
+            this.$store.commit("addFacets", this.facetData);
+        }
     }
 });

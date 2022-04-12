@@ -25,7 +25,7 @@ Vue.component("item-category-dropdown", {
          * @returns {boolean}
          */
         isSelected() {
-            if (typeof this.currentCategory !== 'undefined' && this.isParentCategorySelected()) {
+            if (typeof this.currentCategory !== 'undefined') {
                 return false;
             }
 
@@ -37,8 +37,7 @@ Vue.component("item-category-dropdown", {
          */
         getCategories() {
             if (
-                typeof this.currentCategory !== 'undefined' &&
-                this.facet.values[0].name === this.currentCategory[0].name
+                typeof this.currentCategory !== 'undefined'
             ) {
                 return this.facet.values[0].items;
             }
