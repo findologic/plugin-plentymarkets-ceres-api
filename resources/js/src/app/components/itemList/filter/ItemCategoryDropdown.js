@@ -25,6 +25,8 @@ Vue.component("item-category-dropdown", {
          * @returns {boolean}
          */
         isSelected() {
+            console.log("currentCategory: " + this.currentCategory);
+
             if (typeof this.currentCategory !== 'undefined') {
                 return false;
             }

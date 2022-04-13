@@ -32,9 +32,12 @@ Vue.component("findologic-item-filter", {
         },
 
         isSelected() {
+            /*
             if (this.facet.id === 'cat' && this.facet.values.length === 1) {
                 return true;
             }
+            */
+
 
             return typeof this.getSelectedFilters().find(element => element.id == this.facet.id) !== 'undefined';
         },

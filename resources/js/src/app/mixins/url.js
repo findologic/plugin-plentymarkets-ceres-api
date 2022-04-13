@@ -164,13 +164,13 @@ export default {
 
             } else if (this.facet.select === 'single') {
                 if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetValue)) {
-                    if (this.facet.id === 'cat' && facetValue.includes('_') ) {
+/*                    if (this.facet.id === 'cat' && facetValue.includes('_') ) {
                         // Subcategory deselection
                         attributes[facetId] = [facetValue.split('_')[0]];
-                    } else {
+                    } else { */
                         let index = Object.values(attributes[facetId]).indexOf(facetValue);
                         delete attributes[facetId][index];
-                    }
+                   // }
                 } else {
                     attributes[facetId] = [facetValue];
                 }

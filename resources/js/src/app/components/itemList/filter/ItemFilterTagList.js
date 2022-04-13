@@ -40,12 +40,14 @@ Vue.component("item-filter-tag-list", {
 
     created() {
         this.$options.template = this.template || "#vue-item-filter-tag-list";
-
+/*
         const facets = this.$store.state.itemList.facets;
         if (!facets && !facets.length)
         {
             this.$store.commit("addFacets", this.facetData);
         }
+
+ */
     },
 
     methods: {
