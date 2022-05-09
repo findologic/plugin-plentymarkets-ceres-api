@@ -351,7 +351,7 @@ class SearchService implements SearchServiceInterface
 
         $variationIds = [];
 
-        if ($results['success'] && $results['total'] > 0) {
+        if (isset($results['success']) && $results['total'] > 0) {
             foreach ($results['documents'] as $document) {
                 $variationIds[] = $document['id'];
             }
@@ -414,7 +414,7 @@ class SearchService implements SearchServiceInterface
             $this->getSearchFactory()->hasItemId($productId)
         );
 
-        if (!$result['success'] || empty($result['documents'][0])) {
+        if (!isset($result['success']) || empty($result['documents'][0])) {
             return null;
         }
 
@@ -574,7 +574,7 @@ class SearchService implements SearchServiceInterface
         $i = 0;
         do {
             $responseData = $this->client->call($request);
-            
+
             $error = $this->validateResponse($responseData);
             if (!$error) {
                 return $responseData;
