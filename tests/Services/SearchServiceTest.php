@@ -197,8 +197,10 @@ class SearchServiceTest extends TestCase
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
+        $itemSearchServiceMock->expects($this->once())
+            ->method('getResult')
+            ->willReturn(['success' => false, 'total' => 0]);
 
         $searchFactoryMock = $this->getSearchFactoryMock();
 

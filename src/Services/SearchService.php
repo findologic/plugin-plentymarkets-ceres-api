@@ -414,7 +414,7 @@ class SearchService implements SearchServiceInterface
             $this->getSearchFactory()->hasItemId($productId)
         );
 
-        if (!isset($result['success']) || empty($result['documents'][0])) {
+        if (!$result['success'] || empty($result['documents'][0])) {
             return null;
         }
 
