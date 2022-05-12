@@ -87,7 +87,7 @@
 <script lang="ts">
 import BaseDropdown from '../../../mixins/baseDropdown';
 import { CategoryFacet, FacetAware, FacetValue, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
-import { defineComponent, onMounted, ref } from '@vue/composition-api';
+import { computed, defineComponent, onMounted, ref } from '@vue/composition-api';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
 
@@ -117,33 +117,28 @@ export default defineComponent({
       return '';
     };
 
-    const isSelected = (): boolean => {
+    const isSelected = computed((): boolean => {
       if (typeof props.currentCategory !== 'undefined' && isParentCategorySelected()) {
         return false;
       }
 
       return typeof UrlBuilder.getSelectedFilters().find(element => element.id === props.facet.id) !== 'undefined';
-    };
+    });
 
-    const isInCategoryPage = (): boolean => {
+    const isInCategoryPage = computed((): boolean => {
       return typeof props.currentCategory !== 'undefined';
-    };
+    });
 
-    const getCategories = (): FacetValue[] | undefined  => {
+    const getCategories = computed((): FacetValue[] | undefined  => {
       if (
           typeof props.currentCategory !== 'undefined' &&
           props.facet.values?.[0].name === props.currentCategory[0].name
       ) {
-        console.log('With currentCategory');
-        console.log(props.facet.values?.[0].items);
         return props.facet.values?.[0].items;
       }
 
-      console.log('Without currentCategory');
-      console.log(props.facet.values);
-
       return props.facet.values;
-    };
+    });
 
     const getSubCategoryName = (parentCategory: FacetValue, subCategory: FacetValue): string => {
       return getParentCategoryName(parentCategory) + '_' + subCategory.name;

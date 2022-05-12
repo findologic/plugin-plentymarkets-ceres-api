@@ -7,7 +7,7 @@
     :class="[facet.cssClass, 'col-md-' + filtersPerRow]"
   >
     <div
-      v-if="facet.id !== 'cat' || shouldShowCategoryFilter()"
+      v-if="facet.id !== 'cat' || shouldShowCategoryFilter"
       class="facet-title"
     >
       <div
@@ -41,7 +41,7 @@
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else-if="facet.id === 'cat' && shouldShowCategoryFilter()">
+    <div v-else-if="facet.id === 'cat' && shouldShowCategoryFilter">
       <div v-if="!facet.noAvailableFiltersText">
         <div v-if="facet.findologicFilterType === 'select'">
           <item-category-dropdown
@@ -52,7 +52,7 @@
         </div>
         <div
           v-for="value in facet.values"
-          v-else-if="facet.id === 'cat' && shouldShowCategoryFilter()"
+          v-else-if="facet.id === 'cat' && shouldShowCategoryFilter"
           :key="value.id"
           class="form-check"
         >
@@ -114,7 +114,7 @@
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else-if="facet.findologicFilterType === 'select' && (facet.id !== 'cat' || shouldShowCategoryFilter())">
+    <div v-else-if="facet.findologicFilterType === 'select' && (facet.id !== 'cat' || shouldShowCategoryFilter)">
       <div v-if="!facet.noAvailableFiltersText">
         <item-dropdown :facet="facet" />
       </div>
@@ -123,7 +123,7 @@
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else-if="facet.id !== 'cat' || shouldShowCategoryFilter()">
+    <div v-else-if="facet.id !== 'cat' || shouldShowCategoryFilter">
       <div
         v-for="value in facet.values"
         :key="value.id"
@@ -250,10 +250,10 @@ export default defineComponent({
       return selectedFacets.length;
     });
 
-    const shouldShowCategoryFilter = (): boolean => {
+    const shouldShowCategoryFilter = computed((): boolean => {
       return props.facet.id === 'cat' && typeof props.showCategoryFilter === 'undefined' ||
           props.facet.id === 'cat' && props.showCategoryFilter;
-    };
+    });
 
     return {
       selectedFacets,
