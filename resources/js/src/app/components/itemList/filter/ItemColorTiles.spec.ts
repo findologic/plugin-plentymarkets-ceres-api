@@ -14,18 +14,21 @@ describe('ItemColorTiles', () => {
                 {
                     name: 'Red',
                     hexValue: '#ff0000',
-                    selected: false
+                    selected: false,
+                    items: []
                 },
                 {
                     name: 'Colorful',
                     hexValue: null,
                     colorImageUrl: 'https://your-store.com/images/colors/colorful.png',
-                    selected: false
+                    selected: false,
+                    items: []
                 },
                 {
                     name: 'Unknown',
                     hexValue: null,
-                    selected: false
+                    selected: false,
+                    items: []
                 }
             ]
         };

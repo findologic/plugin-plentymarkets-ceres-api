@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Facet } from '../shared/interfaces';
+import { CategoryFacet, Facet } from '../shared/interfaces';
 import { Mixins } from 'vue-property-decorator';
 import UrlBuilder from '../shared/UrlBuilder';
 
@@ -13,13 +13,18 @@ const BaseDropdownProps = Vue.extend({
         template: {
             type: String,
             default: null
-        }
+        },
+        currentCategory: {
+            type: Array,
+            default: () => []
+        },
     }
 });
 
 interface BaseDropdownInterface {
     facet: Facet;
     template?: string|null;
+    currentCategory: CategoryFacet[];
 }
 
 @Component({
