@@ -351,7 +351,7 @@ class SearchService implements SearchServiceInterface
 
         $variationIds = [];
 
-        if (isset($results['success']) && $results['total'] > 0) {
+        if ($results['success'] && $results['total'] > 0) {
             foreach ($results['documents'] as $document) {
                 $variationIds[] = $document['id'];
             }
