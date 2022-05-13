@@ -25,7 +25,7 @@ class PluginConfigurationValidatorTest extends TestCase
      */
     private $loggerMock;
 
-    public function setup()
+    public function setup(): void
     {
         $this->shopKeyValidatorMock = $this->getMockBuilder(ShopkeyValidator::class)
             ->disableOriginalConstructor()

@@ -90,7 +90,7 @@ class SearchServiceTest extends TestCase
      */
     private $templateConfigService;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->client = $this->getMockBuilder(Client::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $this->requestBuilder = $this->getMockBuilder(RequestBuilder::class)
@@ -128,7 +128,7 @@ class SearchServiceTest extends TestCase
             ->getMock();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         global $classInstances;
         $classInstances = [];
@@ -149,6 +149,7 @@ class SearchServiceTest extends TestCase
 
         $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
         $itemSearchServiceMock->method('getResults')
+            ->expects($this->once())
             ->willReturn($this->getDefaultResultsForItemSearchService());
 
         $searchServiceMock = $this->getSearchServiceMock(
@@ -197,8 +198,10 @@ class SearchServiceTest extends TestCase
 
         $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
+        $itemSearchServiceMock->expects($this->once())
+            ->method('getResult')
+            ->willReturn(['success' => false, 'total' => 0]);
 
         $searchFactoryMock = $this->getVariationSearchFactoryMock();
 
@@ -407,6 +410,9 @@ class SearchServiceTest extends TestCase
         $itemSearchServiceMock->expects($this->once())
             ->method('getResults')
             ->willReturn($itemSearchServiceResultsAll);
+        $itemSearchServiceMock->expects($this->once())
+            ->method('getRedirectUrl')
+            ->willReturn(null);
 
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',

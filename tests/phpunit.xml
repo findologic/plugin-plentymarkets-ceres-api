@@ -8,8 +8,7 @@
         verbose="true"
         stopOnFailure="false"
         processIsolation="false"
-        backupGlobals="false"
-        syntaxCheck="true">
+        backupGlobals="false">
 
     <testsuite name="Tests">
         <directory>./</directory>

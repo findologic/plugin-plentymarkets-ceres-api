@@ -43,7 +43,7 @@ class PluginInfoServiceTest extends TestCase
      */
     private $templateConfigServiceMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->pluginRepositoryMock = $this->getMockForAbstractClass(PluginRepositoryContract::class);
         $this->pluginSetRepositoryMock = $this->getMockForAbstractClass(PluginSetRepositoryContract::class);

@@ -32,7 +32,7 @@ class ResponseParserTest extends TestCase
      */
     protected $logger;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->filterParser = $this->getMockBuilder(FiltersParser::class)
             ->disableOriginalConstructor()
@@ -459,7 +459,7 @@ class ResponseParserTest extends TestCase
     {
         $responseParserMock = $this->getMockBuilder(ResponseParser::class)
             ->setConstructorArgs([
-                'filterParser' => $this->filterParser,
+                'filtersParser' => $this->filterParser,
                 'loggerFactory' => $this->loggerFactory
             ])
             ->setMethods($methods);

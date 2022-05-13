@@ -18,7 +18,7 @@ class ResponseTest extends TestCase
      */
     protected $translator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->translator = $this->getMockBuilder(Translator::class)
             ->disableOriginalConstructor()
