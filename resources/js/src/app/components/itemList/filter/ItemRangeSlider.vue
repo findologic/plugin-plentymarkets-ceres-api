@@ -83,11 +83,10 @@ export default defineComponent({
           .replace(/-$/, '');
     });
     const isDisabled = computed(() => {
-      return (valueFrom.value === '' && valueTo.value === '') ||
-          (parseFloat(valueFrom.value) > parseFloat(valueTo.value)) ||
+        return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
           isNaN(valueFrom.value) ||
           isNaN(valueTo.value) ||
-          valueTo.value === '' ||
+          valueFrom.value === '' ||
           valueTo.value === '' ||
           root.$store.state.isLoading;
     });
