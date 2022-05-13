@@ -41,73 +41,12 @@
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else-if="facet.id === 'cat' && shouldShowCategoryFilter">
+    <div v-else-if="shouldShowCategoryFilter">
       <div v-if="!facet.noAvailableFiltersText">
-        <div v-if="facet.findologicFilterType === 'select'">
-          <item-category-dropdown
-            v-if="facet.findologicFilterType === 'select'"
+        <item-category-dropdown
             :current-category="currentCategory"
             :facet="facet"
-          />
-        </div>
-        <div
-          v-for="value in facet.values"
-          v-else-if="facet.id === 'cat' && shouldShowCategoryFilter"
-          :key="value.id"
-          class="form-check"
-        >
-          <div class="category-container">
-            <input
-              :id="'option-' + value.id"
-              class="form-check-input hidden-xs-up"
-              type="checkbox"
-              :checked="isSelected"
-              :disabled="isLoading"
-              @change="updateFacet(value)"
-            >
-            <label
-              :for="'option-' + value.id"
-              class="form-check-label"
-              rel="nofollow"
-              v-text="value.name"
-            />
-            <div
-              class="filter-badge"
-              v-text="value.count"
-            />
-          </div>
-          <div v-if="isSelected">
-            <div
-              v-if="value.items.length > 0"
-              class="sub-category-container"
-            >
-              <div
-                v-for="subCategory in value.items"
-                :key="subCategory.id"
-                class="form-check"
-              >
-                <input
-                  :id="'option-' + subCategory.id"
-                  class="form-check-input hidden-xs-up"
-                  type="checkbox"
-                  :checked="isCategorySelected(subCategory)"
-                  :disabled="isLoading"
-                  @change="updateFacet(getSubCategoryValue(value, subCategory))"
-                >
-                <label
-                  :for="'option-' + subCategory.id"
-                  class="form-check-label"
-                  rel="nofollow"
-                  v-text="subCategory.name"
-                />
-                <div
-                  class="filter-badge"
-                  v-text="subCategory.count"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        />
       </div>
       <p
         v-if="facet.noAvailableFiltersText"

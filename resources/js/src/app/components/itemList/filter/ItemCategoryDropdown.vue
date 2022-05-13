@@ -21,41 +21,41 @@
         class="fl-dropdown-content form-check"
       >
         <li
-          v-for="value in getCategories"
-          :key="value.id"
+          v-for="category in categories"
+          :key="category.id"
           class="fl-dropdown-item"
           :class="{'form-check-label': !isSelected}"
           rel="nofollow"
-          @click.stop="close(); selected(getParentCategoryName(value));"
+          @click.stop="close(); selected(getParentCategoryName(category));"
         >
           <input
-            :id="'option-' + value.id"
+            :id="'option-' + category.id"
             class="form-check-input hidden-xs-up"
             type="checkbox"
             :checked="isSelected"
             :disabled="isLoading"
           >
           <label
-            :for="'option-' + value.id"
+            :for="'option-' + category.id"
             :class="{'form-check-label': isSelected}"
             rel="nofollow"
-            v-text="value.name"
+            v-text="category.name"
           />
           <div
-            v-if="!isCategorySelected(value) && value.count"
+            v-if="!isCategorySelected(category) && category.count"
             class="filter-badge"
-            v-text="value.count"
+            v-text="category.count"
           />
           <ul
-            v-if="isSelected && value.items.length > 0 && !isInCategoryPage"
+            v-if="isSelected && category.items.length > 0 && !isInCategoryPage"
             class="form-check subcategories"
           >
             <li
-              v-for="subcategory in value.items"
+              v-for="subcategory in category.items"
               :key="subcategory.id"
               class="fl-dropdown-item"
               :class="{'form-check-label': !isCategorySelected(subcategory)}"
-              @click.stop="close(); selected(getSubCategoryName(value, subcategory));"
+              @click.stop="close(); selected(getSubCategoryName(category, subcategory));"
             >
               <input
                 :id="'option-' + subcategory.id"
@@ -129,7 +129,7 @@ export default defineComponent({
       return typeof props.currentCategory !== 'undefined';
     });
 
-    const getCategories = computed((): FacetValue[] | undefined  => {
+    const categories = computed((): FacetValue[] | undefined  => {
       if (
           typeof props.currentCategory !== 'undefined' &&
           props.facet.values?.[0].name === props.currentCategory[0].name
@@ -183,7 +183,7 @@ export default defineComponent({
       dropdownLabel,
       isSelected,
       isInCategoryPage,
-      getCategories,
+      categories,
       getSubCategoryName,
       getParentCategoryName,
       isCategorySelected,
