@@ -16,7 +16,6 @@ use Ceres\Helper\ExternalSearch;
 use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
 use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
-use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
@@ -195,10 +194,6 @@ class SearchServiceTest extends TestCase
 
         $responseMock->expects($this->once())->method('getData')->willReturn(['query' => 'search term']);
 
-        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
-        $itemSearchServiceMock->method('getResults')
-            ->willReturn($this->getDefaultResultsForItemSearchService());
-
         $searchFactoryMock = $this->getVariationSearchFactoryMock();
 
         $searchServiceMock = $this->getSearchServiceMock([
@@ -214,6 +209,7 @@ class SearchServiceTest extends TestCase
         $searchServiceMock->method('search')->willReturn($responseMock);
 
         $mainVariationId = 1011;
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
         $itemSearchServiceMock->method('getResults')->willReturn([
             [
                 'total' => 1,
@@ -222,7 +218,8 @@ class SearchServiceTest extends TestCase
                         '0' => [
                             'id' => $mainVariationId,
                             'price' => 10.00,
-                            'isMain' => true
+                            'isMain' => true,
+                            'data' => []
                         ]
                     ]
                 )
@@ -406,9 +403,6 @@ class SearchServiceTest extends TestCase
         $itemSearchServiceMock->expects($this->once())
             ->method('getResults')
             ->willReturn($itemSearchServiceResultsAll);
-        $itemSearchServiceMock->expects($this->once())
-            ->method('getRedirectUrl')
-            ->willReturn(null);
 
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',
