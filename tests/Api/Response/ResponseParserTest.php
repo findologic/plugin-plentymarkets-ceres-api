@@ -10,7 +10,6 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use SimpleXMLElement;
 
 /**
  * Class ResponseParserTest
@@ -33,7 +32,7 @@ class ResponseParserTest extends TestCase
      */
     protected $logger;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->filterParser = $this->getMockBuilder(FiltersParser::class)
             ->disableOriginalConstructor()
@@ -50,9 +49,6 @@ class ResponseParserTest extends TestCase
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
     public function testParse()
     {
         $responseMock = $this->getMockBuilder(Response::class)
@@ -60,11 +56,8 @@ class ResponseParserTest extends TestCase
             ->setMethods(null)
             ->getMock();
         /** @var ResponseParser|MockObject $responseParserMock */
-        $responseParserMock = $this->getResponseParserMock(['createResponseObject', 'handleLandingPage']);
+        $responseParserMock = $this->getResponseParserMock(['createResponseObject']);
         $responseParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
-        $responseParserMock->expects($this->once())
-            ->method('handleLandingPage')
-            ->with('http://www.example.com/imprint');
 
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
@@ -79,9 +72,9 @@ class ResponseParserTest extends TestCase
         ]);
     }
 
-    public function testHandleErrorResponse()
+    public function responseDataProvider()
     {
-        $errorResponse = [
+        $plentyErrorResponse = [
             'error' => true,
             'error_no' => 0,
             'error_msg' => 'Curl error: Could not resolve host: service.findologic.com',
@@ -89,6 +82,36 @@ class ResponseParserTest extends TestCase
             'error_line' => 155
         ];
 
+        return [
+            'Plentymarkets error response' => [
+                'response' => $plentyErrorResponse,
+                'errorMessage' =>
+                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                'errorContext' => ['response' => $plentyErrorResponse],
+            ],
+            'Empty response' => [
+                'response' => '',
+                'errorMessage' =>
+                    'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
+                'errorContext' => ['response' => ''],
+            ],
+            'Invalid XML response' => [
+                'response' => 'invalid-xml',
+                'errorMessage' => 'Parsing XML failed',
+                'errorContext' => ['xmlString' => 'invalid-xml'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider responseDataProvider
+     *
+     * @param string|array $response
+     * @param string $errorMessage
+     * @param array $errorContext
+     */
+    public function testHandleInvalidResponse($response, string $errorMessage, array $errorContext)
+    {
         $responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
@@ -100,14 +123,12 @@ class ResponseParserTest extends TestCase
         /** @var Request|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
 
-        $this->logger
-            ->expects($this->once())
+        $this->logger->expects($this->once())
             ->method('error')
-            ->with('Invalid response received from server.', ['response' => $errorResponse]);
+            ->with($errorMessage, $errorContext);
 
-        $response = $responseParserMock->parse($requestMock, $errorResponse);
-
-        $this->assertEquals([], $response->getData());
+        $responseParserResult = $responseParserMock->parse($requestMock, $response);
+        $this->assertEquals([], $responseParserResult->getData());
     }
 
     /**
@@ -438,7 +459,7 @@ class ResponseParserTest extends TestCase
     {
         $responseParserMock = $this->getMockBuilder(ResponseParser::class)
             ->setConstructorArgs([
-                'filterParser' => $this->filterParser,
+                'filtersParser' => $this->filterParser,
                 'loggerFactory' => $this->loggerFactory
             ])
             ->setMethods($methods);

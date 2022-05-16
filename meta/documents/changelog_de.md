@@ -1,5 +1,76 @@
 # Release Notes für Findologic
 
+## 3.9.2 (2022-04-11)
+
+### Behoben
+* [PLENTY-427] Ein Fehler wurde behoben, wodurch der Kategorie-Filter auf Navigationsseiten keine Sub-Kategorien enthalten hat.
+* [PLENTY-437] Ein Fehler wurde behoben, wodurch es bei Verwendung plentyShop 5.0.48 und aktiven SSR zu einem Fehler in ItemFilterTagList kam wenn ein Filter auf Navigation ausgewählt wurde.
+
+## 3.9.1 (2022-03-22)
+
+### Behoben
+* [PLENTY-434] Ein Fehler wurde behoben, wodurch nicht auf eine konfigurierte Landinpage weitergeleitet wurde sondern auf die Produktdetailseite wenn es ein einziges Suchresultat gab.
+
+### Geändert
+* [PLENTY-428] Plentymarkets Review Version 3.9.0
+
+## 3.9.0 (2022-03-17)
+
+### Geändert
+* [PLENTY-429] Verwendung von neuer Plentymarkets API für Suche von Varianten um Kompatibilität für plentyShop Version 5.0.47 sicherzustellen.
+
+## 3.8.1 (2022-02-24)
+
+### Behoben
+* [PLENTY-426] Für Preisfilter mit Typ Text muss ein min und max Wert gegeben sein
+
+### Geändert
+* [PLENTY-428] Plentymarkets Review Version 3.8.0
+
+
+## 3.8.0 (2022-02-14)
+
+### Geändert
+
+* [PLENTY-423] Die Drittanbieter Bibliothek "SVG-Injector" wird nicht länger von Cloudflare geladen, sondern stattdessen mit den Plugin-Assets ausgeliefert.
+* [PLENTY-420] Die Weiterleitung zur Produktdetailseite wenn nur ein Produkt gefunden wird, verwendet nun eine ähnliche Logik wie die exportierte Item-URL.
+
+## 3.7.6 (2022-01-11)
+
+### Geändert
+
+* [PLENTY-414] Logging wurde verbessert wenn die XML Antwort nicht verarbeitet werden kann.
+* [PLENTY-366] Im Fehlerfall beinhalten Log Einträge mehr Daten für die weitere Analyse.
+
+
+## 3.7.5 (2021-12-21)
+
+### Geändert
+
+* [PLENTY-403] Marketplace Name und Beschreibung wurden aktualisiert.
+* [PLENTY-411] Wenn eine Anfrage an das Plentymarkets SDK scheitert, werden zwei weitere Anfragen geschickt, bevor ein Fallback passiert.
+
+### Behoben
+
+* [PLENTY-412] Ein Fehler wurde behoben, wodurch die Weiterleitung auf Landingpages nicht wie erwartet funktionierte.
+
+## 3.7.4 (2021-11-30)
+
+### Behoben
+
+* [PLENTY-388] Ein Fehler wurde behoben, wodurch Assisted Suggest beim initialen Seiten-Aufruf automatisch geöffnet wurde, da das `autofocus` Attribut am Suchfeld gesetzt wurde.
+
+## 3.7.3 (2021-10-27)
+
+### Geändert
+
+* [PLENTY-383] Die Weiterleitung zur Produktdetailseite parsed nun die ids, die von der Findologic-Antwort geliefert werden, um zu überprüfen, ob diese auch die id der Variante enthält.
+
+### Behoben
+
+* [PLENTY-373] Ein Fehler wurde behoben, wodurch beim Abschicken der Suche die Sprache nicht berücksichtigt wurde, was dazu führte, dass die Suchergebnisseite der Standardsprache des Shops entsprach.
+* [PLENTY-371] Ein Fehler wurde behoben, wodurch die Weiterleitung auf die Produktdetailseite vor der Weiterleitung einer Landingpage durchgeführt wurde.
+
 ## 3.7.2 (2021-08-30)
 
 ### Geändert

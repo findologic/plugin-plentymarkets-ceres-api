@@ -1,5 +1,75 @@
 # Release Notes for Findologic
 
+## 3.9.2 (2022-04-11)
+
+### Fixed
+* [PLENTY-427] A bug has been fixed, where the category filter on navigation didn't show sub-categories.
+* [PLENTY-437] A bug has been fixed, where an error in ItemFilterTagList occured when using a filter on navigation with plentyShop 5.0.48 and active SSR.
+
+
+## 3.9.1 (2022-03-22)
+
+### Fixed
+* [PLENTY-434] A bug has been fixed, where a configured landingpage had no precedence over the redirect of one search result.
+
+### Changed
+* [PLENTY-428] Plentymarkets Review Version 3.9.0
+
+## 3.9.0 (2022-03-17)
+
+### Changed
+* [PLENTY-429] Using new Plentymarkets API for searching variations to ensure compatibility for upcoming plentyShop version 5.0.47.
+
+## 3.8.1 (2022-02-24)
+
+### Fixed
+* [PLENTY-426] For price filter with type text a min and max value must be given.
+
+### Changed
+* [PLENTY-428] Plentymarkets Review Version 3.8.0
+
+## 3.8.0 (2022-02-14)
+
+### Changed
+
+* [PLENTY-423] The third-party library SVG-Injector is no longer loaded via Cloudflare, but is now bundled with the plugin assets.
+* [PLENTY-420] The redirect to the PDP in case there is only one result, now uses a similar logic to the item URL in the export.
+
+## 3.7.6 (2022-01-11)
+
+### Changed
+
+* [PLENTY-414] Logging for non-parsable XML strings has been improved.
+* [PLENTY-366] Log messages contain more debug information, in case an error occurs.
+
+## 3.7.5 (2021-12-21)
+
+### Changed
+
+* [PLENTY-403] Marketplace name and description have been changed.
+* [PLENTY-411] In case a request to the Plentymarkets SDK fails, two more retries are being done, before a fallback is triggered.
+
+### Fixed
+
+* [PLENTY-412] Fixed a bug that caused the Landingpage redirect to no longer work as expected.
+
+## 3.7.4 (2021-11-30)
+
+### Fixed
+
+* [PLENTY-388] Fixed a bug that caused Assisted Suggest to be shown on initial page load, due to an `autofocus` attribute on the search field.
+
+## 3.7.3 (2021-10-27)
+
+### Changed
+
+* [PLENTY-383] The redirect to the product detail page will now properly parse ids, when the sent id also contains the id of the variant.
+
+### Fixed
+
+* [PLENTY-373] Fixed a bug that caused the search submission, to not take the language into consideration, which resulted in a search result page of a different language.
+* [PLENTY-371] Fixed a bug that caused the redirect to the product detail page, to have precedence over the landingpage redirect.
+
 ## 3.7.2 (2021-08-30)
 
 ### Changed

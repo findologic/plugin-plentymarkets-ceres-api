@@ -60,7 +60,7 @@ class RequestBuilderTest extends TestCase
      */
     protected $pluginInfoService;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)
             ->disableOriginalConstructor()
@@ -168,13 +168,13 @@ class RequestBuilderTest extends TestCase
     /**
      * @dataProvider buildProvider
      *
-     * @param string $userIp
+     * @param string|bool $userIp
      * @param string $expectedUrl
      * @param bool $category
      * @param array $expectedParams
      */
     public function testBuild(
-        string $userIp,
+        $userIp,
         string $expectedUrl,
         bool $category,
         array $expectedParams

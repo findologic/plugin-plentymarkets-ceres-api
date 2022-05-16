@@ -3,7 +3,8 @@
 import FindologicItemSearch from '../components/itemList/FindologicItemSearch.vue';
 import { VueConstructor } from 'vue';
 
+// eslint-disable-next-line
 // @ts-ignore
 const plentyVue = Vue as VueConstructor;
 
-plentyVue.component('findologic-item-search', FindologicItemSearch);
+plentyVue.component('FindologicItemSearch', FindologicItemSearch);

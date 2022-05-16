@@ -5,6 +5,11 @@
 /node_modules/
 /vendor/
 
+# Unit-Tests
+/tests/build
+/build/
+/tests/.phpunit.result.cache
+
 # Local SSL certificates
 private.crt
 private.csr

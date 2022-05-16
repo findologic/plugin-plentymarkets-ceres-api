@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api';
+import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
 import * as noUiSlider from 'noUiSlider';
@@ -83,20 +83,60 @@ export default defineComponent({
           .replace(/-$/, '');
     });
     const isDisabled = computed(() => {
-      return (valueFrom.value === '' && valueTo.value === '') ||
-          (parseFloat(valueFrom.value) > parseFloat(valueTo.value)) ||
+        return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
+          isNaN(valueFrom.value) ||
+          isNaN(valueTo.value) ||
+          valueFrom.value === '' ||
+          valueTo.value === '' ||
           root.$store.state.isLoading;
     });
+
+    const getMaxValue = (): number => {
+      if (!facet.values || facet.values.length === 0) {
+        return Number.MAX_SAFE_INTEGER;
+      }
+
+      const maxValue = facet.values[facet.values?.length - 1].name.split(' - ')[1];
+
+      return maxValue ? parseFloat(maxValue) : Number.MAX_SAFE_INTEGER;
+    };
 
     const triggerFilter = () => {
       if (!isDisabled.value) {
         const facetValue = {
-          min: parseFloat(valueFrom.value),
-          max: valueTo.value ? parseFloat(valueTo.value) : Number.MAX_SAFE_INTEGER
+          min: parseFloat(valueFrom.value) ? valueFrom.value : 0,
+          max: valueTo.value ? parseFloat(valueTo.value) : getMaxValue()
         } as PriceFacetValue;
 
         UrlBuilder.updateSelectedFilters(facet, facet.id, facetValue);
       }
+    };
+
+    const fixDecimalSeparator = (value: string|number): string => {
+      if (typeof value === 'number') {
+        value = value.toString();
+      }
+
+      if (value.includes('.')) {
+        value = value.replace(',', '');
+      } else {
+        value = value.replace(',', '.');
+      }
+
+      return value;
+    };
+
+    const setCustomValidationMessage = (): void => {
+      const elements = root.$el.querySelectorAll('input.fl-range-input[data-custom-validation-message]') as unknown as HTMLInputElement[];
+
+      elements.forEach((input: HTMLInputElement) => {
+        // Must be reset before the validity check as existence of custom validity counts as a validation error.
+        input.setCustomValidity('');
+
+        if (!input.checkValidity()) {
+          input.setCustomValidity(input.dataset.customValidationMessage as string);
+        }
+      });
     };
 
     onMounted(() => {
@@ -111,8 +151,8 @@ export default defineComponent({
           start: [valueFrom.value, valueTo.value],
           connect: true,
           range: {
-            'min': props.facet.minValue,
-            'max': props.facet.maxValue
+            'min': Math.min(valueFrom.value, props.facet.minValue ?? 0),
+            'max': Math.max(valueTo.value, props.facet.maxValue ?? Number.MAX_SAFE_INTEGER)
           }
         });
 
@@ -123,6 +163,13 @@ export default defineComponent({
       });
     });
 
+    watch([valueFrom, valueTo], ([nextValueFrom, nextValueTo]) => {
+      valueFrom.value = fixDecimalSeparator(nextValueFrom);
+      valueTo.value = fixDecimalSeparator(nextValueTo);
+
+      setCustomValidationMessage();
+    });
+
     return {
       valueFrom,
       valueTo,
@@ -130,7 +177,8 @@ export default defineComponent({
       isDisabled,
       isLoading,
       triggerFilter,
-      TranslationService
+      TranslationService,
+      watch
     };
   }
 });

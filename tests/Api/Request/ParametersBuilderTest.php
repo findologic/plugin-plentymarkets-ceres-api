@@ -41,7 +41,7 @@ class ParametersBuilderTest extends TestCase
      */
     protected $tagsHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->categoryService = $this->getMockBuilder(CategoryService::class)
             ->disableOriginalConstructor()
@@ -83,7 +83,35 @@ class ParametersBuilderTest extends TestCase
                         0 => 'variation_id'
                     ],
                     'attrib' => [
-                        'color' => ['red', 'blue']
+                        'color' => ['red', 'blue'],
+                        'cat' => ['Category 2']
+                    ],
+                    'selected' => ['cat' => ['Category']],
+                    'order' => 'price ASC',
+                    'count' => 0,
+                    'first' => 0
+                ]
+            ],
+            'Category page request with subcategory selected' => [
+                'parameters' => [
+                    Plugin::API_PARAMETER_ATTRIBUTES => [
+                        'color' => ['red', 'blue'],
+                        'cat' => ['Category 2', 'Category 1'],
+                    ],
+                ],
+                'requestUri' => 'https://www.test.com/testCategory',
+                'category' => [
+                    'parentCategoryId' => null,
+                    'name' => 'Category'
+                ],
+                'expectedParameters' => [
+                    'query' => 'Test',
+                    'properties' => [
+                        0 => 'variation_id'
+                    ],
+                    'attrib' => [
+                        'color' => ['red', 'blue'],
+                        'cat' => ['Category 2', 'Category 1']
                     ],
                     'selected' => ['cat' => ['Category']],
                     'order' => 'price ASC',

@@ -46,6 +46,7 @@
 import { ColorFacet, ColorFacetValue, FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
 import { computed, defineComponent, nextTick, onMounted } from '@vue/composition-api';
 import UrlBuilder from '../../../shared/UrlBuilder';
+import { SVGInjector } from '@tanem/svg-injector';
 
 interface ItemFilterImageProps extends TemplateOverridable, FacetAware {
   facet: ColorFacet;
@@ -83,7 +84,7 @@ export default defineComponent({
 
     const injectSvgImages = async () => {
       await nextTick();
-      window.SVGInjector($('img.fl-svg'));
+      SVGInjector(document.getElementsByClassName('fl-svg'));
     };
 
     onMounted(injectSvgImages);

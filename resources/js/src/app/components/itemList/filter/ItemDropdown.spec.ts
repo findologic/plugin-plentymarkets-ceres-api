@@ -36,13 +36,15 @@ describe('ItemDropdown', () => {
                     count: 9,
                     id: '20',
                     name: '22220',
-                    selected: false
+                    selected: false,
+                    items: []
                 },
                 {
                     count: 1,
                     id: '21',
                     name: '22221',
-                    selected: false
+                    selected: false,
+                    items: []
                 }
             ]
         };
@@ -74,13 +76,15 @@ describe('ItemDropdown', () => {
                     count: 9,
                     id: '20',
                     name: '22220',
-                    selected: false
+                    selected: false,
+                    items: []
                 },
                 {
                     count: 1,
                     id: '21',
                     name: '22221',
-                    selected: false
+                    selected: false,
+                    items: []
                 }
             ]
         };
@@ -114,13 +118,15 @@ describe('ItemDropdown', () => {
                     count: 9,
                     id: '20',
                     name: '22220',
-                    selected: false
+                    selected: false,
+                    items: []
                 },
                 {
                     count: 1,
                     id: '21',
                     name: '22221',
-                    selected: false
+                    selected: false,
+                    items: []
                 }
             ]
         };

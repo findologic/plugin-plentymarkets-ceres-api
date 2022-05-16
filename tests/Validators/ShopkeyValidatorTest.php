@@ -19,7 +19,7 @@ class ShopkeyValidatorTest extends TestCase
      */
     private $shopkeyValidator;
 
-    public function setup()
+    public function setup(): void
     {
         $this->pluginConfigMock = $this->getMockBuilder(PluginConfig::class)
             ->disableOriginalConstructor()

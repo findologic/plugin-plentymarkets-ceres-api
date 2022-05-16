@@ -4,15 +4,14 @@ namespace Findologic\Middlewares;
 
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
-use Exception;
 use Findologic\Constants\Plugin;
 use Findologic\Contexts\FindologicCategoryItemContext;
 use Findologic\Contexts\FindologicItemSearchContext;
-use Findologic\Exception\AliveException;
 use Findologic\Validators\PluginConfigurationValidator;
 use IO\Helper\ComponentContainer;
 use IO\Helper\ResourceContainer;
 use IO\Helper\TemplateContainer;
+use IO\Helper\Utils;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Http\Response;
 use Plenty\Plugin\Log\Loggable;
@@ -97,15 +96,15 @@ class Middleware extends PlentyMiddleware
                         'shopkey' => strtoupper(md5($this->pluginConfig->getShopKey())),
                         'isSearchPage' => $this->isSearchPage,
                         'activeOnCatPage' => $this->activeOnCatPage,
-                        'minimalSearchTermLength' => $this->pluginConfig->getMinimalSearchTermLength()
+                        'minimalSearchTermLength' => $this->pluginConfig->getMinimalSearchTermLength(),
+                        'languagePath' => $this->getLanguagePath(),
                     ]
                 );
 
                 if ($this->pluginConfig->get(Plugin::CONFIG_FILTERS_STYLING_CSS_ENABLED)) {
                     $container->addStyleTemplate('Findologic::content.styles');
                 }
-            },
-            0
+            }
         );
 
         $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
@@ -117,7 +116,7 @@ class Middleware extends PlentyMiddleware
 
         $this->eventDispatcher->listen(
             'IO.ctx.search',
-            function (TemplateContainer $templateContainer, $templateData = []) {
+            function (TemplateContainer $templateContainer) {
                 $templateContainer->setContext(FindologicItemSearchContext::class);
                 return false;
             }
@@ -125,7 +124,7 @@ class Middleware extends PlentyMiddleware
 
         $this->eventDispatcher->listen(
             'IO.ctx.category.item',
-            function (TemplateContainer $templateContainer, $templateData = []) {
+            function (TemplateContainer $templateContainer) {
                 $templateContainer->setContext(FindologicCategoryItemContext::class);
                 return false;
             }
@@ -142,7 +141,7 @@ class Middleware extends PlentyMiddleware
             if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
-        }, 0);
+        });
 
         $this->eventDispatcher->listen(
             'Ceres.Search.Query',
@@ -158,6 +157,19 @@ class Middleware extends PlentyMiddleware
         $validator = pluginApp(PluginConfigurationValidator::class);
 
         return $validator->validate();
+    }
+
+    public function getLanguagePath(): string
+    {
+        $defaultLanguage = Utils::getDefaultLang();
+        $usedLanguage = Utils::getLang();
+
+        $languagePath = '';
+        if ($usedLanguage !== $defaultLanguage) {
+            $languagePath = '/' . $usedLanguage;
+        }
+
+        return $languagePath;
     }
 
     /**

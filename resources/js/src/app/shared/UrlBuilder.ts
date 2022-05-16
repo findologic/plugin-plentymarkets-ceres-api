@@ -144,10 +144,16 @@ class UrlBuilder {
         if (facetId === 'price' || facet.findologicFilterType === 'range-slider') {
             const facetVal = facetValue as PriceFacetValue;
 
-            attributes[facetId] = {
-                min: facetVal.min,
-                max: facetVal.max
-            };
+            if (facetVal.max !== Number.MAX_SAFE_INTEGER) {
+                attributes[facetId] = {
+                    min: facetVal.min,
+                    max: facetVal.max
+                };
+            } else {
+                attributes[facetId] = {
+                    min: facetVal.min,
+                };
+            }
         } else if (facet.select === 'single') {
             const facetVal = facetValue as string;
 

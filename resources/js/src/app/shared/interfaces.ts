@@ -37,6 +37,7 @@ export interface FacetValue {
     name: string;
     imageUrl?: string;
     selected: boolean;
+    items: FacetValue[];
 }
 
 export interface ColorFacet extends Facet {
@@ -71,5 +72,5 @@ export interface PlentyVuexStore extends Store<StoreState> {
 }
 
 export interface JQuery {
-    collapse: () => {};
+    collapse: () => void;
 }

@@ -3,6 +3,7 @@
 namespace Findologic\Tests\Services;
 
 use Findologic\Services\PluginInfoService;
+use IO\Services\TemplateConfigService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
@@ -37,17 +38,25 @@ class PluginInfoServiceTest extends TestCase
      */
     private $pluginInfoService;
 
-    public function setUp()
+    /**
+     * @var TemplateConfigService
+     */
+    private $templateConfigServiceMock;
+
+    public function setUp(): void
     {
         $this->pluginRepositoryMock = $this->getMockForAbstractClass(PluginRepositoryContract::class);
         $this->pluginSetRepositoryMock = $this->getMockForAbstractClass(PluginSetRepositoryContract::class);
         $this->cacheMock = $this->getMockForAbstractClass(CachingRepository::class);
         $this->pluginMock = $this->getMockForAbstractClass(Plugin::class);
+        $this->templateConfigServiceMock = $this->getMockBuilder(TemplateConfigService::class)
+            ->disableOriginalConstructor()->getMock();
 
         $this->pluginInfoService = new PluginInfoService(
             $this->pluginRepositoryMock,
             $this->pluginSetRepositoryMock,
-            $this->cacheMock
+            $this->cacheMock,
+            $this->templateConfigServiceMock
         );
     }
 

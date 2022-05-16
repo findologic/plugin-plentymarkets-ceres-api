@@ -43,13 +43,15 @@ describe('ItemRangeSlider', () => {
                     count: 9,
                     id: '20',
                     name:'59 - 99',
-                    selected: false
+                    selected: false,
+                    items: []
                 },
                 {
                     count: 1,
                     id: '21',
                     name: '119 - 149',
-                    selected: false
+                    selected: false,
+                    items: []
                 }
             ]
         };
@@ -104,13 +106,15 @@ describe('ItemRangeSlider', () => {
                     count: 9,
                     id: '20',
                     name:'59 - 99',
-                    selected: false
+                    selected: false,
+                    items: []
                 },
                 {
                     count: 1,
                     id: '21',
                     name: '119 - 149',
-                    selected: false
+                    selected: false,
+                    items: []
                 }
             ]
         };

@@ -40,13 +40,15 @@ describe('FindologicItemFilter', () => {
           count: 9,
           id: '20',
           name: '22220',
-          selected: false
+          selected: false,
+          items: []
         },
         {
           count: 1,
           id: '21',
           name: '22221',
-          selected: false
+          selected: false,
+          items: []
         }
       ]
     };
@@ -160,13 +162,15 @@ describe('FindologicItemFilter', () => {
           count: 9,
           id: '20',
           name: '22220',
-          selected: false
+          selected: false,
+          items: []
         },
         {
           count: 1,
           id: '21',
           name: '22221',
-          selected: false
+          selected: false,
+          items: []
         }
       ]
     };
@@ -265,7 +269,8 @@ describe('FindologicItemFilter', () => {
           hexValue: '#0000FF',
           id: '10',
           name: 'blue',
-          selected: false
+          selected: false,
+          items: []
         },
         {
           colorImageUrl: 'https://plugin.demo.findologic.com/yellow.png',
@@ -273,13 +278,15 @@ describe('FindologicItemFilter', () => {
           hexValue: '#FF0000',
           id: '11',
           name: 'red',
-          selected: false
+          selected: false,
+          items: []
         },
         {
           name: 'Unknown',
           hexValue: null,
           id: '12',
-          selected: false
+          selected: false,
+          items: []
         }
       ]
     };
@@ -388,7 +395,7 @@ describe('FindologicItemFilter', () => {
     ];
   }
 
-  it.each(filterClickRedirectionTestProvider())('Redirects to page with filter params applied after a filter value is clicke', async (data) => {
+  it.each(filterClickRedirectionTestProvider())('Redirects to page with filter params applied after a filter value is clicked', async (data) => {
     const facet = data.facet;
 
     store.state.itemList = {

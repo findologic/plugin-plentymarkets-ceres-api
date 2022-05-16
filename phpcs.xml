@@ -7,9 +7,10 @@
 >
     <file>src</file>
     <file>tests</file>
+
     <exclude-pattern>*/tests/build/*</exclude-pattern>
     <exclude-pattern>*/tests/autoload.php</exclude-pattern>
-
+    <exclude-pattern>*.(json|js|ts|scss|vue)</exclude-pattern>
 
     <arg name="colors"/>
     <arg value="p"/>

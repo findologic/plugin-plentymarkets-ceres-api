@@ -13,6 +13,7 @@
         class="form-check-input hidden-xs-up"
         type="checkbox"
         @change="selected(value.name)"
+        @click="selected(value.name)"
       >
       <label
         :for="'option-' + value.id"
