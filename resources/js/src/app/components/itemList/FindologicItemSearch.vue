@@ -4,7 +4,7 @@
     action="/search"
     onsubmit="return flSearchSubmitEventHandler(event, this);"
   >
-    <div class="container-max">
+    <div class="container-max" :class="{'p-0' : $ceres.isShopBuilder}">
       <div class="position-relative">
         <div class="d-flex flex-grow-1 position-relative my-2">
           <input
@@ -13,19 +13,25 @@
             type="search"
             class="search-input flex-grow-1 px-3 py-2"
             autofocus
+            :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
+            :aria-label="$translate('Ceres::Template.headerSearchTerm')"
             @keyup.enter="prepareSearch()"
             @keyup.down="keydown()"
             @keyup.up="keyup()"
-            @focus="setIsSearchFocused(true)"
-            @blur="setIsSearchFocused(false)"
+            @focus="isSearchFocused = true"
+            @blur="onBlurSearchField($event)"
           >
-          <button
-            class="search-submit px-3"
-            type="submit"
-            @click="search()"
-          >
-            <i class="fa fa-search" />
-          </button>
+
+          <slot name="search-button">
+            <button
+                class="search-submit px-3"
+                type="submit"
+                @click="search()"
+                :aria-label="$translate('Ceres::Template.headerSearch')"
+            >
+              <i class="fa fa-search"></i>
+            </button>
+          </slot>
         </div>
       </div>
     </div>
@@ -81,13 +87,6 @@ export default defineComponent({
     const selectAutocompleteItem = () => null;
     const keyup = () => null;
     const keydown = () => null;
-    const setIsSearchFocused = (isFocused: boolean) => {
-      // hide autocomplete after 100ms to make clicking on it possible
-      setTimeout(() =>
-      {
-        isSearchFocused.value = isFocused;
-      }, 100);
-    };
 
     onMounted(() => {
       root.$nextTick(() => {
@@ -117,7 +116,6 @@ export default defineComponent({
       selectAutocompleteItem,
       keyup,
       keydown,
-      setIsSearchFocused,
     };
   }
 });
