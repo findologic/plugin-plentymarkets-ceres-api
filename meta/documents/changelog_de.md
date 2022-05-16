@@ -1,5 +1,24 @@
 # Release Notes für Findologic
 
+## 3.9.2 (2022-04-11)
+
+### Behoben
+* [PLENTY-427] Ein Fehler wurde behoben, wodurch der Kategorie-Filter auf Navigationsseiten keine Sub-Kategorien enthalten hat.
+* [PLENTY-437] Ein Fehler wurde behoben, wodurch es bei Verwendung plentyShop 5.0.48 und aktiven SSR zu einem Fehler in ItemFilterTagList kam wenn ein Filter auf Navigation ausgewählt wurde.
+
+## 3.9.1 (2022-03-22)
+
+### Behoben
+* [PLENTY-434] Ein Fehler wurde behoben, wodurch nicht auf eine konfigurierte Landinpage weitergeleitet wurde sondern auf die Produktdetailseite wenn es ein einziges Suchresultat gab.
+
+### Geändert
+* [PLENTY-428] Plentymarkets Review Version 3.9.0
+
+## 3.9.0 (2022-03-17)
+
+### Geändert
+* [PLENTY-429] Verwendung von neuer Plentymarkets API für Suche von Varianten um Kompatibilität für plentyShop Version 5.0.47 sicherzustellen.
+
 ## 3.8.1 (2022-02-24)
 
 ### Behoben

@@ -193,6 +193,8 @@ describe('ItemCategoryDropdown', () => {
             facets: [facet]
         };
 
+        UrlBuilder.getSelectedFilters = jest.fn(() => []);
+
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
 
         const options = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li');

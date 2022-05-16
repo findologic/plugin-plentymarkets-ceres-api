@@ -20,6 +20,8 @@
                                 v-bind:show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
                                 v-for="facet in facets"
                                 v-if="facet.isMain"
+                                :current-category="currentCategory"
+                                :show-category-filter="showCategoryFilter"
                                 :facet="facet"
                                 :key="facet.id"
                             ></findologic-item-filter>
@@ -58,6 +60,8 @@
                                 v-bind:show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
                                 v-for="facet in facets"
                                 v-if="!facet.isMain"
+                                :current-category="currentCategory"
+                                :show-category-filter="showCategoryFilter"
                                 :facet="facet"
                                 :key="facet.id"
                             ></findologic-item-filter>

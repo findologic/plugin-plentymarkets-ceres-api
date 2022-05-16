@@ -21,57 +21,57 @@
         class="fl-dropdown-content form-check"
       >
         <li
-          v-for="value in facet.values"
-          :key="value.id"
+          v-for="category in categories"
+          :key="category.id"
           class="fl-dropdown-item"
-          :class="{'form-check-label': !value.selected}"
+          :class="{'form-check-label': !isSelected}"
           rel="nofollow"
-          @click.stop="close(); selected(value.name);"
+          @click.stop="close(); selected(getParentCategoryName(category));"
         >
           <input
-            :id="'option-' + value.id"
+            :id="'option-' + category.id"
             class="form-check-input hidden-xs-up"
             type="checkbox"
-            :checked="value.selected"
+            :checked="isSelected"
             :disabled="isLoading"
           >
           <label
-            :for="'option-' + value.id"
-            :class="{'form-check-label': value.selected}"
+            :for="'option-' + category.id"
+            :class="{'form-check-label': isSelected}"
             rel="nofollow"
-            v-text="value.name"
+            v-text="category.name"
           />
           <div
-            v-if="!value.selected && value.count"
+            v-if="!isCategorySelected(category) && category.count"
             class="filter-badge"
-            v-text="value.count"
+            v-text="category.count"
           />
           <ul
-            v-if="value.selected && value.items.length > 0"
+            v-if="isSelected && category.items.length > 0 && !isInCategoryPage"
             class="form-check subcategories"
           >
             <li
-              v-for="subcategory in value.items"
+              v-for="subcategory in category.items"
               :key="subcategory.id"
               class="fl-dropdown-item"
-              :class="{'form-check-label': !subcategory.selected}"
-              @click.stop="close(); selected(getSubCategoryName(value, subcategory));"
+              :class="{'form-check-label': !isCategorySelected(subcategory)}"
+              @click.stop="close(); selected(getSubCategoryName(category, subcategory));"
             >
               <input
                 :id="'option-' + subcategory.id"
                 class="form-check-input hidden-xs-up"
                 type="checkbox"
-                :checked="subcategory.selected"
+                :checked="isCategorySelected(subcategory)"
                 :disabled="isLoading"
               >
               <label
                 :for="'option-' + subcategory.id"
-                :class="{'form-check-label': subcategory.selected}"
+                :class="{'form-check-label': isCategorySelected(subcategory)}"
                 rel="nofollow"
                 v-text="subcategory.name"
               />
               <div
-                v-if="!subcategory.selected && subcategory.count"
+                v-if="!isCategorySelected(subcategory) && subcategory.count"
                 class="filter-badge"
                 v-text="subcategory.count"
               />
@@ -86,17 +86,20 @@
 
 <script lang="ts">
 import BaseDropdown from '../../../mixins/baseDropdown';
-import { FacetAware, FacetValue, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
-import { defineComponent, onMounted, ref } from '@vue/composition-api';
+import { CategoryFacet, FacetAware, FacetValue, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
+import { computed, defineComponent, onMounted, ref } from '@vue/composition-api';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
 
-interface CategoryDropdownProps extends TemplateOverridable, FacetAware { }
+interface CategoryDropdownProps extends TemplateOverridable, FacetAware {
+  currentCategory: CategoryFacet[];
+}
 
 export default defineComponent({
   mixins: [
     BaseDropdown
   ],
+
   setup(props: CategoryDropdownProps, { root }) {
     root.$options.template = props.template || '#vue-item-dropdown';
 
@@ -113,8 +116,61 @@ export default defineComponent({
 
       return '';
     };
+
+    const isSelected = computed((): boolean => {
+      if (typeof props.currentCategory !== 'undefined' && isParentCategorySelected()) {
+        return false;
+      }
+
+      return typeof UrlBuilder.getSelectedFilters().find(element => element.id === props.facet.id) !== 'undefined';
+    });
+
+    const isInCategoryPage = computed((): boolean => {
+      return typeof props.currentCategory !== 'undefined';
+    });
+
+    const categories = computed((): FacetValue[] | undefined  => {
+      if (
+          typeof props.currentCategory !== 'undefined' &&
+          props.facet.values?.[0].name === props.currentCategory[0].name
+      ) {
+        return props.facet.values?.[0].items;
+      }
+
+      return props.facet.values;
+    });
+
     const getSubCategoryName = (parentCategory: FacetValue, subCategory: FacetValue): string => {
-      return parentCategory.name + '_' + subCategory.name;
+      return getParentCategoryName(parentCategory) + '_' + subCategory.name;
+    };
+
+    const getParentCategoryName = (category: FacetValue): string | undefined => {
+      if (typeof props.currentCategory === 'undefined' || props.currentCategory[0].name === category.name) {
+        return category.name;
+      }
+    };
+
+    const isParentCategorySelected = (): boolean => {
+      return typeof UrlBuilder.getSelectedFilters().find(element =>
+          (element.id === props.facet.id && element.name === props.currentCategory[0].name)) !== 'undefined';
+    };
+
+    const isCategorySelected = (category: FacetValue): boolean => {
+      const selectedFilters = UrlBuilder.getSelectedFilters();
+      let splittedSelectedCategories = [] as Array<string> | undefined;
+
+      for (let i = 0; i < selectedFilters.length; i++) {
+        if (selectedFilters[i].id !== props.facet.id) {
+          continue;
+        }
+
+        splittedSelectedCategories = selectedFilters?.[i].name?.split('>');
+
+        break;
+      }
+
+      return typeof splittedSelectedCategories?.find(
+          categoryName => categoryName.trim() === category.name) !== 'undefined';
     };
 
     const dropdownLabel = ref('');
@@ -125,7 +181,12 @@ export default defineComponent({
 
     return {
       dropdownLabel,
+      isSelected,
+      isInCategoryPage,
+      categories,
       getSubCategoryName,
+      getParentCategoryName,
+      isCategorySelected,
       TranslationService
     };
   }

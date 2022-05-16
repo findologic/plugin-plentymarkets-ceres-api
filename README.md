@@ -207,7 +207,7 @@ composer test
 1. Update the German and English change logs in folder `meta/documents`.
 1. Bump the plugin version in files `plugin.json` and `src/Constants/Plugin.php`.
 1. Open the backend from our Plentymarkets shop.
-1. Go to *Plugins > Plugin overview > Ceres > Findologic > Git* and fetch & pull the `main` branch.
+1. Go to *Plugins > Plugin overview > Plugin Release > Findologic > Git* and fetch & pull the `main` branch.
 1. Go back to *Plugin overview* and click *Save & deploy plugin set*.
 1. Open the plugin again and click on *Upload to plentyMarketplace*.
 1. The plugin may not be available yet, Plentymarkets has to do a review on their side.

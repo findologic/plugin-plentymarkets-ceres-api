@@ -1,5 +1,6 @@
 <script lang="ts">
 import {
+  CategoryFacet,
   Facet,
   FacetAware,
   PlentyVuexStore,
@@ -11,6 +12,8 @@ interface ItemFilterListProps extends TemplateOverridable, FacetAware {
   allFacets: Facet[];
   facets: Facet[];
   allowedFacetsTypes: string[];
+  currentCategory: CategoryFacet[];
+  showCategoryFilter: boolean;
 }
 
 export default defineComponent({
@@ -23,6 +26,14 @@ export default defineComponent({
     allowedFacetsTypes: {
       type: Array,
       default: () => []
+    },
+    currentCategory: {
+      type: Array,
+      default: () => []
+    },
+    showCategoryFilter: {
+      type: Boolean,
+      default: true
     }
   },
   setup: (props: ItemFilterListProps, { root }) => {
