@@ -148,7 +148,6 @@ class SearchServiceTest extends TestCase
 
         $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
         $itemSearchServiceMock->method('getResults')
-            ->expects($this->once())
             ->willReturn($this->getDefaultResultsForItemSearchService());
 
         $searchServiceMock = $this->getSearchServiceMock(
