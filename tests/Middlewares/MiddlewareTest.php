@@ -53,7 +53,7 @@ class MiddlewareTest extends TestCase
      */
     protected $middleware;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->searchService = $this->getMockBuilder(SearchService::class)
             ->disableOriginalConstructor()
@@ -82,11 +82,11 @@ class MiddlewareTest extends TestCase
         $classInstances[PluginConfigurationValidator::class] = $this->pluginConfigurationValidatorMock;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         global $classInstances;
         $classInstances = [];
-        
+
         parent::tearDown();
     }
 
