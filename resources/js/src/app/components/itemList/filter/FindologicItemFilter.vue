@@ -6,7 +6,10 @@
     class="card"
     :class="[facet.cssClass, 'col-md-' + filtersPerRow]"
   >
-    <div class="facet-title">
+    <div
+      v-if="facet.id !== 'cat' || shouldShowCategoryFilter"
+      class="facet-title"
+    >
       <div
         class="h3"
         v-text="facet.name"
@@ -38,79 +41,19 @@
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else-if="facet.id === 'cat'">
+    <div v-else-if="shouldShowCategoryFilter">
       <div v-if="!facet.noAvailableFiltersText">
-        <div v-if="facet.findologicFilterType === 'select'">
-          <item-category-dropdown
-            v-if="facet.findologicFilterType === 'select'"
+        <item-category-dropdown
+            :current-category="currentCategory"
             :facet="facet"
-          />
-        </div>
-        <div
-          v-for="value in facet.values"
-          v-else
-          :key="value.id"
-          class="form-check"
-        >
-          <div class="category-container">
-            <input
-              :id="'option-' + value.id"
-              class="form-check-input hidden-xs-up"
-              type="checkbox"
-              :checked="value.selected"
-              :disabled="isLoading"
-              @change="updateFacet(value)"
-            >
-            <label
-              :for="'option-' + value.id"
-              class="form-check-label"
-              rel="nofollow"
-              v-text="value.name"
-            />
-            <div
-              class="filter-badge"
-              v-text="value.count"
-            />
-          </div>
-          <div v-if="value.selected">
-            <div
-              v-if="value.items.length > 0"
-              class="sub-category-container"
-            >
-              <div
-                v-for="subCategory in value.items"
-                :key="subCategory.id"
-                class="form-check"
-              >
-                <input
-                  :id="'option-' + subCategory.id"
-                  class="form-check-input hidden-xs-up"
-                  type="checkbox"
-                  :checked="subCategory.selected"
-                  :disabled="isLoading"
-                  @change="updateFacet(getSubCategoryValue(value, subCategory))"
-                >
-                <label
-                  :for="'option-' + subCategory.id"
-                  class="form-check-label"
-                  rel="nofollow"
-                  v-text="subCategory.name"
-                />
-                <div
-                  class="filter-badge"
-                  v-text="subCategory.count"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        />
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else-if="facet.findologicFilterType === 'select'">
+    <div v-else-if="facet.findologicFilterType === 'select' && (facet.id !== 'cat' || shouldShowCategoryFilter)">
       <div v-if="!facet.noAvailableFiltersText">
         <item-dropdown :facet="facet" />
       </div>
@@ -119,7 +62,7 @@
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else>
+    <div v-else-if="facet.id !== 'cat' || shouldShowCategoryFilter">
       <div
         v-for="value in facet.values"
         :key="value.id"
@@ -152,6 +95,7 @@
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api';
 import {
+  CategoryFacet,
   Facet,
   FacetAware,
   FacetValue,
@@ -170,6 +114,8 @@ interface ItemFilterProps extends TemplateOverridable, FacetAware {
   fallbackImageColorFilter: string;
   fallbackImageImageFilter: string;
   showSelectedFiltersCount: boolean;
+  currentCategory: CategoryFacet[];
+  showCategoryFilter: boolean;
 }
 
 export default defineComponent({
@@ -205,6 +151,14 @@ export default defineComponent({
     showSelectedFiltersCount: {
       type: Boolean,
       default: false
+    },
+    currentCategory: {
+      type: Array,
+      default: () => []
+    },
+    showCategoryFilter: {
+      type: Boolean,
+      default: true
     }
   },
   setup: (props: ItemFilterProps, { root }) => {
@@ -217,12 +171,14 @@ export default defineComponent({
     const updateFacet = (facetValue: FacetValue): void => {
       UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
     };
+
     const getSubCategoryValue = (parentCategory: FacetValue, subCategory: Facet): FacetValue => {
       return {
         id: subCategory.id,
         name: parentCategory.name + '_' + subCategory.name
       } as FacetValue;
     };
+
     const selectedValuesCount = computed((): number => {
       const facetValues = props.facet.values as FacetValue[];
 
@@ -233,12 +189,18 @@ export default defineComponent({
       return selectedFacets.length;
     });
 
+    const shouldShowCategoryFilter = computed((): boolean => {
+      return props.facet.id === 'cat' && typeof props.showCategoryFilter === 'undefined' ||
+          props.facet.id === 'cat' && props.showCategoryFilter;
+    });
+
     return {
       selectedFacets,
       isLoading,
       updateFacet,
       getSubCategoryValue,
-      selectedValuesCount
+      selectedValuesCount,
+      shouldShowCategoryFilter
     };
   }
 });

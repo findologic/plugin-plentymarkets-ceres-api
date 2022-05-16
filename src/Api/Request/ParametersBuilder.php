@@ -84,10 +84,6 @@ class ParametersBuilder
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
             foreach ($attributes as $key => $value) {
-                if ($key === 'cat' && $category) {
-                    continue;
-                }
-
                 $request->setAttributeParam($key, $value);
             }
         }

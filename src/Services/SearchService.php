@@ -14,16 +14,16 @@ use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
-use IO\Services\ItemSearch\Factories\VariationSearchFactory;
-use IO\Services\TemplateConfigService;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
+use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Log\Contracts\LoggerContract;
 use IO\Services\CategoryService;
-use IO\Services\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 
 /**
  * Class SearchService
@@ -125,7 +125,7 @@ class SearchService implements SearchServiceInterface
         return pluginApp(ItemSearchService::class);
     }
 
-    public function getSearchFactory(): VariationSearchFactory
+    public function getVariationSearchFactory(): VariationSearchFactory
     {
         return pluginApp(VariationSearchFactory::class);
     }
@@ -160,6 +160,7 @@ class SearchService implements SearchServiceInterface
         $results = $this->search($request, $externalSearch);
         if ($landingPageUrl = $results->getLandingPage()) {
             $this->doPageRedirect($landingPageUrl);
+            return;
         }
 
         if ($results->getResultsCount() == 0) {
@@ -174,6 +175,7 @@ class SearchService implements SearchServiceInterface
 
         if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
+            return;
         }
 
         /** @var ExternalSearch $searchQuery */
@@ -345,13 +347,16 @@ class SearchService implements SearchServiceInterface
 
     private function filterInvalidVariationIds(array $ids): array
     {
-        $results = $this->getItemSearchService()->getResult(
-            $this->getSearchFactory()->hasVariationIds($ids)->isActive()
-        );
+        $variationSearchFactory = $this->getVariationSearchFactory();
+        $results = $this->getItemSearchService()->getResults([
+            $variationSearchFactory
+                ->isVisibleForClient()
+                ->isActive()
+                ->hasVariationIds($ids)
+        ])[0];
 
         $variationIds = [];
-
-        if ($results['success'] && $results['total'] > 0) {
+        if ($results['total'] > 0) {
             foreach ($results['documents'] as $document) {
                 $variationIds[] = $document['id'];
             }
@@ -376,9 +381,9 @@ class SearchService implements SearchServiceInterface
         return $findologicIds;
     }
 
-    protected function shouldRedirectToProductDetailPage(array $productsIds, HttpRequest $request): bool
+    protected function shouldRedirectToProductDetailPage(array $variationIds, HttpRequest $request): bool
     {
-        if (count($productsIds) !== 1) {
+        if (count($variationIds) !== 1) {
             return false;
         }
 
@@ -410,26 +415,38 @@ class SearchService implements SearchServiceInterface
             $productId = explode('_', $productId)[0];
         }
 
-        $result = $itemSearchService->getResult(
-            $this->getSearchFactory()->hasItemId($productId)
-        );
+        $variationSearchFactory = $this->getVariationSearchFactory()
+            ->hasItemId($productId)
+            ->isVisibleForClient()
+            ->isActive()
+            ->withResultFields([
+                'item.id',
+                'variation.id',
+                'variation.number',
+                'variation.model',
+                'variation.isMain',
+                'salesPrices',
+                'barcodes.*',
+            ]);
+        $result = $itemSearchService->getResults([$variationSearchFactory])[0];
 
-        if (!$result['success'] || empty($result['documents'][0])) {
+        if ($result['total'] === 0 || empty($result['documents'])) {
             return null;
         }
 
+        $resultDocuments = $result['documents'];
+        $firstResultData = $resultDocuments[0]['data'];
+        
         $query = $response->getData(Response::DATA_QUERY)['query'];
-
-        $productData = $result['documents'][0]['data'];
-        $variationId = $this->getVariationIdForRedirect($query, $result['documents']);
+        $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
 
         if ($variationId !== $productId) {
-            $productData['variation']['id'] = $variationId;
+            $firstResultData['variation']['id'] = $variationId;
         }
 
         $withVariationId = $this->shouldExportWithVariationId($variationId);
 
-        return $this->buildItemURL($productData, $withVariationId);
+        return $this->buildItemURL($firstResultData, $withVariationId);
     }
 
     private function shouldExportWithVariationId(int $variationId): bool
@@ -477,7 +494,6 @@ class SearchService implements SearchServiceInterface
 
             if (strtolower($variation['number']) == $lowercasedQuery ||
                 strtolower($variation['model']) == $lowercasedQuery ||
-                strtolower($variation['order']) == $lowercasedQuery ||
                 strtolower($variation['id']) == $lowercasedQuery
             ) {
                 return $variation['id'];

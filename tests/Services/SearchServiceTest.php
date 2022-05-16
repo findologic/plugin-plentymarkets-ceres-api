@@ -2,7 +2,6 @@
 
 namespace Findologic\Tests\Services;
 
-use Exception;
 use Findologic\Api\Client;
 use Findologic\Api\Request\Request;
 use Findologic\Api\Request\RequestBuilder;
@@ -16,12 +15,12 @@ use Findologic\Services\Search\ParametersHandler;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Tests\Helpers\MockResponseHelper;
 use IO\Services\CategoryService;
-use IO\Services\ItemSearch\Factories\VariationSearchFactory;
-use IO\Services\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
-use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
@@ -148,19 +147,15 @@ class SearchServiceTest extends TestCase
         $responseMock->expects($this->exactly(2))->method('getResultsCount')->willReturn(3);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemSearchServiceMock->expects($this->once())
-            ->method('getResult')
-            ->willReturn(['success' => false, 'total' => 0]);
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
+        $itemSearchServiceMock->method('getResults')
+            ->willReturn($this->getDefaultResultsForItemSearchService());
 
         $searchServiceMock = $this->getSearchServiceMock(
-            ['getCategoryService', 'getItemSearchService', 'getSearchFactory', 'getPluginRepository']
+            ['getCategoryService', 'getItemSearchService', 'getVariationSearchFactory', 'getPluginRepository']
         );
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
-
-        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+        $searchServiceMock->method('getVariationSearchFactory')->willReturn($this->getVariationSearchFactoryMock());
 
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
             ->disableOriginalConstructor()
@@ -178,6 +173,9 @@ class SearchServiceTest extends TestCase
 
     public function testItemVariantIdExtractingForRedirectUrlGeneration()
     {
+        $shopUrl = 'myshop.de';
+        $this->setUpPlentyInternalSearchMocks($shopUrl, 'de', 'de');
+
         $requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -195,14 +193,13 @@ class SearchServiceTest extends TestCase
         $responseMock->method('getLandingPage')->willReturn(null);
         $responseMock->method('getProductsIds')->willReturn(['123_456']);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemSearchServiceMock->expects($this->once())
-            ->method('getResult')
-            ->willReturn(['success' => false, 'total' => 0]);
+        $responseMock->expects($this->once())->method('getData')->willReturn(['query' => 'search term']);
 
-        $searchFactoryMock = $this->getSearchFactoryMock();
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
+        $itemSearchServiceMock->method('getResults')
+            ->willReturn($this->getDefaultResultsForItemSearchService());
+
+        $searchFactoryMock = $this->getVariationSearchFactoryMock();
 
         $searchServiceMock = $this->getSearchServiceMock([
             'search',
@@ -210,14 +207,33 @@ class SearchServiceTest extends TestCase
             'getResults',
             'shouldRedirectToProductDetailPage',
             'getItemSearchService',
-            'getSearchFactory'
+            'getVariationSearchFactory',
+            'doPageRedirect',
         ]);
+
         $searchServiceMock->method('search')->willReturn($responseMock);
-        $searchServiceMock->method('getResults')->willReturn($responseMock);
+
+        $mainVariationId = 1011;
+        $itemSearchServiceMock->method('getResults')->willReturn([
+            [
+                'total' => 1,
+                'documents' => $this->getMultipleItemsDocuments(
+                    [
+                        '0' => [
+                            'id' => $mainVariationId,
+                            'price' => 10.00,
+                            'isMain' => true
+                        ]
+                    ]
+                )
+            ]
+        ]);
         $searchServiceMock->method('shouldFilterInvalidProducts')->willReturn(false);
         $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(true);
         $searchServiceMock->expects($this->once())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
-        $searchServiceMock->expects($this->once())->method('getSearchFactory')->willReturn($searchFactoryMock);
+        $searchServiceMock->expects($this->once())->method('getVariationSearchFactory')->willReturn($searchFactoryMock);
+        $expectedRedirectUrl = $shopUrl . '/test-product_11_' . $mainVariationId;
+        $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($expectedRedirectUrl);
 
         $searchFactoryMock->expects($this->once())->method('hasItemId')->with('123');
 
@@ -225,10 +241,10 @@ class SearchServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider redirectToProductPageOnDoSearchProvider
+     * @dataProvider redirectToProductPageOrLandingpageOnDoSearchProvider
      * @runInSeparateProcess
      */
-    public function testRedirectToProductPageOnDoSearch(
+    public function testRedirectToProductPageOrLandingpageOnDoSearch(
         array $query,
         array $responseVariationIds,
         array $responseProductIds,
@@ -237,6 +253,7 @@ class SearchServiceTest extends TestCase
         string $shopUrl,
         array $dataQueryInfoMessage,
         $redirectUrl,
+        $landingPageUrl,
         array $attributes,
         string $language = 'de',
         string $defaultLanguage = 'de',
@@ -254,46 +271,55 @@ class SearchServiceTest extends TestCase
             ->willReturn($isOptionShowPleaseSelectEnabled);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
         $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
-        if ($redirectUrl) {
-            $responseMock->expects($this->exactly(2))->method('getData')
-                ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
-                ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
-            $responseMock->expects($this->once())->method('getProductsIds')->willReturn($responseProductIds);
-        } elseif ($dataQueryInfoMessage['queryStringType'] != 'notImprovedOrCorrected') {
-            $responseMock->expects($this->once())->method('getData')
-                ->with(Response::DATA_QUERY_INFO_MESSAGE)
-                ->willReturn($dataQueryInfoMessage);
-        }
-        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResult'])
-            ->getMock();
-        $itemSearchServiceMock->expects($this->at(0))->method('getResult')->willReturn($itemSearchServiceResultsAll);
-        if ($redirectUrl) {
-            $itemSearchServiceMock->expects($this->at(1))
-                ->method('getResult')
-                ->willReturn($variationSearchByItemIdResult);
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
+
+        if ($landingPageUrl) {
+            $responseMock->expects($this->once())->method('getLandingPage')
+                ->willReturn($landingPageUrl);
+        } else {
+            $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
+            $itemSearchServiceMock->expects($this->at(0))
+                ->method('getResults')
+                ->willReturn($itemSearchServiceResultsAll);
+
+            if ($redirectUrl) {
+                $responseMock->expects($this->exactly(2))->method('getData')
+                    ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
+                    ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
+                $responseMock->expects($this->once())->method('getProductsIds')->willReturn($responseProductIds);
+
+                $itemSearchServiceMock->expects($this->at(1))
+                    ->method('getResults')
+                    ->willReturn($variationSearchByItemIdResult);
+            } elseif ($dataQueryInfoMessage['queryStringType'] != 'notImprovedOrCorrected') {
+                $responseMock->expects($this->once())->method('getData')
+                    ->with(Response::DATA_QUERY_INFO_MESSAGE)
+                    ->willReturn($dataQueryInfoMessage);
+            }
         }
+
+        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',
             'getItemSearchService',
-            'getSearchFactory',
+            'getVariationSearchFactory',
             'doPageRedirect',
-            'getPluginRepository'
+            'getPluginRepository',
+            'loadResultFieldTemplate'
         ]);
         $searchServiceMock->expects($this->any())->method('getItemSearchService')->willReturn($itemSearchServiceMock);
-        if ($redirectUrl) {
+        if ($landingPageUrl) {
+            $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($landingPageUrl);
+        } elseif ($redirectUrl) {
             $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($redirectUrl);
         } else {
             $searchServiceMock->expects($this->never())->method('doPageRedirect');
         }
 
-        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+        $searchServiceMock->method('getVariationSearchFactory')->willReturn($this->getVariationSearchFactoryMock());
 
         /** @var ExternalSearch|MockObject $searchQueryMock */
         $searchQueryMock = $this->getMockBuilder(ExternalSearch::class)
@@ -321,15 +347,7 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [
                     1011, 1012
                 ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'attributes' => [],
                 'configuredSearchCategory' => 1234,
                 'searchedCategory' => 1234,
@@ -339,15 +357,7 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'attributes' => [
                     'attrib' => [
                         'cat' => 'Blubbergurken'
@@ -361,15 +371,7 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [
                     1011, 1022, 1023
                 ],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'attributes' => [
                     'attrib' => [
                         'cat' => 'Blubbergurken'
@@ -400,11 +402,9 @@ class SearchServiceTest extends TestCase
         $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
-        $itemSearchServiceMock = $this->getMockBuilder(ItemSearchService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemSearchServiceMock->expects($this->at(0))
-            ->method('getResult')
+        $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
+        $itemSearchServiceMock->expects($this->once())
+            ->method('getResults')
             ->willReturn($itemSearchServiceResultsAll);
         $itemSearchServiceMock->expects($this->once())
             ->method('getRedirectUrl')
@@ -413,15 +413,17 @@ class SearchServiceTest extends TestCase
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',
             'getItemSearchService',
-            'getSearchFactory',
+            'getVariationSearchFactory',
             'handleProductRedirectUrl',
-            'getPluginRepository'
+            'getPluginRepository',
+            'shouldRedirectToProductDetailPage'
         ]);
         $searchServiceMock->expects($this->any())
             ->method('getItemSearchService')
             ->willReturn($itemSearchServiceMock);
 
-        $searchServiceMock->method('getSearchFactory')->willReturn($this->getSearchFactoryMock());
+        $searchServiceMock->method('getVariationSearchFactory')->willReturn($this->getVariationSearchFactoryMock());
+        $searchServiceMock->method('shouldRedirectToProductDetailPage')->willReturn(false);
 
         $this->configRepository->expects($this->once())->method('get')
             ->with('IO.routing.category_search')
@@ -514,14 +516,20 @@ class SearchServiceTest extends TestCase
                     'isMain' => $variation['isMain'],
                     'model' => (array_key_exists('model', $variation)) ? $variation['model'] : 'model',
                     'number' => (array_key_exists('number', $variation)) ? $variation['number'] :'number',
-                    'order' => (array_key_exists('order', $variation)) ? $variation['order'] : 'model'
                 ],
+                'prices' => [
+                    'default' => [
+                        'price' => [
+                            'value' => $variation['price']
+                        ]
+                    ]
+                ],
+                'barcodes' => (array_key_exists('barcodes', $variation)) ? $variation['barcodes'] : [],
                 'salesPrices' => [
                     [
                         'price' => $variation['price']
                     ]
-                ],
-                'barcodes' => (array_key_exists('barcodes', $variation)) ? $variation['barcodes'] : []
+                ]
             ]
         ];
     }
@@ -537,50 +545,45 @@ class SearchServiceTest extends TestCase
         return $documents;
     }
 
-    public function redirectToProductPageOnDoSearchProvider(): array
+    public function redirectToProductPageOrLandingpageOnDoSearchProvider(): array
     {
         return [
             'Show please select config is set, cheapest variation found, no variation information in redirect url' => [
                 'query' => ['query' => 'test query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 3,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
+
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -591,43 +594,37 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => '1012'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 3,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -638,43 +635,37 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 3,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -685,43 +676,37 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 0.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 0.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 0.00,
-                                'isMain' => false
+                    [
+                        'total' => 3,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 0.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 0.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 0.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -733,43 +718,37 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 0.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 12.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 15.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 0.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 12.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 15.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11_1012',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -781,43 +760,37 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the query'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 10.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 10.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 10.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 10.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 10.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11_1011',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -829,43 +802,37 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => '1012'],
                 'responseVariationIds' => [1011, 1012, 1013],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false
-                            ],
-                            '2' => [
-                                'id' => 1013,
-                                'price' => 20.00,
-                                'isMain' => false
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false
+                                ],
+                                '2' => [
+                                    'id' => 1013,
+                                    'price' => 20.00,
+                                    'isMain' => false
+                                ]
                             ]
-                        ]
-                    ),
+                        ),
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11_1012',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ],
@@ -877,24 +844,17 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        $this->getRowItemDocument([
-                            'id' => 1011,
-                            'price' => 20.00,
-                            'isMain' => true,
-                        ])
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
                     ]
                 ],
                 'shopUrl' => 'https://www.test.com',
@@ -902,30 +862,24 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product with another language found' => [
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        $this->getRowItemDocument([
-                            'id' => 1011,
-                            'price' => 20.00,
-                            'isMain' => true,
-                        ])
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
                     ]
                 ],
                 'shopUrl' => 'https://www.test.com',
@@ -933,6 +887,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/en/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [],
                 'language' => 'en'
             ],
@@ -940,24 +895,17 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        $this->getRowItemDocument([
-                            'id' => 1011,
-                            'price' => 20.00,
-                            'isMain' => true,
-                        ])
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
                     ]
                 ],
                 'shopUrl' => 'https://www.test.com',
@@ -965,6 +913,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -973,39 +922,33 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'model' => 'this is the text that was searched for'
-                            ],
-                        ]
-                    )
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                    'model' => 'this is the text that was searched for'
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -1014,80 +957,33 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                                'number' => 'THIS IS THE TEXT THAT WAS SEARCHED FOR'
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                            ],
-                        ]
-                    )
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true,
+                                    'number' => 'THIS IS THE TEXT THAT WAS SEARCHED FOR'
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
-                'attributes' => [
-                    'page' => 1
-                ]
-            ],
-            'One product with multiple variations redirects to variation with an order matching the query' => [
-                'query' => ['query' => 'this is the text that was searched for'],
-                'responseVariationIds' => [1011, 1012],
-                'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
-                'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'order' => 'this is the text that was searched for'
-                            ],
-                        ]
-                    )
-                ],
-                'shopUrl' => 'https://www.test.com',
-                'dataQueryInfoMessage' => [
-                    'queryStringType' => 'notImprovedOrCorrected'
-                ],
-                'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -1096,43 +992,37 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'barcodes' =>  [
-                                    ['code' => '123123123'],
-                                    ['code' => 'this is the text that was searched for'],
-                                    ['code' => '321321321']
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true,
                                 ],
-                            ],
-                        ]
-                    )
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                    'barcodes' =>  [
+                                        ['code' => '123123123'],
+                                        ['code' => 'this is the text that was searched for'],
+                                        ['code' => '321321321']
+                                    ],
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -1141,42 +1031,36 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => $this->getMultipleItemsDocuments(
-                        [
-                            '0' => [
-                                'id' => 1011,
-                                'price' => 20.00,
-                                'isMain' => true,
-                            ],
-                            '1' => [
-                                'id' => 1012,
-                                'price' => 20.00,
-                                'isMain' => false,
-                                'barcodes' => [
-                                    ['code' => '123123123'],
-                                    ['code' => '321321321']
-                                ]
-                            ],
-                        ]
-                    )
+                    [
+                        'total' => 2,
+                        'documents' => $this->getMultipleItemsDocuments(
+                            [
+                                '0' => [
+                                    'id' => 1011,
+                                    'price' => 20.00,
+                                    'isMain' => true,
+                                ],
+                                '1' => [
+                                    'id' => 1012,
+                                    'price' => 20.00,
+                                    'isMain' => false,
+                                    'barcodes' => [
+                                        ['code' => '123123123'],
+                                        ['code' => '321321321']
+                                    ]
+                                ],
+                            ]
+                        )
+                    ]
                 ],
                 'shopUrl' => 'https://www.test.com',
                 'dataQueryInfoMessage' => [
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 1
                 ]
@@ -1185,29 +1069,22 @@ class SearchServiceTest extends TestCase
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1012],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    [
-                                        'urlPath' => 'test-product'
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        [
+                                            'urlPath' => 'test-product'
+                                        ]
+                                    ],
+                                    'item' => [
+                                        'id' => 11
                                     ]
-                                ],
-                                'item' => [
-                                    'id' => 11
                                 ]
                             ]
                         ]
@@ -1218,6 +1095,7 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => [
                     'page' => 2
                 ]
@@ -1227,40 +1105,42 @@ class SearchServiceTest extends TestCase
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
                 'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ],
-                        [
-                            'id' => 1022
+                    [
+                        'total' => 2,
+                        'documents' => [
+                            [
+                                'id' => 1011
+                            ],
+                            [
+                                'id' => 1022
+                            ]
                         ]
                     ]
                 ],
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 2,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 2,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
-                            ]
-                        ],
-                        [
-                            'id' => 1022,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                            ],
+                            [
+                                'id' => 1022,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1271,33 +1151,27 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product found and query string type is corrected' => [
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1308,33 +1182,27 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'corrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product found and query string type is improved' => [
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1345,33 +1213,27 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'improved'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => []
             ],
             'One product found but filters are set' => [
                 'query' => ['query' => 'this is the text that was searched for'],
                 'responseVariationIds' => [1011, 1022, 1023],
                 'responseProductIds' => [11],
-                'itemSearchServiceResultsAll' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011
-                        ]
-                    ]
-                ],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
                 'variationSearchByItemIdResult' => [
-                    'success' => true,
-                    'total' => 1,
-                    'documents' => [
-                        [
-                            'id' => 1011,
-                            'data' => [
-                                'texts' => [
-                                    'urlPath' => 'test-product'
-                                ],
-                                'item' => [
-                                    'id' => 11
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            [
+                                'id' => 1011,
+                                'data' => [
+                                    'texts' => [
+                                        'urlPath' => 'test-product'
+                                    ],
+                                    'item' => [
+                                        'id' => 11
+                                    ]
                                 ]
                             ]
                         ]
@@ -1382,12 +1244,38 @@ class SearchServiceTest extends TestCase
                     'queryStringType' => 'notImprovedOrCorrected'
                 ],
                 'redirectUrl' => null,
+                'landingPageUrl' => null,
                 'attributes' => [
                     'attrib' => [
                         'cat' => 'Blubbergurken'
                     ]
                 ]
             ],
+            'One product found but landing page match exists' => [
+                'query' => ['query' => 'this is the text that was searched for'],
+                'responseVariationIds' => [1011, 1012],
+                'responseProductIds' => [11],
+                'itemSearchServiceResultsAll' => $this->getDefaultResultsForItemSearchService(),
+                'variationSearchByItemIdResult' => [
+                    [
+                        'total' => 1,
+                        'documents' => [
+                            $this->getRowItemDocument([
+                                'id' => 1011,
+                                'price' => 20.00,
+                                'isMain' => true,
+                            ])
+                        ]
+                    ]
+                ],
+                'shopUrl' => 'https://www.test.com',
+                'dataQueryInfoMessage' => [
+                    'queryStringType' => 'notImprovedOrCorrected'
+                ],
+                'redirectUrl' => '/test-product_11',
+                'landingPageUrl' => 'https://www.test.com/AGB',
+                'attributes' => []
+            ]
         ];
     }
 
@@ -1613,18 +1501,30 @@ class SearchServiceTest extends TestCase
         $classInstances[UrlBuilderRepositoryContract::class] = $urlBuilderMock;
     }
 
-    /**
-     * @return MockObject|VariationSearchFactory
-     */
-    private function getSearchFactoryMock(): VariationSearchFactory
+    private function getVariationSearchFactoryMock(): MockObject
     {
-        $searchServiceFactoryMock = $this->getMockBuilder(VariationSearchFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $searchServiceFactoryMock->method('hasVariationIds')->willReturnSelf();
-        $searchServiceFactoryMock->method('hasItemId')->willReturnSelf();
+        $variationSearchFactoryMock = $this->getMockForAbstractClass(VariationSearchFactory::class);
+        $variationSearchFactoryMock->method('withVariationProperties')->willReturnSelf();
+        $variationSearchFactoryMock->method('withPrices')->willReturnSelf();
+        $variationSearchFactoryMock->method('isActive')->willReturnSelf();
+        $variationSearchFactoryMock->method('withResultFields')->willReturnSelf();
+        $variationSearchFactoryMock->method('hasVariationIds')->willReturnSelf();
+        $variationSearchFactoryMock->method('hasItemId')->willReturnSelf();
 
-        return $searchServiceFactoryMock;
+        return $variationSearchFactoryMock;
+    }
+
+    private function getDefaultResultsForItemSearchService(): array
+    {
+        return [
+            [
+                'total' => 1,
+                'documents' => [
+                    [
+                        'id' => 1011
+                    ]
+                ]
+            ]
+        ];
     }
 }
