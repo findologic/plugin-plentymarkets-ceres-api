@@ -218,8 +218,7 @@ class SearchServiceTest extends TestCase
                         '0' => [
                             'id' => $mainVariationId,
                             'price' => 10.00,
-                            'isMain' => true,
-                            'data' => []
+                            'isMain' => true
                         ]
                     ]
                 )
