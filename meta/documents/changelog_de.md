@@ -1,5 +1,16 @@
 # Release Notes für Findologic
 
+## 4.0.0 (2022-05-19)
+
+### Geändert
+* [PLENTY-342] Vue Komponenten wurden auf Typescipt und zu Vue single file Komponenten überarbeitet.
+* [PLENTY-430] JS Bibliotheken wurden aktualisiert und Änderungen von Plugin Version 3.7.3 bis 3.8.1 wurden übernommen.
+* [PLENTY-439] Github Actions Unit Tests laufen nun mit PHP 8.
+* [PLENTY-440] Änderungen von Plugin Version 3.9.0 bis 3.9.2 wurden übernommen.
+
+## Behoben
+* [PLENTY-441] Ein Fehler wurde behoben, wodurch es auf einer Suchseite zu einer Vue Warnung im ItemFilter Komponente gekommen ist.
+
 ## 3.9.2 (2022-04-11)
 
 ### Behoben
