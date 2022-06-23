@@ -164,6 +164,8 @@ class SearchService implements SearchServiceInterface
         }
 
         if ($results->getResultsCount() == 0) {
+            $externalSearch->setResults([]);
+
             return;
         }
 
