@@ -412,7 +412,6 @@ class ParametersHandlerTest extends TestCase
         array $sortingOptions,
         string $defaultOption
     ) {
-        /** @var ExternalSearchOptions $externalSearchOptions */
         $externalSearchOptions = new ExternalSearchOptions();
 
         /** @var Request|MockObject $requestMock */
@@ -446,7 +445,7 @@ class ParametersHandlerTest extends TestCase
 
         /** @var ParametersHandler|MockObject $parametersHandlerMock */
         $parametersHandlerMock = $this->getMockBuilder(ParametersHandler::class)
-            ->setMethods(['getConfig', 'getItemsPerPage'])
+            ->setMethods(['getConfig', 'getItemsPerPage', 'getCurrentItemsPerPage'])
             ->getMock();
         $parametersHandlerMock->expects($this->any())->method('getConfig')->willReturn($config);
 
