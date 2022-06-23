@@ -158,7 +158,6 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $results = $this->search($request, $externalSearch);
-        $attrs = $request->get('attrib');
         $hasSelectedFilters = $request->get('attrib') !== null;
 
         if ($landingPageUrl = $results->getLandingPage()) {
