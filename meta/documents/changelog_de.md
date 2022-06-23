@@ -1,5 +1,12 @@
 # Release Notes für Findologic
 
+## 4.0.1 (2022-06-23)
+
+### Behoben
+* [PLENTY-443] Ein Fehler wurde behoben, wodurch es zu einem Fehler bei Preis-Selektierung ohne Produkten kam.
+* [PLENTY-445] Ein Fehler wurde behoben, wodurch bei einer Preis-Selektierung ohne Produkte stattdessen alle Produkte angezeigt wurden.
+* [PLENTY-447] Ein Fehler wurde behoben, wodurch ein leerer weißer Bereich gerendert wurde, wenn der Kategorie Filter nicht angezeigt werden soll.
+
 ## 4.0.0 (2022-05-19)
 
 ### Geändert
@@ -8,8 +15,14 @@
 * [PLENTY-439] Github Actions Unit Tests laufen nun mit PHP 8.
 * [PLENTY-440] Änderungen von Plugin Version 3.9.0 bis 3.9.2 wurden übernommen.
 
-## Behoben
+### Behoben
 * [PLENTY-441] Ein Fehler wurde behoben, wodurch es auf einer Suchseite zu einer Vue Warnung im ItemFilter Komponente gekommen ist.
+
+## 3.9.3 (2022-06-23)
+
+### Behoben
+
+* [PLENTY-446] Kompatibilität mit PHP8 hinzugefügt
 
 ## 3.9.2 (2022-04-11)
 
