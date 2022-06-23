@@ -26,7 +26,7 @@ class FiltersParserTest extends TestCase
      */
     protected $libraryCallContract;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->libraryCallContract = $this->getMockBuilder(LibraryCallContract::class)
             ->disableOriginalConstructor()
@@ -69,8 +69,7 @@ class FiltersParserTest extends TestCase
 
         $filtersParserMock = $this->getMockBuilder(FiltersParser::class)
             ->setConstructorArgs([
-                'libraryCallContract' => $this->libraryCallContract,
-                'imageService' => $this->imageService
+                'libraryCallContract' => $this->libraryCallContract
             ])
             ->setMethods($methods)->getMock();
         $filtersParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);

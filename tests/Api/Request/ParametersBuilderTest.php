@@ -41,7 +41,7 @@ class ParametersBuilderTest extends TestCase
      */
     protected $tagsHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->categoryService = $this->getMockBuilder(CategoryService::class)
             ->disableOriginalConstructor()

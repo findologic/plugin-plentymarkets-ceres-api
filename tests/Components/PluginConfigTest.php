@@ -25,7 +25,7 @@ class PluginConfigTest extends TestCase
      */
     private $sessionStorageService;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
             ->disableOriginalConstructor()
