@@ -143,7 +143,7 @@ class SearchServiceTest extends TestCase
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
         $responseMock->expects($this->once())->method('getVariationIds')->willReturn([1, 2, 3]);
-        $responseMock->expects($this->exactly(2))->method('getResultsCount')->willReturn(3);
+        $responseMock->expects($this->exactly(3))->method('getResultsCount')->willReturn(3);
         $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
@@ -1316,6 +1316,42 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $externalSearchServiceMock->expects($this->never())->method('setResults');
+
+        $originalExternalSearchMock = clone $externalSearchServiceMock;
+
+        $this->requestBuilder->expects($this->once())->method('build')
+            ->willReturn(new Request());
+        $this->client->expects($this->once())
+            ->method('call')
+            ->willReturn($this->getMockResponse('noResults.xml'));
+
+        $searchService = $this->getSearchServiceMock();
+        $searchService->doSearch($requestMock, $externalSearchServiceMock);
+
+        $this->assertEquals($originalExternalSearchMock, $externalSearchServiceMock);
+    }
+
+    public function testExternalSearchIsManipulatedOnNoResultPagesInCategory()
+    {
+        $attributes = [
+            'attrib' => [
+                'cat' => 'Blubbergurken'
+            ]
+        ];
+
+        $requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $requestMock->expects($this->any())
+            ->method('get')
+            ->with('attrib')
+            ->willReturn($attributes);
+
+        $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $externalSearchServiceMock->expects($this->once())->method('setResults');
 
         $originalExternalSearchMock = clone $externalSearchServiceMock;
 
