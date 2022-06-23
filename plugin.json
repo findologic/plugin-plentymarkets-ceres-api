@@ -49,7 +49,7 @@
     }
   ],
   "dependencies": {
-    "findologic/http_request2": "2.3.1"
+    "findologic/http_request2": "2.4.0"
   },
   "containers": [
     {
