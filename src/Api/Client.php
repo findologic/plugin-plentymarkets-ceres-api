@@ -50,6 +50,10 @@ class Client
                 'Findologic::http_library',
                 ['request' => $requestArray]
             );
+
+            if (array_key_exists('error', $response) && $response['error']) {
+                $this->logger->error('Exception while handling search query.', ['response' => $response]);
+            }
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.', ['request' => $requestArray]);
             $this->logger->logException($e);
