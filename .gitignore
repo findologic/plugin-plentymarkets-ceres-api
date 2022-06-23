@@ -5,3 +5,4 @@ build/
 src/index.php
 src/Mocks
 tests/build
+/tests/.phpunit.result.cache
