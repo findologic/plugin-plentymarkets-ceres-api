@@ -19,7 +19,7 @@
                                 v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
                                 v-bind:show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
                                 v-for="facet in facets"
-                                v-if="facet.isMain"
+                                v-if="facet.id === 'cat' ? showCategoryFilter && facet.isMain : facet.isMain"
                                 :current-category="currentCategory"
                                 :show-category-filter="showCategoryFilter"
                                 :facet="facet"
