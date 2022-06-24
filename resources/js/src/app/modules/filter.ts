@@ -32,7 +32,7 @@ if (isPageWhereComponentsShouldBeLoaded()) {
     plentyVue.component('ItemDropdown', ItemDropdown);
     plentyVue.component('ItemRangeSlider', ItemRangeSlider);
     plentyVue.component('ItemFilterImage', ItemFilterImage);
+    plentyVue.component('ItemFilterTagList', FindologicItemFilterTagList);
     plentyVue.component('FindologicItemFilterList', ItemFilterList);
     plentyVue.component('FindologicItemFilter', FindologicItemFilter);
-    plentyVue.component('FindologicItemFilterTagList', FindologicItemFilterTagList);
 }
