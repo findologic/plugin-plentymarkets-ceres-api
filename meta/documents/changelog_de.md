@@ -1,5 +1,10 @@
 # Release Notes für Findologic
 
+## 3.9.4 (2022-06-23)
+
+### Geändert
+* [PLENTY-448] Plugin wurde als PHP8 kompatibel markiert
+
 ## 3.9.3 (2022-06-23)
 
 ### Behoben
