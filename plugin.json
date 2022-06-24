@@ -48,6 +48,9 @@
       "defaultLayoutContainer": "Findologic::CategoryItem.SmartDidYouMean"
     }
   ],
+  "platform": {
+    "php": ">=7.3 <8.1"
+  },
   "dependencies": {
     "findologic/http_request2": "2.4.0"
   },
