@@ -51,7 +51,7 @@ class Client
                 ['request' => $requestArray]
             );
 
-            if (array_key_exists('error', $response) && $response['error']) {
+            if (is_array($response) && array_key_exists('error', $response) && $response['error']) {
                 $this->logger->error('Exception while handling search query.', ['response' => $response]);
             }
         } catch (Exception $e) {
