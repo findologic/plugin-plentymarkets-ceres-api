@@ -1,3 +1,6 @@
-<promotion-component
-    :promotion="{{ promotion }}"
-/>
+<div>
+    <promotion-component
+            v-if="{{ promotion | length}} > 0"
+            :promotion="{{ promotion | json_encode}}"
+    />
+</div>
