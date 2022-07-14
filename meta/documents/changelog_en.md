@@ -1,5 +1,10 @@
 # Release Notes for Findologic
 
+## 4.0.5 (2022-07-11)
+
+### Behoben 
+* [PLENTY-449] Review Error in terms of PHP8 Compability has been resolved
+
 ## 4.0.2 (2022-06-24)
 
 ### Changed
