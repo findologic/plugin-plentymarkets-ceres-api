@@ -34,7 +34,7 @@
       @click="toggle()"
       @blur="close()"
     >
-      <span class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span>
+      <span class="fl-dropdown-label">{{ TranslationService.flTranslate("pleaseSelect") }}</span>
       <ul
         v-show="isOpen"
         class="fl-dropdown-content form-check"
@@ -76,6 +76,7 @@
 import { defineComponent } from '@vue/composition-api';
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import BaseDropdown from '../../../mixins/baseDropdown';
+import TranslationService from '../../../shared/TranslationService';
 
 interface ItemDropdownProps extends TemplateOverridable, FacetAware { }
 
@@ -87,11 +88,7 @@ export default defineComponent({
   setup: (props: ItemDropdownProps, { root }) => {
     root.$options.template = props.template || '#vue-item-dropdown';
 
-    const trans = (key: string) => {
-      return window.ceresTranslate(key);
-    };
-
-    return { trans };
+    return { TranslationService };
   }
 });
 </script>

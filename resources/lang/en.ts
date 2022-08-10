@@ -1,0 +1,16 @@
+export default {
+    findologic: {
+        itemFilter: 'More filters',
+        noMainFiltersItemFilter: 'Filter',
+        pleaseSelect: 'Please select',
+        didYouMeanQuery: 'Meinten Sie <a href="/search?query=:alternativeQuery&forceOriginalQuery=1">:alternativeQuery</a>?',
+        improvedQuery: 'Ergebnisse für <strong>:alternativeQuery</strong> werden angezeigt. Alternativ nach <strong><a href="/search?query=:originalQuery&forceOriginalQuery=1">:originalQuery</a></strong> suchen.',
+        correctedQuery: 'Keine Ergebnisse für <strong>:originalQuery</strong>. Zeige stattdessen <strong>:alternativeQuery</strong>',
+        queryInfoMessageCat: 'Suchergebnisse für :filterName <strong>:cat</strong> (<strong>:hits</strong> Treffer)',
+        queryInfoMessageVendor: 'Suchergebnisse für :filterName <strong>:vendor</strong> (<strong>:hits</strong> Treffer)',
+        queryInfoMessageQuery: 'Suchergebnisse für <strong>:query</strong> (<strong>:hits</strong> Treffer)',
+        queryInfoMessageDefault: 'Suchergebnisse (<strong>:hits</strong> Treffer)',
+        queryInfoMessageShoppingGuide: 'Suchergebnisse für <strong>:shoppingGuide</strong> (<strong>:hits</strong> Treffer)',
+        itemRangeSliderFormatValidationMessage: 'Bitte geben Sie eine Zahl ein',
+    }
+};

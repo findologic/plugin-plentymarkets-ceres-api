@@ -15,7 +15,7 @@
       <span
         v-else
         class="fl-dropdown-label"
-      >{{ TranslationService.translate("Findologic::Template.pleaseSelect") }}</span>
+      >{{ TranslationService.flTranslate("pleaseSelect") }}</span>
       <ul
         v-show="isOpen"
         class="fl-dropdown-content form-check"

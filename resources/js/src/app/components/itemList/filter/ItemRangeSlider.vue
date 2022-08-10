@@ -38,7 +38,7 @@
           :class="{'disabled': isDisabled}"
           data-toggle="tooltip"
           data-placement="top"
-          :title="TranslationService.translate('Ceres::Template.itemApply')"
+          :title="TranslationService.ceresTranslate('Ceres::Template.itemApply')"
           rel="nofollow"
           @click="triggerFilter()"
         >

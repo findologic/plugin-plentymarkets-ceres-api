@@ -29,7 +29,7 @@
             <a class="btn btn-link filter-toggle" data-toggle="collapse" href="#filterCollapse"
                aria-controls="filterCollapse">
               <i class="fa fa-sliders default-float"
-                 aria-hidden="true"></i> {{ TranslationService.translate('Findologic::Template.itemFilter') }}
+                 aria-hidden="true"></i> {{ TranslationService.flTranslate('itemFilter') }}
             </a>
           </div>
         </div>
@@ -40,7 +40,7 @@
           <a class="btn btn-link filter-toggle no-main-filters-filter-toggle" data-toggle="collapse"
              href="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
             <i class="fa fa-sliders default-float"
-               aria-hidden="true"></i> {{ TranslationService.translate('Findologic::Template.noMainFiltersItemFilter') }}
+               aria-hidden="true"></i> {{ TranslationService.flTranslate('noMainFiltersItemFilter') }}
           </a>
         </div>
       </div>
