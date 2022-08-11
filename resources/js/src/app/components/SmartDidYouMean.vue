@@ -1,6 +1,6 @@
 <template>
   <div class="col-12">
-    <h1 class="h2" id="searchPageTitle" v-html="infoData"></h1>
+    <h1 class="h2" id="searchPageTitle" v-html="queryInfoMessage"></h1>
     <p class="smart-did-you-mean" v-if="smartText.length > 0" v-html="smartText"></p>
   </div>
 </template>
@@ -11,7 +11,7 @@ import { defineComponent } from '@vue/composition-api';
 
 interface SmartDidYouMeanProps extends TemplateOverridable, FacetAware {
   smartText: string;
-  infoData: string;
+  queryInfoMessage: string;
 }
 
 export default defineComponent({
@@ -21,7 +21,7 @@ export default defineComponent({
       type: String,
       default: '',
     },
-    infoData: {
+    queryInfoMessage: {
       type: String,
       default: '',
     },
