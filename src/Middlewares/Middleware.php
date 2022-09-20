@@ -69,7 +69,7 @@ class Middleware extends PlentyMiddleware
             return;
         }
 
-        if (!$this->pluginConfig->getShopKey() || !$this->searchService->aliveTest()) {
+        if (!$this->pluginConfig->getShopKey()) {
             return;
         }
 
@@ -108,7 +108,9 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.search',
             function (TemplateContainer $templateContainer) {
-                $templateContainer->setContext(FindologicItemSearchContext::class);
+                if ($this->searchService->aliveTest()) {
+                    $templateContainer->setContext(FindologicItemSearchContext::class);
+                }
                 return false;
             }
         );
@@ -116,7 +118,9 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.category.item',
             function (TemplateContainer $templateContainer) {
-                $templateContainer->setContext(FindologicCategoryItemContext::class);
+                if ($this->searchService->aliveTest()) {
+                    $templateContainer->setContext(FindologicCategoryItemContext::class);
+                }
                 return false;
             }
         );
@@ -124,12 +128,17 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'Ceres.Search.Options',
             function (ExternalSearchOptions $searchOptions) use ($request) {
-                $this->searchService->handleSearchOptions($request, $searchOptions);
+                if ($this->searchService->aliveTest()) {
+                    $this->searchService->handleSearchOptions($request, $searchOptions);
+                }
             }
         );
 
         $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
-            if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
+            if (
+                $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter' &&
+                $this->searchService->aliveTest()
+            ) {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
         });
@@ -137,7 +146,9 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'Ceres.Search.Query',
             function (ExternalSearch $externalSearch) use ($request) {
-                $this->searchService->handleSearchQuery($request, $externalSearch);
+                if ($this->searchService->aliveTest()) {
+                    $this->searchService->handleSearchQuery($request, $externalSearch);
+                }
             }
         );
     }
