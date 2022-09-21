@@ -1,5 +1,10 @@
 # Release Notes für Findologic
 
+## 4.0.6 (2022-09-21)
+
+### Behoben
+* [PLENTY-454] Ein Fehler wurde behoben, wodurch sich die Assisted Suggest bei jedem Seitenaufruf geöffnet hat.
+
 ## 4.0.5 (2022-07-11)
 
 ### Behoben 
