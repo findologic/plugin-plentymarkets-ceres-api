@@ -110,8 +110,10 @@ class Middleware extends PlentyMiddleware
             function (TemplateContainer $templateContainer) {
                 if ($this->searchService->aliveTest()) {
                     $templateContainer->setContext(FindologicItemSearchContext::class);
+                    return false;
                 }
-                return false;
+
+                return true;
             }
         );
 
@@ -120,8 +122,10 @@ class Middleware extends PlentyMiddleware
             function (TemplateContainer $templateContainer) {
                 if ($this->searchService->aliveTest()) {
                     $templateContainer->setContext(FindologicCategoryItemContext::class);
+                    return false;
                 }
-                return false;
+
+                return true;
             }
         );
 

@@ -308,6 +308,8 @@ class SearchService implements SearchServiceInterface
      */
     public function aliveTest()
     {
+        return false;
+
         if ($this->aliveTestResult === null) {
             $request = $this->requestBuilder->buildAliveRequest();
             $response = $this->client->call($request);
@@ -442,7 +444,7 @@ class SearchService implements SearchServiceInterface
 
         $resultDocuments = $result['documents'];
         $firstResultData = $resultDocuments[0]['data'];
-        
+
         $query = $response->getData(Response::DATA_QUERY)['query'];
         $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
 
