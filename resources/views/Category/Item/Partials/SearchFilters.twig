@@ -11,19 +11,10 @@
                         :show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
                         :current-category="{{ currentCategory | json_encode }}"
                         :show-category-filter="{{ showCategoryFilter | json_encode}}"
+                        v-bind:filters-per-row="{{ config('Findologic.filters_per_row') }}"
+                        v-bind:fallback-image-color-filter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+                        v-bind:fallback-image-image-filter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
                     ></findologic-item-filter-list>
-                </client-only>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="list-controls">
-    <div class="row">
-        <div class="col-12">
-            <div class="list-wrapper">
-                <client-only>
-                    <findologic-item-filter-tag-list></findologic-item-filter-tag-list>
                 </client-only>
             </div>
         </div>
