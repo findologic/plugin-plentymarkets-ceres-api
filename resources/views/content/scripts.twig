@@ -26,10 +26,9 @@
     });
 </script>
 
-{% if isSearchPage or activeOnCatPage %}
+{% if isSearchPage and isAlive or activeOnCatPage and isAlive %}
     <script src="{{ plugin_path("Findologic") }}/js/dist/findologic-plugin.min.js"></script>
     <!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/findologic-plugin.min.js') }}) -->
-{% endif %}
 
 <!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
@@ -62,6 +61,7 @@
     </div>
 </script>
 <!-- /SSR -->
+{% endif %}
 
 <!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">

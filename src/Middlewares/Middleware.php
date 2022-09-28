@@ -36,6 +36,11 @@ class Middleware extends PlentyMiddleware
     private $activeOnCatPage = false;
 
     /**
+     * @var bool
+     */
+    private $isAlive = true;
+
+    /**
      * @var PluginConfig
      */
     private $pluginConfig;
@@ -76,24 +81,27 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) {
-                if ($this->pluginConfig->get(Plugin::CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED)) {
-                    $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
-                    $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
-                }
+                if ($this->isAlive) {
+                    if ($this->pluginConfig->get(Plugin::CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED)) {
+                        $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
+                        $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
+                    }
 
-                $container->addScriptTemplate(
-                    'Findologic::content.scripts',
-                    [
-                        'shopkey' => strtoupper(md5($this->pluginConfig->getShopKey())),
-                        'isSearchPage' => $this->isSearchPage,
-                        'activeOnCatPage' => $this->activeOnCatPage,
-                        'minimalSearchTermLength' => $this->pluginConfig->getMinimalSearchTermLength(),
-                        'languagePath' => $this->getLanguagePath(),
-                    ]
-                );
+                    $container->addScriptTemplate(
+                        'Findologic::content.scripts',
+                        [
+                            'shopkey' => strtoupper(md5($this->pluginConfig->getShopKey())),
+                            'isSearchPage' => $this->isSearchPage,
+                            'activeOnCatPage' => $this->activeOnCatPage,
+                            'minimalSearchTermLength' => $this->pluginConfig->getMinimalSearchTermLength(),
+                            'languagePath' => $this->getLanguagePath(),
+                            'isAlive' => $this->isAlive
+                        ]
+                    );
 
-                if ($this->pluginConfig->get(Plugin::CONFIG_FILTERS_STYLING_CSS_ENABLED)) {
-                    $container->addStyleTemplate('Findologic::content.styles');
+                    if ($this->pluginConfig->get(Plugin::CONFIG_FILTERS_STYLING_CSS_ENABLED)) {
+                        $container->addStyleTemplate('Findologic::content.styles');
+                    }
                 }
             }
         );
@@ -108,7 +116,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.search',
             function (TemplateContainer $templateContainer) {
-                if ($this->searchService->aliveTest()) {
+                if ($this->isAlive = $this->searchService->aliveTest()) {
                     $templateContainer->setContext(FindologicItemSearchContext::class);
                     return false;
                 }
@@ -120,7 +128,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.category.item',
             function (TemplateContainer $templateContainer) {
-                if ($this->searchService->aliveTest()) {
+                if ($this->isAlive = $this->searchService->aliveTest()) {
                     $templateContainer->setContext(FindologicCategoryItemContext::class);
                     return false;
                 }
@@ -141,7 +149,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
             if (
                 $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter' &&
-                $this->searchService->aliveTest()
+                $this->isAlive = $this->searchService->aliveTest()
             ) {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
@@ -150,7 +158,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'Ceres.Search.Query',
             function (ExternalSearch $externalSearch) use ($request) {
-                if ($this->searchService->aliveTest()) {
+                if ($this->isAlive = $this->searchService->aliveTest()) {
                     $this->searchService->handleSearchQuery($request, $externalSearch);
                 }
             }
