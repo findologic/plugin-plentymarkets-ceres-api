@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted } from '@vue/composition-api';
+import { computed, defineComponent } from '@vue/composition-api';
 import { Facet, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
