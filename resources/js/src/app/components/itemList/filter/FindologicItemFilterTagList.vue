@@ -72,29 +72,6 @@ export default defineComponent({
 
     const resetAllTags = () => UrlBuilder.removeAllAttribsAndRefresh();
 
-    let interval: ReturnType<typeof setInterval>|null = null;
-    const removePlentyTagList = () => {
-      interval = setInterval(() => {
-        const tagLists = document.querySelectorAll('.categoriegrid .list-controls .selected-filters');
-        if (tagLists.length <= 1) {
-          return;
-        }
-
-        const plentyTagList = tagLists[1] ?? null;
-        if (!plentyTagList) {
-          return;
-        }
-
-        plentyTagList.remove();
-        if (interval) {
-          clearInterval(interval);
-        }
-      }, 100);
-    };
-
-    onMounted(() => removePlentyTagList());
-    onBeforeMount(() => interval ? clearInterval(interval) : undefined);
-
     return {
       tagList,
       facetNames,

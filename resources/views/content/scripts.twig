@@ -55,10 +55,15 @@
                     <client-only>
                         <div class="w-100">
                             <!-- SSR:template(findologic-item-filter) -->
-                                <findologic-item-filter template-override="#vue-findologic-item-filter"
-                                                        v-for="facet in facets"
-                                                        :facet="facet"
-                                                        :key="facet.id"></findologic-item-filter>
+                                <findologic-item-filter
+                                    template-override="#vue-findologic-item-filter"
+                                    v-for="facet in facets"
+                                    :facet="facet"
+                                    :key="facet.id"
+                                    v-bind:filters-per-row="{{ config('Findologic.filters_per_row') }}"
+                                    v-bind:fallback-image-color-filter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+                                    v-bind:fallback-image-image-filter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'">
+                                </findologic-item-filter>
                             <!-- /SSR -->
                         </div>
                     </client-only>
@@ -68,6 +73,12 @@
     </div>
 </script>
 
+<script type="x/template" data-component="item-filter-tag-list">
+    {{ component( "Findologic::ItemList.Components.Filter.FindologicItemFilterTagList" ) }}
+    <client-only>
+        <findologic-item-filter-tag-list></findologic-item-filter-tag-list>
+    </client-only>
+</script>
 
 <!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
