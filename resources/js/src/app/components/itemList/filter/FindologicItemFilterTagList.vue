@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted } from '@vue/composition-api';
+import { computed, defineComponent } from '@vue/composition-api';
 import { Facet, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
@@ -71,29 +71,6 @@ export default defineComponent({
     };
 
     const resetAllTags = () => UrlBuilder.removeAllAttribsAndRefresh();
-
-    let interval: ReturnType<typeof setInterval>|null = null;
-    const removePlentyTagList = () => {
-      interval = setInterval(() => {
-        const tagLists = document.querySelectorAll('.categoriegrid .list-controls .selected-filters');
-        if (tagLists.length <= 1) {
-          return;
-        }
-
-        const plentyTagList = tagLists[1] ?? null;
-        if (!plentyTagList) {
-          return;
-        }
-
-        plentyTagList.remove();
-        if (interval) {
-          clearInterval(interval);
-        }
-      }, 100);
-    };
-
-    onMounted(() => removePlentyTagList());
-    onBeforeMount(() => interval ? clearInterval(interval) : undefined);
 
     return {
       tagList,
