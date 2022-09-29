@@ -308,7 +308,7 @@ class SearchService implements SearchServiceInterface
      */
     public function aliveTest()
     {
-        return false;
+        return true;
 
         if ($this->aliveTestResult === null) {
             $request = $this->requestBuilder->buildAliveRequest();
@@ -316,6 +316,8 @@ class SearchService implements SearchServiceInterface
 
             $this->aliveTestResult = ($response === Plugin::API_ALIVE_RESPONSE_BODY);
         }
+
+        $this->logger->error('alive test runned', ['result' => $this->aliveTestResult]);
 
         return $this->aliveTestResult;
     }
