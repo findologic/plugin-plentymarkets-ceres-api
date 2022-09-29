@@ -1,5 +1,20 @@
 # Release Notes für Findologic
 
+## 4.0.7 (2022-09-29)
+
+### Behoben
+* [PLENTY-436] Ein Fehler wurde behoben, wodurch man in manchen Fällen Filter nicht deselektieren konnte.
+
+## 4.0.6 (2022-09-21)
+
+### Behoben
+* [PLENTY-454] Ein Fehler wurde behoben, wodurch sich die Assisted Suggest bei jedem Seitenaufruf geöffnet hat.
+
+## 4.0.5 (2022-07-11)
+
+### Behoben 
+* [PLENTY-449] Review Error hinsichtlich PHP8 Kompatibilität wurde behoben 
+
 ## 4.0.2 (2022-06-24)
 
 ### Geändert
