@@ -1,5 +1,10 @@
 # Release Notes für Findologic
 
+## 4.0.7 (2022-09-29)
+
+### Behoben
+* [PLENTY-436] Ein Fehler wurde behoben, wodurch man in manchen Fällen Filter nicht deselektieren konnte.
+
 ## 4.0.6 (2022-09-21)
 
 ### Behoben
