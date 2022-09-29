@@ -13,13 +13,11 @@ use IO\Helper\ResourceContainer;
 use IO\Helper\TemplateContainer;
 use IO\Helper\Utils;
 use IO\Services\CategoryService;
-use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Http\Response;
 use Findologic\Components\PluginConfig;
 use Findologic\Services\SearchService;
 use Plenty\Plugin\Events\Dispatcher;
-use Plenty\Plugin\Log\LoggerFactory;
 use Plenty\Plugin\Middleware as PlentyMiddleware;
 
 /**
@@ -53,25 +51,14 @@ class Middleware extends PlentyMiddleware
      */
     private $eventDispatcher;
 
-    /**
-     * @var LoggerContract
-     */
-    protected $logger;
-
     public function __construct(
         PluginConfig $pluginConfig,
         SearchService $searchService,
         Dispatcher $eventDispatcher,
-        LoggerFactory $loggerFactory
     ) {
         $this->pluginConfig = $pluginConfig;
         $this->searchService = $searchService;
         $this->eventDispatcher = $eventDispatcher;
-
-        $this->logger = $loggerFactory->getLogger(
-            Plugin::PLUGIN_NAMESPACE,
-            Plugin::PLUGIN_IDENTIFIER
-        );
     }
 
     /**
@@ -87,25 +74,15 @@ class Middleware extends PlentyMiddleware
             return;
         }
 
-        /** @var CategoryService $categoryService */
-        $categoryService = pluginApp(CategoryService::class);
-
-        $this->logger->error('cat', ['cat object' => $categoryService->getCurrentCategory()]);
-
-
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) {
                 /** @var CategoryService $categoryService */
                 $categoryService = pluginApp(CategoryService::class);
-                $this->logger->error('cat', ['cat object' => $categoryService->getCurrentCategory()]);
                 $isCategoryPage = $categoryService->getCurrentCategory() !== null;
                 $isInSearchOrCategoryPage = $this->isSearchPage || $isCategoryPage;
 
-                $this->logger->error('in resoucre import', ['is cat or search' => $isInSearchOrCategoryPage]);
-
                 if ($isInSearchOrCategoryPage && !$this->searchService->aliveTest()) {
-                    $this->logger->error('returning', ['returning' => $isInSearchOrCategoryPage]);
                     return false;
                 }
 
