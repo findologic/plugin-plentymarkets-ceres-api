@@ -5,6 +5,7 @@ namespace Findologic\Tests\Middlewares;
 use Findologic\Constants\Plugin;
 use Findologic\Services\SearchService;
 use Findologic\Validators\PluginConfigurationValidator;
+use IO\Helper\ResourceContainer;
 use IO\Services\SessionStorageService;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -105,7 +106,13 @@ class MiddlewareTest extends TestCase
     {
         $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('testShopKey');
 
-        $this->eventDispatcher->expects($this->never())->method('listen');
+        $this->eventDispatcher->expects($this->once())->method('listen');
+
+        $resourceContainerMock = $this->getMockBuilder(ResourceContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resourceContainerMock->expects($this->exactly(0))->method('addScriptTemplate');
 
         $this->runBefore();
     }
@@ -114,7 +121,7 @@ class MiddlewareTest extends TestCase
     {
         $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testShopKey');
 
-        $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
+        $this->searchService->expects($this->exactly(0))->method('aliveTest')->willReturn(true);
 
         $this->eventDispatcher->expects($this->once())->method('listen')->with('IO.Resources.Import');
 
@@ -125,7 +132,7 @@ class MiddlewareTest extends TestCase
     {
         $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testShopKey');
 
-        $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
+        $this->searchService->expects($this->exactly(0))->method('aliveTest')->willReturn(true);
 
         $this->eventDispatcher->expects($this->exactly(6))->method('listen')->withConsecutive(
             ['IO.Resources.Import'],
@@ -149,7 +156,7 @@ class MiddlewareTest extends TestCase
             ->with(Plugin::CONFIG_NAVIGATION_ENABLED)
             ->willReturn(true);
 
-        $this->searchService->expects($this->once())->method('aliveTest')->willReturn(true);
+        $this->searchService->expects($this->exactly(0))->method('aliveTest');
 
         $this->eventDispatcher->expects($this->exactly(6))->method('listen')->withConsecutive(
             ['IO.Resources.Import'],
@@ -171,17 +178,20 @@ class MiddlewareTest extends TestCase
             'no shopkey configured' => [
                 'lang' => 'de',
                 'rawShopkeyConfig' => '',
-                'isAlive' => true
+                'isAlive' => true,
+                'currentPage' => 'https://your-shop.com/fr/search?query=blub'
             ],
             'shopkey for antoher language is configured' => [
                 'lang' => 'de',
                 'rawShopkeyConfig' => 'fr: ABCDABCDABCDABCDABCDABCDABCDABCD',
-                'isAlive' => true
+                'isAlive' => true,
+                'currentPage' => 'https://your-shop.com/fr/search?query=blub'
             ],
             'invalid shopkey for current language is configured' => [
                 'lang' => 'de',
                 'rawShopkeyConfig' => "de: invalid shopkey :)\nfr: ABCDABCDABCDABCDABCDABCDABCDABCD",
-                'isAlive' => false // Alivetest fails as there is no such shopkey.
+                'isAlive' => false,
+                'currentPage' => 'https://your-shop.com/fr/search?query=blub'
             ]
         ];
     }
@@ -192,16 +202,17 @@ class MiddlewareTest extends TestCase
     public function testPlentymarketsSearchIsUsedWhenNoOrWrongShopkeyIsConfiguredForTheCurrentLanguage(
         string $lang,
         string $rawShopkeyConfig,
-        bool $isAlive
+        bool $isAlive,
+        string $currentPage
     ) {
         $configRepositoryMock = $this->getMockBuilder(ConfigRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $configRepositoryMock->expects($this->once())
+        $configRepositoryMock->expects($this->any())
             ->method('get')
-            ->with(Plugin::CONFIG_SHOPKEY)
-            ->willReturn($rawShopkeyConfig);
+            ->withConsecutive([Plugin::CONFIG_SHOPKEY], [Plugin::CONFIG_NAVIGATION_ENABLED])
+            ->willReturn($rawShopkeyConfig, false);
 
         $sessionStorageServiceMock = $this->getMockBuilder(SessionStorageService::class)
             ->disableOriginalConstructor()
@@ -229,11 +240,21 @@ class MiddlewareTest extends TestCase
         $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
 
         // Ensure Findologic is not triggered.
-        $eventDispatcherMock->expects($this->never())->method('listen');
+        $eventDispatcherMock->expects($this->any())->method('listen');
+
+        $resourceContainerMock = $this->getMockBuilder(ResourceContainer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resourceContainerMock->expects($this->exactly(0))->method('addScriptTemplate');
 
         $requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($currentPage);
 
         $middleware->before($requestMock);
     }
@@ -264,9 +285,8 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $searchServiceMock->expects($this->once())
-            ->method('aliveTest')
-            ->willReturn(true);
+        $searchServiceMock->expects($this->exactly(0))
+            ->method('aliveTest');
 
         $eventDispatcherMock = $this->getMockBuilder(Dispatcher::class)
             ->disableOriginalConstructor()
@@ -345,7 +365,7 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $searchServiceMock->expects($this->once())
+        $searchServiceMock->expects($this->exactly(0))
             ->method('aliveTest')
             ->willReturn(true);
 
