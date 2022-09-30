@@ -112,7 +112,7 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resourceContainerMock->expects($this->exactly(0))->method('addScriptTemplate');
+        $resourceContainerMock->expects($this->never())->method('addScriptTemplate');
 
         $this->runBefore();
     }
@@ -121,7 +121,7 @@ class MiddlewareTest extends TestCase
     {
         $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testShopKey');
 
-        $this->searchService->expects($this->exactly(0))->method('aliveTest')->willReturn(true);
+        $this->searchService->expects($this->never())->method('aliveTest')->willReturn(true);
 
         $this->eventDispatcher->expects($this->once())->method('listen')->with('IO.Resources.Import');
 
@@ -132,7 +132,7 @@ class MiddlewareTest extends TestCase
     {
         $this->pluginConfig->expects($this->any())->method('getShopKey')->willReturn('testShopKey');
 
-        $this->searchService->expects($this->exactly(0))->method('aliveTest')->willReturn(true);
+        $this->searchService->expects($this->never())->method('aliveTest')->willReturn(true);
 
         $this->eventDispatcher->expects($this->exactly(6))->method('listen')->withConsecutive(
             ['IO.Resources.Import'],
@@ -156,7 +156,7 @@ class MiddlewareTest extends TestCase
             ->with(Plugin::CONFIG_NAVIGATION_ENABLED)
             ->willReturn(true);
 
-        $this->searchService->expects($this->exactly(0))->method('aliveTest');
+        $this->searchService->expects($this->never())->method('aliveTest');
 
         $this->eventDispatcher->expects($this->exactly(6))->method('listen')->withConsecutive(
             ['IO.Resources.Import'],
@@ -239,14 +239,15 @@ class MiddlewareTest extends TestCase
 
         $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
 
-        // Ensure Findologic is not triggered.
-        $eventDispatcherMock->expects($this->any())->method('listen');
+        $eventInvokeCount = $isAlive ? 0 : 6;
+
+        $eventDispatcherMock->expects($this->exactly($eventInvokeCount))->method('listen');
 
         $resourceContainerMock = $this->getMockBuilder(ResourceContainer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resourceContainerMock->expects($this->exactly(0))->method('addScriptTemplate');
+        $resourceContainerMock->expects($this->never())->method('addScriptTemplate');
 
         $requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
@@ -285,7 +286,7 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $searchServiceMock->expects($this->exactly(0))
+        $searchServiceMock->expects($this->never())
             ->method('aliveTest');
 
         $eventDispatcherMock = $this->getMockBuilder(Dispatcher::class)
