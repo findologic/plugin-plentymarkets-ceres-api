@@ -54,7 +54,7 @@ class Middleware extends PlentyMiddleware
     public function __construct(
         PluginConfig $pluginConfig,
         SearchService $searchService,
-        Dispatcher $eventDispatcher,
+        Dispatcher $eventDispatcher
     ) {
         $this->pluginConfig = $pluginConfig;
         $this->searchService = $searchService;
@@ -74,12 +74,15 @@ class Middleware extends PlentyMiddleware
             return;
         }
 
+        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
+        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
+
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) {
                 /** @var CategoryService $categoryService */
                 $categoryService = pluginApp(CategoryService::class);
-                $isCategoryPage = $categoryService->getCurrentCategory() !== null;
+                $isCategoryPage = $categoryService->getCurrentCategory() !== null && $this->activeOnCatPage;
                 $isInSearchOrCategoryPage = $this->isSearchPage || $isCategoryPage;
 
                 if ($isInSearchOrCategoryPage && !$this->searchService->aliveTest()) {
@@ -98,7 +101,7 @@ class Middleware extends PlentyMiddleware
                         'isSearchPage' => $this->isSearchPage,
                         'activeOnCatPage' => $this->activeOnCatPage,
                         'minimalSearchTermLength' => $this->pluginConfig->getMinimalSearchTermLength(),
-                        'languagePath' => $this->getLanguagePath()
+                        'languagePath' => $this->getLanguagePath(),
                     ]
                 );
 
@@ -107,9 +110,6 @@ class Middleware extends PlentyMiddleware
                 }
             }
         );
-
-        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
-        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
 
         if (!$this->isSearchPage && !$this->activeOnCatPage) {
             return;
