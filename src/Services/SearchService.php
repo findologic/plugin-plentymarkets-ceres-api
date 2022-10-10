@@ -442,7 +442,7 @@ class SearchService implements SearchServiceInterface
 
         $resultDocuments = $result['documents'];
         $firstResultData = $resultDocuments[0]['data'];
-        
+
         $query = $response->getData(Response::DATA_QUERY)['query'];
         $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
 

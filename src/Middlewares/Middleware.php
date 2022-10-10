@@ -12,6 +12,7 @@ use IO\Helper\ComponentContainer;
 use IO\Helper\ResourceContainer;
 use IO\Helper\TemplateContainer;
 use IO\Helper\Utils;
+use IO\Services\CategoryService;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Http\Response;
 use Plenty\Plugin\Log\Loggable;
@@ -78,13 +79,25 @@ class Middleware extends PlentyMiddleware
             return;
         }
 
-        if (!$this->pluginConfig->getShopKey() || !$this->searchService->aliveTest()) {
+        if (!$this->pluginConfig->getShopKey()) {
             return;
         }
+
+        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
+        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
 
         $this->eventDispatcher->listen(
             'IO.Resources.Import',
             function (ResourceContainer $container) {
+                /** @var CategoryService $categoryService */
+                $categoryService = pluginApp(CategoryService::class);
+                $isCategoryPage = $categoryService->getCurrentCategory() !== null && $this->activeOnCatPage;
+                $isInSearchOrCategoryPage = $this->isSearchPage || $isCategoryPage;
+
+                if ($isInSearchOrCategoryPage && !$this->searchService->aliveTest()) {
+                    return false;
+                }
+
                 if ($this->pluginConfig->get(Plugin::CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED)) {
                     $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
                     $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
@@ -107,9 +120,6 @@ class Middleware extends PlentyMiddleware
             }
         );
 
-        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
-        $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
-
         if (!$this->isSearchPage && !$this->activeOnCatPage) {
             return;
         }
@@ -117,28 +127,40 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.search',
             function (TemplateContainer $templateContainer) {
-                $templateContainer->setContext(FindologicItemSearchContext::class);
-                return false;
+                if ($this->searchService->aliveTest()) {
+                    $templateContainer->setContext(FindologicItemSearchContext::class);
+                    return false;
+                }
+
+                return true;
             }
         );
 
         $this->eventDispatcher->listen(
             'IO.ctx.category.item',
             function (TemplateContainer $templateContainer) {
-                $templateContainer->setContext(FindologicCategoryItemContext::class);
-                return false;
+                if ($this->searchService->aliveTest()) {
+                    $templateContainer->setContext(FindologicCategoryItemContext::class);
+                    return false;
+                }
+
+                return true;
             }
         );
 
         $this->eventDispatcher->listen(
             'Ceres.Search.Options',
             function (ExternalSearchOptions $searchOptions) use ($request) {
-                $this->searchService->handleSearchOptions($request, $searchOptions);
+                if ($this->searchService->aliveTest()) {
+                    $this->searchService->handleSearchOptions($request, $searchOptions);
+                }
             }
         );
 
         $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
-            if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter') {
+            if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter' &&
+                $this->searchService->aliveTest()
+            ) {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
         });
@@ -146,7 +168,9 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'Ceres.Search.Query',
             function (ExternalSearch $externalSearch) use ($request) {
-                $this->searchService->handleSearchQuery($request, $externalSearch);
+                if ($this->searchService->aliveTest()) {
+                    $this->searchService->handleSearchQuery($request, $externalSearch);
+                }
             }
         );
     }
