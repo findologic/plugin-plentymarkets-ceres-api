@@ -1,5 +1,10 @@
 # Release Notes für Findologic
 
+## 3.9.6 (2022-10-10)
+
+### Geändert
+* [PLENTY-455] Alive-Tests werden nur noch auf Such- und Navigationsseiten gesendet.
+
 ## 3.9.5 (2022-08-19)
 
 ### Geändert

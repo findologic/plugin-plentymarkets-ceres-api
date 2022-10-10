@@ -1,8 +1,13 @@
 # Release Notes for Findologic
 
+## 3.9.6 (2022-10-10)
+
+### Changed
+* [PLENTY-455] Only send alive-tests for search and category pages.
+
 ## 3.9.5 (2022-08-19)
 
-### Geändert
+### Changed
 * [PLENTY-449] Review Error in terms of PHP8 compatibility has been resolved
 
 ## 3.9.4 (2022-06-24)
