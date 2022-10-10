@@ -1,5 +1,10 @@
 # Release Notes for Findologic
 
+## 4.0.8 (2022-10-10)
+
+### Changed
+* [PLENTY-455] Only send alive-tests for search and category pages.
+
 ## 4.0.7 (2022-09-29)
 
 ### Fixed
@@ -37,6 +42,21 @@
 
 ### Fixed
 * [PLENTY-441] A bug has been fixed, which caused a Vue warning for ItemFilter component on search result pages
+
+## 3.9.6 (2022-10-10)
+
+### Changed
+* [PLENTY-455] Only send alive-tests for search and category pages.
+
+## 3.9.5 (2022-08-19)
+
+### Changed
+* [PLENTY-449] Review Error in terms of PHP8 compatibility has been resolved
+
+## 3.9.4 (2022-06-24)
+
+### Changed
+* [PLENTY-448] Plugin marked as PHP8 compatible
 
 ## 3.9.3 (2022-06-23)
 
