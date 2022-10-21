@@ -1,5 +1,10 @@
 # Release Notes für Findologic
 
+## 4.0.8 (2022-10-10)
+
+### Geändert
+* [PLENTY-455] Alive-Tests werden nur noch auf Such- und Navigationsseiten gesendet.
+
 ## 4.0.7 (2022-09-29)
 
 ### Behoben
@@ -37,6 +42,21 @@
 
 ### Behoben
 * [PLENTY-441] Ein Fehler wurde behoben, wodurch es auf einer Suchseite zu einer Vue Warnung im ItemFilter Komponente gekommen ist.
+
+## 3.9.6 (2022-10-10)
+
+### Geändert
+* [PLENTY-455] Alive-Tests werden nur noch auf Such- und Navigationsseiten gesendet.
+
+## 3.9.5 (2022-08-19)
+
+### Geändert
+* [PLENTY-449] Review Error hinsichtlich PHP8 Kompatibilität wurde behoben
+
+## 3.9.4 (2022-06-23)
+
+### Geändert
+* [PLENTY-448] Plugin wurde als PHP8 kompatibel markiert
 
 ## 3.9.3 (2022-06-23)
 
