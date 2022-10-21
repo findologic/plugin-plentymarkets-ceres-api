@@ -19,7 +19,7 @@
       rel="nofollow"
       @click="resetAllTags()"
     >
-      {{ TranslationService.ceresTranslate('Ceres::Template.itemFilterReset') }}
+      {{ TranslationService.translate('Ceres::Template.itemFilterReset') }}
     </span>
   </div>
 </template>
