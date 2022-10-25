@@ -2,36 +2,24 @@
   <form
     method="GET"
     action="/search"
-    onsubmit="return flSearchSubmitEventHandler(event, this);"
+    @submit="search()"
   >
     <div class="container-max" :class="{'p-0' : $ceres.isShopBuilder}">
       <div class="position-relative">
         <div class="d-flex flex-grow-1 position-relative my-2">
           <input
-            ref="searchInput"
-            name="query"
             type="search"
             class="search-input flex-grow-1 px-3 py-2"
-            autofocus
+            name="query"
+            ref="searchInput"
+            v-model="searchValue"
             :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
             :aria-label="$translate('Ceres::Template.headerSearchTerm')"
-            @keyup.enter="prepareSearch()"
-            @keyup.down="keydown()"
-            @keyup.up="keyup()"
-            @focus="isSearchFocused = true"
-            @blur="onBlurSearchField($event)"
           >
 
-          <slot name="search-button">
-            <button
-                class="search-submit px-3"
-                type="submit"
-                @click="search()"
-                :aria-label="$translate('Ceres::Template.headerSearch')"
-            >
-              <i class="fa fa-search"></i>
-            </button>
-          </slot>
+          <button class="search-submit px-3" type="submit" :aria-label="$translate('Ceres::Template.headerSearch')">
+            <i class="fa fa-search"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -68,25 +56,11 @@ export default defineComponent({
   setup: (props: ItemSearchProps, { root }) => {
     root.$options.template = props.template;
 
-    const promiseCount = ref(0);
-    const autocompleteResult = ref([]);
-    const selectedAutocompleteIndex = ref(-1);
-    const isSearchFocused = ref(false);
-    const searchInput = ref('');
-
-    const selectedAutocompleteItem = computed(() => null);
+    const searchValue = ref('');
 
     const search = () => {
-      const searchBox = $('#searchBox') as unknown as jQuery.Accordion;
-
-      searchBox.collapse('hide');
+      console.log('trigger search here');
     };
-
-    // Implement methods required by the Ceres template.
-    const autocomplete = () => null;
-    const selectAutocompleteItem = () => null;
-    const keyup = () => null;
-    const keydown = () => null;
 
     onMounted(() => {
       root.$nextTick(() => {
@@ -98,24 +72,13 @@ export default defineComponent({
 
         // Manually regex out all "+" signs as decodeURIComponent does not take care of that.
         // If we wouldn't replace them with spaces, "+" signs would be displayed in the search field.
-        searchInput.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
+        searchValue.value = decodeURIComponent(rawQuery.replace(/\+/g, ' '));
       });
     });
 
-    root.$props.forwardToSingleItem = window.App.config.search.forwardToSingleItem;
-
     return {
-      promiseCount,
-      autocompleteResult,
-      selectedAutocompleteIndex,
-      isSearchFocused,
-      searchInput,
-      selectedAutocompleteItem,
+      searchValue,
       search,
-      autocomplete,
-      selectAutocompleteItem,
-      keyup,
-      keydown,
     };
   }
 });
