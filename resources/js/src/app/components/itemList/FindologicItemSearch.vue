@@ -12,7 +12,6 @@
             name="query"
             type="search"
             class="search-input flex-grow-1 px-3 py-2"
-            autofocus
             :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
             :aria-label="$translate('Ceres::Template.headerSearchTerm')"
             @keyup.enter="prepareSearch()"
@@ -22,16 +21,14 @@
             @blur="onBlurSearchField($event)"
           >
 
-          <slot name="search-button">
-            <button
-                class="search-submit px-3"
-                type="submit"
-                @click="search()"
-                :aria-label="$translate('Ceres::Template.headerSearch')"
-            >
-              <i class="fa fa-search"></i>
-            </button>
-          </slot>
+          <button
+              class="search-submit px-3"
+              type="submit"
+              @click="search()"
+              :aria-label="$translate('Ceres::Template.headerSearch')"
+          >
+            <i class="fa fa-search"></i>
+          </button>
         </div>
       </div>
     </div>
