@@ -25,7 +25,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-symlink": "^2.1.4",
     "gulp-uglify": "^3.0.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
