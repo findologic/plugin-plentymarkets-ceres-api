@@ -34,6 +34,7 @@ class FiltersParser
     public function __construct(LibraryCallContract $libraryCallContract)
     {
         $this->libraryCallContract = $libraryCallContract;
+        /** @var ConfigRepository */
         $this->configRepository = pluginApp(ConfigRepository::class);
     }
 
