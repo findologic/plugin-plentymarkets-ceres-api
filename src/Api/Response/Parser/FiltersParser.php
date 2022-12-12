@@ -14,9 +14,7 @@ use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
  * @package Findologic\Api\Response\Parser
  */
 class FiltersParser
-{
-    use Loggable;
-    
+{    
     /**
      * @var int
      */
@@ -201,7 +199,6 @@ class FiltersParser
 
         if ($filterName === 'price' && $filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
             $stepSize = (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0,01');
-            $this->getLogger(__METHOD__)->error('FindologicFilter', ['size' => $stepSize]);
 
             $filterData['step'] = $stepSize;
         }
