@@ -3,7 +3,6 @@
 namespace Findologic\Api\Response\Parser;
 
 use SimpleXMLElement;
-use Plenty\Plugin\Log\Loggable;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Services\Image;
 use Plenty\Plugin\ConfigRepository;
