@@ -31,11 +31,10 @@ class FiltersParser
      * FiltersParser constructor.
      * @param LibraryCallContract $libraryCallContract
      */
-    public function __construct(LibraryCallContract $libraryCallContract)
+    public function __construct(LibraryCallContract $libraryCallContract, ConfigRepository $configRepository)
     {
         $this->libraryCallContract = $libraryCallContract;
-        /** @var ConfigRepository */
-        $this->configRepository = pluginApp(ConfigRepository::class);
+        $this->configRepository = $configRepository;
     }
 
     /**

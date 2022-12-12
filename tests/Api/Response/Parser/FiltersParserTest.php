@@ -8,6 +8,7 @@ use Findologic\Api\Services\Image;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Plenty\Plugin\ConfigRepository;
 use SimpleXMLElement;
 
 /**
@@ -26,6 +27,11 @@ class FiltersParserTest extends TestCase
      */
     protected $libraryCallContract;
 
+    /**
+     * @var ConfigRepository|MockObject
+     */
+    protected $configRepository;
+
     public function setUp(): void
     {
         $this->libraryCallContract = $this->getMockBuilder(LibraryCallContract::class)
@@ -33,6 +39,10 @@ class FiltersParserTest extends TestCase
             ->setMethods([])
             ->getMock();
         $this->imageService = $this->getMockBuilder(Image::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -69,7 +79,8 @@ class FiltersParserTest extends TestCase
 
         $filtersParserMock = $this->getMockBuilder(FiltersParser::class)
             ->setConstructorArgs([
-                'libraryCallContract' => $this->libraryCallContract
+                'libraryCallContract' => $this->libraryCallContract,
+                'configRepository' => $this->configRepository
             ])
             ->setMethods($methods)->getMock();
         $filtersParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
