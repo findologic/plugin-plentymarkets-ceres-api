@@ -2,10 +2,12 @@
 
 namespace Findologic\Api\Response\Parser;
 
+use SimpleXMLElement;
+use Plenty\Plugin\Log\Loggable;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Services\Image;
+use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
-use SimpleXMLElement;
 
 /**
  * Class FiltersParser
@@ -13,6 +15,8 @@ use SimpleXMLElement;
  */
 class FiltersParser
 {
+    use Loggable;
+    
     /**
      * @var int
      */
@@ -23,13 +27,17 @@ class FiltersParser
      */
     protected $libraryCallContract;
 
+    /** @var ConfigRepository */
+    private $configRepository;
+
     /**
      * FiltersParser constructor.
      * @param LibraryCallContract $libraryCallContract
      */
-    public function __construct(LibraryCallContract $libraryCallContract)
+    public function __construct(LibraryCallContract $libraryCallContract, ConfigRepository $configRepository)
     {
         $this->libraryCallContract = $libraryCallContract;
+        $this->configRepository = $configRepository;
     }
 
     /**
@@ -189,6 +197,13 @@ class FiltersParser
             $filterData['minValue'] = (float)$filter->attributes->totalRange->min;
             $filterData['maxValue'] = (float)$filter->attributes->totalRange->max;
             $filterData['step'] = (float)$filter->attributes->stepSize;
+        }
+
+        if ($filterName === 'price' && $filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
+            $stepSize = (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0,01');
+            $this->getLogger(__METHOD__)->error('FindologicFilter', ['size' => $stepSize]);
+
+            $filterData['step'] = $stepSize;
         }
 
         foreach ($filter->items->item as $key => $item) {
