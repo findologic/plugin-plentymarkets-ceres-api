@@ -17,6 +17,7 @@ use SimpleXMLElement;
  */
 class FiltersParserTest extends TestCase
 {
+    public static $i = 0;
     /**
      * @var Image|MockObject
      */
@@ -61,6 +62,14 @@ class FiltersParserTest extends TestCase
 
         $results = $filtersParserMock->parse(simplexml_load_string($response));
 
+        $file = fopen(__DIR__ . "\..\..\..\DebugResults\\test". self::$i . '.txt', 'w');
+        fwrite($file, json_encode($expectedResult));
+        fwrite($file, "\n");
+        fwrite($file, json_encode($results));
+        fclose($file);
+
+        self::$i++;
+        
         $this->assertEquals($expectedResult, $results);
     }
 
@@ -367,9 +376,9 @@ class FiltersParserTest extends TestCase
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
-                        'minValue' => '59',
-                        'maxValue' => '2300',
-                        'step' => '0.1',
+                        'minValue' => 59,
+                        'maxValue' => 2300,
+                        'step' => 0,
                         'values' => [
                             [
                                 'items' => [],
