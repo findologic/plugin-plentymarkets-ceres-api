@@ -445,9 +445,10 @@ class ParametersHandlerTest extends TestCase
 
         /** @var ParametersHandler|MockObject $parametersHandlerMock */
         $parametersHandlerMock = $this->getMockBuilder(ParametersHandler::class)
-            ->setMethods(['getConfig', 'getItemsPerPage', 'getCurrentItemsPerPage'])
+            ->setMethods(['getConfig', 'getItemsPerPage', 'getCurrentItemsPerPage', 'getSearchURI'])
             ->getMock();
         $parametersHandlerMock->expects($this->any())->method('getConfig')->willReturn($config);
+        $parametersHandlerMock->expects($this->any())->method('getSearchURI')->willReturn('/search');
 
         $parametersHandlerMock->handlePaginationAndSorting($externalSearchOptions, $requestMock);
 

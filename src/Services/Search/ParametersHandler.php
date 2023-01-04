@@ -3,11 +3,12 @@
 namespace Findologic\Services\Search;
 
 use Ceres\Config\CeresConfig;
-use Ceres\Helper\ExternalSearchOptions;
 use Ceres\Helper\SearchOptions;
-use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Translation\Translator;
 use Findologic\Constants\Plugin;
+use IO\Extensions\Constants\ShopUrls;
+use Ceres\Helper\ExternalSearchOptions;
+use Plenty\Plugin\Translation\Translator;
+use Plenty\Plugin\Http\Request as HttpRequest;
 
 /**
  * Class ParametersHandler
@@ -63,8 +64,8 @@ class ParametersHandler
     {
         /** @var CeresConfig $config */
         $config = $this->getConfig();
-
-        $isSearch = strpos($request->getUri(), '/search') !== false;
+        
+        $isSearch = strpos($request->getUri(), $this->getSearchURI()) !== false;
         $isFiltersSet = array_key_exists('attrib', $request->all());
 
         $defaultSort = $isSearch ? $config->sorting->defaultSortingSearch : $config->sorting->defaultSorting;
@@ -161,5 +162,12 @@ class ParametersHandler
         }
 
         return $currentItemsPerPage;
+    }
+
+    public function getSearchURI(): string
+    {
+        $shopUrls = pluginApp(ShopUrls::class);
+        // returns /seo-uri/ so need to trim the last slash
+        return rtrim($shopUrls->search, "/");
     }
 }
