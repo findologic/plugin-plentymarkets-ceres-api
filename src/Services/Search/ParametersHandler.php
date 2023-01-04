@@ -64,12 +64,8 @@ class ParametersHandler
     {
         /** @var CeresConfig $config */
         $config = $this->getConfig();
-        /** @var ShopUrls */
-        $shopUrls = pluginApp(ShopUrls::class);
-        // returns /seo-uri/ so need to trim the last slash
-        $searchURI = rtrim($shopUrls->search, "/");
         
-        $isSearch = strpos($request->getUri(), $searchURI) !== false;
+        $isSearch = strpos($request->getUri(), $this->getSearchURI()) !== false;
         $isFiltersSet = array_key_exists('attrib', $request->all());
 
         $defaultSort = $isSearch ? $config->sorting->defaultSortingSearch : $config->sorting->defaultSorting;
@@ -166,5 +162,12 @@ class ParametersHandler
         }
 
         return $currentItemsPerPage;
+    }
+
+    public function getSearchURI(): string
+    {
+        $shopUrls = pluginApp(ShopUrls::class);
+        // returns /seo-uri/ so need to trim the last slash
+        return rtrim($shopUrls->search, "/");
     }
 }
