@@ -65,8 +65,7 @@ class ParametersHandler
         /** @var CeresConfig $config */
         $config = $this->getConfig();
         /** @var ShopUrls */
-        $shopUrls = pluginApp(ShopUrls::class)
-        ;
+        $shopUrls = pluginApp(ShopUrls::class);
         // returns /seo-uri/ so need to trim the last slash
         $searchURI = rtrim($shopUrls->search, "/");
         
