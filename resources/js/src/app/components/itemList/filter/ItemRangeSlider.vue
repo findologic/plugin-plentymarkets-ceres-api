@@ -91,6 +91,7 @@ export default defineComponent({
           root.$store.state.isLoading;
     });
 
+    // test
     const getMaxValue = (): number => {
       if (!facet.values || facet.values.length === 0) {
         return Number.MAX_SAFE_INTEGER;
