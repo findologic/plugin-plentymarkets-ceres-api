@@ -60,7 +60,6 @@ class FiltersParserTest extends TestCase
         $filtersParserMock = $this->getFiltersParserMock();
 
         $results = $filtersParserMock->parse(simplexml_load_string($response));
-        
         $this->assertEquals($expectedResult, $results);
     }
 
