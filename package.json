@@ -18,6 +18,7 @@
   "dependencies": {
     "@tanem/svg-injector": "^10.1.19",
     "@vue/composition-api": "^1.0.0-rc.5",
+    "run": "^1.4.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2"
