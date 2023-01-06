@@ -196,7 +196,7 @@ class FiltersParser
             $filterData['step'] = (float)$filter->attributes->stepSize;
         }
 
-        if ($filterName === 'price' && $filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
+        if ($filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
             $stepSize = (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0,01');
 
             $filterData['step'] = $stepSize;
