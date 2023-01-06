@@ -13,7 +13,7 @@ use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
  * @package Findologic\Api\Response\Parser
  */
 class FiltersParser
-{    
+{
     /**
      * @var int
      */
