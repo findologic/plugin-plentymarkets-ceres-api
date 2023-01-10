@@ -144,6 +144,21 @@ export default defineComponent({
       valueFrom.value = (values ? values.min : props.facet.minValue) || '';
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
 
+      // round values so it wouldn't have decimals
+      valueFrom.value = Math.floor(valueFrom.value);
+      valueTo.value = Math.ceil(valueTo.value);
+      
+      // Determine number of decimals in the slider
+      let decimalNumber = 2;
+
+      if(props.facet.step === 1) {
+        decimalNumber = 0;
+      }
+
+      if(props.facet.step === 0.1) {
+        decimalNumber = 1;
+      }
+
       $(document).ready(function () {
         const element: noUiSlider.Instance = document.getElementById(sanitizedFacetId.value) as noUiSlider.Instance;
         const slider = element.noUiSlider ? element.noUiSlider : window.noUiSlider.create(element, {
@@ -153,6 +168,14 @@ export default defineComponent({
           range: {
             'min': Math.min(valueFrom.value, props.facet.minValue ?? 0),
             'max': Math.max(valueTo.value, props.facet.maxValue ?? Number.MAX_SAFE_INTEGER)
+          },
+          format: {
+            to: function(value: number) {
+              return value.toFixed(decimalNumber);
+            },
+            from: function(value: string) {
+              return Number(Number(value).toFixed(decimalNumber));
+            }
           }
         });
 

@@ -85,6 +85,28 @@
             ]
           }
         },
+        "price_range_filter_step_size": {
+          "type": "selectBox",
+          "required": false,
+          "label": "Config.priceRangeFilterSteps",
+          "options": {
+            "defaultValue": "0.01",
+            "selectBoxValues": [
+              {
+                "value": "0.01",
+                "caption": "2"
+              },
+              {
+                "value": "0.1",
+                "caption": "1"
+              },
+              {
+                "value": "1",
+                "caption": "0"
+              }
+            ]
+          }
+        },
         "filters_styling_css_enabled": {
           "type": "selectBox",
           "required": false,
