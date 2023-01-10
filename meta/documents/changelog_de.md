@@ -1,5 +1,13 @@
 # Release Notes für Findologic
 
+## 4.1.0 (2023-01-10)
+
+## Hinzugefügt
+* [PLENTY-458] Die Anzahl der Dezimalstellen von Bereichsslider ist nun im Plugin konfigurierbar.
+
+## Behoben
+* [PLENTY-462] Ein Fehler wurde behoben, wodurch die Relevanz bei Verwendung einer Kategorie für die Suchergebnisse nicht verfügbar war.
+
 ## 4.0.8 (2022-10-10)
 
 ### Geändert
