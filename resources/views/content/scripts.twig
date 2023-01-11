@@ -85,7 +85,37 @@
     {{ component( "Findologic::ItemList.Components.ItemSearch") }}
 
     <client-only>
-        <findologic-item-search/>
+        <form method="GET" action="{{ languagePath }}/search" @submit="search()">
+            <div class="container-max">
+                <div class="position-relative">
+                    <div class="d-flex flex-grow-1 position-relative my-2">
+                        <input name="query"
+                               type="search"
+                               class="search-input flex-grow-1 px-3 py-2"
+                               ref="searchInput"
+                                {% if minimalSearchTermLength > 0 %}
+                                    minlength="{{ minimalSearchTermLength }}"
+                                {% endif %}
+                               :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
+                               :aria-label="$translate('Ceres::Template.headerSearchTerm')"
+                               @keyup.down="keydown()"
+                               @keyup.up="keyup()"
+                               @focus="isSearchFocused = true"
+                               @blur="onBlurSearchField($event)"
+                        >
+
+                        <slot name="search-button">
+                            <button class="search-submit px-3"
+                                    type="submit"
+                                    @click="search()"
+                                    :aria-label="$translate('Ceres::Template.headerSearch')">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </slot>
+                    </div>
+                </div>
+            </div>
+        </form>
     </client-only>
 </script>
 <!-- /SSR -->
