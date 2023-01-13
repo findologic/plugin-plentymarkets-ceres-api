@@ -93,6 +93,14 @@ class Middleware extends PlentyMiddleware
                 $categoryService = pluginApp(CategoryService::class);
                 $isCategoryPage = $categoryService->getCurrentCategory() !== null && $this->activeOnCatPage;
                 $isInSearchOrCategoryPage = $this->isSearchPage || $isCategoryPage;
+                $currentCategory = $categoryService->getCurrentCategory();
+
+                $showCategoryFilter = true;
+
+                // Show category filter only in the 0 and 1 level categories
+                if ($currentCategory !== null && $currentCategory->level > 1) {
+                    $showCategoryFilter = false;
+                }
 
                 if ($isInSearchOrCategoryPage && !$this->searchService->aliveTest()) {
                     return false;
@@ -111,6 +119,8 @@ class Middleware extends PlentyMiddleware
                         'activeOnCatPage' => $this->activeOnCatPage,
                         'minimalSearchTermLength' => $this->pluginConfig->getMinimalSearchTermLength(),
                         'languagePath' => $this->getLanguagePath(),
+                        'currentCategory' => null !== $currentCategory ? $currentCategory['details'] : [],
+                        'showCategoryFilter' => $showCategoryFilter
                     ]
                 );
 

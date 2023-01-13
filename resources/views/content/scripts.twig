@@ -37,40 +37,14 @@
 {% endif %}
 
 <script type="x/template" data-component="item-filter-list">
-    <div class="findologic-filter-wrapper"
-         :class="{'mb-5': facets.some(e => e.isMain === true)}"
-         v-show="facets && facets.length > 0">
-        {{ component( "Findologic::ItemList.Components.Filter.ItemFilter") }}
-        {{ component( "Ceres::ItemList.Components.Filter.ItemFilterPrice") }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemRangeSlider") }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemColorTiles" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemDropdown" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemCategoryDropdown" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemFilterPrice" ) }}
-        {{ component( "Findologic::ItemList.Components.Filter.ItemFilterImage" ) }}
-
-        <div class="ml-0 main-filters">
-            <div class="container-max component-loading page-content" :class="{ 'isLoading': isLoading }">
-                <div class="card-columns row">
-                    <client-only>
-                        <div class="w-100">
-                            <!-- SSR:template(findologic-item-filter) -->
-                                <findologic-item-filter
-                                    template-override="#vue-findologic-item-filter"
-                                    v-for="facet in facets"
-                                    :facet="facet"
-                                    :key="facet.id"
-                                    v-bind:filters-per-row="{{ config('Findologic.filters_per_row') }}"
-                                    v-bind:fallback-image-color-filter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
-                                    v-bind:fallback-image-image-filter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'">
-                                </findologic-item-filter>
-                            <!-- /SSR -->
-                        </div>
-                    </client-only>
-                </div>
-            </div>
-        </div>
-    </div>
+    <findologic-filter-wrapper
+        v-bind:facets="facets"
+        v-bind:filtersPerRow="{{ config('Findologic.filters_per_row') }}"
+        v-bind:fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+        v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+        v-bind:currentCategory="{{ currentCategory | json_encode }}"
+        v-bind:showCategoryFilter="{{ showCategoryFilter | json_encode }}"
+    ></findologic-filter-wrapper>
 </script>
 
 <script type="x/template" data-component="item-filter-tag-list">
