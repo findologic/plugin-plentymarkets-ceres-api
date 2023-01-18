@@ -56,11 +56,9 @@
 
 <!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
-    {{ component( "Findologic::ItemList.Components.ItemSearch") }}
-
     <client-only>
         <form method="GET" action="{{ languagePath }}/search" @submit="search()">
-            <div class="container-max">
+            <div class="container-max" :class="{'p-0' : $ceres.isShopBuilder}"> 
                 <div class="position-relative">
                     <div class="d-flex flex-grow-1 position-relative my-2">
                         <input name="query"
@@ -72,11 +70,13 @@
                                 {% endif %}
                                :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
                                :aria-label="$translate('Ceres::Template.headerSearchTerm')"
-                               @keyup.down="keydown()"
-                               @keyup.up="keyup()"
-                               @focus="isSearchFocused = true"
-                               @blur="onBlurSearchField($event)"
-                        >
+                               v-model="searchString" 
+                               @keyup.enter="search()" 
+                               @input="onValueChanged($event.target.value)"
+                               @focus="isSearchFocused = true" 
+                               @blur="onBlurSearchField($event)" 
+                               :autofocus="isShopBuilder" 
+                            >
 
                         <slot name="search-button">
                             <button class="search-submit px-3"
