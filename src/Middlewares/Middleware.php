@@ -106,10 +106,10 @@ class Middleware extends PlentyMiddleware
                     return false;
                 }
 
-                if ($this->pluginConfig->get(Plugin::CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED)) {
-                    $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
-                    $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
-                }
+                // if ($this->pluginConfig->get(Plugin::CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED)) {
+                //     $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
+                //     $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
+                // }
 
                 $container->addScriptTemplate(
                     'Findologic::content.scripts',
