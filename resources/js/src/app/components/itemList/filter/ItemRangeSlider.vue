@@ -157,7 +157,7 @@ export default defineComponent({
           }
         });
 
-        slider.on('update', function (values, handle, unencoded, tap, positions, noUiSlider) {
+        slider.on('update', function (values: (number | string)[]) {
           valueFrom.value = values[0];
           valueTo.value = values[1];
         });
