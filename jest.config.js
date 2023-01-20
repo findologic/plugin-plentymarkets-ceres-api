@@ -17,5 +17,6 @@ module.exports = {
     },
     transformIgnorePatterns: [
         '/node_modules/(?!vue-awesome)'
-    ]
+    ],
+    moduleNameMapper: { "\\.css$": "<rootDir>/resources/js/src/assets/css/__mocks__/styleMock.js" }
 };
