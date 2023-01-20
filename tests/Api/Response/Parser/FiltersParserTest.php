@@ -8,6 +8,7 @@ use Findologic\Api\Services\Image;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Plenty\Plugin\ConfigRepository;
 use SimpleXMLElement;
 
 /**
@@ -26,6 +27,11 @@ class FiltersParserTest extends TestCase
      */
     protected $libraryCallContract;
 
+    /**
+     * @var ConfigRepository|MockObject
+     */
+    protected $configRepository;
+
     public function setUp(): void
     {
         $this->libraryCallContract = $this->getMockBuilder(LibraryCallContract::class)
@@ -33,6 +39,10 @@ class FiltersParserTest extends TestCase
             ->setMethods([])
             ->getMock();
         $this->imageService = $this->getMockBuilder(Image::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -50,7 +60,6 @@ class FiltersParserTest extends TestCase
         $filtersParserMock = $this->getFiltersParserMock();
 
         $results = $filtersParserMock->parse(simplexml_load_string($response));
-
         $this->assertEquals($expectedResult, $results);
     }
 
@@ -69,7 +78,8 @@ class FiltersParserTest extends TestCase
 
         $filtersParserMock = $this->getMockBuilder(FiltersParser::class)
             ->setConstructorArgs([
-                'libraryCallContract' => $this->libraryCallContract
+                'libraryCallContract' => $this->libraryCallContract,
+                'configRepository' => $this->configRepository
             ])
             ->setMethods($methods)->getMock();
         $filtersParserMock->expects($this->any())->method('createResponseObject')->willReturn($responseMock);
@@ -356,9 +366,9 @@ class FiltersParserTest extends TestCase
                         'isMain' => true,
                         'itemCount' => 0,
                         'noAvailableFiltersText' => '',
-                        'minValue' => '59',
-                        'maxValue' => '2300',
-                        'step' => '0.1',
+                        'minValue' => 59,
+                        'maxValue' => 2300,
+                        'step' => 0,
                         'values' => [
                             [
                                 'items' => [],
@@ -1509,5 +1519,103 @@ class FiltersParserTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    public function parseRangeSliderProvider(): array
+    {
+        $filterData =
+            '<filters>
+                <main>
+                    <filter>
+                        <name>price</name>
+                        <display>Preis</display>
+                        <select>single</select>
+                        <type>range-slider</type>
+                        <attributes>
+                            <selectedRange>
+                                <min>59</min>
+                                <max>2300</max>
+                            </selectedRange>
+                            <totalRange>
+                                <min>59</min>
+                                <max>2300</max>
+                            </totalRange>
+                            <stepSize>0.1</stepSize>
+                            <unit>€</unit>
+                        </attributes>
+                        <items>
+                            <item>
+                                <name>59 - 139</name>
+                                <weight>0.5517241358757</weight>
+                                <parameters>
+                                    <min>59</min>
+                                    <max>139</max>
+                                </parameters>
+                            </item>
+                            <item>
+                                <name>146.37 - 250</name>
+                                <weight>0.5517241358757</weight>
+                                <parameters>
+                                    <min>146.37</min>
+                                    <max>250</max>
+                                </parameters>
+                            </item>
+                            <item>
+                                <name>269 - 730</name>
+                                <weight>0.5517241358757</weight>
+                                <parameters>
+                                    <min>269</min>
+                                    <max>730</max>
+                                </parameters>
+                            </item>
+                            <item>
+                                <name>740 - 2300</name>
+                                <weight>0.34482759237289</weight>
+                                <parameters>
+                                    <min>740</min>
+                                    <max>2300</max>
+                                </parameters>
+                            </item>
+                        </items>
+                    </filter>
+                </main>
+            </filters>';
+
+        return [
+            '0.01' => [
+                'stepSize' => '0.01',
+                'response' => $filterData,
+            ],
+            '0.1' => [
+                'stepSize' => '0.1',
+                'response' => $filterData,
+            ],
+            '1' => [
+                'stepSize' => '1',
+                'response' => $filterData,
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider parseRangeSliderProvider
+     */
+    public function testStepConfigurationIsUsed(string $stepSize, string $response): void
+    {
+        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        $this->configRepository->expects($this->once())
+            ->method('get')
+            ->with('Findologic.price_range_filter_step_size')
+            ->willReturn($stepSize);
+
+        /** @var FiltersParser|MockObject $filtersParserMock */
+        $filtersParserMock = $this->getFiltersParserMock();
+
+        $results = $filtersParserMock->parse(simplexml_load_string($response));
+
+        $this->assertSame((float) $stepSize, $results[0]['step']);
     }
 }

@@ -1,5 +1,13 @@
 # Release Notes for Findologic
 
+## 4.1.0 (2023-01-10)
+
+## Added
+* [PLENTY-458] The amount of decimal places for range sliders can now be configured within the plugin configuration.
+
+## Fixed
+* [PLENTY-462] A bug has been fixed, where the relevance sorting was not available when configuring a category for the search results.
+
 ## 4.0.8 (2022-10-10)
 
 ### Changed
