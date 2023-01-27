@@ -11,7 +11,6 @@ import FindologicItemFilter from '../components/itemList/filter/FindologicItemFi
 import FindologicItemFilterTagList from '../components/itemList/filter/FindologicItemFilterTagList.vue';
 import ItemFilterImage from '../components/itemList/filter/ItemFilterImage.vue';
 import ItemFilterList from '../components/itemList/filter/ItemFilterList.vue';
-import SearchTestComponent from '../components/SearchTestComponent.vue';
 import SmartDidYouMean from '../components/SmartDidYouMean.vue';
 import PromotionComponent from '../components/PromotionComponent.vue';
 import FindologicFilterWrapper from '../components/itemList/filter/FindologicFilterWrapper.vue';
@@ -40,7 +39,6 @@ if (isPageWhereComponentsShouldBeLoaded()) {
     plentyVue.component('FindologicItemFilterList', ItemFilterList);
     plentyVue.component('FindologicItemFilter', FindologicItemFilter);
     plentyVue.component('FindologicItemFilterTagList', FindologicItemFilterTagList);
-    plentyVue.component('SearchTestComponent', SearchTestComponent);
     plentyVue.component('SmartDidYouMean', SmartDidYouMean);
     plentyVue.component('PromotionComponent', PromotionComponent);
     plentyVue.component('FindologicFilterWrapper', FindologicFilterWrapper);
