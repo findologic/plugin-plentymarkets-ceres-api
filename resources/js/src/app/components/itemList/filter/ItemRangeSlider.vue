@@ -59,7 +59,6 @@ import { computed, defineComponent, onMounted, ref, watch } from '@vue/compositi
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
 import * as noUiSlider from 'nouislider';
-import 'nouislider/dist/nouislider.css';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
 
@@ -209,5 +208,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
+  @import 'nouislider/dist/nouislider.css';
 </style>
