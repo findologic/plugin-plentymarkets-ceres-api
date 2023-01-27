@@ -180,8 +180,8 @@ export default defineComponent({
         });
 
         slider.on('update', function (values: (number | string)[]) {
-          valueFrom.value = values[0];
-          valueTo.value = values[1];
+          valueFrom.value = values[0].toString();
+          valueTo.value = values[1].toString();
         });
       });
     });
