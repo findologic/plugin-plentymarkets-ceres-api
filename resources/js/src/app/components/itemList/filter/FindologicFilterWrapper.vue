@@ -15,7 +15,6 @@
               <div class="w-100">
                 <!-- SSR:template(findologic-item-filter) -->
                 <findologic-item-filter
-                  template-override="#vue-findologic-item-filter"
                   v-for="facet in facets"
                   :facet="facet"
                   :key="facet.id"
