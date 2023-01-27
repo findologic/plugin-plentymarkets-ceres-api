@@ -13,7 +13,6 @@
           <div class="card-columns row">
             <client-only>
               <div class="w-100">
-                <!-- SSR:template(findologic-item-filter) -->
                 <findologic-item-filter
                   v-for="facet in facets"
                   :facet="facet"
@@ -24,8 +23,6 @@
                   :current-category="currentCategory"
                   :show-category-filter="showCategoryFilter"
                 />
-
-                <!-- /SSR -->
               </div>
             </client-only>
           </div>
