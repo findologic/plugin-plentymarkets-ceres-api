@@ -14,7 +14,7 @@
             <client-only>
               <div class="w-100">
                 <findologic-item-filter
-                  v-for="facet in mainFilters"
+                  v-for="facet in mainFacets"
                   :facet="facet"
                   :key="facet.id"
                   :filtersPerRow="filtersPerRow"
@@ -47,7 +47,7 @@
                 <client-only>
                     <div class="w-100">
                         <findologic-item-filter
-                            v-for="facet in secondaryFilters"
+                            v-for="facet in secondaryFacets"
                             :facet="facet"
                             :key="facet.id"
                             :filtersPerRow="filtersPerRow"
@@ -120,14 +120,14 @@ export default defineComponent({
   setup: (props: FindologicFilterWrapperProps, { root }) => {
     const store = root.$store as PlentyVuexStore;
     const isLoading = computed(() => store.state.itemList.isLoading);
-    const mainFilters = computed((): Facet[] => props.facets.filter((filter: Facet) => filter.id === 'cat' ? props.showCategoryFilter && filter.isMain : filter.isMain));
-    const secondaryFilters = computed((): Facet[] => props.facets.filter((filter: Facet) => !filter.isMain));
+    const mainFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => facet.id === 'cat' ? props.showCategoryFilter && facet.isMain : facet.isMain));
+    const secondaryFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => !facet.isMain));
 
     return {
       isLoading,
       TranslationService,
-      mainFilters,
-      secondaryFilters
+      mainFacets,
+      secondaryFacets
     };
   },
 });
