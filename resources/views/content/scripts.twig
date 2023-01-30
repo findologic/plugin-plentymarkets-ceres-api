@@ -44,6 +44,7 @@
         v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
         v-bind:currentCategory="{{ currentCategory | json_encode }}"
         v-bind:showCategoryFilter="{{ showCategoryFilter | json_encode }}"
+        v-bind:showSelectedFiltersCount="{{ config('Findologic.show_selected_filter_count') }}"
     ></findologic-filter-wrapper>
 </script>
 
