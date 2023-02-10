@@ -1,12 +1,12 @@
 const path = require('path');
-const prod = require('./webpack.dev.js');
+const webpack = process.env.NODE_ENV === 'production' ? require('./webpack.prod.js') : require('./webpack.dev.js');
 
 /**
  * @type {import('@vue/cli-service').ProjectOptions}
  */
 module.exports = {
   publicPath: 'https://localhost:8080',
-  configureWebpack: prod,
+  configureWebpack: webpack,
   outputDir: path.resolve(__dirname, 'resources/js/dist'),
   chainWebpack: config => {
     config.plugins.delete('html');
