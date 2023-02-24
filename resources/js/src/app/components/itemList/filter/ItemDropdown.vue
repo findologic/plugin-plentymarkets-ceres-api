@@ -72,28 +72,19 @@
   <!-- /SSR -->
 </template>
 
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+<script lang="ts" setup>
+import { getCurrentInstance } from 'vue';
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
-import BaseDropdown from '../../../mixins/baseDropdown';
 
 interface ItemDropdownProps extends TemplateOverridable, FacetAware { }
 
-export default defineComponent({
-  name: 'ItemDropdown',
-  mixins: [
-      BaseDropdown
-  ],
-  setup: (props: ItemDropdownProps, { root }) => {
-    root.$options.template = props.template || '#vue-item-dropdown';
+const props = defineProps<ItemDropdownProps>();
+const root = getCurrentInstance()!.proxy;
+root.$options.template = props.template || '#vue-item-dropdown';
 
-    const trans = (key: string) => {
-      return window.ceresTranslate(key);
-    };
-
-    return { trans };
-  }
-});
+const trans = (key: string) => {
+  return window.ceresTranslate(key);
+};
 </script>
 
 <style scoped>

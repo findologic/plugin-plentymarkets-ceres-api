@@ -53,157 +53,137 @@
   <!-- /SSR -->
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
-import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api';
+import { computed, defineComponent, getCurrentInstance, onMounted, ref, watch } from 'vue';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
 import * as noUiSlider from 'nouislider';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
 
-export default defineComponent({
-  name: 'ItemRangeSlider',
-  props: {
-    facet: {
-      type: Object,
-      required: true
-    }
-  },
-  setup: (props: ItemRangeSliderProps, { root }) => {
-    const valueFrom = ref();
-    const valueTo = ref();
-    const facet = props.facet;
+const props = defineProps<ItemRangeSliderProps>();
+const root = getCurrentInstance()!.proxy;
+const valueFrom = ref();
+const valueTo = ref();
+const facet = props.facet;
 
-    const isLoading = computed(() => root.$store.state.isLoading);
-    const sanitizedFacetId = computed(() => {
-      return 'fl-range-slider-' + props.facet.id
-          .replace(/\W/g, '-')
-          .replace(/-+/, '-')
-          .replace(/-$/, '');
-    });
-    const isDisabled = computed(() => {
-        return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
-          isNaN(valueFrom.value) ||
-          isNaN(valueTo.value) ||
-          valueFrom.value === '' ||
-          valueTo.value === '' ||
-          root.$store.state.isLoading;
-    });
+const isLoading = computed(() => root.$store.state.isLoading);
+const sanitizedFacetId = computed(() => {
+  return 'fl-range-slider-' + props.facet.id
+      .replace(/\W/g, '-')
+      .replace(/-+/, '-')
+      .replace(/-$/, '');
+});
+const isDisabled = computed(() => {
+    return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
+      isNaN(valueFrom.value) ||
+      isNaN(valueTo.value) ||
+      valueFrom.value === '' ||
+      valueTo.value === '' ||
+      root.$store.state.isLoading;
+});
 
-    const getMaxValue = (): number => {
-      if (!facet.values || facet.values.length === 0) {
-        return Number.MAX_SAFE_INTEGER;
-      }
-
-      const maxValue = facet.values[facet.values?.length - 1].name.split(' - ')[1];
-
-      return maxValue ? parseFloat(maxValue) : Number.MAX_SAFE_INTEGER;
-    };
-
-    const triggerFilter = () => {
-      if (!isDisabled.value) {
-        const facetValue = {
-          min: parseFloat(valueFrom.value) ? valueFrom.value : 0,
-          max: valueTo.value ? parseFloat(valueTo.value) : getMaxValue()
-        } as PriceFacetValue;
-
-        UrlBuilder.updateSelectedFilters(facet, facet.id, facetValue);
-      }
-    };
-
-    const fixDecimalSeparator = (value: string|number): string => {
-      if (typeof value === 'number') {
-        value = value.toString();
-      }
-
-      if (value.includes('.')) {
-        value = value.replace(',', '');
-      } else {
-        value = value.replace(',', '.');
-      }
-
-      return value;
-    };
-
-    const setCustomValidationMessage = (): void => {
-      const elements = root.$el.querySelectorAll('input.fl-range-input[data-custom-validation-message]') as unknown as HTMLInputElement[];
-
-      elements.forEach((input: HTMLInputElement) => {
-        // Must be reset before the validity check as existence of custom validity counts as a validation error.
-        input.setCustomValidity('');
-
-        if (!input.checkValidity()) {
-          input.setCustomValidity(input.dataset.customValidationMessage as string);
-        }
-      });
-    };
-
-    onMounted(() => {
-      const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
-      valueFrom.value = (values ? values.min : props.facet.minValue) || '';
-      valueTo.value = (values ? values.max : props.facet.maxValue) || '';
-
-      // round values so it wouldn't have decimals
-      valueFrom.value = Math.floor(valueFrom.value);
-      valueTo.value = Math.ceil(valueTo.value);
-      
-      // Determine number of decimals in the slider
-      let decimalNumber = 2;
-
-      if(props.facet.step === 1) {
-        decimalNumber = 0;
-      }
-
-      if(props.facet.step === 0.1) {
-        decimalNumber = 1;
-      }
-
-      $(document).ready(function () {
-        const element: noUiSlider.target = document.getElementById(sanitizedFacetId.value) as noUiSlider.target;
-        const slider = noUiSlider.create(element, {
-          step: props.facet.step,
-          start: [valueFrom.value, valueTo.value],
-          connect: true,
-          range: {
-            'min': Math.min(valueFrom.value, props.facet.minValue ?? 0),
-            'max': Math.max(valueTo.value, props.facet.maxValue ?? Number.MAX_SAFE_INTEGER)
-          },
-          format: {
-            to: function(value: number) {
-              return value.toFixed(decimalNumber);
-            },
-            from: function(value: string) {
-              return Number(Number(value).toFixed(decimalNumber));
-            }
-          }
-        });
-
-        slider.on('update', function (values: (number | string)[]) {
-          valueFrom.value = values[0].toString();
-          valueTo.value = values[1].toString();
-        });
-      });
-    });
-
-    watch([valueFrom, valueTo], ([nextValueFrom, nextValueTo]) => {
-      valueFrom.value = fixDecimalSeparator(nextValueFrom);
-      valueTo.value = fixDecimalSeparator(nextValueTo);
-
-      setCustomValidationMessage();
-    });
-
-    return {
-      valueFrom,
-      valueTo,
-      sanitizedFacetId,
-      isDisabled,
-      isLoading,
-      triggerFilter,
-      TranslationService,
-      watch
-    };
+const getMaxValue = (): number => {
+  if (!facet.values || facet.values.length === 0) {
+    return Number.MAX_SAFE_INTEGER;
   }
+
+  const maxValue = facet.values[facet.values?.length - 1].name.split(' - ')[1];
+
+  return maxValue ? parseFloat(maxValue) : Number.MAX_SAFE_INTEGER;
+};
+
+const triggerFilter = () => {
+  if (!isDisabled.value) {
+    const facetValue = {
+      min: parseFloat(valueFrom.value) ? valueFrom.value : 0,
+      max: valueTo.value ? parseFloat(valueTo.value) : getMaxValue()
+    } as PriceFacetValue;
+
+    UrlBuilder.updateSelectedFilters(facet, facet.id, facetValue);
+  }
+};
+
+const fixDecimalSeparator = (value: string|number): string => {
+  if (typeof value === 'number') {
+    value = value.toString();
+  }
+
+  if (value.includes('.')) {
+    value = value.replace(',', '');
+  } else {
+    value = value.replace(',', '.');
+  }
+
+  return value;
+};
+
+const setCustomValidationMessage = (): void => {
+  const elements = root.$el.querySelectorAll('input.fl-range-input[data-custom-validation-message]') as unknown as HTMLInputElement[];
+
+  elements.forEach((input: HTMLInputElement) => {
+    // Must be reset before the validity check as existence of custom validity counts as a validation error.
+    input.setCustomValidity('');
+
+    if (!input.checkValidity()) {
+      input.setCustomValidity(input.dataset.customValidationMessage as string);
+    }
+  });
+};
+
+onMounted(() => {
+  const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
+  valueFrom.value = (values ? values.min : props.facet.minValue) || '';
+  valueTo.value = (values ? values.max : props.facet.maxValue) || '';
+
+  // round values so it wouldn't have decimals
+  valueFrom.value = Math.floor(valueFrom.value);
+  valueTo.value = Math.ceil(valueTo.value);
+  
+  // Determine number of decimals in the slider
+  let decimalNumber = 2;
+
+  if(props.facet.step === 1) {
+    decimalNumber = 0;
+  }
+
+  if(props.facet.step === 0.1) {
+    decimalNumber = 1;
+  }
+
+  $(document).ready(function () {
+    const element: noUiSlider.target = document.getElementById(sanitizedFacetId.value) as noUiSlider.target;
+    const slider = noUiSlider.create(element, {
+      step: props.facet.step,
+      start: [valueFrom.value, valueTo.value],
+      connect: true,
+      range: {
+        'min': Math.min(valueFrom.value, props.facet.minValue ?? 0),
+        'max': Math.max(valueTo.value, props.facet.maxValue ?? Number.MAX_SAFE_INTEGER)
+      },
+      format: {
+        to: function(value: number) {
+          return value.toFixed(decimalNumber);
+        },
+        from: function(value: string) {
+          return Number(Number(value).toFixed(decimalNumber));
+        }
+      }
+    });
+
+    slider.on('update', function (values: (number | string)[]) {
+      valueFrom.value = values[0].toString();
+      valueTo.value = values[1].toString();
+    });
+  });
+});
+
+watch([valueFrom, valueTo], ([nextValueFrom, nextValueTo]) => {
+  valueFrom.value = fixDecimalSeparator(nextValueFrom);
+  valueTo.value = fixDecimalSeparator(nextValueTo);
+
+  setCustomValidationMessage();
 });
 </script>
 

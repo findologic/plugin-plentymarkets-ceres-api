@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { FacetAware, TemplateOverridable } from '../shared/interfaces';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import {
   Promotion
 } from '../shared/interfaces';

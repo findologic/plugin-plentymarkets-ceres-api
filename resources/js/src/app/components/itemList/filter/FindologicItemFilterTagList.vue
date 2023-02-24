@@ -24,8 +24,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api';
+<script lang="ts" setup>
+import { computed, getCurrentInstance } from 'vue';
 import { Facet, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
@@ -35,52 +35,42 @@ interface ItemFilterTagListProps extends TemplateOverridable {
   marginInlineStyles: string;
 }
 
-export default defineComponent({
-  name: 'FindologicItemFilterTagList',
-  props: {
-    template: {
-      type: String,
-      default: '#vue-item-filter-tag-list',
-    },
-    marginClasses: {
-      type: String,
-      default: null,
-    },
-    marginInlineStyles: {
-      type: String,
-      default: null,
-    },
+const props = defineProps({
+  template: {
+    type: String,
+    default: '#vue-item-filter-tag-list',
   },
-  setup: (props: ItemFilterTagListProps, { root }) => {
-    root.$options.template = props.template || '#vue-item-filter-tag-list';
-    const store = root.$store as PlentyVuexStore;
-
-    const tagList = computed((): Facet[] => UrlBuilder.getSelectedFilters(store));
-    const facetNames = computed(() => {
-      const map: {[key: string]: string} = {};
-
-      store.state.itemList.facets.forEach((facet: Facet) => {
-        map[facet.id] = facet.name as string;
-      });
-
-      return map;
-    });
-
-    const removeTag = (tag: Facet) => {
-      UrlBuilder.removeSelectedFilter(tag.id, tag?.name || '');
-    };
-
-    const resetAllTags = () => UrlBuilder.removeAllAttribsAndRefresh();
-
-    return {
-      tagList,
-      facetNames,
-      removeTag,
-      TranslationService,
-      resetAllTags
-    };
-  }
+  marginClasses: {
+    type: String,
+    default: null,
+  },
+  marginInlineStyles: {
+    type: String,
+    default: null,
+  },
 });
+
+const root = getCurrentInstance()!.proxy;
+root.$options.template = props.template || '#vue-item-filter-tag-list';
+const store = root.$store as PlentyVuexStore;
+
+const tagList = computed((): Facet[] => UrlBuilder.getSelectedFilters(store));
+const facetNames = computed(() => {
+  const map: {[key: string]: string} = {};
+
+  store.state.itemList.facets.forEach((facet: Facet) => {
+    map[facet.id] = facet.name as string;
+  });
+
+  return map;
+});
+
+const removeTag = (tag: Facet) => {
+  UrlBuilder.removeSelectedFilter(tag.id, tag?.name || '');
+};
+
+const resetAllTags = () => UrlBuilder.removeAllAttribsAndRefresh();
+
 </script>
 
 <style scoped>

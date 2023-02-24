@@ -13,7 +13,7 @@
           <div class="card-columns row">
             <client-only>
               <div class="w-100">
-                <findologic-item-filter
+                <!-- <findologic-item-filter
                   v-for="facet in mainFacets"
                   :facet="facet"
                   :key="facet.id"
@@ -22,7 +22,7 @@
                   :fallbackImageImageFilter="fallbackImageImageFilter"
                   :current-category="currentCategory"
                   :show-category-filter="showCategoryFilter"
-                />
+                /> -->
               </div>
             </client-only>
           </div>
@@ -47,7 +47,7 @@
               <div class="card-columns row">
                   <client-only>
                       <div class="w-100">
-                          <findologic-item-filter
+                          <!-- <findologic-item-filter
                               v-for="facet in secondaryFacets"
                               :facet="facet"
                               :key="facet.id"
@@ -57,7 +57,7 @@
                               :showSelectedFiltersCount="showSelectedFiltersCount"
                               :currentCategory="currentCategory"
                               :showCategoryFilter="showCategoryFilter"
-                          ></findologic-item-filter>
+                          ></findologic-item-filter> -->
                       </div>
                   </client-only>
               </div>
@@ -69,17 +69,16 @@
   </client-only>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
-  CategoryFacet,
   Facet,
   FacetAware,
   PlentyVuexStore,
   TemplateOverridable,
 } from '../../../shared/interfaces';
-import { computed, defineComponent } from '@vue/composition-api';
-import FindologicItemFilter from './FindologicItemFilter.vue';
-import type { PropType } from '@vue/composition-api';
+import { computed, getCurrentInstance } from 'vue';
+// import FindologicItemFilter from './FindologicItemFilter.vue';
+import type { PropType } from 'vue';
 import TranslationService from '../../../shared/TranslationService';
 
 interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
@@ -87,13 +86,8 @@ interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
   showCategoryFilter: boolean
 }
 
-export default defineComponent({
-  name: 'FindologicFilterWrapper',
-  components: {
-    'findologic-item-filter': FindologicItemFilter,
-  },
-  props: {
-    facets: {
+const props = defineProps({
+  facets: {
       type: Array as PropType<Array<Facet>>,
       default: () => [],
     },
@@ -121,20 +115,12 @@ export default defineComponent({
       type: Boolean,
       default: true
     }
-  },
-
-  setup: (props: FindologicFilterWrapperProps, { root }) => {
-    const store = root.$store as PlentyVuexStore;
-    const isLoading = computed(() => store.state.itemList.isLoading);
-    const mainFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => facet.id === 'cat' ? props.showCategoryFilter && facet.isMain : facet.isMain));
-    const secondaryFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => !facet.isMain));
-
-    return {
-      isLoading,
-      TranslationService,
-      mainFacets,
-      secondaryFacets
-    };
-  },
 });
+
+const root = getCurrentInstance()!.proxy;
+const store = root.$store as PlentyVuexStore;
+const isLoading = computed(() => store.state.itemList.isLoading);
+const mainFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => facet.id === 'cat' ? props.showCategoryFilter && facet.isMain : facet.isMain));
+const secondaryFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => !facet.isMain));
+
 </script>

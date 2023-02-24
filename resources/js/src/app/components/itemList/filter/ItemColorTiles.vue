@@ -47,56 +47,36 @@
   <!-- /SSR -->
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ColorFacet, ColorFacetValue, FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import UrlBuilder from '../../../shared/UrlBuilder';
-import { defineComponent, nextTick, onMounted } from '@vue/composition-api';
+import { nextTick, onMounted } from 'vue';
 import { SVGInjector } from '@tanem/svg-injector';
 
 interface ItemColorTilesProps extends TemplateOverridable, FacetAware {
   facet: ColorFacet;
   fallbackImage: string;
 }
+const props = defineProps<ItemColorTilesProps>();
+const tileClicked = (value: string) => {
+    UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, value);
+  };
+const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
+  const target = event.target as HTMLImageElement;
 
-export default defineComponent({
-  name: 'ItemColorTiles',
-  props: {
-    facet: {
-      type: Object,
-      required: true
-    },
-    fallbackImage: {
-      type: String,
-      default: ''
-    }
-  },
-  setup: (props: ItemColorTilesProps) => {
-    const tileClicked = (value: string) => {
-      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, value);
-    };
-    const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
-      const target = event.target as HTMLImageElement;
-
-      if (!colorValue.hexValue) {
-        target.src = props.fallbackImage;
-      } else {
-        target.remove();
-      }
-    };
-
-    const injectSvgImages = async () => {
-      await nextTick();
-      SVGInjector(document.getElementsByClassName('fl-svg'));
-    };
-
-    onMounted(injectSvgImages);
-
-    return {
-      tileClicked,
-      handleImageError
-    };
+  if (!colorValue.hexValue) {
+    target.src = props.fallbackImage;
+  } else {
+    target.remove();
   }
-});
+};
+
+const injectSvgImages = async () => {
+  await nextTick();
+  SVGInjector(document.getElementsByClassName('fl-svg'));
+};
+
+onMounted(injectSvgImages);
 </script>
 
 <style scoped>

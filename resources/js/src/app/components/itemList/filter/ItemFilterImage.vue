@@ -42,9 +42,9 @@
   <!-- /SSR -->
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ColorFacet, ColorFacetValue, FacetAware, FacetValue, TemplateOverridable } from '../../../shared/interfaces';
-import { computed, defineComponent, nextTick, onMounted } from '@vue/composition-api';
+import { computed, getCurrentInstance, nextTick, onMounted } from 'vue';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import { SVGInjector } from '@tanem/svg-injector';
 
@@ -53,49 +53,31 @@ interface ItemFilterImageProps extends TemplateOverridable, FacetAware {
   fallbackImage: string;
 }
 
-export default defineComponent({
-  name: 'ItemFilterImage',
-  props: {
-    facet: {
-      type: Object,
-      required: true
-    },
-    fallbackImage: {
-      type: String,
-      default: ''
-    }
-  },
-  setup: (props: ItemFilterImageProps, { root }) => {
-    const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
-      const target = event.target as HTMLImageElement;
+const props = defineProps<ItemFilterImageProps>();
+const root = getCurrentInstance()!.proxy;
 
-      if (!colorValue.hexValue) {
-        target.src = props.fallbackImage;
-      } else {
-        target.remove();
-      }
-    };
+const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
+  const target = event.target as HTMLImageElement;
 
-    const isLoading = computed(() => root.$store.state.isLoading);
-
-    const updateFacet = (facetValue: FacetValue): void => {
-      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
-    };
-
-    const injectSvgImages = async () => {
-      await nextTick();
-      SVGInjector(document.getElementsByClassName('fl-svg'));
-    };
-
-    onMounted(injectSvgImages);
-
-    return {
-      handleImageError,
-      isLoading,
-      updateFacet
-    };
+  if (!colorValue.hexValue) {
+    target.src = props.fallbackImage;
+  } else {
+    target.remove();
   }
-});
+};
+
+const isLoading = computed(() => root.$store.state.isLoading);
+
+const updateFacet = (facetValue: FacetValue): void => {
+  UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
+};
+
+const injectSvgImages = async () => {
+  await nextTick();
+  SVGInjector(document.getElementsByClassName('fl-svg'));
+};
+
+onMounted(injectSvgImages);
 </script>
 
 <style scoped>

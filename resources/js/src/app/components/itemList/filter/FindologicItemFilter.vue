@@ -92,15 +92,12 @@
   <!-- /SSR -->
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api';
+<script lang="ts" setup>
+import { computed, getCurrentInstance } from 'vue';
 import {
-  CategoryFacet,
   Facet,
-  FacetAware,
   FacetValue,
   PlentyVuexStore,
-  TemplateOverridable,
 } from '../../../shared/interfaces';
 import ItemRangeSlider from './ItemRangeSlider.vue';
 import ItemColorTiles from './ItemColorTiles.vue';
@@ -109,100 +106,72 @@ import ItemDropdown from './ItemDropdown.vue';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import ItemFilterImage from './ItemFilterImage.vue';
 
-interface ItemFilterProps extends TemplateOverridable, FacetAware {
-  filtersPerRow: number;
-  fallbackImageColorFilter: string;
-  fallbackImageImageFilter: string;
-  showSelectedFiltersCount: boolean;
-  currentCategory: CategoryFacet[];
-  showCategoryFilter: boolean;
-}
-
-export default defineComponent({
-  name: 'FindologicItemFilter',
-  components: {
-    'item-range-slider': ItemRangeSlider,
-    'item-color-tiles': ItemColorTiles,
-    'item-category-dropdown': ItemCategoryDropdown,
-    'item-dropdown': ItemDropdown,
-    'item-filter-image': ItemFilterImage
+const props = defineProps({
+  template: {
+    type: String,
+    default: null
   },
-  props: {
-    template: {
-      type: String,
-      default: null
-    },
-    facet: {
-      type: Object,
-      required: true
-    },
-    filtersPerRow: {
-      type: Number,
-      required: true
-    },
-    fallbackImageColorFilter: {
-      type: String,
-      default: ''
-    },
-    fallbackImageImageFilter: {
-      type: String,
-      default: ''
-    },
-    showSelectedFiltersCount: {
-      type: Boolean,
-      default: false
-    },
-    currentCategory: {
-      type: Array,
-      default: () => []
-    },
-    showCategoryFilter: {
-      type: Boolean,
-      default: true
-    }
+  facet: {
+    type: Object,
+    required: true
   },
-  setup: (props: ItemFilterProps, { root }) => {
-    root.$options.template = props.template || '#vue-item-filter';
-    const store = root.$store as PlentyVuexStore;
-
-    const selectedFacets = computed(() => store.itemList?.selectedFacets);
-    const isLoading = computed(() => store.itemList?.isLoading || false);
-
-    const updateFacet = (facetValue: FacetValue): void => {
-      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
-    };
-
-    const getSubCategoryValue = (parentCategory: FacetValue, subCategory: Facet): FacetValue => {
-      return {
-        id: subCategory.id,
-        name: parentCategory.name + '_' + subCategory.name
-      } as FacetValue;
-    };
-
-    const selectedValuesCount = computed((): number => {
-      const facetValues = props.facet.values as FacetValue[];
-
-      const selectedFacets = facetValues.filter((value: FacetValue) => {
-        return value.selected;
-      });
-
-      return selectedFacets.length;
-    });
-
-    const shouldShowCategoryFilter = computed((): boolean => {
-      return props.facet.id === 'cat' && typeof props.showCategoryFilter === 'undefined' ||
-          props.facet.id === 'cat' && props.showCategoryFilter;
-    });
-
-    return {
-      selectedFacets,
-      isLoading,
-      updateFacet,
-      getSubCategoryValue,
-      selectedValuesCount,
-      shouldShowCategoryFilter
-    };
+  filtersPerRow: {
+    type: Number,
+    required: true
+  },
+  fallbackImageColorFilter: {
+    type: String,
+    default: ''
+  },
+  fallbackImageImageFilter: {
+    type: String,
+    default: ''
+  },
+  showSelectedFiltersCount: {
+    type: Boolean,
+    default: false
+  },
+  currentCategory: {
+    type: Array,
+    default: () => []
+  },
+  showCategoryFilter: {
+    type: Boolean,
+    default: true
   }
+});
+
+const root = getCurrentInstance()!.proxy;
+root.$options.template = props.template || '#vue-item-filter';
+const store = root.$store as PlentyVuexStore;
+
+const selectedFacets = computed(() => store.itemList?.selectedFacets);
+const isLoading = computed(() => store.itemList?.isLoading || false);
+
+const updateFacet = (facetValue: FacetValue): void => {
+  UrlBuilder.updateSelectedFilters(props.facet.value, props.facet.id, facetValue.name);
+};
+
+const getSubCategoryValue = (parentCategory: FacetValue, subCategory: Facet): FacetValue => {
+  return {
+    id: subCategory.id,
+    name: parentCategory.name + '_' + subCategory.name
+  } as FacetValue;
+};
+
+const selectedValuesCount = computed((): number => {
+  const facetValues = props.facet.values as FacetValue[];
+
+  const selectedFacets = facetValues.filter((value: FacetValue) => {
+    return value.selected;
+  });
+
+  return selectedFacets.length;
+});
+
+const shouldShowCategoryFilter = computed((): boolean => {
+  return props.facet.id === 'cat' && typeof props.showCategoryFilter === 'undefined' ||
+      props.facet.id === 'cat' && props.showCategoryFilter;
 });
 </script>
 
