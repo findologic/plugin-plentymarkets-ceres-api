@@ -13,7 +13,7 @@
           <div class="card-columns row">
             <client-only>
               <div class="w-100">
-                <!-- <findologic-item-filter
+                <findologic-item-filter
                   v-for="facet in mainFacets"
                   :facet="facet"
                   :key="facet.id"
@@ -22,7 +22,7 @@
                   :fallbackImageImageFilter="fallbackImageImageFilter"
                   :current-category="currentCategory"
                   :show-category-filter="showCategoryFilter"
-                /> -->
+                />
               </div>
             </client-only>
           </div>
@@ -47,7 +47,7 @@
               <div class="card-columns row">
                   <client-only>
                       <div class="w-100">
-                          <!-- <findologic-item-filter
+                          <findologic-item-filter
                               v-for="facet in secondaryFacets"
                               :facet="facet"
                               :key="facet.id"
@@ -57,7 +57,7 @@
                               :showSelectedFiltersCount="showSelectedFiltersCount"
                               :currentCategory="currentCategory"
                               :showCategoryFilter="showCategoryFilter"
-                          ></findologic-item-filter> -->
+                          ></findologic-item-filter>
                       </div>
                   </client-only>
               </div>
