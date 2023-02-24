@@ -55,7 +55,7 @@
 
 <script lang="ts" setup>
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
-import { computed, defineComponent, getCurrentInstance, onMounted, ref, watch } from 'vue';
+import { computed, getCurrentInstance, onMounted, ref, toRefs, watch } from 'vue';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
 import * as noUiSlider from 'nouislider';
@@ -63,10 +63,10 @@ import * as noUiSlider from 'nouislider';
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
 
 const props = defineProps<ItemRangeSliderProps>();
+const facet = toRefs(props).facet.value;
 const root = getCurrentInstance()!.proxy;
 const valueFrom = ref();
 const valueTo = ref();
-const facet = props.facet;
 
 const isLoading = computed(() => root.$store.state.isLoading);
 const sanitizedFacetId = computed(() => {
