@@ -1606,14 +1606,11 @@ class FiltersParserTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['get'])
             ->getMockForAbstractClass();
-        $this->configRepository->expects($this->once())
-            ->method('get')
-            ->with('Findologic.price_range_filter_step_size')
-            ->willReturn($stepSize);
 
-        $this->configRepository->expects($this->once())
+        $this->configRepository->expects($this->exactly(2))
             ->method('get')
-            ->with('Findologic.load_no_ui_slider_styles_enabled');
+            ->withConsecutive(['Findologic.price_range_filter_step_size'],['Findologic.load_no_ui_slider_styles_enabled'])
+            ->willReturnOnConsecutiveCalls($stepSize, true);
 
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
