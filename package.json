@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "@tanem/svg-injector": "^10.1.19",
+    "@vue/cli-plugin-eslint": "^5.0.8",
     "@vue/composition-api": "^1.0.0-rc.5",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
