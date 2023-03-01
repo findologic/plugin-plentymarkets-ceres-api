@@ -1687,11 +1687,11 @@ class FiltersParserTest extends TestCase
 
         return [
             'enabled' => [
-                'enabled' => true,
+                'enabled' => "1",
                 'response' => $filterData,
             ],
             'disabled' => [
-                'enabled' => false,
+                'enabled' => "0",
                 'response' => $filterData,
             ],
         ];
@@ -1717,6 +1717,6 @@ class FiltersParserTest extends TestCase
 
         $results = $filtersParserMock->parse(simplexml_load_string($response));
 
-        $this->assertSame($enabled, $results[0]['useNoUISliderCSS']);
+        $this->assertSame((bool) $enabled, $results[0]['useNoUISliderCSS']);
     }
 }
