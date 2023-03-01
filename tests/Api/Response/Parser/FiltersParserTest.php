@@ -369,6 +369,7 @@ class FiltersParserTest extends TestCase
                         'minValue' => 59,
                         'maxValue' => 2300,
                         'step' => 0,
+                        'useNoUISliderCSS' => false,
                         'values' => [
                             [
                                 'items' => [],
@@ -1161,6 +1162,7 @@ class FiltersParserTest extends TestCase
                         'minValue' => 59,
                         'maxValue' => 2300,
                         'step' => 0.1,
+                        'useNoUISliderCSS' => false,
                         'values' => [
                             0 => [
                                 'items' => [
@@ -1303,6 +1305,7 @@ class FiltersParserTest extends TestCase
                         'minValue' => 59,
                         'maxValue' => 2300,
                         'step' => 0.1,
+                        'useNoUISliderCSS' => false,
                         'values' => [
                             0 => [
                                 'items' => [
@@ -1438,6 +1441,7 @@ class FiltersParserTest extends TestCase
                         'minValue' => 59,
                         'maxValue' => 2300,
                         'step' => 0.1,
+                        'useNoUISliderCSS' => false,
                         'values' => null
                     ],
                     [
@@ -1491,6 +1495,7 @@ class FiltersParserTest extends TestCase
                         'minValue' => 59,
                         'maxValue' => 2300,
                         'step' => 0.1,
+                        'useNoUISliderCSS' => false,
                         'values' => null
                     ],
                     [
