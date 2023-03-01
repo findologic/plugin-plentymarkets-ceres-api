@@ -209,6 +209,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .fl-no-ui-slider {
-  @import 'nouislider/dist/nouislider.css';
+  @import 'nouislider/dist/nouislider';
 }
 </style>
