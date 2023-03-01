@@ -1624,4 +1624,99 @@ class FiltersParserTest extends TestCase
 
         $this->assertSame((float) $stepSize, $results[0]['step']);
     }
+
+    public function parseRangeSliderProviderNoUI(): array
+    {
+        $filterData =
+            '<filters>
+                <main>
+                    <filter>
+                        <name>price</name>
+                        <display>Preis</display>
+                        <select>single</select>
+                        <type>range-slider</type>
+                        <attributes>
+                            <selectedRange>
+                                <min>59</min>
+                                <max>2300</max>
+                            </selectedRange>
+                            <totalRange>
+                                <min>59</min>
+                                <max>2300</max>
+                            </totalRange>
+                            <stepSize>0.1</stepSize>
+                            <unit>€</unit>
+                        </attributes>
+                        <items>
+                            <item>
+                                <name>59 - 139</name>
+                                <weight>0.5517241358757</weight>
+                                <parameters>
+                                    <min>59</min>
+                                    <max>139</max>
+                                </parameters>
+                            </item>
+                            <item>
+                                <name>146.37 - 250</name>
+                                <weight>0.5517241358757</weight>
+                                <parameters>
+                                    <min>146.37</min>
+                                    <max>250</max>
+                                </parameters>
+                            </item>
+                            <item>
+                                <name>269 - 730</name>
+                                <weight>0.5517241358757</weight>
+                                <parameters>
+                                    <min>269</min>
+                                    <max>730</max>
+                                </parameters>
+                            </item>
+                            <item>
+                                <name>740 - 2300</name>
+                                <weight>0.34482759237289</weight>
+                                <parameters>
+                                    <min>740</min>
+                                    <max>2300</max>
+                                </parameters>
+                            </item>
+                        </items>
+                    </filter>
+                </main>
+            </filters>';
+
+        return [
+            'enabled' => [
+                'enabled' => true,
+                'response' => $filterData,
+            ],
+            'disabled' => [
+                'enabled' => false,
+                'response' => $filterData,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider parseRangeSliderProviderNoUI
+     */
+    public function testNoUiCSSIsUsed(string $enabled, string $response): void
+    {
+        $this->configRepository = $this->getMockBuilder(ConfigRepository::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $this->configRepository->expects($this->exactly(2))
+            ->method('get')
+            ->withConsecutive(['Findologic.price_range_filter_step_size'],['Findologic.load_no_ui_slider_styles_enabled'])
+            ->willReturnOnConsecutiveCalls(0.01, $enabled);
+
+        /** @var FiltersParser|MockObject $filtersParserMock */
+        $filtersParserMock = $this->getFiltersParserMock();
+
+        $results = $filtersParserMock->parse(simplexml_load_string($response));
+
+        $this->assertSame($enabled, $results[0]['useNoUISliderCSS']);
+    }
 }
