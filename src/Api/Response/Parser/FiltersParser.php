@@ -194,6 +194,7 @@ class FiltersParser
             $filterData['minValue'] = (float)$filter->attributes->totalRange->min;
             $filterData['maxValue'] = (float)$filter->attributes->totalRange->max;
             $filterData['step'] = (float)$filter->attributes->stepSize;
+            $filterData['useNoUISliderCSS'] = $this->configRepository->get('Findologic.load_no_ui_slider_styles_enabled', '1') === '1';
         }
 
         if ($filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
