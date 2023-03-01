@@ -9,7 +9,8 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "vue-cli-service lint resources/js/src resources/js/types",
+    "lint": "eslint --ext .js --ext .vue --ext .ts resources/js",
+    "lint-fix": "eslint --ext .js --ext .vue --ext .ts resources/js --fix",
     "test": "jest --coverageDirectory=jest"
   },
   "files": [
