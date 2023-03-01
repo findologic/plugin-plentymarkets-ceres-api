@@ -1611,6 +1611,10 @@ class FiltersParserTest extends TestCase
             ->with('Findologic.price_range_filter_step_size')
             ->willReturn($stepSize);
 
+        $this->configRepository->expects($this->once())
+            ->method('get')
+            ->with('Findologic.load_no_ui_slider_styles_enabled');
+
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 
