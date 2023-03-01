@@ -207,6 +207,8 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.fl-no-ui-slider {
   @import 'nouislider/dist/nouislider.css';
+}
 </style>
