@@ -1,7 +1,15 @@
 <template>
   <div class="col-12">
-    <h1 class="h2" id="searchPageTitle" v-html="queryInfoMessage"></h1>
-    <p class="smart-did-you-mean" v-if="smartText.length > 0" v-html="smartText"></p>
+    <h1
+      id="searchPageTitle"
+      class="h2"
+      v-html="queryInfoMessage"
+    />
+    <p
+      v-if="smartText.length > 0"
+      class="smart-did-you-mean"
+      v-html="smartText"
+    />
   </div>
 </template>
 

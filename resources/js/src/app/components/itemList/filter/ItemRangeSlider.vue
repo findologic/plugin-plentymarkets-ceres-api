@@ -1,7 +1,9 @@
 <template>
   <!-- SSR:template(findologic-item-range-slider) -->
-  <div class="fl-range-slider-container"
-      :class="{'fl-no-ui-slider': facet.useNoUISliderCSS }" >
+  <div
+    class="fl-range-slider-container"
+    :class="{'fl-no-ui-slider': facet.useNoUISliderCSS }"
+  >
     <div class="row">
       <div class="col-md-6 col-xs-6">
         <input

@@ -1,11 +1,14 @@
 <template>
   <client-only>
     <div
+      v-show="facets && facets.length > 0"
       class="findologic-filter-wrapper"
       :class="{ 'mb-5': facets.some((e) => e.isMain === true) }"
-      v-show="facets && facets.length > 0"
     >
-      <div class="ml-0 main-filters" v-if="facets.some(e => e.isMain === true)">
+      <div
+        v-if="facets.some(e => e.isMain === true)"
+        class="ml-0 main-filters"
+      >
         <div
           class="container-max component-loading page-content"
           :class="{ isLoading: isLoading }"
@@ -15,11 +18,11 @@
               <div class="w-100">
                 <findologic-item-filter
                   v-for="facet in mainFacets"
-                  :facet="facet"
                   :key="facet.id"
-                  :filtersPerRow="filtersPerRow"
-                  :fallbackImageColorFilter="fallbackImageColorFilter"
-                  :fallbackImageImageFilter="fallbackImageImageFilter"
+                  :facet="facet"
+                  :filters-per-row="filtersPerRow"
+                  :fallback-image-color-filter="fallbackImageColorFilter"
+                  :fallback-image-image-filter="fallbackImageImageFilter"
                   :current-category="currentCategory"
                   :show-category-filter="showCategoryFilter"
                 />
@@ -31,40 +34,55 @@
 
       <div v-if="secondaryFacets.length">
         <div class="ml-0">
-          <div class="container-max component-loading" :class="{ 'isLoading': isLoading }">
-              <div class="row">
-                  <a class="btn btn-link filter-toggle no-main-filters-filter-toggle" data-toggle="collapse"
-                      href="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
-                      <i class="fa fa-sliders default-float"
-                          aria-hidden="true"></i> {{ TranslationService.translate("Findologic::Template.noMainFiltersItemFilter") }}
-                  </a>
-              </div>
+          <div
+            class="container-max component-loading"
+            :class="{ 'isLoading': isLoading }"
+          >
+            <div class="row">
+              <a
+                class="btn btn-link filter-toggle no-main-filters-filter-toggle"
+                data-toggle="collapse"
+                href="#filterCollapse"
+                aria-expanded="false"
+                aria-controls="filterCollapse"
+              >
+                <i
+                  class="fa fa-sliders default-float"
+                  aria-hidden="true"
+                /> {{ TranslationService.translate("Findologic::Template.noMainFiltersItemFilter") }}
+              </a>
+            </div>
           </div>
         </div>
   
-        <div class="ml-0 filter-collapse collapse" id="filterCollapse">
-          <div class="container-max component-loading page-content mb-5" :class="{ 'isLoading': isLoading }">
-              <div class="card-columns row">
-                  <client-only>
-                      <div class="w-100">
-                          <findologic-item-filter
-                              v-for="facet in secondaryFacets"
-                              :facet="facet"
-                              :key="facet.id"
-                              :filtersPerRow="filtersPerRow"
-                              :fallbackImageColorFilter="fallbackImageColorFilter"
-                              :fallbackImageImageFilter="fallbackImageImageFilter"
-                              :showSelectedFiltersCount="showSelectedFiltersCount"
-                              :currentCategory="currentCategory"
-                              :showCategoryFilter="showCategoryFilter"
-                          ></findologic-item-filter>
-                      </div>
-                  </client-only>
-              </div>
+        <div
+          id="filterCollapse"
+          class="ml-0 filter-collapse collapse"
+        >
+          <div
+            class="container-max component-loading page-content mb-5"
+            :class="{ 'isLoading': isLoading }"
+          >
+            <div class="card-columns row">
+              <client-only>
+                <div class="w-100">
+                  <findologic-item-filter
+                    v-for="facet in secondaryFacets"
+                    :key="facet.id"
+                    :facet="facet"
+                    :filters-per-row="filtersPerRow"
+                    :fallback-image-color-filter="fallbackImageColorFilter"
+                    :fallback-image-image-filter="fallbackImageImageFilter"
+                    :show-selected-filters-count="showSelectedFiltersCount"
+                    :current-category="currentCategory"
+                    :show-category-filter="showCategoryFilter"
+                  />
+                </div>
+              </client-only>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </client-only>
 </template>

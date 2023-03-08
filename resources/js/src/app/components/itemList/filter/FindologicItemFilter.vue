@@ -44,8 +44,8 @@
     <div v-else-if="shouldShowCategoryFilter">
       <div v-if="!facet.noAvailableFiltersText">
         <item-category-dropdown
-            :current-category="currentCategory"
-            :facet="facet"
+          :current-category="currentCategory"
+          :facet="facet"
         />
       </div>
       <p
