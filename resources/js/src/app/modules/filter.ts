@@ -14,7 +14,6 @@ import SmartDidYouMean from '../components/SmartDidYouMean.vue';
 import PromotionComponent from '../components/PromotionComponent.vue';
 import FindologicFilterWrapper from '../components/itemList/filter/FindologicFilterWrapper.vue';
 
-
 function isPageWhereComponentsShouldBeLoaded(): boolean {
     if (typeof window === 'undefined') {
         return true;
