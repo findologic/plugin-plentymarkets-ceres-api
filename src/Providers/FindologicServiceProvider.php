@@ -22,7 +22,6 @@ class FindologicServiceProvider extends ServiceProvider
         $this->getApplication()->singleton(SearchService::class);
         $this->getApplication()->singleton(PluginConfig::class);
         $this->getApplication()->singleton(PluginConfigurationValidator::class);
-        // $this->getApplication()->register(FindologicTemplateProvider::class);
 
         $this->addGlobalMiddleware(Middleware::class);
     }
