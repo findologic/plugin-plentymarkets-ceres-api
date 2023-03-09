@@ -83,6 +83,7 @@
           v-text="value.name"
         />
         <div
+          v-if="value.count"
           class="filter-badge"
           v-text="value.count"
         />
