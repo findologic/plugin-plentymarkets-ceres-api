@@ -30,12 +30,6 @@
   "dataProviders":
   [
     {
-      "key": "Findologic\\Containers\\SearchFilterContainer",
-      "name": "Filters",
-      "description": "Display Findologic filters",
-      "defaultLayoutContainer": "Ceres::Search.Filter"
-    },
-    {
       "key": "Findologic\\Containers\\PromotionContainer",
       "name": "Promotion",
       "description": "Display promotion banner",

@@ -74,3 +74,8 @@ export interface PlentyVuexStore extends Store<StoreState> {
 export interface JQuery {
     collapse: () => void;
 }
+
+export interface Promotion {
+    link: string;
+    image: string;
+}
