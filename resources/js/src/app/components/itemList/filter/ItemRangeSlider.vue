@@ -1,6 +1,9 @@
 <template>
   <!-- SSR:template(findologic-item-range-slider) -->
-  <div class="fl-range-slider-container">
+  <div
+    class="fl-range-slider-container"
+    :class="{'fl-no-ui-slider': facet.useNoUISliderCSS }"
+  >
     <div class="row">
       <div class="col-md-6 col-xs-6">
         <input
@@ -187,6 +190,8 @@ watch([valueFrom, valueTo], ([nextValueFrom, nextValueTo]) => {
 });
 </script>
 
-<style scoped>
-  @import 'nouislider/dist/nouislider.css';
+<style lang="scss">
+.fl-no-ui-slider {
+  @import 'nouislider/dist/nouislider';
+}
 </style>

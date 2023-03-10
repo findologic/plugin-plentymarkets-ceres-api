@@ -44,8 +44,8 @@
     <div v-else-if="shouldShowCategoryFilter">
       <div v-if="!facet.noAvailableFiltersText">
         <item-category-dropdown
-            :current-category="currentCategory"
-            :facet="facet"
+          :current-category="currentCategory"
+          :facet="facet"
         />
       </div>
       <p
@@ -83,6 +83,7 @@
           v-text="value.name"
         />
         <div
+          v-if="value.count"
           class="filter-badge"
           v-text="value.count"
         />
@@ -144,7 +145,6 @@ const props = defineProps({
 const root = getCurrentInstance()!.proxy;
 root.$options.template = props.template || '#vue-item-filter';
 const store = root.$store as PlentyVuexStore;
-
 const selectedFacets = computed(() => store.itemList?.selectedFacets);
 const isLoading = computed(() => store.itemList?.isLoading || false);
 
