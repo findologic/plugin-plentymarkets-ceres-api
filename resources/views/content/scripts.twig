@@ -37,6 +37,7 @@
 <!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/findologic_ceres.js') }}) -->
 {% endif %}
 
+<!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
     <findologic-filter-wrapper
         v-bind:facets="facets"
@@ -48,6 +49,7 @@
         v-bind:showSelectedFiltersCount="{{ config('Findologic.show_selected_filter_count') }}"
     ></findologic-filter-wrapper>
 </script>
+<!-- /SSR -->
 
 <script type="x/template" data-component="item-filter-tag-list">
     <client-only>

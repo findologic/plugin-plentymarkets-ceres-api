@@ -11,7 +11,8 @@
     "serve": "vite preview",
     "lint": "eslint --ext .js --ext .vue --ext .ts resources/js",
     "lint-fix": "eslint --ext .js --ext .vue --ext .ts resources/js --fix",
-    "test": "jest --coverageDirectory=jest"
+    "test": "jest --coverageDirectory=jest",
+    "rollup": "rollup -c"
   },
   "files": [
     "resources/js/types"
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-commonjs": "^24.0.1",
     "@types/jest": "^27.4.1",
     "@types/jquery": "^3.5.14",
     "@types/jqueryui": "^1.12.16",
