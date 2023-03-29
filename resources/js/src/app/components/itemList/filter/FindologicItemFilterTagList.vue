@@ -1,34 +1,42 @@
 <template>
   <div class="selected-filters clearfix">
-    <span
+    <div
       v-for="tag in tagList"
       :key="tag.id"
       :class="'selected-filter filter-' + tag.id"
       rel="nofollow"
+      style="display: flex;"
       @click="removeTag(tag)"
     >
-      <i
-        class="fa fa-times"
-        aria-hidden="true"
-      /> {{ facetNames[tag.id] }}: {{ tag.name }}
-    </span>
+      <i class="fa fa-times mr-1 align-self-center" aria-hidden="true" /> 
+      <p class="mb-0">{{ facetNames[tag.id] }}: {{ tag.name }}</p>
+    </div>
 
-    <span
+    <div
       v-if="tagList.length >= 2"
       class="selected-filter reset-all"
       rel="nofollow"
       @click="resetAllTags()"
     >
-      {{ TranslationService.translate('Ceres::Template.itemFilterReset') }}
-    </span>
+      <p class="mb-0">{{ resetFilterText }}</p>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from '@vue/composition-api';
-import { Facet, PlentyVuexStore, TemplateOverridable } from '../../../shared/interfaces';
-import UrlBuilder from '../../../shared/UrlBuilder';
-import TranslationService from '../../../shared/TranslationService';
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+} from "@vue/composition-api";
+import {
+  Facet,
+  PlentyVuexStore,
+  TemplateOverridable,
+} from "../../../shared/interfaces";
+import UrlBuilder from "../../../shared/UrlBuilder";
+import TranslationService from "../../../shared/TranslationService";
 
 interface ItemFilterTagListProps extends TemplateOverridable {
   marginClasses: string;
@@ -36,11 +44,11 @@ interface ItemFilterTagListProps extends TemplateOverridable {
 }
 
 export default defineComponent({
-  name: 'FindologicItemFilterTagList',
+  name: "FindologicItemFilterTagList",
   props: {
     template: {
       type: String,
-      default: '#vue-item-filter-tag-list',
+      default: "#vue-item-filter-tag-list",
     },
     marginClasses: {
       type: String,
@@ -52,12 +60,12 @@ export default defineComponent({
     },
   },
   setup: (props: ItemFilterTagListProps, { root }) => {
-    root.$options.template = props.template || '#vue-item-filter-tag-list';
+    root.$options.template = props.template || "#vue-item-filter-tag-list";
     const store = root.$store as PlentyVuexStore;
-
-    const tagList = computed((): Facet[] => UrlBuilder.getSelectedFilters(store));
+    const tagList = ref<Facet[]>([]);
+    const resetFilterText = ref<String>("");
     const facetNames = computed(() => {
-      const map: {[key: string]: string} = {};
+      const map: { [key: string]: string } = {};
 
       store.state.itemList.facets.forEach((facet: Facet) => {
         map[facet.id] = facet.name as string;
@@ -66,8 +74,15 @@ export default defineComponent({
       return map;
     });
 
+    onMounted(() => {
+      resetFilterText.value = TranslationService.translate(
+        "Ceres::Template.itemFilterReset"
+      );
+      tagList.value = UrlBuilder.getSelectedFilters(store);
+    });
+
     const removeTag = (tag: Facet) => {
-      UrlBuilder.removeSelectedFilter(tag.id, tag?.name || '');
+      UrlBuilder.removeSelectedFilter(tag.id, tag?.name || "");
     };
 
     const resetAllTags = () => UrlBuilder.removeAllAttribsAndRefresh();
@@ -77,12 +92,9 @@ export default defineComponent({
       facetNames,
       removeTag,
       TranslationService,
-      resetAllTags
+      resetAllTags,
+      resetFilterText,
     };
-  }
+  },
 });
 </script>
-
-<style scoped>
-
-</style>

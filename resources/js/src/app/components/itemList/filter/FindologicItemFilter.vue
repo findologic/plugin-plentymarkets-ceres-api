@@ -1,6 +1,4 @@
 <template>
-  <!-- SSR:template(findologic-item-filter) -->
-  <!-- Additionally checking that min and max values aren't the same, because this would be a useless filter. -->
   <div
     v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))"
     class="card"

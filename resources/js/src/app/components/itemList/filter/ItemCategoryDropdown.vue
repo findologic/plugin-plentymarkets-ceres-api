@@ -1,5 +1,4 @@
 <template>
-  <!-- SSR:template(findologic-item-category-dropdown) -->
   <div class="fl-dropdown">
     <div
       class="fl-dropdown-container fl-category-dropdown-container custom-select"
@@ -81,7 +80,6 @@
       </ul>
     </div>
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">

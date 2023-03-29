@@ -12,10 +12,6 @@ export default defineConfig({
         '@': path.resolve(__dirname, './'),
     },
     build: {
-        lib: {
-            entry: './resources/js/src/index.ts',
-            formats: ['cjs']
-        },
         target: 'es2020',
         rollupOptions: {
             input: {
@@ -27,9 +23,5 @@ export default defineConfig({
                 assetFileNames: 'findologic_ceres.css',
             }
         },
-        commonjsOptions: {
-            transformMixedEsModules: true
-        }
-
     },
 });

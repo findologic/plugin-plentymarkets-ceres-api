@@ -1,12 +1,12 @@
 <template>
-  <client-only>
+  <div>
     <div
       v-show="facets && facets.length > 0"
       class="findologic-filter-wrapper"
       :class="{ 'mb-5': facets.some((e) => e.isMain === true) }"
     >
       <div
-        v-if="facets.some(e => e.isMain === true)"
+        v-if="facets.some((e) => e.isMain === true)"
         class="ml-0 main-filters"
       >
         <div
@@ -14,7 +14,7 @@
           :class="{ isLoading: isLoading }"
         >
           <div class="card-columns row">
-            <client-only>
+            <div>
               <div class="w-100">
                 <findologic-item-filter
                   v-for="facet in mainFacets"
@@ -27,7 +27,7 @@
                   :show-category-filter="showCategoryFilter"
                 />
               </div>
-            </client-only>
+            </div>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
         <div class="ml-0">
           <div
             class="container-max component-loading"
-            :class="{ 'isLoading': isLoading }"
+            :class="{ isLoading: isLoading }"
           >
             <div class="row">
               <a
@@ -46,25 +46,20 @@
                 aria-expanded="false"
                 aria-controls="filterCollapse"
               >
-                <i
-                  class="fa fa-sliders default-float"
-                  aria-hidden="true"
-                /> {{ TranslationService.translate("Findologic::Template.noMainFiltersItemFilter") }}
+                <i class="fa fa-sliders default-float" aria-hidden="true" />
+                {{ filterText }}
               </a>
             </div>
           </div>
         </div>
-  
-        <div
-          id="filterCollapse"
-          class="ml-0 filter-collapse collapse"
-        >
+
+        <div id="filterCollapse" class="ml-0 filter-collapse collapse">
           <div
             class="container-max component-loading page-content mb-5"
-            :class="{ 'isLoading': isLoading }"
+            :class="{ isLoading: isLoading }"
           >
             <div class="card-columns row">
-              <client-only>
+              <div>
                 <div class="w-100">
                   <findologic-item-filter
                     v-for="facet in secondaryFacets"
@@ -78,13 +73,13 @@
                     :show-category-filter="showCategoryFilter"
                   />
                 </div>
-              </client-only>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </client-only>
+  </div>
 </template>
 
 <script lang="ts">
@@ -94,21 +89,21 @@ import {
   FacetAware,
   PlentyVuexStore,
   TemplateOverridable,
-} from '../../../shared/interfaces';
-import { computed, defineComponent } from '@vue/composition-api';
-import FindologicItemFilter from './FindologicItemFilter.vue';
-import type { PropType } from '@vue/composition-api';
-import TranslationService from '../../../shared/TranslationService';
+} from "../../../shared/interfaces";
+import { computed, defineComponent, onMounted, ref } from "@vue/composition-api";
+import FindologicItemFilter from "./FindologicItemFilter.vue";
+import type { PropType } from "@vue/composition-api";
+import TranslationService from "../../../shared/TranslationService";
 
 interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
   facets: Facet[];
-  showCategoryFilter: boolean
+  showCategoryFilter: boolean;
 }
 
 export default defineComponent({
-  name: 'FindologicFilterWrapper',
+  name: "FindologicFilterWrapper",
   components: {
-    'findologic-item-filter': FindologicItemFilter,
+    "findologic-item-filter": FindologicItemFilter,
   },
   props: {
     facets: {
@@ -121,37 +116,51 @@ export default defineComponent({
     },
     fallbackImageColorFilter: {
       type: String,
-      default: '',
+      default: "",
     },
     fallbackImageImageFilter: {
       type: String,
-      default: '',
+      default: "",
     },
     currentCategory: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     showCategoryFilter: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showSelectedFiltersCount: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   setup: (props: FindologicFilterWrapperProps, { root }) => {
     const store = root.$store as PlentyVuexStore;
     const isLoading = computed(() => store.state.itemList.isLoading);
-    const mainFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => facet.id === 'cat' ? props.showCategoryFilter && facet.isMain : facet.isMain));
-    const secondaryFacets = computed((): Facet[] => props.facets.filter((facet: Facet) => !facet.isMain));
+    const mainFacets = computed((): Facet[] =>
+      props.facets.filter((facet: Facet) =>
+        facet.id === "cat"
+          ? props.showCategoryFilter && facet.isMain
+          : facet.isMain
+      )
+    );
+    const filterText = ref<String>("");
+    const secondaryFacets = computed((): Facet[] =>
+      props.facets.filter((facet: Facet) => !facet.isMain)
+    );
+
+    onMounted(() => {
+      filterText.value = TranslationService.translate("Findologic::Template.noMainFiltersItemFilter");
+    });
 
     return {
       isLoading,
       TranslationService,
       mainFacets,
-      secondaryFacets
+      secondaryFacets,
+      filterText
     };
   },
 });

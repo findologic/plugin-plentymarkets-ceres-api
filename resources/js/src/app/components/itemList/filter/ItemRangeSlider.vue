@@ -1,5 +1,4 @@
 <template>
-  <!-- SSR:template(findologic-item-range-slider) -->
   <div
     class="fl-range-slider-container"
     :class="{'fl-no-ui-slider': facet.useNoUISliderCSS }"
@@ -41,7 +40,7 @@
           :class="{'disabled': isDisabled}"
           data-toggle="tooltip"
           data-placement="top"
-          :title="TranslationService.translate('Ceres::Template.itemApply')"
+          :title="TranslationService?.translate('Ceres::Template.itemApply')"
           rel="nofollow"
           @click="triggerFilter()"
         >
@@ -53,14 +52,13 @@
       </div>
     </div>
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
-import TranslationService from '../../../shared/TranslationService';
+import TranslationServiceImport from '../../../shared/TranslationService';
 import * as noUiSlider from 'nouislider';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
@@ -77,7 +75,7 @@ export default defineComponent({
     const valueFrom = ref();
     const valueTo = ref();
     const facet = props.facet;
-
+    let TranslationService;
     const isLoading = computed(() => root.$store.state.isLoading);
     const sanitizedFacetId = computed(() => {
       return 'fl-range-slider-' + props.facet.id
@@ -144,6 +142,7 @@ export default defineComponent({
 
     onMounted(() => {
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
+      TranslationService = TranslationServiceImport;
       valueFrom.value = (values ? values.min : props.facet.minValue) || '';
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
 
