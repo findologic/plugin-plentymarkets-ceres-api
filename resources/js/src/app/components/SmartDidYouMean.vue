@@ -14,13 +14,7 @@
 </template>
 
 <script lang="ts">
-import { FacetAware, TemplateOverridable } from '../shared/interfaces';
 import { defineComponent } from '@vue/composition-api';
-
-interface SmartDidYouMeanProps extends TemplateOverridable, FacetAware {
-  smartText: string;
-  queryInfoMessage: string;
-}
 
 export default defineComponent({
   name: 'SmartDidYouMean',

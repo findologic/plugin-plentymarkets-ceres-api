@@ -14,15 +14,7 @@
 </template>
 
 <script lang="ts">
-import { FacetAware, TemplateOverridable } from '../shared/interfaces';
 import { defineComponent } from '@vue/composition-api';
-import {
-  Promotion
-} from '../shared/interfaces';
-
-interface PromotionComponentProps extends TemplateOverridable, FacetAware {
-  promotion: Promotion;
-}
 
 export default defineComponent({
   name: 'PromotionComponent',

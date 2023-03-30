@@ -8,8 +8,13 @@
       style="display: flex;"
       @click="removeTag(tag)"
     >
-      <i class="fa fa-times mr-1 align-self-center" aria-hidden="true" /> 
-      <p class="mb-0">{{ facetNames[tag.id] }}: {{ tag.name }}</p>
+      <i
+        class="fa fa-times mr-1 align-self-center"
+        aria-hidden="true"
+      /> 
+      <p class="mb-0">
+        {{ facetNames[tag.id] }}: {{ tag.name }}
+      </p>
     </div>
 
     <div
@@ -18,7 +23,9 @@
       rel="nofollow"
       @click="resetAllTags()"
     >
-      <p class="mb-0">{{ resetFilterText }}</p>
+      <p class="mb-0">
+        {{ resetFilterText }}
+      </p>
     </div>
   </div>
 </template>
@@ -29,14 +36,14 @@ import {
   defineComponent,
   onMounted,
   ref,
-} from "@vue/composition-api";
+} from '@vue/composition-api';
 import {
   Facet,
   PlentyVuexStore,
   TemplateOverridable,
-} from "../../../shared/interfaces";
-import UrlBuilder from "../../../shared/UrlBuilder";
-import TranslationService from "../../../shared/TranslationService";
+} from '../../../shared/interfaces';
+import UrlBuilder from '../../../shared/UrlBuilder';
+import TranslationService from '../../../shared/TranslationService';
 
 interface ItemFilterTagListProps extends TemplateOverridable {
   marginClasses: string;
@@ -44,11 +51,11 @@ interface ItemFilterTagListProps extends TemplateOverridable {
 }
 
 export default defineComponent({
-  name: "FindologicItemFilterTagList",
+  name: 'FindologicItemFilterTagList',
   props: {
     template: {
       type: String,
-      default: "#vue-item-filter-tag-list",
+      default: '#vue-item-filter-tag-list',
     },
     marginClasses: {
       type: String,
@@ -60,10 +67,10 @@ export default defineComponent({
     },
   },
   setup: (props: ItemFilterTagListProps, { root }) => {
-    root.$options.template = props.template || "#vue-item-filter-tag-list";
+    root.$options.template = props.template || '#vue-item-filter-tag-list';
     const store = root.$store as PlentyVuexStore;
     const tagList = ref<Facet[]>([]);
-    const resetFilterText = ref<String>("");
+    const resetFilterText = ref<string>('');
     
     const facetNames = computed(() => {
       const map: { [key: string]: string } = {};
@@ -77,13 +84,13 @@ export default defineComponent({
 
     onMounted(() => {
       resetFilterText.value = TranslationService.translate(
-        "Ceres::Template.itemFilterReset"
+        'Ceres::Template.itemFilterReset'
       );
       tagList.value = UrlBuilder.getSelectedFilters(store);
     });
 
     const removeTag = (tag: Facet) => {
-      UrlBuilder.removeSelectedFilter(tag.id, tag?.name || "");
+      UrlBuilder.removeSelectedFilter(tag.id, tag?.name || '');
     };
 
     const resetAllTags = () => UrlBuilder.removeAllAttribsAndRefresh();
