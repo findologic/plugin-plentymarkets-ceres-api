@@ -1,13 +1,12 @@
 import { createVuePlugin as vue } from 'vite-plugin-vue2';
 import { defineConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
-import commonjs from '@rollup/plugin-commonjs';
 
 const path = require('path');
 
 export default defineConfig({
     server: { https: true },
-    plugins: [vue(), mkcert(), commonjs()],
+    plugins: [vue(), mkcert()],
     alias: {
         '@': path.resolve(__dirname, './'),
     },
