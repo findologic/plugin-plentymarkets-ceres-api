@@ -64,6 +64,7 @@ export default defineComponent({
     const store = root.$store as PlentyVuexStore;
     const tagList = ref<Facet[]>([]);
     const resetFilterText = ref<String>("");
+    
     const facetNames = computed(() => {
       const map: { [key: string]: string } = {};
 

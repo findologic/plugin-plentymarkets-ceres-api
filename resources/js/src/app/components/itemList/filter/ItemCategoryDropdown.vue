@@ -14,7 +14,7 @@
       <span
         v-else
         class="fl-dropdown-label"
-      >{{ TranslationService.translate("Findologic::Template.pleaseSelect") }}</span>
+      >{{ pleaseSelectText }}</span>
       <ul
         v-show="isOpen"
         class="fl-dropdown-content form-check"
@@ -23,7 +23,7 @@
           v-for="category in categories"
           :key="category.id"
           class="fl-dropdown-item"
-          :class="{'form-check-label': !isSelected}"
+          :class="{'form-check-label': !categoryIsSelected}"
           rel="nofollow"
           @click.stop="close(); selected(getParentCategoryName(category));"
         >
@@ -31,12 +31,12 @@
             :id="'option-' + category.id"
             class="form-check-input hidden-xs-up"
             type="checkbox"
-            :checked="isSelected"
+            :checked="categoryIsSelected"
             :disabled="isLoading"
           >
           <label
             :for="'option-' + category.id"
-            :class="{'form-check-label': isSelected}"
+            :class="{'form-check-label': categoryIsSelected}"
             rel="nofollow"
             v-text="category.name"
           />
@@ -46,7 +46,7 @@
             v-text="category.count"
           />
           <ul
-            v-if="isSelected && category.items.length > 0 && !isInCategoryPage"
+            v-if="categoryIsSelected && category.items.length > 0 && !isInCategoryPage"
             class="form-check subcategories"
           >
             <li
@@ -99,7 +99,12 @@ export default defineComponent({
   ],
 
   setup(props: CategoryDropdownProps, { root }) {
+    const pleaseSelectText = ref<String>('');
+    const categoryIsSelected = ref<Boolean>(false);
+    const categories = ref<Array<FacetValue> | undefined>([]);
+      
     root.$options.template = props.template || '#vue-item-dropdown';
+
 
     const buildDropdownLabel = () => {
       const selectedFilters = UrlBuilder.getSelectedFilters(root.$store as PlentyVuexStore);
@@ -127,7 +132,7 @@ export default defineComponent({
       return typeof props.currentCategory !== 'undefined';
     });
 
-    const categories = computed((): FacetValue[] | undefined  => {
+    const comCategories = computed((): FacetValue[] | undefined  => {
       if (
           typeof props.currentCategory !== 'undefined' &&
           props.facet.values?.[0].name === props.currentCategory[0].name
@@ -175,17 +180,20 @@ export default defineComponent({
 
     onMounted(() => {
       dropdownLabel.value = buildDropdownLabel() as string;
+      pleaseSelectText.value = TranslationService.translate("Findologic::Template.pleaseSelect");
+      categoryIsSelected.value = isSelected.value;
+      categories.value = comCategories.value;
     });
 
     return {
       dropdownLabel,
-      isSelected,
+      categoryIsSelected,
       isInCategoryPage,
       categories,
       getSubCategoryName,
       getParentCategoryName,
       isCategorySelected,
-      TranslationService
+      pleaseSelectText
     };
   }
 });
