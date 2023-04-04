@@ -185,6 +185,7 @@ export default defineComponent({
       categories.value = comCategories.value;
     });
 
+
     return {
       dropdownLabel,
       categoryIsSelected,

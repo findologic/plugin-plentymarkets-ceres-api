@@ -1,4 +1,5 @@
 import Vuex from 'vuex';
+import Vue from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { CategoryFacet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
@@ -21,7 +22,7 @@ describe('ItemCategoryDropdown', () => {
         store = new Vuex.Store({});
     });
 
-    it('shows all options in a dropdown regardless of set fixed item count', () => {
+    it('shows all options in a dropdown regardless of set fixed item count', async () => {
         const facet: CategoryFacet = {
             cssClass: '',
             findologicFilterType: 'select',
@@ -57,7 +58,7 @@ describe('ItemCategoryDropdown', () => {
         };
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
-
+        await Vue.nextTick();
         expect(wrapper.findAll(':scope > *').length).toBe(1);
         const options = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select ul li');
         expect(options.length).toBe(2);
@@ -112,7 +113,6 @@ describe('ItemCategoryDropdown', () => {
         UrlBuilder.getSelectedFilters = jest.fn(() => [{ id: 'cat', name: 'Living Room' }]);
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
-
         await localVue.nextTick();
 
         const dropdownLabel = wrapper.find(':scope > div.fl-category-dropdown-container.custom-select > .fl-dropdown-label');
@@ -128,7 +128,7 @@ describe('ItemCategoryDropdown', () => {
         expect(subcategories.at(1).find('label').text()).toBe('Sofas');
     });
 
-    it('does not show subcategories when no parent category is selected', () => {
+    it('does not show subcategories when no parent category is selected', async () => {
         const facet: CategoryFacet = {
             cssClass: '',
             findologicFilterType: 'select',
@@ -196,6 +196,7 @@ describe('ItemCategoryDropdown', () => {
         UrlBuilder.getSelectedFilters = jest.fn(() => []);
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
+        await Vue.nextTick();
 
         const options = wrapper.findAll(':scope > div.fl-category-dropdown-container.custom-select > ul > li');
         expect(options.length).toBe(2);
