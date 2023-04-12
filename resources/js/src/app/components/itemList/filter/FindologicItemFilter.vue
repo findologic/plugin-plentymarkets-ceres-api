@@ -88,7 +88,6 @@
       </div>
     </div>
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">
@@ -99,7 +98,7 @@ import {
   FacetAware,
   FacetValue,
   PlentyVuexStore,
-  TemplateOverridable,
+  TemplateOverridable
 } from '../../../shared/interfaces';
 import ItemRangeSlider from './ItemRangeSlider.vue';
 import ItemColorTiles from './ItemColorTiles.vue';

@@ -21,7 +21,6 @@
     "paths": {
       "@/*": [
         "src/*",
-        "./resources/js/src"
       ]
     },
     "lib": [

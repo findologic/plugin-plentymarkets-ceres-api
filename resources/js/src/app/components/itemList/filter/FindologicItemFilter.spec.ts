@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import Vuex from 'vuex';
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import { Facet, ColorFacet, State, CategoryFacet } from '../../../shared/interfaces';
@@ -24,7 +25,7 @@ describe('FindologicItemFilter', () => {
     store = new Vuex.Store({});
   });
 
-  it('Shows the facet name', () => {
+  it('Shows the facet name', async () => {
     const facet: Facet = {
       cssClass: '',
       findologicFilterType: 'select',
@@ -68,6 +69,8 @@ describe('FindologicItemFilter', () => {
       store,
       localVue
     });
+
+    await Vue.nextTick();
 
     const filterHeading = wrapper.find(':scope > div div.h3').text();
     expect(filterHeading).toBe('Facet name');
@@ -199,7 +202,7 @@ describe('FindologicItemFilter', () => {
     expect(firstOptionItemsCount).toBe('9');
   });
 
-  it('Renders category facet values correctly in the respective filter container', () => {
+  it('Renders category facet values correctly in the respective filter container', async () => {
     const categoryFacet: CategoryFacet = {
       cssClass: '',
       findologicFilterType: 'select',
@@ -243,6 +246,8 @@ describe('FindologicItemFilter', () => {
       store,
       localVue
     });
+    await Vue.nextTick();
+
     const categoryElement = categoryWrapper.find(':scope > div:last-child div.fl-category-dropdown-container');
     const dropdownOptions = categoryElement.findAll('ul.fl-dropdown-content li');
     expect(dropdownOptions.length).toBe(2);
@@ -415,6 +420,8 @@ describe('FindologicItemFilter', () => {
       store,
       localVue
     });
+    await Vue.nextTick();
+    
     const optionElement = wrapper.find(data.itemSelector);
     await optionElement.trigger('click');
     expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(1, facet, data.expectedFacetId, data.expectedFacetValue);
