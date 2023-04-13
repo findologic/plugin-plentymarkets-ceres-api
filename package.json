@@ -11,8 +11,7 @@
     "serve": "vite preview",
     "lint": "eslint --ext .js --ext .vue --ext .ts resources/js",
     "lint-fix": "eslint --ext .js --ext .vue --ext .ts resources/js --fix",
-    "test": "jest --coverageDirectory=jest",
-    "rollup": "rollup -c"
+    "test": "jest --coverageDirectory=jest"
   },
   "files": [
     "resources/js/types"
