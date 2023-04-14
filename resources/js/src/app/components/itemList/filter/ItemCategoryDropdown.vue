@@ -101,7 +101,6 @@ export default defineComponent({
   setup(props: CategoryDropdownProps, { root }) {
     const pleaseSelectText = ref<string>('');
     const categoryIsSelected = ref<boolean>(false);
-    const categories = ref<Array<FacetValue> | undefined>([]);
       
     root.$options.template = props.template || '#vue-item-dropdown';
 
@@ -132,7 +131,7 @@ export default defineComponent({
       return typeof props.currentCategory !== 'undefined';
     });
 
-    const comCategories = computed((): FacetValue[] | undefined  => {
+    const categories = computed((): FacetValue[] | undefined  => {
       if (
           typeof props.currentCategory !== 'undefined' &&
           props.facet.values?.[0].name === props.currentCategory[0].name
@@ -182,7 +181,6 @@ export default defineComponent({
       dropdownLabel.value = buildDropdownLabel() as string;
       pleaseSelectText.value = TranslationService.translate('Findologic::Template.pleaseSelect');
       categoryIsSelected.value = isSelected.value;
-      categories.value = comCategories.value;
     });
 
 
