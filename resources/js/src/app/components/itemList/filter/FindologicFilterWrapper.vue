@@ -4,7 +4,10 @@
     class="findologic-filter-wrapper"
     :class="{ 'mb-5': facets.some((e) => e.isMain === true) }"
   >
-    <div v-if="facets.some((e) => e.isMain === true)" class="ml-0 main-filters">
+    <div
+      v-if="facets.some((e) => e.isMain === true)"
+      class="ml-0 main-filters"
+    >
       <div
         class="container-max component-loading page-content"
         :class="{ isLoading: isLoading }"
@@ -40,14 +43,20 @@
               aria-expanded="false"
               aria-controls="filterCollapse"
             >
-              <i class="fa fa-sliders default-float" aria-hidden="true" />
+              <i
+                class="fa fa-sliders default-float"
+                aria-hidden="true"
+              />
               {{ filterText }}
             </a>
           </div>
         </div>
       </div>
 
-      <div id="filterCollapse" class="ml-0 filter-collapse collapse">
+      <div
+        id="filterCollapse"
+        class="ml-0 filter-collapse collapse"
+      >
         <div
           class="container-max component-loading page-content mb-5"
           :class="{ isLoading: isLoading }"
@@ -80,15 +89,15 @@ import {
   FacetAware,
   PlentyVuexStore,
   TemplateOverridable,
-} from "../../../shared/interfaces";
+} from '../../../shared/interfaces';
 import {
   computed,
   defineComponent,
   onMounted,
   ref,
-} from "@vue/composition-api";
-import FindologicItemFilter from "./FindologicItemFilter.vue";
-import TranslationService from "../../../shared/TranslationService";
+} from '@vue/composition-api';
+import FindologicItemFilter from './FindologicItemFilter.vue';
+import TranslationService from '../../../shared/TranslationService';
 
 interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
   facets: Facet[];
@@ -101,9 +110,9 @@ interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
 }
 
 export default defineComponent({
-  name: "FindologicFilterWrapper",
+  name: 'FindologicFilterWrapper',
   components: {
-    "findologic-item-filter": FindologicItemFilter,
+    'findologic-item-filter': FindologicItemFilter,
   },
   props: {
     facets: {
@@ -116,11 +125,11 @@ export default defineComponent({
     },
     fallbackImageColorFilter: {
       type: String,
-      default: "",
+      default: '',
     },
     fallbackImageImageFilter: {
       type: String,
-      default: "",
+      default: '',
     },
     currentCategory: {
       type: Array,
@@ -141,19 +150,19 @@ export default defineComponent({
     const isLoading = computed(() => store.state.itemList.isLoading);
     const mainFacets = computed((): Facet[] =>
       props.facets.filter((facet: Facet) =>
-        facet.id === "cat"
+        facet.id === 'cat'
           ? props.showCategoryFilter && facet.isMain
           : facet.isMain
       )
     );
-    const filterText = ref<string>("");
+    const filterText = ref<string>('');
     const secondaryFacets = computed((): Facet[] =>
       props.facets.filter((facet: Facet) => !facet.isMain)
     );
 
     onMounted(() => {
       filterText.value = TranslationService.translate(
-        "Findologic::Template.noMainFiltersItemFilter"
+        'Findologic::Template.noMainFiltersItemFilter'
       );
     });
 
