@@ -1,85 +1,70 @@
 <template>
-  <div>
-    <div
-      v-show="facets && facets.length > 0"
-      class="findologic-filter-wrapper"
-      :class="{ 'mb-5': facets.some((e) => e.isMain === true) }"
-    >
+  <div
+    v-show="facets && facets.length > 0"
+    class="findologic-filter-wrapper"
+    :class="{ 'mb-5': facets.some((e) => e.isMain === true) }"
+  >
+    <div v-if="facets.some((e) => e.isMain === true)" class="ml-0 main-filters">
       <div
-        v-if="facets.some((e) => e.isMain === true)"
-        class="ml-0 main-filters"
+        class="container-max component-loading page-content"
+        :class="{ isLoading: isLoading }"
       >
+        <div class="card-columns row">
+          <div class="w-100">
+            <findologic-item-filter
+              v-for="facet in mainFacets"
+              :key="facet.id"
+              :facet="facet"
+              :filters-per-row="filtersPerRow"
+              :fallback-image-color-filter="fallbackImageColorFilter"
+              :fallback-image-image-filter="fallbackImageImageFilter"
+              :current-category="currentCategory"
+              :show-category-filter="showCategoryFilter"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="secondaryFacets.length">
+      <div class="ml-0">
         <div
-          class="container-max component-loading page-content"
+          class="container-max component-loading"
           :class="{ isLoading: isLoading }"
         >
-          <div class="card-columns row">
-            <div>
-              <div class="w-100">
-                <findologic-item-filter
-                  v-for="facet in mainFacets"
-                  :key="facet.id"
-                  :facet="facet"
-                  :filters-per-row="filtersPerRow"
-                  :fallback-image-color-filter="fallbackImageColorFilter"
-                  :fallback-image-image-filter="fallbackImageImageFilter"
-                  :current-category="currentCategory"
-                  :show-category-filter="showCategoryFilter"
-                />
-              </div>
-            </div>
+          <div class="row">
+            <a
+              class="btn btn-link filter-toggle no-main-filters-filter-toggle"
+              data-toggle="collapse"
+              href="#filterCollapse"
+              aria-expanded="false"
+              aria-controls="filterCollapse"
+            >
+              <i class="fa fa-sliders default-float" aria-hidden="true" />
+              {{ filterText }}
+            </a>
           </div>
         </div>
       </div>
 
-      <div v-if="secondaryFacets.length">
-        <div class="ml-0">
-          <div
-            class="container-max component-loading"
-            :class="{ isLoading: isLoading }"
-          >
-            <div class="row">
-              <a
-                class="btn btn-link filter-toggle no-main-filters-filter-toggle"
-                data-toggle="collapse"
-                href="#filterCollapse"
-                aria-expanded="false"
-                aria-controls="filterCollapse"
-              >
-                <i
-                  class="fa fa-sliders default-float"
-                  aria-hidden="true"
-                />
-                {{ filterText }}
-              </a>
-            </div>
-          </div>
-        </div>
-
+      <div id="filterCollapse" class="ml-0 filter-collapse collapse">
         <div
-          id="filterCollapse"
-          class="ml-0 filter-collapse collapse"
+          class="container-max component-loading page-content mb-5"
+          :class="{ isLoading: isLoading }"
         >
-          <div
-            class="container-max component-loading page-content mb-5"
-            :class="{ isLoading: isLoading }"
-          >
-            <div class="card-columns row">
-              <div>
-                <div class="w-100">
-                  <findologic-item-filter
-                    v-for="facet in secondaryFacets"
-                    :key="facet.id"
-                    :facet="facet"
-                    :filters-per-row="filtersPerRow"
-                    :fallback-image-color-filter="fallbackImageColorFilter"
-                    :fallback-image-image-filter="fallbackImageImageFilter"
-                    :show-selected-filters-count="showSelectedFiltersCount"
-                    :current-category="currentCategory"
-                    :show-category-filter="showCategoryFilter"
-                  />
-                </div>
-              </div>
+          <div class="card-columns row">
+            <div class="w-100">
+              <findologic-item-filter
+                v-for="facet in secondaryFacets"
+                :key="facet.id"
+                :facet="facet"
+                :filters-per-row="filtersPerRow"
+                :fallback-image-color-filter="fallbackImageColorFilter"
+                :fallback-image-image-filter="fallbackImageImageFilter"
+                :show-selected-filters-count="showSelectedFiltersCount"
+                :current-category="currentCategory"
+                :show-category-filter="showCategoryFilter"
+              />
             </div>
           </div>
         </div>
@@ -95,11 +80,16 @@ import {
   FacetAware,
   PlentyVuexStore,
   TemplateOverridable,
-} from '../../../shared/interfaces';
-import { computed, defineComponent, onMounted, ref } from '@vue/composition-api';
-import FindologicItemFilter from './FindologicItemFilter.vue';
-import type { PropType } from '@vue/composition-api';
-import TranslationService from '../../../shared/TranslationService';
+} from "../../../shared/interfaces";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+} from "@vue/composition-api";
+import FindologicItemFilter from "./FindologicItemFilter.vue";
+import type { PropType } from "@vue/composition-api";
+import TranslationService from "../../../shared/TranslationService";
 
 interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
   facets: Facet[];
@@ -107,9 +97,9 @@ interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
 }
 
 export default defineComponent({
-  name: 'FindologicFilterWrapper',
+  name: "FindologicFilterWrapper",
   components: {
-    'findologic-item-filter': FindologicItemFilter,
+    "findologic-item-filter": FindologicItemFilter,
   },
   props: {
     facets: {
@@ -122,11 +112,11 @@ export default defineComponent({
     },
     fallbackImageColorFilter: {
       type: String,
-      default: '',
+      default: "",
     },
     fallbackImageImageFilter: {
       type: String,
-      default: '',
+      default: "",
     },
     currentCategory: {
       type: Array,
@@ -147,18 +137,20 @@ export default defineComponent({
     const isLoading = computed(() => store.state.itemList.isLoading);
     const mainFacets = computed((): Facet[] =>
       props.facets.filter((facet: Facet) =>
-        facet.id === 'cat'
+        facet.id === "cat"
           ? props.showCategoryFilter && facet.isMain
           : facet.isMain
       )
     );
-    const filterText = ref<string>('');
+    const filterText = ref<string>("");
     const secondaryFacets = computed((): Facet[] =>
       props.facets.filter((facet: Facet) => !facet.isMain)
     );
 
     onMounted(() => {
-      filterText.value = TranslationService.translate('Findologic::Template.noMainFiltersItemFilter');
+      filterText.value = TranslationService.translate(
+        "Findologic::Template.noMainFiltersItemFilter"
+      );
     });
 
     return {
@@ -166,7 +158,7 @@ export default defineComponent({
       TranslationService,
       mainFacets,
       secondaryFacets,
-      filterText
+      filterText,
     };
   },
 });
