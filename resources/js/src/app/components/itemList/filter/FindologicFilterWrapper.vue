@@ -88,12 +88,16 @@ import {
   ref,
 } from "@vue/composition-api";
 import FindologicItemFilter from "./FindologicItemFilter.vue";
-import type { PropType } from "@vue/composition-api";
 import TranslationService from "../../../shared/TranslationService";
 
 interface FindologicFilterWrapperProps extends TemplateOverridable, FacetAware {
   facets: Facet[];
   showCategoryFilter: boolean;
+  filtersPerRow: number;
+  fallbackImageColorFilter: string;
+  fallbackImageImageFilter: string;
+  currentCategory: CategoryFacet[];
+  showSelectedFiltersCount: boolean;
 }
 
 export default defineComponent({
@@ -103,7 +107,7 @@ export default defineComponent({
   },
   props: {
     facets: {
-      type: Array as PropType<Array<Facet>>,
+      type: Array,
       default: () => [],
     },
     filtersPerRow: {
