@@ -31,11 +31,13 @@
 </script>
 
 <script src="{{ plugin_path("Findologic") }}/js/dist/findologic_ceres.js"></script>
+{#<script src="https://localhost:5173/resources/js/dist/findologic_ceres.js"></script>#}
 
 {% if isSearchPage or activeOnCatPage %}
 <!-- SSR:entry({{ ssr_entry('Findologic', 'resources/js/dist/findologic_ceres.js') }}) -->
 {% endif %}
 
+<!-- SSR:template(item-filter-list) -->
 <script type="x/template" data-component="item-filter-list">
     <findologic-filter-wrapper
         v-bind:facets="facets"
@@ -47,48 +49,47 @@
         v-bind:showSelectedFiltersCount="{{ config('Findologic.show_selected_filter_count') }}"
     ></findologic-filter-wrapper>
 </script>
+<!-- /SSR -->
 
+<!-- SSR:template(item-filter-tag-list) -->
 <script type="x/template" data-component="item-filter-tag-list">
-    <client-only>
-        <findologic-item-filter-tag-list></findologic-item-filter-tag-list>
-    </client-only>
+    <findologic-item-filter-tag-list></findologic-item-filter-tag-list>
 </script>
+<!-- /SSR -->
 
 <!-- SSR:template(item-search) -->
 <script type="x/template" data-component="item-search">
-    <client-only>
-        <form method="GET" action="{{ languagePath }}/search" @submit="search()">
-            <div class="container-max" :class="{'p-0' : $ceres.isShopBuilder}"> 
-                <div class="position-relative">
-                    <div class="d-flex flex-grow-1 position-relative my-2">
-                        <input name="query"
-                               type="search"
-                               class="search-input flex-grow-1 px-3 py-2"
-                               ref="searchInput"
-                                {% if minimalSearchTermLength > 0 %}
-                                    minlength="{{ minimalSearchTermLength }}"
-                                {% endif %}
-                               :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
-                               :aria-label="$translate('Ceres::Template.headerSearchTerm')"
-                               v-model="searchString" 
-                               @keyup.enter="search()" 
-                               @input="onValueChanged($event.target.value)"
-                               @focus="isSearchFocused = true" 
-                               @blur="onBlurSearchField($event)" 
-                            >
+    <form method="GET" action="{{ languagePath }}/search" @submit="search()">
+        <div class="container-max" :class="{'p-0' : $ceres.isShopBuilder}">
+            <div class="position-relative">
+                <div class="d-flex flex-grow-1 position-relative my-2">
+                    <input name="query"
+                            type="search"
+                            class="search-input flex-grow-1 px-3 py-2"
+                            ref="searchInput"
+                            {% if minimalSearchTermLength > 0 %}
+                                minlength="{{ minimalSearchTermLength }}"
+                            {% endif %}
+                            :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
+                            :aria-label="$translate('Ceres::Template.headerSearchTerm')"
+                            v-model="searchString"
+                            @keyup.enter="search()"
+                            @input="onValueChanged($event.target.value)"
+                            @focus="isSearchFocused = true"
+                            @blur="onBlurSearchField($event)"
+                        >
 
-                        <slot name="search-button">
-                            <button class="search-submit px-3"
-                                    type="submit"
-                                    @click="search()"
-                                    :aria-label="$translate('Ceres::Template.headerSearch')">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </slot>
-                    </div>
+                    <slot name="search-button">
+                        <button class="search-submit px-3"
+                                type="submit"
+                                @click="search()"
+                                :aria-label="$translate('Ceres::Template.headerSearch')">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </slot>
                 </div>
             </div>
-        </form>
-    </client-only>
+        </div>
+    </form>
 </script>
 <!-- /SSR -->

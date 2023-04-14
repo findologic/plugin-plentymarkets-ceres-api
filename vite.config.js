@@ -1,13 +1,17 @@
-import { createVuePlugin as vue } from "vite-plugin-vue2";
+import { createVuePlugin as vue } from 'vite-plugin-vue2';
 import { defineConfig } from 'vite';
-const path = require("path");
+import mkcert from 'vite-plugin-mkcert';
+
+const path = require('path');
 
 export default defineConfig({
-    plugins: [vue()],
+    server: { https: true },
+    plugins: [vue(), mkcert()],
     alias: {
-        "@": path.resolve(__dirname, "./"),
+        '@': path.resolve(__dirname, './'),
     },
     build: {
+        target: 'es2020',
         rollupOptions: {
             input: {
                 app: './resources/js/src/index.ts',
@@ -19,4 +23,4 @@ export default defineConfig({
             }
         },
     },
-})
+});

@@ -1,5 +1,4 @@
 <template>
-  <!-- SSR:template(findologic-item-range-slider) -->
   <div
     class="fl-range-slider-container"
     :class="{'fl-no-ui-slider': facet.useNoUISliderCSS }"
@@ -41,7 +40,7 @@
           :class="{'disabled': isDisabled}"
           data-toggle="tooltip"
           data-placement="top"
-          :title="TranslationService.translate('Ceres::Template.itemApply')"
+          :title="applyText"
           rel="nofollow"
           @click="triggerFilter()"
         >
@@ -53,7 +52,6 @@
       </div>
     </div>
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">
@@ -77,6 +75,7 @@ export default defineComponent({
     const valueFrom = ref();
     const valueTo = ref();
     const facet = props.facet;
+    const applyText = ref('');
 
     const isLoading = computed(() => root.$store.state.isLoading);
     const sanitizedFacetId = computed(() => {
@@ -107,7 +106,7 @@ export default defineComponent({
     const triggerFilter = () => {
       if (!isDisabled.value) {
         const facetValue = {
-          min: parseFloat(valueFrom.value) ? valueFrom.value : 0,
+          min: parseFloat(valueFrom.value) ? parseFloat(valueFrom.value) : 0,
           max: valueTo.value ? parseFloat(valueTo.value) : getMaxValue()
         } as PriceFacetValue;
 
@@ -146,7 +145,7 @@ export default defineComponent({
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
       valueFrom.value = (values ? values.min : props.facet.minValue) || '';
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
-
+      applyText.value = TranslationService.translate('Ceres::Template.itemApply');
       // round values so it wouldn't have decimals
       valueFrom.value = Math.floor(valueFrom.value);
       valueTo.value = Math.ceil(valueTo.value);
@@ -203,8 +202,8 @@ export default defineComponent({
       isDisabled,
       isLoading,
       triggerFilter,
-      TranslationService,
-      watch
+      watch,
+      applyText
     };
   }
 });
