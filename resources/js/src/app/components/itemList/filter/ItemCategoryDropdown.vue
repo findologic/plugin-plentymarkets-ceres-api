@@ -101,9 +101,9 @@ export default defineComponent({
   setup(props: CategoryDropdownProps, { root }) {
     const pleaseSelectText = ref<string>('');
     const categoryIsSelected = ref<boolean>(false);
-      
-    root.$options.template = props.template || '#vue-item-dropdown';
+    const dropdownLabel = ref<string>('');
 
+    root.$options.template = props.template || '#vue-item-dropdown';
 
     const buildDropdownLabel = () => {
       const selectedFilters = UrlBuilder.getSelectedFilters(root.$store as PlentyVuexStore);
@@ -175,14 +175,11 @@ export default defineComponent({
           categoryName => categoryName.trim() === category.name) !== 'undefined';
     };
 
-    const dropdownLabel = ref('');
-
     onMounted(() => {
       dropdownLabel.value = buildDropdownLabel() as string;
       pleaseSelectText.value = TranslationService.translate('Findologic::Template.pleaseSelect');
       categoryIsSelected.value = isSelected.value;
     });
-
 
     return {
       dropdownLabel,
