@@ -58,7 +58,7 @@
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
-import TranslationServiceImport from '../../../shared/TranslationService';
+import TranslationService from '../../../shared/TranslationService';
 import * as noUiSlider from 'nouislider';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
@@ -75,7 +75,6 @@ export default defineComponent({
     const valueFrom = ref();
     const valueTo = ref();
     const facet = props.facet;
-    let TranslationService;
     const applyText = ref('');
 
     const isLoading = computed(() => root.$store.state.isLoading);
@@ -144,7 +143,6 @@ export default defineComponent({
 
     onMounted(() => {
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
-      TranslationService = TranslationServiceImport;
       valueFrom.value = (values ? values.min : props.facet.minValue) || '';
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
       applyText.value = TranslationService.translate('Ceres::Template.itemApply');
