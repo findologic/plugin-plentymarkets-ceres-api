@@ -1,5 +1,11 @@
 # Release Notes for Findologic
 
+## 5.0.0 (2023-04-17)
+
+## Added
+
+* [PLENTY-335] The plugin components are now rendered on the server side, if configured for Plenty.
+
 ## 4.1.0 (2023-01-10)
 
 ## Added

@@ -1,5 +1,11 @@
 # Release Notes für Findologic
 
+## 5.0.0 (2023-04-17)
+
+## Hinzugefügt
+
+- [PLENTY-335] Die Komponenten im Plugin werden nun serverseitig gerendert, wenn es für Plenty konfiguriert wurde.
+
 ## 4.1.0 (2023-01-10)
 
 ## Hinzugefügt
