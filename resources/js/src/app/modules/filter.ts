@@ -10,7 +10,9 @@ import ItemRangeSlider from '../components/itemList/filter/ItemRangeSlider.vue';
 import FindologicItemFilter from '../components/itemList/filter/FindologicItemFilter.vue';
 import FindologicItemFilterTagList from '../components/itemList/filter/FindologicItemFilterTagList.vue';
 import ItemFilterImage from '../components/itemList/filter/ItemFilterImage.vue';
-import ItemFilterList from '../components/itemList/filter/ItemFilterList.vue';
+import SmartDidYouMean from '../components/SmartDidYouMean.vue';
+import PromotionComponent from '../components/PromotionComponent.vue';
+import FindologicFilterWrapper from '../components/itemList/filter/FindologicFilterWrapper.vue';
 
 function isPageWhereComponentsShouldBeLoaded(): boolean {
     if (typeof window === 'undefined') {
@@ -32,7 +34,9 @@ if (isPageWhereComponentsShouldBeLoaded()) {
     plentyVue.component('ItemDropdown', ItemDropdown);
     plentyVue.component('ItemRangeSlider', ItemRangeSlider);
     plentyVue.component('ItemFilterImage', ItemFilterImage);
-    plentyVue.component('FindologicItemFilterList', ItemFilterList);
     plentyVue.component('FindologicItemFilter', FindologicItemFilter);
     plentyVue.component('FindologicItemFilterTagList', FindologicItemFilterTagList);
+    plentyVue.component('SmartDidYouMean', SmartDidYouMean);
+    plentyVue.component('PromotionComponent', PromotionComponent);
+    plentyVue.component('FindologicFilterWrapper', FindologicFilterWrapper);
 }

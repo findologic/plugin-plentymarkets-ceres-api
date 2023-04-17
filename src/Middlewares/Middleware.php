@@ -93,14 +93,17 @@ class Middleware extends PlentyMiddleware
                 $categoryService = pluginApp(CategoryService::class);
                 $isCategoryPage = $categoryService->getCurrentCategory() !== null && $this->activeOnCatPage;
                 $isInSearchOrCategoryPage = $this->isSearchPage || $isCategoryPage;
+                $currentCategory = $categoryService->getCurrentCategory();
+
+                $showCategoryFilter = true;
+
+                // Show category filter only in the 0 and 1 level categories
+                if ($currentCategory !== null && $currentCategory->level > 1) {
+                    $showCategoryFilter = false;
+                }
 
                 if ($isInSearchOrCategoryPage && !$this->searchService->aliveTest()) {
                     return false;
-                }
-
-                if ($this->pluginConfig->get(Plugin::CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED)) {
-                    $container->addScriptTemplate('Findologic::content.nouislider.noui-js');
-                    $container->addStyleTemplate('Findologic::content.nouislider.noui-css');
                 }
 
                 $container->addScriptTemplate(
@@ -111,6 +114,8 @@ class Middleware extends PlentyMiddleware
                         'activeOnCatPage' => $this->activeOnCatPage,
                         'minimalSearchTermLength' => $this->pluginConfig->getMinimalSearchTermLength(),
                         'languagePath' => $this->getLanguagePath(),
+                        'currentCategory' => null !== $currentCategory ? $currentCategory['details'] : [],
+                        'showCategoryFilter' => $showCategoryFilter
                     ]
                 );
 

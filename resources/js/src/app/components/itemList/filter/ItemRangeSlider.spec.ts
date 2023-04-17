@@ -1,4 +1,5 @@
 import Vuex from 'vuex';
+import Vue from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { Facet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
@@ -76,6 +77,8 @@ describe('ItemRangeSlider', () => {
             }
         );
 
+        await Vue.nextTick();
+
         const submitButton = wrapper.find('button');
         await submitButton.trigger('click');
         expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(1, facet, 'price', { 'max': 149, 'min': 59 });
@@ -85,8 +88,7 @@ describe('ItemRangeSlider', () => {
         expect(UrlBuilder.updateSelectedFilters).toHaveBeenNthCalledWith(2, facet, 'price', { 'max': 140.55, 'min': 100 });
     });
 
-    // TODO: reenable the test once the tested functionality works properly
-    xit('Disables the filter submit button if fields contain incorrect values', async () => {
+    it('Disables the filter submit button if fields contain incorrect values', async () => {
         const facet: Facet = {
             cssClass: '',
             findologicFilterType: 'range-slider',
@@ -138,6 +140,9 @@ describe('ItemRangeSlider', () => {
                 localVue
             }
         );
+
+        await Vue.nextTick();
+
         const submitButton = wrapper.find('button');
 
         await wrapper.setData({ valueFrom: '', valueTo: '' });

@@ -1,5 +1,4 @@
 <template>
-  <!-- SSR:template(findologic-item-color-tiles) -->
   <div class="fl-item-color-tiles-container">
     <ul class="fl-item-color-tiles-list">
       <li
@@ -44,7 +43,6 @@
       </li>
     </ul>
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">

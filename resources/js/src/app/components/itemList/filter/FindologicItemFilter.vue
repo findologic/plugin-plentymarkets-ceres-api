@@ -1,6 +1,4 @@
 <template>
-  <!-- SSR:template(findologic-item-filter) -->
-  <!-- Additionally checking that min and max values aren't the same, because this would be a useless filter. -->
   <div
     v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))"
     class="card"
@@ -44,8 +42,8 @@
     <div v-else-if="shouldShowCategoryFilter">
       <div v-if="!facet.noAvailableFiltersText">
         <item-category-dropdown
-            :current-category="currentCategory"
-            :facet="facet"
+          :current-category="currentCategory"
+          :facet="facet"
         />
       </div>
       <p
@@ -83,13 +81,13 @@
           v-text="value.name"
         />
         <div
+          v-if="value.count"
           class="filter-badge"
           v-text="value.count"
         />
       </div>
     </div>
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">
@@ -100,7 +98,7 @@ import {
   FacetAware,
   FacetValue,
   PlentyVuexStore,
-  TemplateOverridable,
+  TemplateOverridable
 } from '../../../shared/interfaces';
 import ItemRangeSlider from './ItemRangeSlider.vue';
 import ItemColorTiles from './ItemColorTiles.vue';

@@ -1,18 +1,22 @@
 module.exports = {
   root: true,
   env: {
+    jquery: true,
+    es2021: true,
     node: true,
-    jquery: true
   },
-  'extends': [
-    'plugin:vue/essential',
+  extends: [
     'eslint:recommended',
-    '@vue/typescript/recommended',
-    'plugin:vue/recommended'
+    'plugin:@typescript-eslint/recommended',
+    'plugin:vue/recommended',
+    '@vue/eslint-config-typescript'
   ],
+  parser: 'vue-eslint-parser',
+  plugins: ['@typescript-eslint'],
   parserOptions: {
-    ecmaVersion: 2020
+    parser: '@typescript-eslint/parser'
   },
+  ignorePatterns: ['resources/js/dist/*'],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -31,4 +35,4 @@ module.exports = {
       }
     }
   ]
-}
+};

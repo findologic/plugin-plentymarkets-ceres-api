@@ -1,6 +1,8 @@
 <template>
-  <!-- SSR:template(findologic-item-range-slider) -->
-  <div class="fl-range-slider-container">
+  <div
+    class="fl-range-slider-container"
+    :class="{'fl-no-ui-slider': facet.useNoUISliderCSS }"
+  >
     <div class="row">
       <div class="col-md-6 col-xs-6">
         <input
@@ -38,7 +40,7 @@
           :class="{'disabled': isDisabled}"
           data-toggle="tooltip"
           data-placement="top"
-          :title="TranslationService.translate('Ceres::Template.itemApply')"
+          :title="applyText"
           rel="nofollow"
           @click="triggerFilter()"
         >
@@ -50,7 +52,6 @@
       </div>
     </div>
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">
@@ -58,7 +59,7 @@ import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
-import * as noUiSlider from 'noUiSlider';
+import * as noUiSlider from 'nouislider';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
 
@@ -74,6 +75,7 @@ export default defineComponent({
     const valueFrom = ref();
     const valueTo = ref();
     const facet = props.facet;
+    const applyText = ref('');
 
     const isLoading = computed(() => root.$store.state.isLoading);
     const sanitizedFacetId = computed(() => {
@@ -104,7 +106,7 @@ export default defineComponent({
     const triggerFilter = () => {
       if (!isDisabled.value) {
         const facetValue = {
-          min: parseFloat(valueFrom.value) ? valueFrom.value : 0,
+          min: parseFloat(valueFrom.value) ? parseFloat(valueFrom.value) : 0,
           max: valueTo.value ? parseFloat(valueTo.value) : getMaxValue()
         } as PriceFacetValue;
 
@@ -143,7 +145,7 @@ export default defineComponent({
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
       valueFrom.value = (values ? values.min : props.facet.minValue) || '';
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
-
+      applyText.value = TranslationService.translate('Ceres::Template.itemApply');
       // round values so it wouldn't have decimals
       valueFrom.value = Math.floor(valueFrom.value);
       valueTo.value = Math.ceil(valueTo.value);
@@ -160,8 +162,8 @@ export default defineComponent({
       }
 
       $(document).ready(function () {
-        const element: noUiSlider.Instance = document.getElementById(sanitizedFacetId.value) as noUiSlider.Instance;
-        const slider = element.noUiSlider ? element.noUiSlider : window.noUiSlider.create(element, {
+        const element: noUiSlider.target = document.getElementById(sanitizedFacetId.value) as noUiSlider.target;
+        const slider = noUiSlider.create(element, {
           step: props.facet.step,
           start: [valueFrom.value, valueTo.value],
           connect: true,
@@ -179,9 +181,9 @@ export default defineComponent({
           }
         });
 
-        slider.on('update', function (ui: string[]) {
-          valueFrom.value = ui[0];
-          valueTo.value = ui[1];
+        slider.on('update', function (values: (number | string)[]) {
+          valueFrom.value = values[0].toString();
+          valueTo.value = values[1].toString();
         });
       });
     });
@@ -200,13 +202,15 @@ export default defineComponent({
       isDisabled,
       isLoading,
       triggerFilter,
-      TranslationService,
-      watch
+      watch,
+      applyText
     };
   }
 });
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.fl-no-ui-slider {
+  @import 'nouislider/dist/nouislider';
+}
 </style>

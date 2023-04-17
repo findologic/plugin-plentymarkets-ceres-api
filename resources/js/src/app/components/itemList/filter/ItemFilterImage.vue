@@ -1,5 +1,4 @@
 <template>
-  <!-- SSR:template(findologic-item-filter-image) -->
   <div>
     <div v-if="!facet.noAvailableFiltersText">
       <div
@@ -39,7 +38,6 @@
       v-text="facet.noAvailableFiltersText"
     />
   </div>
-  <!-- /SSR -->
 </template>
 
 <script lang="ts">

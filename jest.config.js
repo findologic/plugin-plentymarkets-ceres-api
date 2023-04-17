@@ -1,5 +1,5 @@
 module.exports = {
-    preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
+    "testEnvironment": "jsdom",
     testMatch: [
         "**/resources/js/src/**/*.spec.[jt]s?(x)",
     ],
@@ -11,11 +11,12 @@ module.exports = {
         'vue'
     ],
     transform: {
-        '.*\\.(vue)$': 'vue-jest',
+        '.*\\.(vue)$': '@vue/vue2-jest',
         '.*\\.(js)$': 'babel-jest',
         '.*\\.(ts)$': 'babel-jest',
     },
     transformIgnorePatterns: [
         '/node_modules/(?!vue-awesome)'
-    ]
+    ],
+    moduleNameMapper: { "\\.css$": "<rootDir>/resources/js/src/assets/css/__mocks__/styleMock.js" }
 };
