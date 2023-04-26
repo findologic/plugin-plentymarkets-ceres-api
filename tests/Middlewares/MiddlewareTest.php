@@ -18,6 +18,7 @@ use Plenty\Plugin\Http\Request;
 use Findologic\Components\PluginConfig;
 use Findologic\Middlewares\Middleware;
 use IO\Extensions\Constants\ShopUrls;
+use IO\Helper\RouteConfig;
 
 /**
  * Class MiddlewareTest
@@ -157,6 +158,10 @@ class MiddlewareTest extends TestCase
         );
 
         $this->request->method('getUri')->willReturn('https://testshop.com/search');
+        $this->shopUrls->expects($this->once())
+            ->method('is')
+            ->with(RouteConfig::SEARCH)
+            ->willReturn(true);
 
         $this->runBefore();
     }
@@ -273,6 +278,11 @@ class MiddlewareTest extends TestCase
         $requestMock->expects($this->any())
             ->method('getUri')
             ->willReturn($currentPage);
+
+        $shopUrls->expects($this->once())
+            ->method('is')
+            ->with(RouteConfig::SEARCH)
+            ->willReturn(true);
 
         $middleware->before($requestMock);
     }
@@ -502,7 +512,7 @@ class MiddlewareTest extends TestCase
             ->getMock();
 
         $this->middleware->method('getLanguagePath')->willReturn('');
-
+                    
         $this->middleware->before(
             $this->request
         );
