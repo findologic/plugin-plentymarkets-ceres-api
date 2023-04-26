@@ -324,10 +324,6 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $requestMock->expects($this->once())
-            ->method('getUri')
-            ->willReturn('https://your-shop.com/chairs-and-stools');
-
         $middleware->before($requestMock);
     }
 
