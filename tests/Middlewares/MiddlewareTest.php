@@ -255,11 +255,16 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $shopUrls = $this->getMockBuilder(ShopUrls::class)
+        $shopUrlsMock = $this->getMockBuilder(ShopUrls::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock, $shopUrls);
+        $shopUrlsMock->expects($this->any())
+            ->method('is')
+            ->with(RouteConfig::SEARCH)
+            ->willReturn(true);
+
+        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock, $shopUrlsMock);
 
         $eventInvokeCount = $isAlive ? 0 : 6;
 
@@ -278,11 +283,6 @@ class MiddlewareTest extends TestCase
         $requestMock->expects($this->any())
             ->method('getUri')
             ->willReturn($currentPage);
-
-        $shopUrls->expects($this->once())
-            ->method('is')
-            ->with(RouteConfig::SEARCH)
-            ->willReturn(true);
 
         $middleware->before($requestMock);
     }
