@@ -4,6 +4,8 @@ namespace Findologic\Tests\Services\Search;
 
 use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Services\Search\ParametersHandler;
+use IO\Extensions\Constants\ShopUrls;
+use IO\Helper\RouteConfig;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Plenty\Plugin\Http\Request;
@@ -418,7 +420,7 @@ class ParametersHandlerTest extends TestCase
         $requestMock = $this->getMockBuilder(Request::class)
             ->setMethods([])
             ->getMock();
-
+        
         $returnedUri = 'test.com';
 
         if ($isSearch) {
@@ -445,11 +447,16 @@ class ParametersHandlerTest extends TestCase
 
         /** @var ParametersHandler|MockObject $parametersHandlerMock */
         $parametersHandlerMock = $this->getMockBuilder(ParametersHandler::class)
-            ->setMethods(['getConfig', 'getItemsPerPage', 'getCurrentItemsPerPage', 'getSearchURI'])
+            ->setMethods(['getConfig', 'getItemsPerPage', 'getCurrentItemsPerPage', 'getShopUrls'])
             ->getMock();
-        $parametersHandlerMock->expects($this->any())->method('getConfig')->willReturn($config);
-        $parametersHandlerMock->expects($this->any())->method('getSearchURI')->willReturn('/search');
+        $searchUrlsMock = $this->getMockBuilder(ShopUrls::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['is'])
+            ->getMock();
 
+        $parametersHandlerMock->expects($this->any())->method('getConfig')->willReturn($config);
+        $parametersHandlerMock->expects($this->any())->method('getShopUrls')->willReturn($searchUrlsMock);
+        $searchUrlsMock->expects($this->once())->method('is')->with(RouteConfig::SEARCH)->willReturn($isSearch);
         $parametersHandlerMock->handlePaginationAndSorting($externalSearchOptions, $requestMock);
 
         $this->assertEquals($sortingOptions, $externalSearchOptions->getSortingOptions());
