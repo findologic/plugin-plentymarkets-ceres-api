@@ -17,6 +17,8 @@ use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Plugin\Http\Request;
 use Findologic\Components\PluginConfig;
 use Findologic\Middlewares\Middleware;
+use IO\Extensions\Constants\ShopUrls;
+use IO\Helper\RouteConfig;
 
 /**
  * Class MiddlewareTest
@@ -50,6 +52,11 @@ class MiddlewareTest extends TestCase
     protected $pluginConfigurationValidatorMock;
 
     /**
+     * @var ShopUrls|MockObject
+     */
+    protected $shopUrls;
+
+    /**
      * @var Middleware|MockObject
      */
     protected $middleware;
@@ -75,6 +82,11 @@ class MiddlewareTest extends TestCase
         $this->pluginConfigurationValidatorMock = $this->getMockBuilder(PluginConfigurationValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->shopUrls = $this->getMockBuilder(ShopUrls::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->pluginConfigurationValidatorMock->expects($this->any())
             ->method('validate')
             ->willReturn(true);
@@ -98,6 +110,8 @@ class MiddlewareTest extends TestCase
         $this->searchService->expects($this->never())->method('aliveTest');
 
         $this->eventDispatcher->expects($this->never())->method('listen');
+
+        $this->shopUrls->expects($this->never())->method('is');
 
         $this->runBefore();
     }
@@ -144,6 +158,10 @@ class MiddlewareTest extends TestCase
         );
 
         $this->request->method('getUri')->willReturn('https://testshop.com/search');
+        $this->shopUrls->expects($this->once())
+            ->method('is')
+            ->with(RouteConfig::SEARCH)
+            ->willReturn(true);
 
         $this->runBefore();
     }
@@ -237,7 +255,16 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
+        $shopUrlsMock = $this->getMockBuilder(ShopUrls::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $shopUrlsMock->expects($this->any())
+            ->method('is')
+            ->with(RouteConfig::SEARCH)
+            ->willReturn(true);
+
+        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock, $shopUrlsMock);
 
         $eventInvokeCount = $isAlive ? 0 : 6;
 
@@ -293,7 +320,12 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
+        $shopUrls = $this->getMockBuilder(ShopUrls::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
+        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock, $shopUrls);
 
         // Ensure snippets get loaded but Findologic is not triggered.
         $eventDispatcherMock->expects($this->once())->method('listen')->with('IO.Resources.Import');
@@ -301,10 +333,6 @@ class MiddlewareTest extends TestCase
         $requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $requestMock->expects($this->once())
-            ->method('getUri')
-            ->willReturn('https://your-shop.com/chairs-and-stools');
 
         $middleware->before($requestMock);
     }
@@ -374,7 +402,11 @@ class MiddlewareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
+        $shopUrls = $this->getMockBuilder(ShopUrls::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock, $shopUrls);
 
         // Ensure Findologic is triggered.
         $eventDispatcherMock->expects($this->exactly(6))
@@ -391,10 +423,6 @@ class MiddlewareTest extends TestCase
         $requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $requestMock->expects($this->once())
-            ->method('getUri')
-            ->willReturn($currentPage);
 
         $middleware->before($requestMock);
     }
@@ -459,8 +487,11 @@ class MiddlewareTest extends TestCase
         $eventDispatcherMock = $this->getMockBuilder(Dispatcher::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $shopUrls = $this->getMockBuilder(ShopUrls::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock);
+        $middleware = new Middleware($pluginConfig, $searchServiceMock, $eventDispatcherMock, $shopUrls);
         $this->assertEquals($expectedLanguagePath, $middleware->getLanguagePath());
     }
 
@@ -470,7 +501,8 @@ class MiddlewareTest extends TestCase
             ->setConstructorArgs([
                 'pluginConfig' => $this->pluginConfig,
                 'searchService' => $this->searchService,
-                'eventDispatcher' => $this->eventDispatcher
+                'eventDispatcher' => $this->eventDispatcher,
+                'shopUrls' => $this->shopUrls
             ])
             ->setMethods(
                 [
@@ -480,7 +512,7 @@ class MiddlewareTest extends TestCase
             ->getMock();
 
         $this->middleware->method('getLanguagePath')->willReturn('');
-
+                    
         $this->middleware->before(
             $this->request
         );

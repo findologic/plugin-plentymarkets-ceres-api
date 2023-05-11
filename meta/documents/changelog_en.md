@@ -1,5 +1,15 @@
 # Release Notes for Findologic
 
+## 5.1.0 (2023-05-09)
+
+## Hinzugefügt
+
+- [PLENTY-474] Re-added the container link for the filters.
+
+## Behoben
+
+- [PLENTY-473] A bug was fixed, where the wrong sorting was applied for the search.
+
 ## 5.0.0 (2023-04-17)
 
 ## Added

@@ -7,6 +7,7 @@ use Ceres\Helper\SearchOptions;
 use Findologic\Constants\Plugin;
 use IO\Extensions\Constants\ShopUrls;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Helper\RouteConfig;
 use Plenty\Plugin\Translation\Translator;
 use Plenty\Plugin\Http\Request as HttpRequest;
 
@@ -25,6 +26,11 @@ class ParametersHandler
      * @var Translator
      */
     protected $translator;
+
+    /**
+     * @var ShopUrls
+     */
+    protected $shopUrls;
 
     /**
      * @var bool|array
@@ -55,6 +61,15 @@ class ParametersHandler
         return $this->translator;
     }
 
+    public function getShopUrls()
+    {
+        if (!$this->shopUrls) {
+            $this->shopUrls = pluginApp(ShopUrls::class);
+        }
+
+        return $this->shopUrls;
+    }
+
     /**
      * @param ExternalSearchOptions $search
      * @param HttpRequest $request
@@ -64,8 +79,9 @@ class ParametersHandler
     {
         /** @var CeresConfig $config */
         $config = $this->getConfig();
-        
-        $isSearch = strpos($request->getUri(), $this->getSearchURI()) !== false;
+        $searchUrls = $this->getShopUrls();
+
+        $isSearch = $searchUrls->is(RouteConfig::SEARCH);
         $isFiltersSet = array_key_exists('attrib', $request->all());
 
         $defaultSort = $isSearch ? $config->sorting->defaultSortingSearch : $config->sorting->defaultSorting;
@@ -162,12 +178,5 @@ class ParametersHandler
         }
 
         return $currentItemsPerPage;
-    }
-
-    public function getSearchURI(): string
-    {
-        $shopUrls = pluginApp(ShopUrls::class);
-        // returns /seo-uri/ so need to trim the last slash
-        return rtrim($shopUrls->search, "/");
     }
 }

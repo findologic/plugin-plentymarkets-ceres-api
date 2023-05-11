@@ -1,5 +1,15 @@
 # Release Notes für Findologic
 
+## 5.1.0 (2023-05-09)
+
+## Hinzugefügt
+
+- [PLENTY-474] Die Containerverknüpfung für Filter wurde wieder hinzugefügt.
+
+## Behoben
+
+- [PLENTY-473] Ein Fehler wurde behoben, wodurch die falsche Sortierung bei der Suche verwendet wurde.
+
 ## 5.0.0 (2023-04-17)
 
 ## Hinzugefügt

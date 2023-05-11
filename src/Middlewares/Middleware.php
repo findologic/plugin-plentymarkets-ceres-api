@@ -18,6 +18,8 @@ use Plenty\Plugin\Http\Response;
 use Plenty\Plugin\Log\Loggable;
 use Findologic\Components\PluginConfig;
 use Findologic\Services\SearchService;
+use IO\Extensions\Constants\ShopUrls;
+use IO\Helper\RouteConfig;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Middleware as PlentyMiddleware;
@@ -56,6 +58,11 @@ class Middleware extends PlentyMiddleware
     private $searchService;
 
     /**
+     * @var ShopUrls
+     */
+    private $shopUrls;
+
+    /**
      * @var Dispatcher
      */
     private $eventDispatcher;
@@ -63,11 +70,13 @@ class Middleware extends PlentyMiddleware
     public function __construct(
         PluginConfig $pluginConfig,
         SearchService $searchService,
-        Dispatcher $eventDispatcher
+        Dispatcher $eventDispatcher,
+        ShopUrls $shopUrls
     ) {
         $this->pluginConfig = $pluginConfig;
         $this->searchService = $searchService;
         $this->eventDispatcher = $eventDispatcher;
+        $this->shopUrls = $shopUrls;
     }
 
     /**
@@ -83,7 +92,7 @@ class Middleware extends PlentyMiddleware
             return;
         }
 
-        $this->isSearchPage = strpos($request->getUri(), '/search') !== false;
+        $this->isSearchPage = $this->shopUrls->is(RouteConfig::SEARCH);
         $this->activeOnCatPage = !$this->isSearchPage && $this->pluginConfig->get(Plugin::CONFIG_NAVIGATION_ENABLED);
 
         $this->eventDispatcher->listen(
