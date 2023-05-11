@@ -1,9 +1,9 @@
 <findologic-filter-wrapper
         v-bind:facets="{{ facets | json_encode }}"
-        v-bind:filtersPerRow="{{ config('Findologic.filters_per_row') }}"
-        v-bind:fallbackImageColorFilter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
-        v-bind:fallbackImageImageFilter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
-        v-bind:currentCategory="{{ currentCategory | json_encode }}"
-        v-bind:showCategoryFilter="{{ showCategoryFilter | json_encode }}"
-        v-bind:showSelectedFiltersCount="{{ config('Findologic.show_selected_filter_count') }}"
+        v-bind:filters-per-row="{{ config('Findologic.filters_per_row') }}"
+        v-bind:fallback-image-color-filter="'{{ plugin_path("Findologic") }}/images/no-picture.png'"
+        v-bind:fallback-image-image-filter="'{{ plugin_path("Findologic") }}/images/no-picture-2.png'"
+        v-bind:current-category="{{ currentCategory | json_encode }}"
+        v-bind:show-category-filter="{{ showCategoryFilter | json_encode }}"
+        v-bind:show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
 ></findologic-filter-wrapper>
