@@ -33,7 +33,7 @@
       @click="toggle()"
       @blur="close()"
     >
-      <span class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span>
+      <span class="fl-dropdown-label">{{ pleaseSelectText }}</span>
       <ul
         v-show="isOpen"
         class="fl-dropdown-content form-check"
@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, onMounted, ref } from '@vue/composition-api';
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import BaseDropdown from '../../../mixins/baseDropdown';
 import TranslationService from '../../../shared/TranslationService';
@@ -84,13 +84,15 @@ export default defineComponent({
       BaseDropdown
   ],
   setup: (props: ItemDropdownProps, { root }) => {
+    const pleaseSelectText = ref<string>('');
+    
     root.$options.template = props.template || '#vue-item-dropdown';
 
-    const trans = (key: string) => {
-      return TranslationService.translate(key)
-    };
+    onMounted(() => {
+      pleaseSelectText.value = TranslationService.translate('Findologic::Template.pleaseSelect');
+    });
 
-    return { trans };
+    return { pleaseSelectText };
   }
 });
 </script>
