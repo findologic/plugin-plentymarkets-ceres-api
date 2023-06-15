@@ -53,7 +53,7 @@
     </div>
     <div v-else-if="facet.findologicFilterType === 'select' && (facet.id !== 'cat' || shouldShowCategoryFilter)">
       <div v-if="!facet.noAvailableFiltersText">
-        <item-dropdown :facet="facet" />
+        <!-- <item-dropdown :facet="facet" /> -->
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
