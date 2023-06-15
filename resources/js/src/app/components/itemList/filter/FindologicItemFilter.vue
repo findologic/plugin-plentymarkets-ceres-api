@@ -53,7 +53,7 @@
     </div>
     <div v-else-if="facet.findologicFilterType === 'select' && (facet.id !== 'cat' || shouldShowCategoryFilter)">
       <div v-if="!facet.noAvailableFiltersText">
-        <!-- <item-dropdown :facet="facet" /> -->
+        <item-dropdown :facet="facet" />
       </div>
       <p
         v-if="facet.noAvailableFiltersText"
@@ -103,7 +103,7 @@ import {
 import ItemRangeSlider from './ItemRangeSlider.vue';
 import ItemColorTiles from './ItemColorTiles.vue';
 import ItemCategoryDropdown from './ItemCategoryDropdown.vue';
-// import ItemDropdown from './ItemDropdown.vue';
+import ItemDropdown from './ItemDropdown.vue';
 import UrlBuilder from '../../../shared/UrlBuilder';
 import ItemFilterImage from './ItemFilterImage.vue';
 
@@ -122,7 +122,7 @@ export default defineComponent({
     'item-range-slider': ItemRangeSlider,
     'item-color-tiles': ItemColorTiles,
     'item-category-dropdown': ItemCategoryDropdown,
-    // 'item-dropdown': ItemDropdown,
+    'item-dropdown': ItemDropdown,
     'item-filter-image': ItemFilterImage
   },
   props: {
