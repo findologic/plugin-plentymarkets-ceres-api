@@ -38,7 +38,7 @@
 {% endif %}
 
 <!-- SSR:template(item-filter-list) -->
-<script type="x/template" data-component="item-filter-list">
+{# <script type="x/template" data-component="item-filter-list">
     <findologic-filter-wrapper
         v-bind:facets="facets"
         v-bind:filters-per-row="{{ config('Findologic.filters_per_row') }}"
@@ -48,7 +48,7 @@
         v-bind:show-category-filter="{{ showCategoryFilter | json_encode }}"
         v-bind:show-selected-filters-count="{{ config('Findologic.show_selected_filter_count') }}"
     ></findologic-filter-wrapper>
-</script>
+</script> #}
 <!-- /SSR -->
 
 <!-- SSR:template(item-filter-tag-list) -->
