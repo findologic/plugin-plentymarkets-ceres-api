@@ -88,7 +88,7 @@ export default defineComponent({
 
     const trans = (key: string) => {
       // return window.ceresTranslate(key);
-      return  TranslationService.translate(key)
+      return TranslationService.translate(key);
     };
 
     return { trans };
