@@ -33,7 +33,7 @@
       @click="toggle()"
       @blur="close()"
     >
-      <span class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span>
+      <!-- <span class="fl-dropdown-label">{{ trans("Findologic::Template.pleaseSelect") }}</span> -->
       <ul
         v-show="isOpen"
         class="fl-dropdown-content form-check"
@@ -86,12 +86,12 @@ export default defineComponent({
   setup: (props: ItemDropdownProps, { root }) => {
     root.$options.template = props.template || '#vue-item-dropdown';
 
-    const trans = (key: string) => {
-      // return window.ceresTranslate(key);
-      return TranslationService.translate(key);
-    };
+    // const trans = (key: string) => {
+    //   // return window.ceresTranslate(key);
+    //   return TranslationService.translate(key);
+    // };
 
-    return { trans };
+    // return { trans };
   }
 });
 </script>
