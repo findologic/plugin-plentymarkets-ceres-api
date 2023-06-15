@@ -74,7 +74,6 @@
 import { defineComponent } from '@vue/composition-api';
 import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import BaseDropdown from '../../../mixins/baseDropdown';
-import TranslationService from '../../../shared/TranslationService';
 
 interface ItemDropdownProps extends TemplateOverridable, FacetAware { }
 
@@ -87,7 +86,7 @@ export default defineComponent({
     root.$options.template = props.template || '#vue-item-dropdown';
 
     const trans = (key: string) => {
-      return TranslationService.translate(key);
+      return window.ceresTranslate(key);
     };
 
     return { trans };
