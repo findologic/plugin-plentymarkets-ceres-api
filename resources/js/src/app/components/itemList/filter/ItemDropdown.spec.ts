@@ -1,4 +1,5 @@
 import Vuex from 'vuex';
+import Vue from 'vue';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { Facet, State } from '../../../shared/interfaces';
 import { Store } from 'vuex';
@@ -102,7 +103,7 @@ describe('ItemDropdown', () => {
         expect(wrapper.findAll(':scope > div.fl-dropdown-container.custom-select ul li').length).toBe(1);
     });
 
-    it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', () => {
+    it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', async () => {
         const facet: Facet = {
             cssClass: '',
             findologicFilterType: 'select',
@@ -144,6 +145,7 @@ describe('ItemDropdown', () => {
         expect(options.length).toBe(2);
         expect(options.at(0).find('label').text()).toBe('22220');
         expect(options.at(1).find('label').text()).toBe('22221');
+        await Vue.nextTick();
         expect(wrapper.find('.fl-dropdown-label').text()).toBe('Findologic::Template.pleaseSelect');
     });
 });
