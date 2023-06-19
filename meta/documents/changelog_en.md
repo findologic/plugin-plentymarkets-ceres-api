@@ -1,5 +1,11 @@
 # Release Notes for Findologic
 
+## 5.1.1 (2023-06-19)
+
+## Behoben
+
+- [PLENTY-478] A bug was fixed, where an exception was thrown for category pages with SSR.
+
 ## 5.1.0 (2023-05-09)
 
 ## Hinzugefügt

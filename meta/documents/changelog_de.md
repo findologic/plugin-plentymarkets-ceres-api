@@ -1,5 +1,11 @@
 # Release Notes für Findologic
 
+## 5.1.1 (2023-06-19)
+
+## Behoben
+
+- [PLENTY-478] Ein Bug wurde behoben, wodurch Kategorieseiten mit SSR eine Fehlermeldung gerendert sind.
+
 ## 5.1.0 (2023-05-09)
 
 ## Hinzugefügt
