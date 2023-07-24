@@ -2,17 +2,18 @@
 
 namespace Findologic\Api\Request;
 
-use Ceres\Helper\ExternalSearch;
-use Findologic\Constants\Plugin;
 use Findologic\Api\Client;
 use Findologic\Helpers\Tags;
-use Findologic\Services\PluginInfoService;
-use Plenty\Log\Contracts\LoggerContract;
-use Plenty\Modules\System\Models\WebstoreConfiguration;
+use Ceres\Helper\ExternalSearch;
+use Findologic\Constants\Plugin;
+use FINDOLOGIC\Api\Requests\Request;
 use Plenty\Plugin\Log\LoggerFactory;
-use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Components\PluginConfig;
+use Plenty\Log\Contracts\LoggerContract;
+use Findologic\Services\PluginInfoService;
 use IO\Services\WebstoreConfigurationService;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Modules\System\Models\WebstoreConfiguration;
 
 /**
  * Class RequestBuilder
@@ -83,9 +84,9 @@ class RequestBuilder
      * @param int|null $category
      * @return bool|Request
      */
-    public function build(HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
+    public function build(int $searchType, HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
     {
-        $request = $this->createRequestObject();
+        $request = $this->createRequestObject($searchType);
         $request = $this->setDefaultValues($request, $this->getRequestType($httpRequest, $category));
         $request = $this->parametersBuilder->setSearchParams($request, $httpRequest, $externalSearch, $category);
 
@@ -109,9 +110,9 @@ class RequestBuilder
     /**
      * @return Request
      */
-    public function createRequestObject()
+    public function createRequestObject($requestType)
     {
-        return pluginApp(Request::class);
+        return Request::getInstance($requestType);
     }
 
     /**
@@ -188,20 +189,20 @@ class RequestBuilder
      */
     protected function setDefaultValues($request, $requestType)
     {
-        $request->setUrl($this->getUrl($requestType));
-        $request->setParam('revision', $this->getPluginVersion());
-        $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
-        $request->setParam('shopkey', $this->pluginConfig->getShopKey());
+        $request->setShopUrl($this->getUrl($requestType));
+        $request->addParam('revision', $this->getPluginVersion());
+        $request->addParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
+        $request->addParam('shopkey', $this->pluginConfig->getShopKey());
         $request->setConfiguration(
             Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT,
             Client::DEFAULT_CONNECTION_TIME_OUT
         );
 
         if ($this->getUserIp()) {
-            $request->setParam('userip', $this->getUserIp());
+            $request->addParam('userip', $this->getUserIp());
         }
-        $request->setParam('shopType', self::SHOPTYPE);
-        $request->setParam('shopVersion', $this->pluginInfoService->getPluginVersion('ceres'));
+        $request->addParam('shopType', self::SHOPTYPE);
+        $request->addParam('shopVersion', $this->pluginInfoService->getPluginVersion('ceres'));
 
         return $request;
     }

@@ -3,11 +3,14 @@
 namespace Findologic\Api;
 
 use Exception;
+use FINDOLOGIC\Api\Client as FindologicClinet;
+use FINDOLOGIC\Api\Config;
 use Findologic\Constants\Plugin;
-use Findologic\Api\Request\Request;
-use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
-use Plenty\Log\Contracts\LoggerContract;
+use FINDOLOGIC\Api\Requests\Request;
 use Plenty\Plugin\Log\LoggerFactory;
+use FINDOLOGIC\Api\Responses\Response;
+use Findologic\Components\PluginConfig;
+use Plenty\Log\Contracts\LoggerContract;
 
 /**
  * Class Client
@@ -15,69 +18,43 @@ use Plenty\Plugin\Log\LoggerFactory;
  */
 class Client
 {
-    const DEFAULT_CONNECTION_TIME_OUT = 5;
-
-    const DEFAULT_TIME_OUT = 10;
 
     /**
-     * @var LibraryCallContract
+     * @var FindologicClinet
      */
-    protected $libraryCallContract;
+    private $findologicClient;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * @var LoggerContract
      */
     protected $logger;
 
-    public function __construct(LibraryCallContract $libraryCallContract, LoggerFactory $loggerFactory)
+    public function __construct(LoggerFactory $loggerFactory, PluginConfig $pluginConfig)
     {
-        $this->libraryCallContract = $libraryCallContract;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
+        $this->config = new Config($pluginConfig->getShopKey());
+        $this->findologicClient = new Client($this->config);
     }
 
     /**
      * @param Request $request
      * @return mixed
      */
-    public function call(Request $request)
+    public function call(Request $request): ?Response
     {
-        $requestArray = [];
-        $response = false;
+        $response = null;
 
         try {
-            $requestArray = $this->requestToArray($request);
-            $response = $this->libraryCallContract->call(
-                'Findologic::http_library',
-                ['request' => $requestArray]
-            );
-
-            if (is_array($response) && array_key_exists('error', $response) && $response['error']) {
-                $this->logger->error('Exception while handling search query.', ['response' => $response]);
-            }
+            $response = $this->findologicClient->send($request);
         } catch (Exception $e) {
-            $this->logger->error('Exception while handling search query.', ['request' => $requestArray]);
+            $this->logger->error('Exception while handling search query.', ['request' => $request->getParams()]);
             $this->logger->logException($e);
         }
 
         return $response;
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     */
-    protected function requestToArray($request)
-    {
-        $requestArray = [];
-
-        $requestArray['url'] = $request->getRequestUrl();
-
-        $connectTimeout = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT);
-        $requestArray['connect_timeout'] = $connectTimeout ?? self::DEFAULT_CONNECTION_TIME_OUT;
-
-        $timeout = $request->getConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT);
-        $requestArray['timeout'] = $timeout ?? self::DEFAULT_CONNECTION_TIME_OUT;
-
-        return $requestArray;
     }
 }
