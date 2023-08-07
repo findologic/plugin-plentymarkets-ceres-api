@@ -3,12 +3,13 @@
 namespace Findologic\Api\Response;
 
 use Exception;
+use FINDOLOGIC\Api\Responses\Response as ApiResponse;
+use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Constants\Plugin;
 use Findologic\Services\SearchService;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
-use SimpleXMLElement;
 use Plenty\Plugin\Http\Request as HttpRequest;
 
 /**
@@ -23,161 +24,81 @@ class ResponseParser
     protected $filtersParser;
 
     /**
+     * @var Json10Response
+     */
+    private $response;
+
+    /**
      * @var LoggerContract
      */
     protected $logger;
 
     public function __construct(
         FiltersParser $filtersParser,
-        LoggerFactory $loggerFactory
+        LoggerFactory $loggerFactory,
+        Json10Response $response
     ) {
         $this->filtersParser = $filtersParser;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
-    }
-
-    public function parse(HttpRequest $request, $responseData): Response
-    {
-        /** @var Response $response */
-        $response = $this->createResponseObject();
-
-        if (!is_string($responseData) || $responseData === '') {
-            $msg = sprintf(
-                'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
-                SearchService::MAX_RETRIES
-            );
-            $this->logger->error($msg, ['response' => $responseData]);
-
-            return $response;
-        }
-
-        try {
-            $data = $this->loadXml($responseData);
-            $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data));
-            $response->setData(Response::DATA_SERVERS, $this->parseServers($data));
-            $response->setData(Response::DATA_QUERY, $this->parseQuery($data));
-            $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data));
-            $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
-            $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
-            $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->filters));
-            $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->filters));
-            $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
-        } catch (Exception $e) {
-            $this->logger->error('Parsing XML failed', ['xmlString' => $responseData]);
-            $this->logger->logException($e);
-        }
-
-        return $response;
+        $this->response = $response;
     }
 
     /**
-     * @param string $xmlString
-     * @return SimpleXMLElement
-     * @throws Exception
-     */
-    public function loadXml($xmlString = '')
-    {
-        $parsedXml = simplexml_load_string($xmlString);
-
-        if (!$parsedXml) {
-            throw new Exception('Error while parsing XML');
-        }
-
-        return $parsedXml;
-    }
-
-    public function createResponseObject(): Response
-    {
-        return pluginApp(Response::class);
-    }
-
-    /**
-     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseServers(SimpleXMLElement $data)
-    {
-        $servers = [];
-
-        if (!empty($data->servers)) {
-            $servers['frontend'] = $data->servers->frontend->__toString();
-            $servers['backend'] = $data->servers->backend->__toString();
-        }
-
-        return $servers;
-    }
-
-    /**
-     * @param SimpleXMLElement $data
-     * @return array
-     */
-    protected function parseQuery(SimpleXMLElement $data)
+    protected function parseQuery()
     {
         $query = [];
 
-        if (!empty($data->query)) {
-            $query['query'] = $data->query->queryString->__toString();
+        if ($this->response->getRequest()->getQuery()) {
+            $query['query'] = $this->response->getRequest()->getQuery();
             $query['searchedWordCount'] = $data->query->searchWordCount->__toString();
             $query['foundWordCount'] = $data->query->foundWordCount->__toString();
 
-            $query['first'] = $data->query->limit['first']->__toString();
-            $query['count'] = $data->query->limit['count']->__toString();
+            $query['first'] = $this->response->getRequest()->getFirst();
+            $query['count'] = $this->response->getRequest()->getCount();
         }
 
         return $query;
     }
 
     /**
-     * @param SimpleXMLElement $data
      * @return string|null
      */
-    protected function parseLandingPage(SimpleXMLElement $data)
+    protected function parseLandingPage()
     {
-        if (!isset($data->landingPage)
-            || empty($data->landingPage->attributes())
-            || !isset($data->landingPage->attributes()->link)
-        ) {
-            return null;
-        }
-
-        return $data->landingPage->attributes()->link->__toString();
+        $landingPage = $this->response->getResult()->getMetadata()->getLandingPage();
+        return $landingPage ? $landingPage->getUrl() : null;
     }
 
     /**
-     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parsePromotion(SimpleXMLElement $data)
+    protected function parsePromotion()
     {
         $promotion = [];
+        $responsePromotion = $this->response->getResult()->getMetadata()->getPromotion();
 
-        if (isset($data->promotion) && !empty($data->promotion->attributes())) {
-            $promotion['image'] = $data->promotion->attributes()->image->__toString();
-            $promotion['link'] = $data->promotion->attributes()->link->__toString();
+        if ($responsePromotion) {
+            $promotion['image'] = $this->response->getResult()->getMetadata()->getPromotion()->getImageUrl();
+            $promotion['link'] = $this->response->getResult()->getMetadata()->getPromotion()->getUrl();
         }
 
         return $promotion;
     }
 
     /**
-     * @param SimpleXMLElement $data
-     * @return array
+     * @return int
      */
-    protected function parseResults(SimpleXMLElement $data)
+    protected function parseTotalResults()
     {
-        $results = [];
-
-        if (!empty($data->results)) {
-            $results['count'] = $data->results->count->__toString();
-        }
-
-        return $results;
+        return $this->response->getResult()->getMetadata()->getTotalResults();
     }
 
     /**
-     * @param SimpleXMLElement $data
      * @return array
      */
-    protected function parseProducts(SimpleXMLElement $data)
+    protected function parseProducts()
     {
         $products = [];
 
@@ -199,15 +120,10 @@ class ResponseParser
         return $products;
     }
 
-    protected function parseQueryInfoMessage(HttpRequest $request, SimpleXMLElement $data): array
+    protected function parseQueryInfoMessage(HttpRequest $request): array
     {
-        if (empty($data->query)) {
-            return [];
-        }
 
-        $originalQuery = isset($data->query->originalQuery) ? $data->query->originalQuery->__toString() : null;
-        $didYouMeanQuery = isset($data->query->didYouMeanQuery) ? $data->query->didYouMeanQuery->__toString() : null;
-        $currentQuery = isset($data->query->queryString) ? $data->query->queryString->__toString() : null;
+        // Not sure about this one, fix after
         $queryStringType = isset($data->query->queryString->attributes()->type)
             ? $data->query->queryString->attributes()->type->__toString()
             : null;
@@ -215,9 +131,9 @@ class ResponseParser
         $requestParams = (array) $request->all();
 
         return [
-            'originalQuery' => $originalQuery,
-            'didYouMeanQuery' => $didYouMeanQuery,
-            'currentQuery' => $currentQuery,
+            'originalQuery' => $this->response->getRequest()->getQuery(),
+            'didYouMeanQuery' =>$this->response->getResult()->getVariant()->getDidYouMeanQuery(),
+            'currentQuery' => $this->response->getResult()->getMetadata()->getEffectiveQuery() ,
             'queryStringType' => $queryStringType,
             'selectedCategoryName' => $this->getSelectedCategoryName($requestParams),
             'selectedVendorName' => $this->getSelectedVendorName($requestParams),

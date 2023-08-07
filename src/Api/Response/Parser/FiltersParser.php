@@ -2,11 +2,12 @@
 
 namespace Findologic\Api\Response\Parser;
 
-use SimpleXMLElement;
+use FINDOLOGIC\Api\Responses\Json10\Json10Response;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\RangeSliderFilter;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Services\Image;
 use Plenty\Plugin\ConfigRepository;
-use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 
 /**
  * Class FiltersParser
@@ -14,65 +15,60 @@ use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
  */
 class FiltersParser
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $valueId;
 
-    /**
-     * @var LibraryCallContract
-     */
-    protected $libraryCallContract;
+    /** @var Json10Response|null */
+    private $response;
 
     /** @var ConfigRepository */
     private $configRepository;
 
     /**
      * FiltersParser constructor.
-     * @param LibraryCallContract $libraryCallContract
+     * @param Json10Response $response
      */
-    public function __construct(LibraryCallContract $libraryCallContract, ConfigRepository $configRepository)
+    public function __construct(ConfigRepository $configRepository, ?Json10Response $response)
     {
-        $this->libraryCallContract = $libraryCallContract;
         $this->configRepository = $configRepository;
+        $this->response = $response;
     }
 
     /**
-     * @param SimpleXMLElement|null $data
+     * @return array
      */
-    public function parse($data): array
+    public function parse(): array
     {
-        if (!$data instanceof SimpleXMLElement) {
+        if (!$this->response) {
             return [];
         }
 
-        $filters = [];
-
-        if ($data->main->filter) {
-            foreach ($data->main->filter as $filter) {
-                $filters[] = $this->parseFilter($filter, true);
-            }
+        $filters = array_merge(
+            $this->response->getResult()->getMainFilters() ?? [],
+            $this->response->getResult()->getOtherFilters() ?? []
+        );
+        
+        foreach ($this->response->getResult()->getMainFilters() as $filter) {
+            $filters[] = $this->parseFilter($filter, true);
         }
 
-        if ($data->other->filter) {
-            foreach ($data->other->filter as $filter) {
-                $filters[] = $this->parseFilter($filter);
-            }
+        foreach ($this->response->getResult()->getOtherFilters() as $filter) {
+            $filters[] = $this->parseFilter($filter);
         }
 
         return $filters;
     }
 
     /**
-     * @param SimpleXMLElement|null $data
+     * @return array
      */
-    public function parseForWidgets($data): array
+    public function parseForWidgets(): array
     {
-        if (!$data instanceof SimpleXMLElement) {
+        if (!$this->response) {
             return [];
         }
 
-        $filters = $this->parse($data);
+        $filters = $this->parse();
 
         if (empty($filters)) {
             return [];
@@ -107,11 +103,10 @@ class FiltersParser
     /**
      * @param string $filterType
      * @param array $filterItem
-     * @param \SimpleXMLElement $data
      * @param int $index
      * @return void
      */
-    public function parseFilterItem($filterType, &$filterItem, $data, $index)
+    public function parseFilterItem($filterType, &$filterItem, $index)
     {
         if (!empty($data)) {
             $filterItem['items'] = [];
@@ -158,28 +153,25 @@ class FiltersParser
     }
 
     /**
-     * @param \SimpleXMLElement $filter
+     * @param Filter|RangeSliderFilter $filter
      * @param bool $isMainFilter
      * @return array
      */
-    protected function parseFilter($filter, $isMainFilter = false)
+    protected function parseFilter(Filter $filter, bool $isMainFilter = false)
     {
-        $noAvailableFiltersText = $filter->noAvailableFiltersText ? $filter->noAvailableFiltersText->__toString() : '';
-
-        $filterName = $filter->name->__toString();
+        $filterName = $filter->getName();
         $filterData = [
             'id' => $filterName,
-            'name' => $filter->display->__toString(),
-            'select' => $filter->select->__toString(),
+            'name' => $filter->getDisplayName(),
+            'select' => $filter->getSelectMode(),
             'type' => '',
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'values' => [],
             'itemCount' => $filter->itemCount ? $filter->itemCount->__toString() : 0,
-            'noAvailableFiltersText' => $noAvailableFiltersText
+            'noAvailableFiltersText' => $filter->getNoAvailableFiltersText() ?: '',
+            'cssClass' => $filter->getCssClass() ?: ''
         ];
-
-        $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';
 
         if ($filter->type) {
             $filterData['findologicFilterType'] = $filter->type->__toString();
@@ -190,9 +182,9 @@ class FiltersParser
         }
 
         if ($filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
-            $filterData['unit'] = $filter->attributes->unit->__toString();
-            $filterData['minValue'] = (float)$filter->attributes->totalRange->min;
-            $filterData['maxValue'] = (float)$filter->attributes->totalRange->max;
+            $filterData['unit'] = $filter->getUnit();
+            $filterData['minValue'] = (float)$filter->getTotalRange()->getMin();
+            $filterData['maxValue'] = (float)$filter->getTotalRange()->getMax();
             $filterData['step'] = (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0.01');
             $filterData['useNoUISliderCSS'] = (bool) $this->configRepository->get('Findologic.load_no_ui_slider_styles_enabled', '1');
         }

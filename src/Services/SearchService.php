@@ -11,6 +11,7 @@ use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
 use Plenty\Plugin\ConfigRepository;
 use FINDOLOGIC\Api\Requests\Request;
+use FINDOLOGIC\Api\Responses\Response as ApiResponse;
 use Plenty\Plugin\Log\LoggerFactory;
 use Findologic\Api\Response\Response;
 use Ceres\Helper\ExternalSearchOptions;
@@ -590,9 +591,9 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @return mixed
+     * @return ApiResponse|null
      */
-    private function requestWithRetries(Request $request)
+    private function requestWithRetries(Request $request): ?ApiResponse
     {
         $i = 0;
         do {
@@ -617,7 +618,7 @@ class SearchService implements SearchServiceInterface
      * @param mixed $responseData
      * @return string|null
      */
-    private function validateResponse($responseData)
+    private function validateResponse($responseData): ?string
     {
         $errorMsg = null;
         if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {

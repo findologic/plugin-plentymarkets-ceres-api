@@ -3,7 +3,7 @@
 namespace Findologic\Api;
 
 use Exception;
-use FINDOLOGIC\Api\Client as FindologicClinet;
+use FINDOLOGIC\Api\Client as FindologicClient;
 use FINDOLOGIC\Api\Config;
 use Findologic\Constants\Plugin;
 use FINDOLOGIC\Api\Requests\Request;
@@ -20,7 +20,7 @@ class Client
 {
 
     /**
-     * @var FindologicClinet
+     * @var FindologicClient
      */
     private $findologicClient;
     /**
@@ -37,12 +37,12 @@ class Client
     {
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
         $this->config = new Config($pluginConfig->getShopKey());
-        $this->findologicClient = new Client($this->config);
+        $this->findologicClient = new FindologicClient($this->config);
     }
 
     /**
      * @param Request $request
-     * @return mixed
+     * @return Response|null
      */
     public function call(Request $request): ?Response
     {
