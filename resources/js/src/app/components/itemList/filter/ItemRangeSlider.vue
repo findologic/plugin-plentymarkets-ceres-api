@@ -82,7 +82,8 @@ export default defineComponent({
       return 'fl-range-slider-' + props.facet.id
           .replace(/\W/g, '-')
           .replace(/-+/, '-')
-          .replace(/-$/, '');
+          .replace(/-$/, '')
+          + Math.random().toString(36).substr(2, 9);
     });
     const isDisabled = computed(() => {
         return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
