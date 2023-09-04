@@ -10,7 +10,7 @@ use Plenty\Modules\Webshop\ItemSearch\SearchPresets\CategoryItems;
 use Plenty\Modules\Webshop\ItemSearch\SearchPresets\Facets;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use Plenty\Plugin\Http\Request;
-use Findologic\Api\Response\Response;
+use FINDOLOGIC\Api\Responses\Response;
 
 class FallbackSearchService implements SearchServiceInterface
 {
@@ -83,7 +83,7 @@ class FallbackSearchService implements SearchServiceInterface
      */
     public function createResponseFromSearchResult(array $searchResults)
     {
-        $response = $this->responseParser->createResponseObject();
+        $response = $this->responseParser->response;
         $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
         $this->setFilters($searchResults['facets'], $response);
         $this->setTotal($searchResults['itemList']['total'], $response);

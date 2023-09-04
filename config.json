@@ -10,6 +10,12 @@
           "label": "Config.shopkeyLabel",
           "options": {}
         },
+        "useVariants": {
+          "type": "checkBox",
+          "required": false,
+          "label": "Config.useVariantsLabel",
+          "options": {}
+        },
         "nav_enabled": {
           "type": "selectBox",
           "required": false,

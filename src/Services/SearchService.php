@@ -18,7 +18,8 @@ use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Exception\AliveException;
 use Plenty\Log\Contracts\LoggerContract;
 use Findologic\Api\Request\RequestBuilder;
-use Findologic\Api\Response\ResponseParser;
+use Findologic\Api\Response\Json10ResponseParser;
+use FINDOLOGIC\Components\SmartDidYouMean;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Services\Search\ParametersHandler;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
@@ -48,7 +49,7 @@ class SearchService implements SearchServiceInterface
     protected $requestBuilder;
 
     /**
-     * @var ResponseParser
+     * @var Json10ResponseParser
      */
     protected $responseParser;
 
@@ -98,7 +99,7 @@ class SearchService implements SearchServiceInterface
     public function __construct(
         Client $client,
         RequestBuilder $requestBuilder,
-        ResponseParser $responseParser,
+        Json10ResponseParser $responseParser,
         ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
         FallbackSearchService $fallbackSearchService,
@@ -149,6 +150,11 @@ class SearchService implements SearchServiceInterface
     public function getResults()
     {
         return $this->results;
+    }
+
+    public function getSmartDidYouMean() : SmartDidYouMean
+    {
+        return $this->responseParser->getSmartDidYouMeanExtension();
     }
 
     /**
