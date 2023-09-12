@@ -11,12 +11,18 @@ use FINDOLOGIC\Api\Responses\Response;
 use Findologic\Components\PluginConfig;
 use FINDOLOGIC\Struct\FiltersExtension;
 use FINDOLOGIC\Components\SmartDidYouMean;
+use FINDOLOGIC\Response\Filter\BaseFilter;
 use FINDOLOGIC\FinSearch\Struct\Pagination;
 use Symfony\Component\HttpFoundation\Request;
+use Plenty\Plugin\Http\Request as HttpRequest;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use FINDOLOGIC\Struct\QueryInfoMessage\QueryInfoMessage;
+use FINDOLOGIC\Struct\QueryInfoMessage\VendorInfoMessage;
+use FINDOLOGIC\Struct\QueryInfoMessage\CategoryInfoMessage;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
+use FINDOLOGIC\Struct\QueryInfoMessage\ShoppingGuideInfoMessage;
+use FINDOLOGIC\Struct\QueryInfoMessage\SearchTermQueryInfoMessage;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Promotion as ApiPromotion;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter as ApiFilter;
 
@@ -104,10 +110,10 @@ class Json10ResponseParser extends Json10Response
         return new Pagination($limit, $offset, $this->getResult()->getMetadata()->getTotalResults());
     }
 
-    public function getQueryInfoMessage(): QueryInfoMessage
+    public function getQueryInfoMessage(HttpRequest $request): QueryInfoMessage
     {
         $queryString = $this->getRequest()->getQuery() ?? '';
-        $params = $event->getRequest()->query->all();
+        $params = (array) $request->all();
 
         // if ($this->hasAlternativeQuery($queryString)) {   ?????????
         //     /** @var SmartDidYouMean $smartDidYouMean */
@@ -117,7 +123,7 @@ class Json10ResponseParser extends Json10Response
         // }
 
         // Check for shopping guide parameter first, otherwise it will always be overridden with search or vendor query
-        if ($this->isFilterSet($params, 'wizard')) {
+        if ($this->isFilterSet($params['attrib'], 'wizard')) {
             return $this->buildShoppingGuideInfoMessage($params);
         }
 
@@ -125,7 +131,7 @@ class Json10ResponseParser extends Json10Response
             return $this->buildSearchTermQueryInfoMessage($queryString);
         }
 
-        if ($this->isFilterSet($params, 'cat')) {
+        if ($this->isFilterSet($params['attrib'], 'cat')) {
             return $this->buildCategoryQueryInfoMessage($params);
         }
 
@@ -134,7 +140,7 @@ class Json10ResponseParser extends Json10Response
             $vendorFilterValues &&
             count($vendorFilterValues) === 1
         ) {
-            return $this->buildVendorQueryInfoMessage($params, current($vendorFilterValues));
+            return $this->buildVendorQueryInfoMessage(current($vendorFilterValues));
         }
 
         return QueryInfoMessage::buildInstance(QueryInfoMessage::TYPE_DEFAULT);
@@ -156,7 +162,7 @@ class Json10ResponseParser extends Json10Response
         /** @var ShoppingGuideInfoMessage $queryInfoMessage */
         $queryInfoMessage = QueryInfoMessage::buildInstance(
             QueryInfoMessage::TYPE_SHOPPING_GUIDE,
-            $params['wizard']
+            $params['attrib']['wizard']
         );
 
         return $queryInfoMessage;
@@ -170,7 +176,7 @@ class Json10ResponseParser extends Json10Response
             $this->getResult()->getOtherFilters() ?? []
         );
 
-        $categories = explode('_', $params['cat']);
+        $categories = explode('_', $params['attrib']['cat']);
         $category = end($categories);
 
         $catFilter = array_filter(
@@ -195,7 +201,7 @@ class Json10ResponseParser extends Json10Response
         return $categoryInfoMessage;
     }
 
-    private function buildVendorQueryInfoMessage(array $params, string $value): VendorInfoMessage
+    private function buildVendorQueryInfoMessage(string $value): VendorInfoMessage
     {
         /** @var ApiFilter[] $filters */
         $filters = array_merge(
