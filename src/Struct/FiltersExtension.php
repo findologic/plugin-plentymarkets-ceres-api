@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Struct;
 
+use FINDOLOGIC\Response\Filter\BaseFilter;
+
 
 class FiltersExtension
 {
@@ -36,6 +38,6 @@ class FiltersExtension
             return null;
         }
 
-    //     return $this->filters[$id];
-    // }
+        return $this->filters[$id];
+    }
 }

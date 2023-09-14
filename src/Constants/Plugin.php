@@ -52,4 +52,7 @@ class Plugin
     const FILTER_TYPE_RANGE_SLIDER = 'range-slider';
     const FILTER_TYPE_COLOR = 'color';
     const FILTER_TYPE_IMAGE = 'image';
+
+    const FILTER_HANDLER_DELIMITER = '|';
+    const FILTER_VALUE_DELIMITER = '>';
 }

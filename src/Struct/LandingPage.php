@@ -6,13 +6,13 @@ namespace FINDOLOGIC\Struct;
 
 class LandingPage
 {
-    // public function __construct(
-    //     protected readonly string $link
-    // ) {
-    // }
+    public function __construct(
+        protected readonly string $link
+    ) {
+    }
 
-    // public function getLink(): string
-    // {
-    //     return $this->link;
-    // }
+    public function getLink(): string
+    {
+        return $this->link;
+    }
 }

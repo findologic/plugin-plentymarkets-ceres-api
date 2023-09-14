@@ -12,6 +12,7 @@ class SmartDidYouMean
     protected const CORRECTED = 'corrected';
 
     private ?string $link;
+    private ?string $type;
 
     public function __construct(
         private ?string $originalQuery,
@@ -27,7 +28,8 @@ class SmartDidYouMean
         $this->didYouMeanQuery = htmlentities($didYouMeanQuery ?? '');
         $this->improvedQuery = htmlentities($improvedQuery ?? '');
 
-        // $this->link = $this->createLink($controllerPath);
+        $this->type = $this->defineType();
+        $this->link = $this->createLink($controllerPath);
     }
 
     public function getLink(): ?string
@@ -85,20 +87,20 @@ class SmartDidYouMean
         return '';
     }
 
-    // private function createLink(?string $controllerPath): ?string
-    // {
-    //     return match ($this->type) {
-    //         self::DID_YOU_MEAN => sprintf(
-    //             '%s?search=%s&forceOriginalQuery=1',
-    //             $controllerPath,
-    //             $this->didYouMeanQuery
-    //         ),
-    //         self::IMPROVED => sprintf(
-    //             '%s?search=%s&forceOriginalQuery=1',
-    //             $controllerPath,
-    //             $this->improvedQuery
-    //         ),
-    //         default => null,
-    //     };
-    // }
+    private function createLink(?string $controllerPath): ?string
+    {
+        return match ($this->type) {
+            self::DID_YOU_MEAN => sprintf(
+                '%s?search=%s&forceOriginalQuery=1',
+                $controllerPath,
+                $this->didYouMeanQuery
+            ),
+            self::IMPROVED => sprintf(
+                '%s?search=%s&forceOriginalQuery=1',
+                $controllerPath,
+                $this->improvedQuery
+            ),
+            default => null,
+        };
+    }
 }

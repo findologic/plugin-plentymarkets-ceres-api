@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace FINDOLOGIC\Struct\QueryInfoMessage;
 
-use FINDOLOGIC\Struct\Struct;
 use InvalidArgumentException;
 
-abstract class QueryInfoMessage extends Struct
+abstract class QueryInfoMessage
 {
     // Search results for "<query>" (<count> hits)
     public const TYPE_QUERY = 'query';
