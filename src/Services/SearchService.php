@@ -18,7 +18,7 @@ use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Exception\AliveException;
 use Plenty\Log\Contracts\LoggerContract;
 use Findologic\Api\Request\RequestBuilder;
-use Findologic\Api\Response\Json10ResponseParser;
+use Findologic\Api\Response\ResponseParser;
 use FINDOLOGIC\Components\SmartDidYouMean;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Services\Search\ParametersHandler;
@@ -38,85 +38,28 @@ class SearchService implements SearchServiceInterface
     const DEFAULT_ITEMS_PER_PAGE = 25;
     const MAX_RETRIES = 2;
 
-    /**
-     * @var Client
-     */
-    protected $client;
+    protected LoggerContract $logger;
 
-    /**
-     * @var RequestBuilder
-     */
-    protected $requestBuilder;
+    protected CategoryService $categoryService;
 
-    /**
-     * @var Json10ResponseParser
-     */
-    protected $responseParser;
+    protected bool|null $aliveTestResult;
 
-    /**
-     * @var ParametersHandler
-     */
-    protected $searchParametersHandler;
-
-    /**
-     * @var LoggerContract
-     */
-    protected $logger;
-
-    /**
-     * @var CategoryService
-     */
-    protected $categoryService;
-
-    /**
-     * @var Response
-     */
-    protected $results;
-
-    /**
-     * @var FallbackSearchService
-     */
-    protected $fallbackSearchService;
-
-    /**
-     * @var ConfigRepository
-     */
-    protected $configRepository;
-
-    /**
-     * @var bool|null
-     */
-    protected $aliveTestResult;
-
-    /**
-     * @var PluginInfoService
-     */
-    protected $pluginInfoService;
-
-    /** @var bool $useMainVariationAsFallback */
-    protected $useMainVariationAsFallback = false;
+    protected bool $useMainVariationAsFallback = false;
 
     public function __construct(
-        Client $client,
-        RequestBuilder $requestBuilder,
-        Json10ResponseParser $responseParser,
-        ParametersHandler $searchParametersHandler,
+        protected Client $client,
+        protected RequestBuilder $requestBuilder,
+        protected ResponseParser $responseParser,
+        protected ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
-        FallbackSearchService $fallbackSearchService,
-        ConfigRepository $configRepository,
-        PluginInfoService $pluginInfoService
+        protected FallbackSearchService $fallbackSearchService,
+        protected ConfigRepository $configRepository,
+        protected PluginInfoService $pluginInfoService
     ) {
-        $this->client = $client;
-        $this->requestBuilder = $requestBuilder;
-        $this->responseParser = $responseParser;
-        $this->searchParametersHandler = $searchParametersHandler;
         $this->logger = $loggerFactory->getLogger(
             Plugin::PLUGIN_NAMESPACE,
             Plugin::PLUGIN_IDENTIFIER
         );
-        $this->fallbackSearchService = $fallbackSearchService;
-        $this->configRepository = $configRepository;
-        $this->pluginInfoService = $pluginInfoService;
     }
 
     /**

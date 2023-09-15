@@ -20,7 +20,7 @@ class QueryInfoMessageFactory {
             return $this->buildSearchTermQueryInfoMessage($this->response->getResult()->getMetadata()->getEffectiveQuery());
         }
         else if ($this->isFilterSet($params['attrib'], 'wizard')) {
-            return QueryInfoMessage::TYPE_SHOPPING_GUIDE;
+            return $this->buildShoppingGuideInfoMessage($params);
         }
         else if ($this->hasQuery()) {
             return $this->buildSearchTermQueryInfoMessage();
@@ -38,6 +38,17 @@ class QueryInfoMessageFactory {
         }
 
         return QueryInfoMessage::buildInstance(QueryInfoMessage::TYPE_DEFAULT);
+    }
+
+    private function buildShoppingGuideInfoMessage(array $params): ShoppingGuideInfoMessage
+    {
+        /** @var ShoppingGuideInfoMessage $queryInfoMessage */
+        $queryInfoMessage = QueryInfoMessage::buildInstance(
+            QueryInfoMessage::TYPE_SHOPPING_GUIDE,
+            $params['attrib']['wizard']
+        );
+
+        return $queryInfoMessage;
     }
 
     private function buildVendorQueryInfoMessage(string $value): VendorInfoMessage
