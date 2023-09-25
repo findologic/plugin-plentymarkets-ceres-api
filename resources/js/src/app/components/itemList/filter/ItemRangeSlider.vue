@@ -80,10 +80,7 @@ export default defineComponent({
 
     const isLoading = computed(() => root.$store.state.isLoading);
     const sanitizedFacetId = computed(() => {
-      return 'fl-range-slider-' + props.facet.id
-          .replace(/\W/g, '-')
-          .replace(/-+/, '-')
-          .replace(/-$/, '')
+      return 'fl-range-slider-' + 'test'
           + '-'
           + randomRangeSliderId;
     });
