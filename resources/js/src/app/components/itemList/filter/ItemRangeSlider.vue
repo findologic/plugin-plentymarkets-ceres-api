@@ -76,13 +76,16 @@ export default defineComponent({
     const valueTo = ref();
     const facet = props.facet;
     const applyText = ref('');
+    const randomRangeSliderId = Math.random().toString(36).substring(2, 13);
 
     const isLoading = computed(() => root.$store.state.isLoading);
     const sanitizedFacetId = computed(() => {
       return 'fl-range-slider-' + props.facet.id
           .replace(/\W/g, '-')
           .replace(/-+/, '-')
-          .replace(/-$/, '');
+          .replace(/-$/, '')
+          + '-'
+          + randomRangeSliderId;
     });
     const isDisabled = computed(() => {
         return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
