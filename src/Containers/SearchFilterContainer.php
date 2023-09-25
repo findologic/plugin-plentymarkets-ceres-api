@@ -32,8 +32,8 @@ class SearchFilterContainer
         return $twig->render(
             'Findologic::Category.Item.Partials.SearchFilters',
             [
-                'resultsCount' => $searchResults->getResultsCount(),
-                'facets' => $searchResults->getData(Response::DATA_FILTERS),
+                'resultsCount' => $searchResults->parseTotalResults(),
+                'facets' => $searchResults->getFiltersExtension(),
                 'currentCategory' => null !== $currentCategory ? $currentCategory['details'] : [],
                 'showCategoryFilter' => $showCategoryFilter
             ]

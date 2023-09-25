@@ -28,7 +28,7 @@ class PromotionContainer
         return $twig->render(
             'Findologic::Category.Item.Partials.Promotion',
             [
-                'promotion' => $searchResults->getData(Response::DATA_PROMOTION)
+                'promotion' => $searchResults->getPromotionExtension()
             ]
         );
     }

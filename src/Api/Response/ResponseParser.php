@@ -37,19 +37,19 @@ class ResponseParser
 
     protected PluginConfig $pluginConfig;
 
+    protected HttpRequest $request;
+
     public function __construct(
         FiltersParser $filtersParser,
         LoggerFactory $loggerFactory,
-        Json10Response $response,
         PluginConfig $pluginConfig
     ) {
         $this->filtersParser = $filtersParser;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
-        $this->response = $response;
         $this->pluginConfig = $pluginConfig;
     }
 
-    protected function parseQuery() :array
+    public function parseQuery() :array
     {
         $query = [];
 
@@ -86,12 +86,12 @@ class ResponseParser
         return null;
     }
 
-    protected function parseTotalResults() :int
+    public function parseTotalResults() :int
     {
         return $this->response->getResult()->getMetadata()->getTotalResults();
     }
 
-    protected function getProductIds() :array
+    public function getProductIds() :array
     {
         return array_map(
             function (Item $product) {
@@ -129,10 +129,10 @@ class ResponseParser
         return new Pagination($limit, $offset, $this->response->getResult()->getMetadata()->getTotalResults());
     }
 
-    public function getQueryInfoMessage(HttpRequest $request): QueryInfoMessage
+    public function getQueryInfoMessage(): QueryInfoMessage
     {
         $queryString = $this->response->getRequest()->getQuery() ?? '';
-        $params = (array) $request->all();
+        $params = (array) $this->request->all();
         $queryInfoMessageFactory = new QueryInfoMessageFactory($this->response, $queryString);
         
         return $queryInfoMessageFactory->getQueryInfoMessage($params);
@@ -159,7 +159,7 @@ class ResponseParser
         ];
     }
 
-    public function getSmartDidYouMeanExtension(Request $request): SmartDidYouMean
+    public function getSmartDidYouMeanExtension(): SmartDidYouMean
     {
         return new SmartDidYouMean(
             $this->response->getRequest()->getQuery(),
@@ -167,7 +167,7 @@ class ResponseParser
             $this->response->getResult()->getVariant()->getCorrectedQuery(),
             $this->response->getResult()->getVariant()->getDidYouMeanQuery(),
             $this->response->getResult()->getVariant()->getImprovedQuery(),
-            $request->getRequestUri()
+            $this->request->getRequestUri()
         );
     }
 
@@ -212,5 +212,29 @@ class ResponseParser
     public function getResponse(): Json10Response
     {
         return $this->response;
+    }
+
+    /**
+     * Set the value of response
+     *
+     * @return  self
+     */ 
+    public function setResponse($response)
+    {
+        $this->response = $response;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of request
+     *
+     * @return  self
+     */ 
+    public function setRequest($request)
+    {
+        $this->request = $request;
+
+        return $this;
     }
 }

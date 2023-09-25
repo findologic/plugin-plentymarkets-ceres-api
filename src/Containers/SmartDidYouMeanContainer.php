@@ -29,7 +29,7 @@ class SmartDidYouMeanContainer
             'Findologic::Category.Item.Partials.SmartDidYouMean',
             [
                 'query_info_message' => $searchResults->getQueryInfoMessage(),
-                'smart_did_you_mean' => $searchResults->getSmartDidYouMean()
+                'smart_did_you_mean' => $searchResults->getSmartDidYouMeanExtension()
             ]
         );
     }
