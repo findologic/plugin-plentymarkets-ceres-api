@@ -76,6 +76,7 @@ export default defineComponent({
     const valueTo = ref();
     const facet = props.facet;
     const applyText = ref('');
+    const randomRangeSliderId = Math.random().toString(36).substr(2, 9);
 
     const isLoading = computed(() => root.$store.state.isLoading);
     const sanitizedFacetId = computed(() => {
@@ -83,7 +84,7 @@ export default defineComponent({
           .replace(/\W/g, '-')
           .replace(/-+/, '-')
           .replace(/-$/, '')
-          + Math.random().toString(36).substr(2, 9);
+          + randomRangeSliderId;
     });
     const isDisabled = computed(() => {
         return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
