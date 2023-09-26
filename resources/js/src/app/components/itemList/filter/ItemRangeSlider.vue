@@ -74,6 +74,7 @@ export default defineComponent({
   setup: (props: ItemRangeSliderProps, { root }) => {
     const valueFrom = ref();
     const valueTo = ref();
+    const sanitizedFacetId = ref();
     const facet = props.facet;
     const applyText = ref('');
     const isLoading = computed(() => root.$store.state.isLoading);
@@ -144,7 +145,7 @@ export default defineComponent({
       // round values so it wouldn't have decimals
       valueFrom.value = Math.floor(valueFrom.value);
       valueTo.value = Math.ceil(valueTo.value);
-      const sanitizedFacetId = computed(() => {
+      sanitizedFacetId.value = computed(() => {
         return 'fl-range-slider-' + props.facet.id
             .replace(/\W/g, '-')
             .replace(/-+/, '-')
@@ -201,6 +202,7 @@ export default defineComponent({
     return {
       valueFrom,
       valueTo,
+      sanitizedFacetId,
       isDisabled,
       isLoading,
       triggerFilter,
