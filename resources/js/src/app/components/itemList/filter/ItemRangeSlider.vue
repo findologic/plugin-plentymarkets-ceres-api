@@ -164,6 +164,7 @@ export default defineComponent({
       }
 
       $(document).ready(function () {
+        console.log(sanitizedFacetId.value);
         const element: noUiSlider.target = document.getElementById(sanitizedFacetId.value) as noUiSlider.target;
         const slider = noUiSlider.create(element, {
           step: props.facet.step,
