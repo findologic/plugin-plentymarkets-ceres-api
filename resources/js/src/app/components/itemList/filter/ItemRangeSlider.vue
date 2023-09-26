@@ -76,17 +76,8 @@ export default defineComponent({
     const valueTo = ref();
     const facet = props.facet;
     const applyText = ref('');
-    const randomRangeSliderId = Math.random().toString(36).substring(2, 13);
-
     const isLoading = computed(() => root.$store.state.isLoading);
-    const sanitizedFacetId = computed(() => {
-      return 'fl-range-slider-' + props.facet.id
-          .replace(/\W/g, '-')
-          .replace(/-+/, '-')
-          .replace(/-$/, '')
-          + '-'
-          + randomRangeSliderId;
-    });
+    
     const isDisabled = computed(() => {
         return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
           isNaN(valueFrom.value) ||
@@ -145,6 +136,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
+      const randomRangeSliderId = Math.random().toString(36).substring(2, 13);
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
       valueFrom.value = (values ? values.min : props.facet.minValue) || '';
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
@@ -152,7 +144,14 @@ export default defineComponent({
       // round values so it wouldn't have decimals
       valueFrom.value = Math.floor(valueFrom.value);
       valueTo.value = Math.ceil(valueTo.value);
-      
+      const sanitizedFacetId = computed(() => {
+        return 'fl-range-slider-' + props.facet.id
+            .replace(/\W/g, '-')
+            .replace(/-+/, '-')
+            .replace(/-$/, '')
+            + '-'
+            + randomRangeSliderId;
+      });
       // Determine number of decimals in the slider
       let decimalNumber = 2;
 
@@ -201,7 +200,6 @@ export default defineComponent({
     return {
       valueFrom,
       valueTo,
-      sanitizedFacetId,
       isDisabled,
       isLoading,
       triggerFilter,
