@@ -138,6 +138,7 @@ export default defineComponent({
 
     onMounted(() => {
       const randomRangeSliderId = Math.random().toString(36).substring(2, 13);
+      console.log(randomRangeSliderId);
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
       valueFrom.value = (values ? values.min : props.facet.minValue) || '';
       valueTo.value = (values ? values.max : props.facet.maxValue) || '';
@@ -151,6 +152,7 @@ export default defineComponent({
             .replace(/-$/, '')
             + '-'
             + randomRangeSliderId;
+      console.log(sanitizedFacetId.value);
       // Determine number of decimals in the slider
       let decimalNumber = 2;
 
