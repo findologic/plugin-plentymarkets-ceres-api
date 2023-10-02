@@ -59,7 +59,6 @@ import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
-import {  } from 'vuex';
 import * as noUiSlider from 'nouislider';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
