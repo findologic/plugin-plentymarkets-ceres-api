@@ -99,11 +99,11 @@ class ParametersBuilder
         }
 
         if ($this->tagsHelper->isTagPage($httpRequest)) {
-            $request->setParam('selected', ['cat_id' => [$this->tagsHelper->getTagIdFromUri($httpRequest)]]);
+            $request->addParam('selected', ['cat_id' => [$this->tagsHelper->getTagIdFromUri($httpRequest)]]);
         }
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
-            $request->setParam('selected', ['cat' => [$categoryFullName]]);
+            $request->addParam('selected', ['cat' => [$categoryFullName]]);
         }
 
         if ($externalSearch->sorting !== 'item.score' &&

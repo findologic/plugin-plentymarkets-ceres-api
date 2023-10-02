@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace FINDOLOGIC\Components;
+namespace Findologic\Struct;
 
 
 class SmartDidYouMean
@@ -102,5 +100,10 @@ class SmartDidYouMean
             ),
             default => null,
         };
+    }
+
+    public function getType()
+    {
+        return $this->type;
     }
 }

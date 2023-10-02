@@ -1,31 +1,35 @@
 <?php
-declare(strict_types=1);
 
-namespace FINDOLOGIC\Struct\QueryInfoMessage;
+namespace Findologic\Struct\QueryInfoMessage;
 
 use Findologic\Constants\Plugin;
 use FINDOLOGIC\Response\Filter\BaseFilter;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter as ApiFilter;
 
-class QueryInfoMessageFactory {
+class QueryInfoMessageFactory
+{
+
+    protected Json10Response $response;
+    protected string $queryString;
 
     public function __construct(
-        protected readonly Json10Response $response,
-        protected readonly string $queryString
-    ){}
+        Json10Response $response,
+        string $queryString
+    ) {
+        $this->response = $response;
+        $this->queryString = $queryString;
+    }
 
-    public function getQueryInfoMessage(array $params): QueryInfoMessage {
+    public function getQueryInfoMessage(array $params): QueryInfoMessage
+    {
         if ($this->hasAlternativeQuery()) {
             return $this->buildSearchTermQueryInfoMessage($this->response->getResult()->getMetadata()->getEffectiveQuery());
-        }
-        else if ($this->isFilterSet($params['attrib'], 'wizard')) {
+        } else if ($this->isFilterSet($params['attrib'], 'wizard')) {
             return $this->buildShoppingGuideInfoMessage($params);
-        }
-        else if ($this->hasQuery()) {
+        } else if ($this->hasQuery()) {
             return $this->buildSearchTermQueryInfoMessage();
-        }
-        else if ($this->isFilterSet($params['attrib'], 'cat')) {
+        } else if ($this->isFilterSet($params['attrib'], 'cat')) {
             return $this->buildCategoryQueryInfoMessage($params);
         }
 
@@ -157,5 +161,4 @@ class QueryInfoMessageFactory {
 
         return $categoryInfoMessage;
     }
- }
- 
+}

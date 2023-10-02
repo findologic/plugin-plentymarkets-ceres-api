@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
-namespace FINDOLOGIC\Struct;
+namespace Findologic\Struct;
 
 class LandingPage
 {
-    public function __construct(
-        protected readonly string $link
-    ) {
+    protected string $link;
+
+    public function __construct(string $link)
+    {
+        $this->link = $link;
     }
 
     public function getLink(): string

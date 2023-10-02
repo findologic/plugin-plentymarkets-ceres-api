@@ -1,10 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace FINDOLOGIC\Response\Filter;
-
-use FINDOLOGIC\FinSearch\Findologic\Response\Json10\Filter\Values\FilterValue;
+namespace Findologic\Api\Response\Filter;
 
 abstract class BaseFilter
 {
@@ -16,14 +12,21 @@ abstract class BaseFilter
 
     protected bool $hidden = false;
 
+    protected string $id;
+    protected string $name;
+    protected array $values = [];
+
     /**
      * @param FilterValue[] $values
      */
     public function __construct(
-        protected readonly string $id,
-        protected readonly string $name,
-        protected array $values = [],
+        string $id,
+        string $name,
+        array $values = [],
     ) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->values = $values;
     }
 
     public function getDisplayType(): ?string

@@ -4,23 +4,23 @@ namespace Findologic\Api\Response;
 
 use Exception;
 use Findologic\Constants\Plugin;
-use FINDOLOGIC\Struct\Promotion;
-use FINDOLOGIC\Struct\LandingPage;
+use Findologic\Struct\Promotion;
+use Findologic\Struct\LandingPage;
 use Plenty\Plugin\Log\LoggerFactory;
 use Findologic\Services\SearchService;
 use Findologic\Components\PluginConfig;
 use FINDOLOGIC\Struct\FiltersExtension;
 use Plenty\Log\Contracts\LoggerContract;
 use FINDOLOGIC\Components\SmartDidYouMean;
-use FINDOLOGIC\FinSearch\Struct\Pagination;
+use Findologic\FinSearch\Struct\Pagination;
 use Symfony\Component\HttpFoundation\Request;
 use Plenty\Plugin\Http\Request as HttpRequest;
-use Findologic\Api\Response\Parser\FiltersParser;
+// use Findologic\Api\Response\Parser\FiltersParser;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
-use FINDOLOGIC\Struct\QueryInfoMessage\QueryInfoMessage;
+use Findologic\Struct\QueryInfoMessage\QueryInfoMessage;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
-use FINDOLOGIC\Struct\QueryInfoMessage\QueryInfoMessageFactory;
+use Findologic\Struct\QueryInfoMessage\QueryInfoMessageFactory;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Promotion as ApiPromotion;
 
 /**
@@ -29,7 +29,7 @@ use FINDOLOGIC\Api\Responses\Json10\Properties\Promotion as ApiPromotion;
  */
 class ResponseParser
 {
-    protected FiltersParser $filtersParser;
+    // protected FiltersParser $filtersParser;
 
     protected Json10Response $response;
 
@@ -40,11 +40,11 @@ class ResponseParser
     protected HttpRequest $request;
 
     public function __construct(
-        FiltersParser $filtersParser,
+        // FiltersParser $filtersParser,
         LoggerFactory $loggerFactory,
         PluginConfig $pluginConfig
     ) {
-        $this->filtersParser = $filtersParser;
+        // $this->filtersParser = $filtersParser;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
         $this->pluginConfig = $pluginConfig;
     }

@@ -52,7 +52,8 @@
     "php": ">=7.3 <8.1"
   },
   "dependencies": {
-    "findologic/http_request2": "2.4.0"
+    "findologic/http_request2": "2.4.0",
+    "findologic/findologic-api": "^2.0"
   },
   "containers": [
     {

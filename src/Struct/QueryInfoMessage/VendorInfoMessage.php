@@ -1,15 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
-namespace FINDOLOGIC\Struct\QueryInfoMessage;
+namespace Findologic\Struct\QueryInfoMessage;
 
 class VendorInfoMessage extends QueryInfoMessage
 {
+    protected string $filterName;
+    protected string $filterValue;
+
     public function __construct(
-        protected readonly string $filterName,
-        protected readonly string $filterValue
+        string $filterName,
+        string $filterValue
     ) {
+        $this->filterName = $filterName;
+        $this->filterValue = $filterValue;
     }
 
     public function getFilterName(): string

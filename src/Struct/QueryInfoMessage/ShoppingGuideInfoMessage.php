@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
-namespace FINDOLOGIC\Struct\QueryInfoMessage;
+namespace Findologic\Struct\QueryInfoMessage;
 
 class ShoppingGuideInfoMessage extends QueryInfoMessage
 {
-    public function __construct(
-        protected readonly string $shoppingGuide
-    ) {
+    protected string $shoppingGuide;
+
+    public function __construct(string $shoppingGuide)
+    {
+        $this->shoppingGuide = $shoppingGuide;
     }
 
     public function getShoppingGuide(): string

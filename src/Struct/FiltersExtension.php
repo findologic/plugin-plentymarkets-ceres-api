@@ -1,20 +1,21 @@
 <?php
 
-declare(strict_types=1);
+namespace Findologic\Struct;
 
-namespace FINDOLOGIC\Struct;
-
-use FINDOLOGIC\Response\Filter\BaseFilter;
+use Findologic\Api\Response\Filter\BaseFilter;
 
 
 class FiltersExtension
 {
+    private array $filters = [];
+
     // /**
     //  * @param BaseFilter[] $filters
     //  */
     public function __construct(
-        private array $filters = []
+        array $filters = []
     ) {
+        $this->filters = $filters;
     }
 
     public function addFilter($filter): self

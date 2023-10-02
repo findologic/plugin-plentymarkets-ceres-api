@@ -1,19 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
-namespace FINDOLOGIC\FinSearch\Struct;
+namespace Findologic\FinSearch\Struct;
 
 
 class Pagination
 {
     public const DEFAULT_LIMIT = 24;
-
+    private ?int $limit;
+    private ?int $offset;
+    private ?int $total;
     public function __construct(
-        private ?int $limit,
-        private ?int $offset,
-        private readonly ?int $total
+        ?int $limit,
+        ?int $offset,
+        ?int $total
     ) {
+        $this->limit = $limit;
+        $this->offset = $offset;
+        $this->total = $total;
         $this->limit = $limit ?? self::DEFAULT_LIMIT;
         $this->offset = $offset ?? 0;
     }

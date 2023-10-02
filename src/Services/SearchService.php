@@ -9,7 +9,7 @@ use Plenty\Plugin\Log\Loggable;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
-use FINDOLOGIC\Struct\LandingPage;
+use Findologic\Struct\LandingPage;
 use Plenty\Plugin\ConfigRepository;
 use FINDOLOGIC\Api\Requests\Request;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -353,14 +353,19 @@ class SearchService implements SearchServiceInterface
             return false;
         }
 
-        $dataQueryInfoMessage = $this->responseParser->getQueryInfoMessage();//$this->getResults()->getData(Response::DATA_QUERY_INFO_MESSAGE);
+        // $dataQueryInfoMessage = $this->responseParser->getQueryInfoMessage();//$this->getResults()->getData(Response::DATA_QUERY_INFO_MESSAGE);
+        $smartDidYouMean = $this->responseParser->getSmartDidYouMeanExtension();
 
-        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
+        // if theres no smartdidyoumean type return true
+        if($smartDidYouMean->getType()){
+            return true;
+        }
+
+        return false;
+        // $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
+        //     ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
         
-        // if(gettype($dataQueryInfoMessage) ===)
-
-        return $type !== 'corrected' && $type !== 'improved';
+        // return $type !== 'corrected' && $type !== 'improved';
     }
 
     /**

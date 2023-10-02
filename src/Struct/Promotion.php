@@ -1,16 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
-namespace FINDOLOGIC\Struct;
+namespace Findologic\Struct;
 
 
 class Promotion
 {
+    private string $image;
+    private string $link;
+
     public function __construct(
-        private readonly string $image,
-        private readonly string $link
+        string $image,
+        string $link
     ) {
+        $this->image = $image;
+        $this->link = $link;
     }
 
     public function getImage(): string
