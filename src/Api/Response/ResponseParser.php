@@ -69,7 +69,7 @@ class ResponseParser
     {
         $landingPage = $this->response->getResult()->getMetadata()->getLandingPage();
         if ($landingPage instanceof LandingPage) {
-            return new LandingPage($landingPage->getUrl());
+            return pluginApp(LandingPage::class, [$landingPage->getUrl()]);
         }
 
         return null;
@@ -80,7 +80,7 @@ class ResponseParser
         $promotion = $this->response->getResult()->getMetadata()->getPromotion();
 
         if ($promotion instanceof ApiPromotion) {
-            return new Promotion($promotion->getImageUrl(), $promotion->getUrl());
+            return pluginApp(Promotion::class, [$promotion->getImageUrl(), $promotion->getUrl()]);
         }
 
         return null;
@@ -112,7 +112,7 @@ class ResponseParser
             $this->response->getResult()->getOtherFilters() ?? []
         );
 
-        $filtersExtension = new FiltersExtension();
+        $filtersExtension = pluginApp(FiltersExtension::class);
         foreach ($apiFilters as $apiFilter) {
             $filter = Filter::getInstance($apiFilter);
 
@@ -126,14 +126,14 @@ class ResponseParser
 
     public function getPaginationExtension(?int $limit, ?int $offset): Pagination
     {
-        return new Pagination($limit, $offset, $this->response->getResult()->getMetadata()->getTotalResults());
+        return pluginApp(Pagination::class, [$limit, $offset, $this->response->getResult()->getMetadata()->getTotalResults()]);
     }
 
     public function getQueryInfoMessage(): QueryInfoMessage
     {
         $queryString = $this->response->getRequest()->getQuery() ?? '';
         $params = (array) $this->request->all();
-        $queryInfoMessageFactory = new QueryInfoMessageFactory($this->response, $queryString);
+        $queryInfoMessageFactory = pluginApp(QueryInfoMessageFactory::class, [$this->response, $queryString]);
         
         return $queryInfoMessageFactory->getQueryInfoMessage($params);
     }
@@ -161,13 +161,13 @@ class ResponseParser
 
     public function getSmartDidYouMeanExtension(): SmartDidYouMean
     {
-        return new SmartDidYouMean(
+        return pluginApp(SmartDidYouMean::class,[
             $this->response->getRequest()->getQuery(),
             $this->response->getResult()->getMetadata()->getEffectiveQuery(),
             $this->response->getResult()->getVariant()->getCorrectedQuery(),
             $this->response->getResult()->getVariant()->getDidYouMeanQuery(),
             $this->response->getResult()->getVariant()->getImprovedQuery(),
-            $this->request->getRequestUri()
+            $this->request->getRequestUri()]
         );
     }
 

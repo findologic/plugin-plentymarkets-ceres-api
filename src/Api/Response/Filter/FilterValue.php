@@ -26,7 +26,7 @@ class FilterValue
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->translated = new TranslatedName($name);
+        $this->translated = pluginApp(TranslatedName::class, $name);
         if ($filterName !== null) {
             $this->uuid = sprintf('%s%s%s', $filterName, self::DELIMITER, $id);
         }

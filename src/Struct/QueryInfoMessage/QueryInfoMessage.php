@@ -27,23 +27,23 @@ abstract class QueryInfoMessage
             case self::TYPE_QUERY:
                 static::assertQueryIsNotEmpty($query);
 
-                return new SearchTermQueryInfoMessage($query);
+                return pluginApp(SearchTermQueryInfoMessage::class, [$query]);
             case self::TYPE_CATEGORY:
                 static::assertFilterNameAndValueAreNotEmpty($filterName, $filterValue);
 
-                return new CategoryInfoMessage($filterName, $filterValue);
+                return pluginApp(CategoryInfoMessage::class, [$filterName, $filterValue]);
             case self::TYPE_VENDOR:
                 static::assertFilterNameAndValueAreNotEmpty($filterName, $filterValue);
 
-                return new VendorInfoMessage($filterName, $filterValue);
+                return pluginApp(VendorInfoMessage::class, [$filterName, $filterValue]);
             case self::TYPE_SHOPPING_GUIDE:
                 static::assertWizardIsNotEmpty($query);
 
-                return new ShoppingGuideInfoMessage($query);
+                return pluginApp(ShoppingGuideInfoMessage::class, [$query]);
             case self::TYPE_DEFAULT:
-                return new DefaultInfoMessage();
+                return pluginApp(DefaultInfoMessage::class);
             default:
-                throw new InvalidArgumentException(sprintf('Unknown query info message type "%s".', $type));
+                throw pluginApp(InvalidArgumentException::class, [sprintf('Unknown query info message type "%s".', $type)]);
         }
     }
 
