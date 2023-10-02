@@ -1,33 +1,34 @@
 # Release Notes for Findologic
 
+## 5.1.2 (2023-09-25)
+
+### Fixed
+- [PLENTY-480] A bug was fixed, where a range slider of the same filter could not be rendered twice.
+
 ## 5.1.1 (2023-06-19)
 
-## Behoben
-
+### Fixed
 - [PLENTY-478] A bug was fixed, where an exception was thrown for category pages with SSR.
 
 ## 5.1.0 (2023-05-09)
 
-## Hinzugefügt
-
+### Added
 - [PLENTY-474] Re-added the container link for the filters.
 
-## Behoben
-
+### Fixed
 - [PLENTY-473] A bug was fixed, where the wrong sorting was applied for the search.
 
 ## 5.0.0 (2023-04-17)
 
-## Added
-
+### Added
 * [PLENTY-335] The plugin components are now rendered on the server side, if configured for Plenty.
 
 ## 4.1.0 (2023-01-10)
 
-## Added
+### Added
 * [PLENTY-458] The amount of decimal places for range sliders can now be configured within the plugin configuration.
 
-## Fixed
+### Fixed
 * [PLENTY-462] A bug has been fixed, where the relevance sorting was not available when configuring a category for the search results.
 
 ## 4.0.8 (2022-10-10)
