@@ -28,7 +28,8 @@
     <div class="row fl-range-slider-row">
       <div class="col-md-9 col-sm-9 col-xs-12">
         <div
-          :id="sanitizedFacetId"
+          :id=sanitizedFacetId
+          ref="slider"
           class="fl-range-slider"
         />
       </div>
@@ -59,6 +60,7 @@ import { FacetAware, TemplateOverridable } from '../../../shared/interfaces';
 import { computed, defineComponent, onMounted, ref, watch } from '@vue/composition-api';
 import UrlBuilder, { PriceFacetValue } from '../../../shared/UrlBuilder';
 import TranslationService from '../../../shared/TranslationService';
+import {  } from 'vuex';
 import * as noUiSlider from 'nouislider';
 
 interface ItemRangeSliderProps extends TemplateOverridable, FacetAware { }
@@ -203,6 +205,7 @@ export default defineComponent({
       valueFrom,
       valueTo,
       isDisabled,
+      sanitizedFacetId,
       isLoading,
       triggerFilter,
       watch,
