@@ -43,7 +43,7 @@ class SearchService implements SearchServiceInterface
 
     protected CategoryService $categoryService;
 
-    protected bool|null $aliveTestResult = null;
+    protected bool|null $aliveTestResult;
 
     protected bool $useMainVariationAsFallback = false;
 
@@ -61,6 +61,8 @@ class SearchService implements SearchServiceInterface
             Plugin::PLUGIN_NAMESPACE,
             Plugin::PLUGIN_IDENTIFIER
         );
+
+        $this->aliveTestResult = null;
     }
 
     /**
