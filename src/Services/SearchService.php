@@ -43,7 +43,7 @@ class SearchService implements SearchServiceInterface
 
     protected CategoryService $categoryService;
 
-    protected bool|null $aliveTestResult;
+    protected bool|null $aliveTestResult = null;
 
     protected bool $useMainVariationAsFallback = false;
 
