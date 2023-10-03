@@ -10,6 +10,7 @@ use FINDOLOGIC\Api\Responses\Response;
 use Findologic\Components\PluginConfig;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
+use Plenty\Plugin\Log\Loggable;
 
 /**
  * Class Client
@@ -17,6 +18,7 @@ use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
  */
 class Client
 {
+    use Loggable;
     private LibraryCallContract $libraryCall;
 
     protected LoggerContract $logger;
@@ -42,6 +44,7 @@ class Client
 
         try {
             $response = $this->libraryCall->call('Findologic::findologic_client', [ 'request' => $request, 'shop_key' => $this->pluginConfig->getShopKey()]);
+            $this->getLogger(__METHOD__)->error('response', $response);
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.', ['request' => $request->getParams()]);
             $this->logger->logException($e);
