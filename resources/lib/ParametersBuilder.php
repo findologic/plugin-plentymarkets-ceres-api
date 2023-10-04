@@ -1,10 +1,6 @@
 <?php
 
-namespace Findologic\Api\Request;
-
 use Exception;
-use Findologic\Constants\Plugin;
-use Findologic\Helpers\Tags;
 use FINDOLOGIC\Api\Requests\Request;
 use FINDOLOGIC\Api\Requests\SearchNavigation\SearchNavigationRequest;
 use Plenty\Log\Contracts\LoggerContract;
@@ -39,18 +35,14 @@ class ParametersBuilder
      */
     protected $logger;
 
-    /**
-     * @var Tags
-     */
-    protected $tagsHelper;
 
     public function __construct(
         LoggerFactory $loggerFactory,
         Tags $tagsHelper
     ) {
         $this->logger = $loggerFactory->getLogger(
-            Plugin::PLUGIN_NAMESPACE,
-            Plugin::PLUGIN_IDENTIFIER
+            SdkRestApi::getParam('pluginNamespace'),
+            SdkRestApi::getParam('pluginIdentifier')
         );
         $this->tagsHelper = $tagsHelper;
     }
@@ -99,11 +91,11 @@ class ParametersBuilder
         }
 
         if ($this->tagsHelper->isTagPage($httpRequest)) {
-            $request->setParam('selected', ['cat_id' => [$this->tagsHelper->getTagIdFromUri($httpRequest)]]);
+            $request->addParam('selected', ['cat_id' => [$this->tagsHelper->getTagIdFromUri($httpRequest)]]);
         }
 
         if ($category && ($categoryFullName = $this->getCategoryName($category))) {
-            $request->setParam('selected', ['cat' => [$categoryFullName]]);
+            $request->addParam('selected', ['cat' => [$categoryFullName]]);
         }
 
         if ($externalSearch->sorting !== 'item.score' &&
