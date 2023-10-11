@@ -38,7 +38,7 @@ class Client
      * @param Request $request
      * @return Response|null
      */
-    public function call(Request $request): ?Response
+    public function call(Request $request): ?array
     {
         $response = null;
 

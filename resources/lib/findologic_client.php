@@ -1,6 +1,23 @@
 <?php
 
-$config = new \FINDOLOGIC\Api\Config(SdkRestApi::getParam('shop_key'));
-$findologicClient = new \FINDOLOGIC\Api\Client($config);
+require_once __DIR__ . '/Components/ApiResponse.php';
+require_once __DIR__ . '/Components/RequestBuilder.php';
+use FINDOLOGIC\Api\Client;
+use FINDOLOGIC\Api\Config;
+use FindologicApi\Components\ApiResponse;
+use FindologicApi\Components\RequestBuilder;
 
-return $findologicClient->send(SdkRestApi::getParam('request'));
+try {
+    $config = new Config(SdkRestApi::getParam('shop_key'));
+    $findologicClient = new Client($config);
+
+    if(SdkRestApi::getParam('aliveRequest')){
+        $request = (new RequestBuilder())->buildAliveRequest();
+    }
+    else $request = (new RequestBuilder())->setDefaultValues()->setSearchParams();
+
+    $response = new ApiResponse($findologicClient->send($request));
+    return ['response'=> (array)$response];
+} catch (\Exception $e) {
+    return ['error' => $e->getMessage()];
+}

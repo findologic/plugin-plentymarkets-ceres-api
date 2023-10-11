@@ -9,23 +9,17 @@ use Plenty\Plugin\Log\Loggable;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
-use Findologic\Struct\LandingPage;
 use Plenty\Plugin\ConfigRepository;
-use FINDOLOGIC\Api\Requests\Request;
 use Plenty\Plugin\Log\LoggerFactory;
-use Findologic\Api\Response\Response;
 use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Exception\AliveException;
 use Plenty\Log\Contracts\LoggerContract;
 use Findologic\Api\Request\RequestBuilder;
-use FINDOLOGIC\Components\SmartDidYouMean;
 use Findologic\Api\Response\ResponseParser;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Services\Search\ParametersHandler;
-use FINDOLOGIC\Api\Responses\Response as ApiResponse;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
-use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
 use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
 
 /**
