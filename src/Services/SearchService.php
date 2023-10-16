@@ -11,6 +11,7 @@ use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Struct\SmartDidYouMean;
 use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Exception\AliveException;
 use Plenty\Log\Contracts\LoggerContract;
@@ -157,8 +158,8 @@ class SearchService implements SearchServiceInterface
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
-        $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
+        // $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
+        // $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
 
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
@@ -174,7 +175,7 @@ class SearchService implements SearchServiceInterface
             $total = $this->responseParser->parseQuery()['count'];
         }
 
-        $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
+        // $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
     }
 
     /**
@@ -240,7 +241,7 @@ class SearchService implements SearchServiceInterface
         }
 
         $apiRequest = $this->requestBuilder->build(
-            Request::TYPE_SEARCH,
+            RequestBuilder::TYPE_SEARCH,
             $request,
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
@@ -549,7 +550,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @return ApiResponse|null
      */
-    private function requestWithRetries(Request $request): ?ApiResponse
+    private function requestWithRetries(array $request): ?array
     {
         $i = 0;
         do {

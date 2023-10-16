@@ -8,48 +8,54 @@ use FINDOLOGIC\Api\Responses\Json10\Properties\Variant;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Metadata;
 use FINDOLOGIC\Api\Responses\Json10\Properties\ItemVariant;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\FilterValue;
 
-class ApiResult extends Result{
+class ApiResult extends Result
+{
 
-        /** @var Metadata */
-        private $metadata;
+    /** @var Metadata */
+    private $metadata;
 
-        /** @var Item[] */
-        private $items = [];
-    
-        /** @var Variant */
-        private $variant;
-    
-        /** @var Filter[] */
-        private $mainFilters;
-    
-        /** @var Filter[] */
-        private $otherFilters;
+    /** @var Item[] */
+    private $items = [];
 
-    function __construct(Result $result) {
+    /** @var Variant */
+    private $variant;
+
+    /** @var Filter[] */
+    private $mainFilters;
+
+    /** @var Filter[] */
+    private $otherFilters;
+
+    function __construct(Result $result)
+    {
         $this->metadata = $result->getMetadata();
         $this->items = $result->getItems();
         $this->variant = $result->getVariant();
         $this->mainFilters = $result->getMainFilters();
         $this->otherFilters = $result->getOtherFilters();
     }
-    public function __toArray(){
+    public function __toArray()
+    {
         return [
             'metadata' => [
-                'search_concept' => $this->metadata->getSearchConcept(),
-                'effective_query' => $this->metadata->getEffectiveQuery(),
-                'total_results' => $this->metadata->getTotalResults(),
-                'currency_symbol' => $this->metadata->getCurrencySymbol()
+                'searchConcept' => $this->metadata->getSearchConcept(),
+                'effectiveQuery' => $this->metadata->getEffectiveQuery(),
+                'totalResults' => $this->metadata->getTotalResults(),
+                'currencySymbol' => $this->metadata->getCurrencySymbol(),
+                'landingPage' => (array) $this->metadata->getLandingPage(),
+                'promotion' => (array) $this->metadata->getPromotion()
             ],
-            'items' => array_map(fn(Item $item)=>[
-                'highlighted_name' => $item->getHighlightedName(),
-                'product_placement' => $item->getProductPlacement(),
-                'push_rules' => $item->getPushRules(),
-                'variants' => array_map(fn(ItemVariant $variant)=>(array)$variant, $item->getVariants())
+            'items' => array_map(fn (Item $item) => [
+                'highlightedName' => $item->getHighlightedName(),
+                'productPlacement' => $item->getProductPlacement(),
+                'pushRules' => $item->getPushRules(),
+                'variants' => array_map(fn (ItemVariant $variant) => (array)$variant, $item->getVariants())
             ], $this->items),
             'variant' => (array)$this->variant,
-            'main_filters' => array_map(fn(Filter $filter)=>(array)$filter, $this->mainFilters),
-            'other_filters' => array_map(fn(Filter $filter)=>(array)$filter, $this->otherFilters)
+            'mainFilters' => array_map(fn (Filter $filter) => [...(array)$filter, 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->mainFilters),
+            'otherFilters' => array_map(fn (Filter $filter) => [...(array)$filter, 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->otherFilters)
         ];
     }
 }

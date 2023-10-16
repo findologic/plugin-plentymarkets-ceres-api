@@ -12,7 +12,7 @@ use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use Plenty\Plugin\Http\Request;
 use FINDOLOGIC\Api\Responses\Response;
 
-class FallbackSearchService //implements SearchServiceInterface
+class FallbackSearchService implements SearchServiceInterface
 {
     /**
      * @var ResponseParser
@@ -25,124 +25,124 @@ class FallbackSearchService //implements SearchServiceInterface
         $this->responseParser = $responseParser;
     }
 
-    // /**
-    //  * @param Request $request
-    //  * @param ExternalSearchOptions $searchOptions
-    //  */
-    // public function handleSearchOptions(
-    //     Request $request,
-    //     ExternalSearchOptions $searchOptions
-    // ) {
-    //     // Search options are always provided by Findologic,
-    //     // therefore no actual implementation is needed.
-    // }
+    /**
+     * @param Request $request
+     * @param ExternalSearchOptions $searchOptions
+     */
+    public function handleSearchOptions(
+        Request $request,
+        ExternalSearchOptions $searchOptions
+    ) {
+        // Search options are always provided by Findologic,
+        // therefore no actual implementation is needed.
+    }
 
-    // /**
-    //  * @inheritdoc
-    //  */
-    // public function handleSearchQuery(Request $request, ExternalSearch $externalSearch)
-    // {
-    //     $searchResults = $this->getSearchResults($request, $externalSearch);
-    //     $response = $this->createResponseFromSearchResult($searchResults);
+    /**
+     * @inheritdoc
+     */
+    public function handleSearchQuery(Request $request, ExternalSearch $externalSearch)
+    {
+        $searchResults = $this->getSearchResults($request, $externalSearch);
+        $response = $this->createResponseFromSearchResult($searchResults);
 
-    //     return $response;
-    // }
+        return $response;
+    }
 
-    // /**
-    //  * @param Request $request
-    //  * @param ExternalSearch $externalSearch
-    //  * @return array
-    //  */
-    // public function getSearchResults(Request $request, ExternalSearch $externalSearch)
-    // {
-    //     $itemListOptions = [
-    //         'page' => $externalSearch->page,
-    //         'itemsPerPage' => $externalSearch->itemsPerPage,
-    //         'sorting' => $externalSearch->sorting,
-    //         'facets' => $request->get('facets', ''),
-    //         'categoryId' => $externalSearch->categoryId,
-    //         'query' => $externalSearch->searchString,
-    //         'priceMin' => $request->get('priceMin', 0),
-    //         'priceMax' => $request->get('priceMax', 0),
-    //     ];
+    /**
+     * @param Request $request
+     * @param ExternalSearch $externalSearch
+     * @return array
+     */
+    public function getSearchResults(Request $request, ExternalSearch $externalSearch)
+    {
+        $itemListOptions = [
+            'page' => $externalSearch->page,
+            'itemsPerPage' => $externalSearch->itemsPerPage,
+            'sorting' => $externalSearch->sorting,
+            'facets' => $request->get('facets', ''),
+            'categoryId' => $externalSearch->categoryId,
+            'query' => $externalSearch->searchString,
+            'priceMin' => $request->get('priceMin', 0),
+            'priceMax' => $request->get('priceMax', 0),
+        ];
 
-    //     $defaultSearchFactory = [
-    //         'itemList' => CategoryItems::getSearchFactory($itemListOptions),
-    //         'facets'   => Facets::getSearchFactory($itemListOptions)
-    //     ];
+        $defaultSearchFactory = [
+            'itemList' => CategoryItems::getSearchFactory($itemListOptions),
+            'facets'   => Facets::getSearchFactory($itemListOptions)
+        ];
 
-    //     /** @var ItemSearchService $itemSearchService */
-    //     $itemSearchService = pluginApp(ItemSearchService::class);
+        /** @var ItemSearchService $itemSearchService */
+        $itemSearchService = pluginApp(ItemSearchService::class);
 
-    //     return $itemSearchService->getResults($defaultSearchFactory);
-    // }
+        return $itemSearchService->getResults($defaultSearchFactory);
+    }
 
     /**
      * @param array $searchResults
      * @return Response
      */
-    // public function createResponseFromSearchResult(array $searchResults)
-    // {
-    //     $response = $this->responseParser->getResponse();
-    //     $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
-    //     $this->setFilters($searchResults['facets'], $response);
-    //     $this->setTotal($searchResults['itemList']['total'], $response);
+    public function createResponseFromSearchResult(array $searchResults)
+    {
+        $response = $this->responseParser->getResponse();
+        $this->setSearchDataProducts($searchResults['itemList']['documents'], $response);
+        $this->setFilters($searchResults['facets'], $response);
+        $this->setTotal($searchResults['itemList']['total'], $response);
 
-    //     return $response;
-    // }
+        return $response;
+    }
 
     /**
      * @param array $searchResults
      * @param Response $response
      */
-    // private function setSearchDataProducts(array $searchResults, Response $response)
-    // {
-    //     $getObjectFromSearchResultItemsDocuments = function ($document) {
-    //         return [
-    //             'id' => $document['id'],
-    //             'relevance' => $document['score'],
-    //             'direct' => '0',
-    //             'properties' => [
-    //                 Plugin::API_PROPERTY_VARIATION_ID => $document['id']
-    //             ]
-    //         ];
-    //     };
-    //     $products = array_map(
-    //         $getObjectFromSearchResultItemsDocuments,
-    //         $searchResults
-    //     );
+    private function setSearchDataProducts(array $searchResults, Response $response)
+    {
+        $getObjectFromSearchResultItemsDocuments = function ($document) {
+            return [
+                'id' => $document['id'],
+                'relevance' => $document['score'],
+                'direct' => '0',
+                'properties' => [
+                    Plugin::API_PROPERTY_VARIATION_ID => $document['id']
+                ]
+            ];
+        };
+        $products = array_map(
+            $getObjectFromSearchResultItemsDocuments,
+            $searchResults
+        );
 
-    //     $response->setData(
-    //         Response::DATA_PRODUCTS,
-    //         $products
-    //     );
-    // }
+        $response->setData(
+            Response::DATA_PRODUCTS,
+            $products
+        );
+    }
 
-    // /**
-    //  * @param string $dataResults
-    //  * @param Response $response
-    //  */
-    // private function setSearchDataResults(string $dataResults, Response $response)
-    // {
-    //     $count = [];
-    //     $count['count'] = (string)$dataResults;
-    //     $response->setData(Response::DATA_RESULTS, $count);
-    // }
+    /**
+     * @param string $dataResults
+     * @param Response $response
+     */
+    private function setSearchDataResults(string $dataResults, Response $response)
+    {
+        $count = [];
+        $count['count'] = (string)$dataResults;
+        $response->setData(Response::DATA_RESULTS, $count);
+    }
 
-    // /**
-    //  * @param array $dataResults
-    //  * @param Response $response
-    //  */
-    // private function setFilters(array $dataResults, Response $response)
-    // {
-    //     $response->setData(Response::DATA_FILTERS, $dataResults);
-    // }
+    /**
+     * @param array $dataResults
+     * @param Response $response
+     */
+    private function setFilters(array $dataResults, Response $response)
+    {
+        $response->setData(Response::DATA_FILTERS, $dataResults);
+    }
 
-    // /**
-    //  * @return void
-    //  */
-    // private function setTotal(int $totalCount, Response $response)
-    // {
-    //     $response->setData(Response::DATA_RESULTS, ['count' => $totalCount]);
-    // }
+    /**
+     * @return void
+     */
+    private function setTotal(int $totalCount, Response $response)
+    {
+        $response->setData(Response::DATA_RESULTS, ['count' => $totalCount]);
+    }
 }

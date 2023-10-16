@@ -6,7 +6,7 @@ class LandingPage
 {
     protected string $link;
 
-    public function __construct(string $link)
+    public function __construct(string $link, string $name)
     {
         $this->link = $link;
     }

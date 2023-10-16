@@ -7,21 +7,17 @@ use Findologic\Constants\Plugin;
 use Findologic\Struct\Promotion;
 use Findologic\Struct\LandingPage;
 use Plenty\Plugin\Log\LoggerFactory;
-use Findologic\Services\SearchService;
+use Findologic\Struct\SmartDidYouMean;
 use Findologic\Components\PluginConfig;
-use FINDOLOGIC\Struct\FiltersExtension;
+use Findologic\Struct\FiltersExtension;
+use Findologic\Api\Response\Result\Item;
 use Plenty\Log\Contracts\LoggerContract;
-use FINDOLOGIC\Components\SmartDidYouMean;
+// use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\FinSearch\Struct\Pagination;
 use Symfony\Component\HttpFoundation\Request;
 use Plenty\Plugin\Http\Request as HttpRequest;
-// use Findologic\Api\Response\Parser\FiltersParser;
-use FINDOLOGIC\Api\Responses\Json10\Json10Response;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessage;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessageFactory;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Promotion as ApiPromotion;
 
 /**
  * Class ResponseParser
@@ -31,7 +27,7 @@ class ResponseParser
 {
     // protected FiltersParser $filtersParser;
 
-    protected Json10Response $response;
+    protected Response $response;
 
     protected LoggerContract $logger;
 
@@ -40,11 +36,9 @@ class ResponseParser
     protected HttpRequest $request;
 
     public function __construct(
-        // FiltersParser $filtersParser,
         LoggerFactory $loggerFactory,
         PluginConfig $pluginConfig
     ) {
-        // $this->filtersParser = $filtersParser;
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
         $this->pluginConfig = $pluginConfig;
     }
@@ -67,23 +61,12 @@ class ResponseParser
 
     public function getLandingPageExtension(): ?LandingPage
     {
-        $landingPage = $this->response->getResult()->getMetadata()->getLandingPage();
-        if ($landingPage instanceof LandingPage) {
-            return pluginApp(LandingPage::class, [$landingPage->getUrl()]);
-        }
-
-        return null;
+        return $this->response->getResult()->getMetadata()->getLandingPage();
     }
 
     public function getPromotionExtension(): ?Promotion
     {
-        $promotion = $this->response->getResult()->getMetadata()->getPromotion();
-
-        if ($promotion instanceof ApiPromotion) {
-            return pluginApp(Promotion::class, [$promotion->getImageUrl(), $promotion->getUrl()]);
-        }
-
-        return null;
+        return $this->response->getResult()->getMetadata()->getPromotion();
     }
 
     public function parseTotalResults() :int
@@ -113,13 +96,13 @@ class ResponseParser
         );
 
         $filtersExtension = pluginApp(FiltersExtension::class);
-        foreach ($apiFilters as $apiFilter) {
-            $filter = Filter::getInstance($apiFilter);
+        // foreach ($apiFilters as $apiFilter) {
+        //     $filter = Filter::getInstance($apiFilter);
 
-            if ($filter && count($filter->getValues()) >= 1) {
-                $filtersExtension->addFilter($filter);
-            }
-        }
+        //     if ($filter && count($filter->getValues()) >= 1) {
+        //         $filtersExtension->addFilter($filter);
+        //     }
+        // }
 
         return $filtersExtension;
     }
@@ -209,7 +192,7 @@ class ResponseParser
     /**
      * Get the value of response
      */
-    public function getResponse(): Json10Response
+    public function getResponse(): Response
     {
         return $this->response;
     }
@@ -219,9 +202,9 @@ class ResponseParser
      *
      * @return  self
      */ 
-    public function setResponse($response)
+    public function setResponse(?array $response)
     {
-        $this->response = $response;
+        if($response) $this->response = new Response($response);
 
         return $this;
     }

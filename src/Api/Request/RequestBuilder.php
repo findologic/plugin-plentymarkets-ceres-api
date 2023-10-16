@@ -5,8 +5,6 @@ namespace Findologic\Api\Request;
 use Findologic\Helpers\Tags;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
-use FINDOLOGIC\Api\Requests\Request;
-use FINDOLOGIC\Api\Requests\SearchNavigation\SearchNavigationRequest;
 use Plenty\Plugin\Log\LoggerFactory;
 use Findologic\Components\PluginConfig;
 use Plenty\Log\Contracts\LoggerContract;
@@ -21,6 +19,11 @@ use Plenty\Modules\System\Models\WebstoreConfiguration;
  */
 class RequestBuilder
 {
+    public const TYPE_SEARCH = 0;
+    public const TYPE_NAVIGATION = 1;
+    public const TYPE_SUGGEST_V3 = 2;
+    public const TYPE_ALIVETEST = 3;
+    public const TYPE_ITEM_UPDATE = 4;
     const DEFAULT_REQUEST_TYPE = 'request';
     const ALIVE_REQUEST_TYPE = 'alive';
     const CATEGORY_REQUEST_TYPE = 'category';
@@ -43,11 +46,6 @@ class RequestBuilder
     protected $logger;
 
     /**
-     * @var Request|bool $request
-     */
-    protected $request;
-
-    /**
      * @var WebstoreConfiguration
      */
     private $webstoreConfig;
@@ -61,6 +59,8 @@ class RequestBuilder
      * @var PluginInfoService
      */
     private $pluginInfoService;
+
+    private $request = [];
 
     public function __construct(
         ParametersBuilder $parametersBuilder,
@@ -83,35 +83,26 @@ class RequestBuilder
      * @param HttpRequest $httpRequest
      * @param ExternalSearch $externalSearch
      * @param int|null $category
-     * @return bool|Request
+     * @return array
      */
     public function build(int $requestType, HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
     {
-        $request = $this->createRequestObject($requestType);
-        $request = $this->setDefaultValues($request, $this->getRequestType($httpRequest, $category));
-        $request = $this->parametersBuilder->setSearchParams($request, $httpRequest, $externalSearch, $category);
+        $this->request['requestType'] = $requestType;
+        $this->setDefaultValues($this->getRequestType($httpRequest, $category));
+        $this->request = array_merge($this->request, $this->parametersBuilder->setSearchParams($httpRequest, $externalSearch, $category));
 
-        return $request;
+        return $this->request;
     }
 
     /**
-     * @return bool|Request
+     * @return self
      */
     public function buildAliveRequest()
     {
-        $request = $this->createRequestObject(Request::TYPE_ALIVETEST);
-        $request->setShopUrl($this->getUrl(self::ALIVE_REQUEST_TYPE));
-        $request->setShopkey($this->pluginConfig->getShopKey());
-
-        return $request;
-    }
-
-    /**
-     * @return Request
-     */
-    public function createRequestObject(int $requestType): Request
-    {
-        return Request::getInstance($requestType);
+        $this->request['shopUrl'] = $this->getUrl(self::ALIVE_REQUEST_TYPE);
+        $this->request['shopKey'] = $this->pluginConfig->getShopKey();
+        $this->request['aliveRequest'] = true;
+        return $this;
     }
 
     /**
@@ -182,24 +173,22 @@ class RequestBuilder
     }
 
     /**
-     * @param Request|SearchNavigationRequest $request
      * @param string $requestType
      * @return Request
      */
-    protected function setDefaultValues(Request $request, string $requestType): Request
+    protected function setDefaultValues(string $requestType): self
     {
-        $request->setShopUrl($this->getUrl($requestType));
-        $request->setShopkey($this->pluginConfig->getShopKey());
-        $request->setOutputAdapter(Plugin::API_OUTPUT_ADAPTER);
-        $request->setRevision($this->getPluginVersion());
+        $this->request['shopUrl'] = $this->getUrl($requestType);
+        $this->request['shopKey'] = $this->pluginConfig->getShopKey();
+        $this->request['revision'] = $this->getPluginVersion();
 
         if ($this->getUserIp()) {
-            $request->setUserIp($this->getUserIp());
+            $this->request['userIp'] = $this->getUserIp();
         }
-        $request->setShopType(self::SHOPTYPE);
-        $request->setShopVersion($this->pluginInfoService->getPluginVersion('ceres'));
+        $this->request['shopType'] = self::SHOPTYPE;
+        $this->request['shopVersion'] = $this->pluginInfoService->getPluginVersion('ceres');
 
-        return $request;
+        return $this;
     }
 
     /**

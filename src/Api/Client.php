@@ -4,7 +4,6 @@ namespace Findologic\Api;
 
 use Exception;
 use Findologic\Constants\Plugin;
-use FINDOLOGIC\Api\Requests\Request;
 use Plenty\Plugin\Log\LoggerFactory;
 use FINDOLOGIC\Api\Responses\Response;
 use Findologic\Components\PluginConfig;
@@ -35,18 +34,18 @@ class Client
     }
 
     /**
-     * @param Request $request
+     * @param array $request
      * @return Response|null
      */
-    public function call(Request $request): ?array
+    public function call(array $request): ?array
     {
         $response = null;
 
         try {
-            $response = $this->libraryCall->call('Findologic::findologic_client', [ 'request' => $request, 'shop_key' => $this->pluginConfig->getShopKey()]);
+            $response = $this->libraryCall->call('Findologic::findologic_client', $request);
             $this->getLogger(__METHOD__)->error('response', $response);
         } catch (Exception $e) {
-            $this->logger->error('Exception while handling search query.', ['request' => $request->getParams()]);
+            $this->logger->error('Exception while handling search query.', ['request' => $request['params']]);
             $this->logger->logException($e);
         }
 
