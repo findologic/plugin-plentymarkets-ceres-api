@@ -1,7 +1,5 @@
 <?php
 
-namespace FindologicApi\Components;
-
 use InvalidArgumentException;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;

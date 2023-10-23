@@ -1,7 +1,5 @@
 <?php
 
-namespace FindologicApi\Components;
-
 require_once __DIR__ . '/ApiResult.php';
 
 // use FindologicApi\Components\ApiResult;

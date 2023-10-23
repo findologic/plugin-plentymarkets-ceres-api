@@ -1,7 +1,5 @@
 <?php
 
-namespace FindologicApi\Constants;
-
 class Plugin
 {
     const PLUGIN_NAMESPACE = 'Findologic';
