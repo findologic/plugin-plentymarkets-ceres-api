@@ -18,6 +18,6 @@ try {
 
     $response = new ApiResponse($findologicClient->send($request));
     return ['response'=> (array)$response];
-} catch (\Exception $e) {
-    return ['error' => $e->getMessage()];
+} catch (\Throwable $t) {
+    return ['error' => (string)$e];
 }
