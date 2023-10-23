@@ -2,9 +2,6 @@
 
 namespace Findologic\Api\Response\Parser;
 
-use FINDOLOGIC\Api\Responses\Json10\Json10Response;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\RangeSliderFilter;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Services\Image;
 use Plenty\Plugin\ConfigRepository;

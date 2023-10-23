@@ -5,7 +5,6 @@ namespace Findologic\Api;
 use Exception;
 use Findologic\Constants\Plugin;
 use Plenty\Plugin\Log\LoggerFactory;
-use FINDOLOGIC\Api\Responses\Response;
 use Findologic\Components\PluginConfig;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
@@ -35,7 +34,7 @@ class Client
 
     /**
      * @param array $request
-     * @return Response|null
+     * @return array
      */
     public function call(array $request): ?array
     {
