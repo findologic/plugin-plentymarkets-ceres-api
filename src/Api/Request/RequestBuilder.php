@@ -102,7 +102,7 @@ class RequestBuilder
         $this->request['shopUrl'] = $this->getUrl(self::ALIVE_REQUEST_TYPE);
         $this->request['shopKey'] = $this->pluginConfig->getShopKey();
         $this->request['aliveRequest'] = true;
-        return $this;
+        return $this->request;
     }
 
     /**
