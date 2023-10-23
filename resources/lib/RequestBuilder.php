@@ -23,6 +23,7 @@ class RequestBuilder extends Request
 
     public function __construct()
     {
+        parent::__construct();
         $this->request = Request::getInstance(\SdkRestApi::getParam('requestType'));
     }
 
