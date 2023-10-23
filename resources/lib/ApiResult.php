@@ -1,6 +1,5 @@
 <?php
 
-use InvalidArgumentException;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Variant;
@@ -92,7 +91,7 @@ class ApiResult extends Result
             case $filter instanceof ImageFilter:
                 return [ 'type' => 'vendorImageFilter'];
             default:
-                throw new InvalidArgumentException('The submitted filter is unknown.');
+                throw new \Exception('The submitted filter is unknown.');
         }
     }
 }
