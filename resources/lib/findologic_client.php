@@ -19,5 +19,5 @@ try {
     $response = new ApiResponse($findologicClient->send($request));
     return ['response'=> (array)$response];
 } catch (\Throwable $t) {
-    return ['error' => (string)$e];
+    return ['error' => (string)$t];
 }
