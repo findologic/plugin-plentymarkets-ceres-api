@@ -111,7 +111,7 @@ class Middleware extends PlentyMiddleware
                     $showCategoryFilter = false;
                 }
 
-                if ($isInSearchOrCategoryPage && !$this->searchService->aliveTest()) {
+                if ($isInSearchOrCategoryPage && !true) {
                     return false;
                 }
 
@@ -141,7 +141,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.search',
             function (TemplateContainer $templateContainer) {
-                if ($this->searchService->aliveTest()) {
+                if (true) {
                     $templateContainer->setContext(FindologicItemSearchContext::class);
                     return false;
                 }
@@ -153,7 +153,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.category.item',
             function (TemplateContainer $templateContainer) {
-                if ($this->searchService->aliveTest()) {
+                if (true) {
                     $templateContainer->setContext(FindologicCategoryItemContext::class);
                     return false;
                 }
@@ -165,7 +165,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'Ceres.Search.Options',
             function (ExternalSearchOptions $searchOptions) use ($request) {
-                if ($this->searchService->aliveTest()) {
+                if (true) {
                     $this->searchService->handleSearchOptions($request, $searchOptions);
                 }
             }
@@ -173,7 +173,7 @@ class Middleware extends PlentyMiddleware
 
         $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
             if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter' &&
-                $this->searchService->aliveTest()
+                true
             ) {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
@@ -182,7 +182,7 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'Ceres.Search.Query',
             function (ExternalSearch $externalSearch) use ($request) {
-                if ($this->searchService->aliveTest()) {
+                if (true) {
                     $this->searchService->handleSearchQuery($request, $externalSearch);
                 }
             }
