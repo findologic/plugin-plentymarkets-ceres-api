@@ -7,7 +7,7 @@ namespace Findologic\Api\Response\Json10\Filter;
 class Media
 {
     public function __construct(
-        private readonly ?string $url
+        private ?string $url
     ) {
     }
 

@@ -75,10 +75,10 @@ abstract class Filter extends BaseFilter
 
     private static function handleLabelTextFilter(ResultFilter $filter): LabelTextFilter
     {
-        $customFilter = new LabelTextFilter($filter->getName(), $filter->getDisplayName());
+        $customFilter = pluginApp(LabelTextFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(new FilterValue($item->getName(), $item->getName(), $filter->getName()));
+            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]));
         }
 
         return $customFilter;
@@ -86,10 +86,10 @@ abstract class Filter extends BaseFilter
 
     private static function handleSelectDropdownFilter(ResultFilter $filter): SelectDropdownFilter
     {
-        $customFilter = new SelectDropdownFilter($filter->getName(), $filter->getDisplayName());
+        $customFilter = pluginApp(SelectDropdownFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(new FilterValue($item->getName(), $item->getName(), $filter->getName()));
+            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]));
         }
 
         return $customFilter;
@@ -97,7 +97,7 @@ abstract class Filter extends BaseFilter
 
     private static function handleRangeSliderFilter(ResultFilter $filter): RangeSliderFilter
     {
-        $customFilter = new RangeSliderFilter($filter->getName(), $filter->getDisplayName());
+        $customFilter = pluginApp(RangeSliderFilter::class,[$filter->getName(), $filter->getDisplayName()]);
         $unit = $filter->getUnit();
         $step = $filter->getStepSize();
 
@@ -124,7 +124,7 @@ abstract class Filter extends BaseFilter
         }
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(new FilterValue($item->getName(), $item->getName(), $filter->getName()));
+            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]));
         }
 
         if ($filter->getTotalRange()['min'] && $filter->getTotalRange()['max']) {
@@ -150,18 +150,18 @@ abstract class Filter extends BaseFilter
 
     private static function handleColorPickerFilter(ResultFilter $filter): ColorPickerFilter
     {
-        $customFilter = new ColorPickerFilter($filter->getName(), $filter->getDisplayName());
+        $customFilter = pluginApp(ColorPickerFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         /** @var ResultFilterValue $item */
         foreach ($filter->getValues() as $item) {
             $imageUrls[$item->getName()] = $item->getImage();
 
-            $filterValue = new ColorFilterValue($item->getName(), $item->getName(), $filter->getName());
+            $filterValue = pluginApp(ColorFilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]);
             $filterValue->setColorHexCode($item->getColor());
 
             self::setColorPickerDisplayType($item, $filterValue);
 
-            $media = new Media($item->getImage());
+            $media = pluginApp(Media::class,[$item->getImage()]);
             $filterValue->setMedia($media);
 
             $customFilter->addValue($filterValue);
@@ -172,13 +172,13 @@ abstract class Filter extends BaseFilter
 
     private static function handleVendorImageFilter(ResultFilter $filter): VendorImageFilter
     {
-        $customFilter = new VendorImageFilter($filter->getName(), $filter->getDisplayName());
+        $customFilter = pluginApp(VendorImageFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         /** @var ApiImageFilterValue $item */
         foreach ($filter->getValues() as $item) {
             $imageUrls[$item->getName()] = $item->getImage();
-            $filterValue = new ImageFilterValue($item->getName(), $item->getName(), $filter->getName());
-            $media = new Media($item->getImage());
+            $filterValue = pluginApp(ImageFilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]);
+            $media = pluginApp(Media::class,[$item->getImage()]);
             $filterValue->setMedia($media);
             $customFilter->addValue($filterValue);
             $filterValue->setDisplayType('media');
@@ -189,7 +189,7 @@ abstract class Filter extends BaseFilter
 
     private static function handleCategoryFilter(ResultFilter $filter): CategoryFilter
     {
-        $categoryFilter = new CategoryFilter($filter->getName(), $filter->getDisplayName());
+        $categoryFilter = pluginApp(CategoryFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         foreach ($filter->getValues() as $item) {
             $levels = explode('_', $item->getName());
@@ -197,7 +197,7 @@ abstract class Filter extends BaseFilter
 
             foreach ($levels as $level) {
                 if (!$foundValue = $currentValue->searchValue($level)) {
-                    $foundValue = new CategoryFilterValue($level, $level);
+                    $foundValue = pluginApp(CategoryFilterValue::class,[$level, $level]);
                     $foundValue->setSelected($item->isSelected());
                     $foundValue->setFrequency($item->getFrequency());
 
@@ -218,7 +218,7 @@ abstract class Filter extends BaseFilter
             return null;
         }
 
-        $customFilter = new RatingFilter($filter->getName(), $filter->getDisplayName());
+        $customFilter = pluginApp(RatingFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         if ($totalRange['max']) {
             $customFilter->setMaxPoints(ceil($totalRange['max']));
@@ -226,7 +226,7 @@ abstract class Filter extends BaseFilter
 
         /** @var ApiRangeSliderValue $item */
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(new FilterValue($item->getName(), $item->getName()));
+            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName()]));
         }
 
         return $customFilter;

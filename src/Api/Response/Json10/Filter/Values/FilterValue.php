@@ -21,8 +21,8 @@ class FilterValue
      * The uuid is generated only for the values in which we need a unique ID for selection in storefront
      */
     public function __construct(
-        private readonly string $id,
-        private readonly string $name,
+        private string $id,
+        private string $name,
         ?string $filterName = null
     ) {
         $this->translated = new TranslatedName($name);
