@@ -263,7 +263,7 @@ class SearchService implements SearchServiceInterface
             $request = $this->requestBuilder->buildAliveRequest();
             $response = $this->client->call($request);
 
-            $this->aliveTestResult = ($response === Plugin::API_ALIVE_RESPONSE_BODY);
+            $this->aliveTestResult = ($response['response'] === Plugin::API_ALIVE_RESPONSE_BODY);
         }
 
         return $this->aliveTestResult;
