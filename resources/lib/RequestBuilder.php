@@ -21,10 +21,24 @@ class RequestBuilder extends Request
 
     private Request|SearchNavigationRequest $request;
 
-    public function __construct()
+    public function __construct(
+        private string $requestType = null, 
+        private string $shopUrl = null, 
+        private string $shopKey = null, 
+        private string $revision = null,
+        private string $userIp = null,
+        private string $shopType = null,
+        private string $shopVersion = null,
+        private array $params = null,
+        private array $externalSearch = null,
+        private $isTagPage = null,
+        private $tagId = null,
+        private string $categoryName = null,
+        private $category = null,
+        )
     {
         parent::__construct();
-        $this->request = Request::getInstance(\SdkRestApi::getParam('requestType'));
+        $this->request = Request::getInstance($this->requestType);
     }
 
     public function getBody()
@@ -33,34 +47,33 @@ class RequestBuilder extends Request
     }
 
     public function buildAliveRequest() : self {
-        $this->request->setShopUrl(\SdkRestApi::getParam('shopUrl'));
-        $this->request->setShopkey(\SdkRestApi::getParam('shopKey'));
+        $this->request->setShopUrl($this->shopUrl);
+        $this->request->setShopkey($this->shopKey);
 
         return $this;
     }
 
     public function setDefaultValues(): self
     {
-        $this->request->setShopUrl(\SdkRestApi::getParam('shopUrl'));
-        $this->request->setShopkey(\SdkRestApi::getParam('shopKey'));
+        $this->request->setShopUrl($this->shopUrl);
+        $this->request->setShopkey($this->shopKey);
         $this->request->setOutputAdapter(OutputAdapter::JSON_10);
-        $this->request->setRevision(\SdkRestApi::getParam('revision'));
+        $this->request->setRevision($this->revision);
 
-        if (\SdkRestApi::getParam('userIp')) {
-            $this->request->setUserIp(\SdkRestApi::getParam('userIp'));
+        if ($this->userIp) {
+            $this->request->setUserIp($this->userIp);
         }
-        $this->request->setShopType(\SdkRestApi::getParam('shopType'));
-        $this->request->setShopVersion(\SdkRestApi::getParam('shopVersion'));
+        $this->request->setShopType($this->shopType);
+        $this->request->setShopVersion($this->shopVersion);
 
         return $this;
     }
 
     public function setSearchParams(
     ):self {
-        $parameters = \SdkRestApi::getParam('params');
+        $parameters = $this->params;
 
-        $externalSearch = \SdkRestApi::getParam('externalSearch');
-        $this->request->setQuery($externalSearch['searchString']);
+        $this->request->setQuery($$this->externalSearch['searchString']);
         $this->request->addProperty(Plugin::API_PROPERTY_VARIATION_ID);
 
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
@@ -76,28 +89,28 @@ class RequestBuilder extends Request
             $this->request->setForceOriginalQuery(true);
         }
 
-        if (\SdkRestApi::getParam('isTagPage')) {
-            $this->request->addIndividualParam('selected', ['cat_id' => [\SdkRestApi::getParam('tagId')]], Request::SET_VALUE);
+        if ($this->isTagPage) {
+            $this->request->addIndividualParam('selected', ['cat_id' => [$this->tagId]], Request::SET_VALUE);
         }
 
-        if (\SdkRestApi::getParam('category') && ($categoryFullName = \SdkRestApi::getParam('categoryName'))) {
+        if ($this->category && ($categoryFullName = $this->categoryName)) {
             $this->request->addIndividualParam('selected', ['cat' => [$categoryFullName]], Request::SET_VALUE);
         }
 
-        if ($externalSearch->sorting !== 'item.score' &&
-            in_array($externalSearch->sorting, Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)
+        if ($$this->externalSearch['sorting'] !== 'item.score' &&
+            in_array($$this->externalSearch['sorting'], Plugin::API_SORT_ORDER_AVAILABLE_OPTIONS)
         ) {
-            $this->request->setOrder(self::SORT_MAPPING[$externalSearch['sorting']]);
+            $this->request->setOrder(self::SORT_MAPPING[$$this->externalSearch['sorting']]);
         }
 
-        $this->setPagination($externalSearch, $parameters);
+        $this->setPagination($parameters);
 
         return $this;
     }
 
-    protected function setPagination(array $externalSearch, array $parameters):void
+    protected function setPagination(array $parameters):void
     {
-        if ($externalSearch['categoryId'] !== null &&
+        if ($$this->externalSearch['categoryId'] !== null &&
             !array_key_exists(Plugin::API_PARAMETER_ATTRIBUTES, $parameters)
         ) {
             $this->request->setFirst(0);
@@ -105,10 +118,10 @@ class RequestBuilder extends Request
             return;
         }
 
-        $this->request->setCount($externalSearch['itemsPerPage']);
+        $this->request->setCount($$this->externalSearch['itemsPerPage']);
 
-        if ($externalSearch['page'] > 1) {
-            $this->request->setFirst(($externalSearch['page'] - 1) * $externalSearch['itemsPerPage']);
+        if ($$this->externalSearch['page'] > 1) {
+            $this->request->setFirst(($$this->externalSearch['page'] - 1) * $$this->externalSearch['itemsPerPage']);
         }
     }
 
