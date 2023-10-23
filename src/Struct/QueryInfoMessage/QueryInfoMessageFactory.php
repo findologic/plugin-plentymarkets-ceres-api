@@ -3,18 +3,18 @@
 namespace Findologic\Struct\QueryInfoMessage;
 
 use Findologic\Constants\Plugin;
-use FINDOLOGIC\Response\Filter\BaseFilter;
-use FINDOLOGIC\Api\Responses\Json10\Json10Response;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter as ApiFilter;
+use Findologic\Api\Response\Response;
+use Findologic\Api\Response\Result\Filter;
+use Findologic\Api\Response\Filter\BaseFilter;
 
 class QueryInfoMessageFactory
 {
 
-    protected Json10Response $response;
+    protected Response $response;
     protected string $queryString;
 
     public function __construct(
-        Json10Response $response,
+        Response $response,
         string $queryString
     ) {
         $this->response = $response;
@@ -57,7 +57,7 @@ class QueryInfoMessageFactory
 
     private function buildVendorQueryInfoMessage(string $value): VendorInfoMessage
     {
-        /** @var ApiFilter[] $filters */
+        /** @var Filter[] $filters */
         $filters = array_merge(
             $this->response->getResult()->getMainFilters() ?? [],
             $this->response->getResult()->getOtherFilters() ?? []
@@ -65,7 +65,7 @@ class QueryInfoMessageFactory
 
         $vendorFilter = array_filter(
             $filters,
-            static fn (ApiFilter $filter) => $filter->getName() === BaseFilter::VENDOR_FILTER_NAME
+            static fn (Filter $filter) => $filter->getName() === BaseFilter::VENDOR_FILTER_NAME
         );
 
         if ($vendorFilter && count($vendorFilter) === 1) {
@@ -133,7 +133,7 @@ class QueryInfoMessageFactory
 
     private function buildCategoryQueryInfoMessage(array $params): CategoryInfoMessage
     {
-        /** @var ApiFilter[] $filters */
+        /** @var Filter[] $filters */
         $filters = array_merge(
             $this->response->getResult()->getMainFilters() ?? [],
             $this->response->getResult()->getOtherFilters() ?? []
@@ -144,7 +144,7 @@ class QueryInfoMessageFactory
 
         $catFilter = array_filter(
             $filters,
-            static fn (ApiFilter $filter) => $filter->getName() === BaseFilter::CAT_FILTER_NAME
+            static fn (Filter $filter) => $filter->getName() === BaseFilter::CAT_FILTER_NAME
         );
 
         if ($catFilter && count($catFilter) === 1) {

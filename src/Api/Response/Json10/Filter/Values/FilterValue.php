@@ -1,6 +1,10 @@
 <?php
 
-namespace Findologic\Api\Response\Filter;
+declare(strict_types=1);
+
+namespace Findologic\Api\Response\Json10\Filter\Values;
+
+use Findologic\Api\Response\Json10\Filter\TranslatedName;
 
 class FilterValue
 {
@@ -10,9 +14,6 @@ class FilterValue
 
     private TranslatedName $translated;
 
-    private string $id;
-    private string $name;
-
     /**
      * @param string|null $filterName
      * This can be null because we do not want to set this for all filter values.
@@ -20,13 +21,11 @@ class FilterValue
      * The uuid is generated only for the values in which we need a unique ID for selection in storefront
      */
     public function __construct(
-        string $id,
-        string $name,
+        private readonly string $id,
+        private readonly string $name,
         ?string $filterName = null
     ) {
-        $this->id = $id;
-        $this->name = $name;
-        $this->translated = pluginApp(TranslatedName::class, $name);
+        $this->translated = new TranslatedName($name);
         if ($filterName !== null) {
             $this->uuid = sprintf('%s%s%s', $filterName, self::DELIMITER, $id);
         }

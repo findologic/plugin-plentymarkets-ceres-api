@@ -2,16 +2,25 @@
 
 namespace FindologicApi\Components;
 
+use InvalidArgumentException;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Variant;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Metadata;
 use FINDOLOGIC\Api\Responses\Json10\Properties\ItemVariant;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\ColorFilter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\ImageFilter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\LabelFilter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\SelectFilter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\RangeSliderFilter;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\FilterValue;
 
 class ApiResult extends Result
 {
+    public const RATING_FILTER_NAME = 'rating';
+    public const CAT_FILTER_NAME = 'cat';
+    public const VENDOR_FILTER_NAME = 'vendor';
 
     /** @var Metadata */
     private $metadata;
@@ -54,8 +63,38 @@ class ApiResult extends Result
                 'variants' => array_map(fn (ItemVariant $variant) => (array)$variant, $item->getVariants())
             ], $this->items),
             'variant' => (array)$this->variant,
-            'mainFilters' => array_map(fn (Filter $filter) => [...(array)$filter, 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->mainFilters),
-            'otherFilters' => array_map(fn (Filter $filter) => [...(array)$filter, 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->otherFilters)
+            'mainFilters' => array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->mainFilters),
+            'otherFilters' => array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->otherFilters)
         ];
+    }
+
+    private function getFilterExtras(Filter|RangeSliderFilter $filter):array
+    {
+        switch (true) {
+            case $filter instanceof LabelFilter:
+                if ($filter->getName() === self::CAT_FILTER_NAME) {
+                    return [ 'type' => 'labelFilter'];
+                }
+
+                return [ 'type' => 'labelFilter'];
+            case $filter instanceof SelectFilter:
+                if ($filter->getName() === self::CAT_FILTER_NAME) {
+                    return [ 'type' => 'selectFilter'];
+                }
+
+                return [ 'type' => 'selectFilter'];
+            case $filter instanceof RangeSliderFilter:
+                if ($filter->getName() === self::RATING_FILTER_NAME) {
+                    return [ 'type' => 'rangeSliderFilter'];
+                }
+
+                return [ 'type' => 'rangeSliderFilter', 'totalRange' => (array)$filter->getTotalRange(), 'selectedRange' => (array)$filter->getSelectedRange()];
+            case $filter instanceof ColorFilter:
+                return [ 'type' => 'colorPickerFilter'];
+            case $filter instanceof ImageFilter:
+                return [ 'type' => 'vendorImageFilter'];
+            default:
+                throw new InvalidArgumentException('The submitted filter is unknown.');
+        }
     }
 }

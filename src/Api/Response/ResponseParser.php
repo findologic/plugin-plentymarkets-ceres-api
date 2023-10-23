@@ -16,6 +16,7 @@ use Plenty\Log\Contracts\LoggerContract;
 use Findologic\FinSearch\Struct\Pagination;
 use Symfony\Component\HttpFoundation\Request;
 use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Api\Response\Json10\Filter\Filter;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessage;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessageFactory;
 
@@ -96,13 +97,13 @@ class ResponseParser
         );
 
         $filtersExtension = pluginApp(FiltersExtension::class);
-        // foreach ($apiFilters as $apiFilter) {
-        //     $filter = Filter::getInstance($apiFilter);
+        foreach ($apiFilters as $apiFilter) {
+            $filter = Filter::getInstance($apiFilter);
 
-        //     if ($filter && count($filter->getValues()) >= 1) {
-        //         $filtersExtension->addFilter($filter);
-        //     }
-        // }
+            if ($filter && count($filter->getValues()) >= 1) {
+                $filtersExtension->addFilter($filter);
+            }
+        }
 
         return $filtersExtension;
     }

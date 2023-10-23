@@ -2,15 +2,15 @@
 
 namespace Findologic\Services;
 
+use Plenty\Plugin\Http\Request;
 use Ceres\Helper\ExternalSearch;
+use Findologic\Constants\Plugin;
+use Findologic\Api\Response\Response;
 use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Api\Response\ResponseParser;
-use Findologic\Constants\Plugin;
-use Plenty\Modules\Webshop\ItemSearch\SearchPresets\CategoryItems;
 use Plenty\Modules\Webshop\ItemSearch\SearchPresets\Facets;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
-use Plenty\Plugin\Http\Request;
-use FINDOLOGIC\Api\Responses\Response;
+use Plenty\Modules\Webshop\ItemSearch\SearchPresets\CategoryItems;
 
 class FallbackSearchService //implements SearchServiceInterface
 {

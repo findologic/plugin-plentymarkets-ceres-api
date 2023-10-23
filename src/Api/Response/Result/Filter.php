@@ -16,6 +16,18 @@ class Filter
 
     protected ?string $combinationOperation;
 
+    protected float $stepSize;
+
+    protected string $unit;
+
+    protected array $totalRange;
+
+    protected array $selectedRange;
+
+    protected int $pinnedFilterValueCount;
+
+    protected string $type;
+
     /** @var FilterValue[] */
     protected $values = [];
 
@@ -27,13 +39,19 @@ class Filter
         $this->cssClass = $filter['cssClass'];
         $this->noAvailableFiltersText = $filter['noAvailableFiltersText'];
         $this->combinationOperation = $filter['combinationOperation'];
+        $this->type = $filter['type'];
+        $this->stepSize = $filter['stepSize'];
+        $this->unit = $filter['unit'];
+        $this->totalRange = $filter['totalRange'];
+        $this->selectedRange = $filter['selectedRange'];
+        $this->pinnedFilterValueCount = $filter['pinnedFilterValueCount'];
         $this->values = array_map(fn ($filterValue) => pluginApp(FilterValue::class, $filterValue), $filter['values']);
     }
 
     /**
      * Get the value of name
      */
-    public function getName()
+    public function getName():string
     {
         return $this->name;
     }
@@ -41,7 +59,7 @@ class Filter
     /**
      * Get the value of displayName
      */
-    public function getDisplayName()
+    public function getDisplayName():string
     {
         return $this->displayName;
     }
@@ -49,7 +67,7 @@ class Filter
     /**
      * Get the value of selectMode
      */
-    public function getSelectMode()
+    public function getSelectMode():string
     {
         return $this->selectMode;
     }
@@ -57,7 +75,7 @@ class Filter
     /**
      * Get the value of cssClass
      */
-    public function getCssClass()
+    public function getCssClass():?string
     {
         return $this->cssClass;
     }
@@ -65,7 +83,7 @@ class Filter
     /**
      * Get the value of noAvailableFiltersText
      */
-    public function getNoAvailableFiltersText()
+    public function getNoAvailableFiltersText():?string
     {
         return $this->noAvailableFiltersText;
     }
@@ -73,7 +91,7 @@ class Filter
     /**
      * Get the value of combinationOperation
      */
-    public function getCombinationOperation()
+    public function getCombinationOperation():?string
     {
         return $this->combinationOperation;
     }
@@ -81,8 +99,48 @@ class Filter
     /**
      * Get the value of values
      */
-    public function getValues()
+    public function getValues():array
     {
         return $this->values;
+    }
+
+    /**
+     * Get the value of type
+     */ 
+    public function getType():string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get the value of stepSize
+     */ 
+    public function getStepSize():float
+    {
+        return $this->stepSize;
+    }
+
+    /**
+     * Get the value of unit
+     */ 
+    public function getUnit():string
+    {
+        return $this->unit;
+    }
+
+    /**
+     * Get the value of totalRange
+     */ 
+    public function getTotalRange():array
+    {
+        return $this->totalRange;
+    }
+
+    /**
+     * Get the value of selectedRange
+     */ 
+    public function getSelectedRange():array
+    {
+        return $this->selectedRange;
     }
 }

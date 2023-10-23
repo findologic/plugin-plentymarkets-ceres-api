@@ -1,15 +1,14 @@
 <?php
 
-namespace Findologic\Api\Response\Filter;
+declare(strict_types=1);
+
+namespace Findologic\Api\Response\Json10\Filter;
 
 class TranslatedName
 {
-    private string $name;
-
     public function __construct(
-        string $name
+        private readonly string $name
     ) {
-        $this->name = $name;
     }
 
     public function getName(): string
