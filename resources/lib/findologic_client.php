@@ -4,8 +4,8 @@ require_once __DIR__ . '/Components/ApiResponse.php';
 require_once __DIR__ . '/Components/RequestBuilder.php';
 use FINDOLOGIC\Api\Client;
 use FINDOLOGIC\Api\Config;
-use FindologicApi\Components\ApiResponse;
-use FindologicApi\Components\RequestBuilder;
+// use FindologicApi\Components\ApiResponse;
+// use FindologicApi\Components\RequestBuilder;
 
 try {
     $config = new Config(SdkRestApi::getParam('shop_key'));

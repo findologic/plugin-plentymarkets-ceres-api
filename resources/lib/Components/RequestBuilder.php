@@ -3,7 +3,7 @@
 namespace FindologicApi\Components;
 
 require_once __DIR__ . '/Constants/Plugin.php';
-use FindologicApi\Constants\Plugin;
+// use FindologicApi\Constants\Plugin;
 use FINDOLOGIC\Api\Requests\Request;
 use FINDOLOGIC\Api\Definitions\OutputAdapter;
 use FINDOLOGIC\Api\Requests\SearchNavigation\SearchNavigationRequest;

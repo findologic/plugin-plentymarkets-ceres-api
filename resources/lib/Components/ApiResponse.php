@@ -4,7 +4,7 @@ namespace FindologicApi\Components;
 
 require_once __DIR__ . '/ApiResult.php';
 
-use FindologicApi\Components\ApiResult;
+// use FindologicApi\Components\ApiResult;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Request;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;
