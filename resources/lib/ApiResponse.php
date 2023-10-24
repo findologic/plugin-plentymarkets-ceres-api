@@ -24,7 +24,7 @@ class ApiResponse extends Json10Response
     {
         return [
             'result' => (array)new ApiResult($this->result),
-            'request' => [...(array)$this->request, 'order' => (array)$this->request->getOrder()]
+            'request' => array_merge((array)$this->request, ['order' => (array)$this->request->getOrder()])
         ];
     }
 }
