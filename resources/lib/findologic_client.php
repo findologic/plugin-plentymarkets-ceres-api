@@ -39,7 +39,7 @@ function setDefaultValues(Request|SearchNavigationRequest $request): Request
 
 function setSearchParams(Request|SearchNavigationRequest $request): Request
 {
-    $parameters = \SdkRestApi::getParam('params');
+    $parameters = \SdkRestApi::getParam('parameters');
 
     $request->setQuery(\SdkRestApi::getParam('externalSearch')['searchString']);
     $request->addProperty('variation_id');
