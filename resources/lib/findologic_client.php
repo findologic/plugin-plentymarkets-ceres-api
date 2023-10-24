@@ -26,13 +26,14 @@ try {
     $categoryName = \SdkRestApi::getParam('categoryName');
     $category = \SdkRestApi::getParam('category');
     $aliveRequest = \SdkRestApi::getParam('aliveRequest');
-    if ($aliveRequest) {
-        $request = (new RequestBuilder($requestType, $shopUrl, $shopKey))->buildAliveRequest();
-    } else $request = (new RequestBuilder($requestType, $shopUrl, $shopKey, $revision, $userIp, $shopType, $shopVersion, $params, $externalSearch, $isTagPage, $tagId, $categoryName, $category))->setDefaultValues()->setSearchParams();
+    // if ($aliveRequest) {
+    //     $request = (new RequestBuilder($requestType, $shopUrl, $shopKey))->buildAliveRequest();
+    // } else 
+    $request = (new RequestBuilder($requestType, $shopUrl, $shopKey, $revision, $userIp, $shopType, $shopVersion, $params, $externalSearch, $isTagPage, $tagId, $categoryName, $category))->setDefaultValues()->setSearchParams();
 
     $apiResponse = $findologicClient->send($request);
     //$response = new ApiResponse($apiResponse);
-    return ['response' => json_encode($apiResponse)];
+    return ['response' => $apiResponse->getRawResponse()];
 } catch (\Throwable | \Exception $t) {
     return ['error' => (string)$t, 'request' => (array)$request];
 }
