@@ -60,10 +60,36 @@ class ApiResult extends Result
                 'variants' => array_map(fn (ItemVariant $variant) => (array)$variant, $item->getVariants())
             ], $this->items),
             'variant' => (array)$this->variant,
-            'mainFilters' => array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->mainFilters),
-            'otherFilters' => array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->otherFilters)
+            'mainFilters' => $this->getFilters($this->mainFilters),//array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->mainFilters),
+            'otherFilters' => $this->getFilters($this->otherFilters)//array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->otherFilters)
         ];
     }
+
+    private function getFilters(array $filters):array
+    {
+        $filtered = [];
+
+        foreach ($filters as $filter) {
+            /** @var $filter Filter */
+            $filtered[] = array_merge($this->getFilterExtras($filter), array_merge((array)$filter, $this->getFilterValues($filter->getValues())));
+
+        }
+
+        return $filtered;
+    }
+
+    private function getFilterValues(array $filterValues):array
+    {
+        $filtered = [];
+
+        foreach ($filterValues as $filterValue) {
+            /** @var $filter FilterValue */
+            $filtered[] = (array)$filterValue;
+
+        }
+
+        return $filtered;
+    }    
 
     private function getFilterExtras(Filter|RangeSliderFilter $filter):array
     {
