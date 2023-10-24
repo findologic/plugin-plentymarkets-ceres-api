@@ -67,14 +67,14 @@ class ParametersBuilder
         $category = null
     ) {
         $request = [];
-        // $request['parameters'] = (array) $httpRequest->all();
-        // $request['externalSearch'] = [
-        //     'searchString' => $externalSearch->searchString,
-        //     'sorting' => $externalSearch->sorting,
-        //     'itemsPerPage' => $externalSearch->itemsPerPage,
-        //     'page' => $externalSearch->page,
-        //     'categoryId' => $externalSearch->categoryId
-        // ];
+        $request['parameters'] = (array) $httpRequest->all();
+        $request['externalSearch'] = [
+            'searchString' => $externalSearch->searchString,
+            'sorting' => $externalSearch->sorting,
+            'itemsPerPage' => $externalSearch->itemsPerPage,
+            'page' => $externalSearch->page,
+            'categoryId' => $externalSearch->categoryId
+        ];
 
         $request['isTagPage'] = $this->tagsHelper->isTagPage($httpRequest);
         $request['tagId'] = $this->tagsHelper->getTagIdFromUri($httpRequest);
