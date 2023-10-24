@@ -22,19 +22,19 @@ class RequestBuilder extends Request
     private Request|SearchNavigationRequest $request;
 
     public function __construct(
-        private string $requestType = null, 
-        private string $shopUrl = null, 
-        private string $shopKey = null, 
-        private string $revision = null,
-        private string $userIp = null,
-        private string $shopType = null,
-        private string $shopVersion = null,
-        private array $params = null,
-        private array $externalSearch = null,
+        private ?string $requestType = null, 
+        private ?string $shopUrl = null, 
+        private ?string $shopKey = null, 
+        private ?string $revision = null,
+        private ?string $userIp = null,
+        private ?string $shopType = null,
+        private ?string $shopVersion = null,
+        private ?array $params = null,
+        private ?array $externalSearch = null,
         private $isTagPage = null,
         private $tagId = null,
-        private string $categoryName = null,
-        private $category = null,
+        private ?string $categoryName = null,
+        private $category = null
         )
     {
         parent::__construct();
