@@ -33,7 +33,7 @@ try {
 
     $apiResponse = $findologicClient->send($request);
     //$response = new ApiResponse($apiResponse);
-    return ['response' => $apiResponse->getRawResponse()];
+    return ['response' => 'no thx'];
 } catch (\Throwable | \Exception $t) {
     return ['error' => (string)$t, 'request' => (array)$request];
 }
