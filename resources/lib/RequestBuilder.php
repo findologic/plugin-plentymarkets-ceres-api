@@ -97,51 +97,51 @@ class RequestBuilder extends Request
 
     public function setSearchParams(): self
     {
-        // $parameters = $this->params;
+        $parameters = $this->params;
 
-        // $this->request->setQuery($$this->externalSearch['searchString']);
-        // $this->request->addProperty('variation_id');
+        $this->request->setQuery($this->externalSearch['searchString']);
+        $this->request->addProperty('variation_id');
 
-        // if (isset($parameters['attrib'])) {
-        //     $attributes = $parameters['attrib'];
-        //     foreach ($attributes as $filterName => $value) {
-        //         $this->request->addAttribute($filterName, $value);
-        //     }
-        // }
+        if (isset($parameters['attrib'])) {
+            $attributes = $parameters['attrib'];
+            foreach ($attributes as $filterName => $value) {
+                $this->request->addAttribute($filterName, $value);
+            }
+        }
 
-        // if (
-        //     isset($parameters['forceOriginalQuery'])
-        //     && $parameters['forceOriginalQuery'] != false
-        // ) {
-        //     $this->request->setForceOriginalQuery(true);
-        // }
+        if (
+            isset($parameters['forceOriginalQuery'])
+            && $parameters['forceOriginalQuery'] != false
+        ) {
+            $this->request->setForceOriginalQuery(true);
+        }
 
-        // if ($this->isTagPage) {
-        //     $this->request->addIndividualParam('selected', ['cat_id' => [$this->tagId]], Request::SET_VALUE);
-        // }
+        if ($this->isTagPage) {
+            $this->request->addIndividualParam('selected', ['cat_id' => [$this->tagId]], Request::SET_VALUE);
+        }
 
-        // if ($this->category && ($categoryFullName = $this->categoryName)) {
-        //     $this->request->addIndividualParam('selected', ['cat' => [$categoryFullName]], Request::SET_VALUE);
-        // }
+        if ($this->category && ($categoryFullName = $this->categoryName)) {
+            $this->request->addIndividualParam('selected', ['cat' => [$categoryFullName]], Request::SET_VALUE);
+        }
 
-        // if (
-        //     $$this->externalSearch['sorting'] !== 'item.score' &&
-        //     in_array($$this->externalSearch['sorting'], [
-        //         'sorting.price.avg_asc',
-        //         'sorting.price.avg_desc',
-        //         'texts.name1_asc',
-        //         'texts.name1_desc',
-        //         'variation.createdAt_desc',
-        //         'variation.createdAt_asc',
-        //         'item.score',
-        //         'variation.position_asc',
-        //         'variation.position_desc'
-        //     ])
-        // ) {
-        //     $this->request->setOrder(self::SORT_MAPPING[$$this->externalSearch['sorting']]);
-        // }
+        if (
+            $this->externalSearch['sorting'] !== 'item.score' &&
+            in_array($this->externalSearch['sorting'], [
+                'sorting.price.avg_asc',
+                'sorting.price.avg_desc',
+                'texts.name1_asc',
+                'texts.name1_desc',
+                'variation.createdAt_desc',
+                'variation.createdAt_asc',
+                'item.score',
+                'variation.position_asc',
+                'variation.position_desc'
+            ])
+        ) {
+            $this->request->setOrder(self::SORT_MAPPING[$this->externalSearch['sorting']]);
+        }
 
-        // $this->setPagination($parameters);
+        $this->setPagination($parameters);
 
         return $this;
     }
@@ -149,7 +149,7 @@ class RequestBuilder extends Request
     protected function setPagination(array $parameters): void
     {
         if (
-            $$this->externalSearch['categoryId'] !== null &&
+            $this->externalSearch['categoryId'] !== null &&
             !array_key_exists('attrib', $parameters)
         ) {
             $this->request->setFirst(0);
@@ -157,10 +157,10 @@ class RequestBuilder extends Request
             return;
         }
 
-        $this->request->setCount($$this->externalSearch['itemsPerPage']);
+        $this->request->setCount($this->externalSearch['itemsPerPage']);
 
-        if ($$this->externalSearch['page'] > 1) {
-            $this->request->setFirst(($$this->externalSearch['page'] - 1) * $$this->externalSearch['itemsPerPage']);
+        if ($this->externalSearch['page'] > 1) {
+            $this->request->setFirst(($this->externalSearch['page'] - 1) * $this->externalSearch['itemsPerPage']);
         }
     }
 }
