@@ -20,25 +20,50 @@ class RequestBuilder extends Request
     ];
 
     private Request|SearchNavigationRequest $request;
+    private ?string $requestType = null;
+    private ?string $shopUrl = null;
+    private ?string $shopKey = null;
+    private ?string $revision = null;
+    private ?string $userIp = null;
+    private ?string $shopType = null;
+    private ?string $shopVersion = null;
+    private ?array $params = null;
+    private ?array $externalSearch = null;
+    private $isTagPage = null;
+    private $tagId = null;
+    private ?string $categoryName = null;
+    private $category = null;
 
     public function __construct(
-        private ?string $requestType = null, 
-        private ?string $shopUrl = null, 
-        private ?string $shopKey = null, 
-        private ?string $revision = null,
-        private ?string $userIp = null,
-        private ?string $shopType = null,
-        private ?string $shopVersion = null,
-        private ?array $params = null,
-        private ?array $externalSearch = null,
-        private $isTagPage = null,
-        private $tagId = null,
-        private ?string $categoryName = null,
-        private $category = null
-        )
-    {
+        $requestType = null,
+        $shopUrl = null,
+        $shopKey = null,
+        $revision = null,
+        $userIp = null,
+        $shopType = null,
+        $shopVersion = null,
+        $params = null,
+        $externalSearch = null,
+        $isTagPage = null,
+        $tagId = null,
+        $categoryName = null,
+        $category = null
+    ) {
         parent::__construct();
         $this->request = Request::getInstance($this->requestType);
+        $this->requestType = $requestType;
+        $this->shopUrl = $shopUrl;
+        $this->shopKey = $shopKey;
+        $this->revision = $revision;
+        $this->userIp = $userIp;
+        $this->shopType = $shopType;
+        $this->shopVersion = $shopVersion;
+        $this->params = $params;
+        $this->externalSearch = $externalSearch;
+        $this->isTagPage = $isTagPage;
+        $this->tagId = $tagId;
+        $this->categoryName = $categoryName;
+        $this->category = $category;
     }
 
     public function getBody()
@@ -46,7 +71,8 @@ class RequestBuilder extends Request
         return parent::getBody();
     }
 
-    public function buildAliveRequest() : self {
+    public function buildAliveRequest(): self
+    {
         $this->request->setShopUrl($this->shopUrl);
         $this->request->setShopkey($this->shopKey);
 
@@ -69,8 +95,8 @@ class RequestBuilder extends Request
         return $this;
     }
 
-    public function setSearchParams(
-    ):self {
+    public function setSearchParams(): self
+    {
         $parameters = $this->params;
 
         $this->request->setQuery($$this->externalSearch['searchString']);
@@ -83,7 +109,8 @@ class RequestBuilder extends Request
             }
         }
 
-        if (isset($parameters['forceOriginalQuery'])
+        if (
+            isset($parameters['forceOriginalQuery'])
             && $parameters['forceOriginalQuery'] != false
         ) {
             $this->request->setForceOriginalQuery(true);
@@ -97,7 +124,8 @@ class RequestBuilder extends Request
             $this->request->addIndividualParam('selected', ['cat' => [$categoryFullName]], Request::SET_VALUE);
         }
 
-        if ($$this->externalSearch['sorting'] !== 'item.score' &&
+        if (
+            $$this->externalSearch['sorting'] !== 'item.score' &&
             in_array($$this->externalSearch['sorting'], [
                 'sorting.price.avg_asc',
                 'sorting.price.avg_desc',
@@ -118,9 +146,10 @@ class RequestBuilder extends Request
         return $this;
     }
 
-    protected function setPagination(array $parameters):void
+    protected function setPagination(array $parameters): void
     {
-        if ($$this->externalSearch['categoryId'] !== null &&
+        if (
+            $$this->externalSearch['categoryId'] !== null &&
             !array_key_exists('attrib', $parameters)
         ) {
             $this->request->setFirst(0);
@@ -134,5 +163,4 @@ class RequestBuilder extends Request
             $this->request->setFirst(($$this->externalSearch['page'] - 1) * $$this->externalSearch['itemsPerPage']);
         }
     }
-
 }
