@@ -36,7 +36,7 @@ class SearchService implements SearchServiceInterface
 
     protected LoggerContract $logger;
 
-    protected CategoryService $categoryService;
+    protected $categoryService;
 
     protected bool|null $aliveTestResult;
 
