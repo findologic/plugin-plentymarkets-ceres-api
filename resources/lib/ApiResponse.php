@@ -23,7 +23,7 @@ class ApiResponse extends Json10Response
     public function __toArray()
     {
         return [
-            'result' => (array)new ApiResult($this->result),
+            'result' => (new ApiResult($this->result))->__toArray(),
             'request' => array_merge((array)$this->request, ['order' => (array)$this->request->getOrder()])
         ];
     }
