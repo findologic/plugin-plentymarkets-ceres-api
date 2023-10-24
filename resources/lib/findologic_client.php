@@ -32,7 +32,7 @@ try {
 
     $apiResponse = $findologicClient->send($request);
     $response = new ApiResponse($apiResponse);
-    return ['response' => $aliveRequest ? $apiResponse->getRawResponse() : (array)$response];
+    return ['response' => json_encode($response)];
 } catch (\Throwable | \Exception $t) {
     return ['error' => (string)$t, 'request' => (array)$request];
 }
