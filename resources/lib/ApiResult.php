@@ -54,7 +54,7 @@ class ApiResult extends Result
                 'promotion' => (array) $this->metadata->getPromotion()
             ],
             'items' => array_map(fn (Item $item) => [
-                'obj_vars' => get_object_vars($item),
+                'obj_vars' => $this->getItem($item),
                 'highlightedName' => $item->getHighlightedName(),
                 'productPlacement' => $item->getProductPlacement(),
                 'pushRules' => $item->getPushRules(),
@@ -64,6 +64,12 @@ class ApiResult extends Result
             'mainFilters' => $this->getFilters($this->mainFilters),//array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->mainFilters),
             'otherFilters' => $this->getFilters($this->otherFilters)//array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->otherFilters)
         ];
+    }
+
+    private function getItem(Item $item)
+    {
+        $reflectionClass = new ReflectionClass(Item::class);
+        return $reflectionClass->getMethods();
     }
 
     private function getFilters(array $filters):array
