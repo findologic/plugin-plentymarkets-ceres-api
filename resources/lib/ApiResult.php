@@ -54,7 +54,7 @@ class ApiResult extends Result
                 'promotion' => (array) $this->metadata->getPromotion()
             ],
             'items' => array_map(fn (Item $item) => [
-                'obj_vars' => $this->getItem($item),
+                'obj_vars' => $this->getObjectProperties($item),
                 'highlightedName' => $item->getHighlightedName(),
                 'productPlacement' => $item->getProductPlacement(),
                 'pushRules' => $item->getPushRules(),
@@ -66,10 +66,16 @@ class ApiResult extends Result
         ];
     }
 
-    private function getItem(Item $item)
+    private function getObjectProperties(mixed $item):array
     {
-        $reflectionClass = new ReflectionClass(Item::class);
-        return $reflectionClass->getMethods();
+        $mappedProperties = [];
+        $reflectionClass = new ReflectionClass(get_class($item));
+
+        foreach($reflectionClass->getProperties() as $property){
+            /** @var $property ReflectionProperty */
+            $mappedProperties[$property->getName()] = $property->getValue($item);
+        }
+        return $mappedProperties;
     }
 
     private function getFilters(array $filters):array
