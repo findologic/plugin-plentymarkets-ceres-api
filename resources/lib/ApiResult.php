@@ -66,16 +66,21 @@ class ApiResult extends Result
         ];
     }
 
-    private function getObjectProperties(mixed $item):array
+    private function getObjectProperties(mixed $item, $parentClass = null):array
     {
         $mappedProperties = [];
-        $reflectionClass = new ReflectionClass(get_class($item));
+        $reflectionClass = new ReflectionClass($parentClass ? $parentClass : get_class($item));
 
         foreach($reflectionClass->getProperties() as $property){
             /** @var $property ReflectionProperty */
             $property->setAccessible(true);
             $mappedProperties[$property->getName()] = $property->getValue($item);
         }
+
+        if($reflectionClass->getParentClass()){
+            array_merge($mappedProperties, $this->getObjectProperties($item, $reflectionClass->getParentClass()));
+        }
+
         return $mappedProperties;
     }
 
