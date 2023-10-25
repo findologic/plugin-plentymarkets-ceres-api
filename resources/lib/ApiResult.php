@@ -50,10 +50,11 @@ class ApiResult extends Result
                 'effectiveQuery' => $this->metadata->getEffectiveQuery(),
                 'totalResults' => $this->metadata->getTotalResults(),
                 'currencySymbol' => $this->metadata->getCurrencySymbol(),
-                'landingPage' => (array) $this->metadata->getLandingPage(),
+                'landingPage' => json_encode($this->metadata->getLandingPage()),
                 'promotion' => (array) $this->metadata->getPromotion()
             ],
             'items' => array_map(fn (Item $item) => [
+                'obj_vars' => get_object_vars($item),
                 'highlightedName' => $item->getHighlightedName(),
                 'productPlacement' => $item->getProductPlacement(),
                 'pushRules' => $item->getPushRules(),
