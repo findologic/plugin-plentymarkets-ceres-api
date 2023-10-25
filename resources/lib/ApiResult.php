@@ -66,10 +66,10 @@ class ApiResult extends Result
         ];
     }
 
-    private function getObjectProperties(mixed $item, $parentClass = null):array
+    private function getObjectProperties(mixed $item, ReflectionClass $parentClass = null):array
     {
         $mappedProperties = [];
-        $reflectionClass = new ReflectionClass($parentClass ? $parentClass : get_class($item));
+        $reflectionClass = $parentClass ? $parentClass : new ReflectionClass(get_class($item));
 
         foreach($reflectionClass->getProperties() as $property){
             /** @var $property ReflectionProperty */
