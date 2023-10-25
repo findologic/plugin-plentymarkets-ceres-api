@@ -73,6 +73,7 @@ class ApiResult extends Result
 
         foreach($reflectionClass->getProperties() as $property){
             /** @var $property ReflectionProperty */
+            $property->setAccessible(true);
             $mappedProperties[$property->getName()] = $property->getValue($item);
         }
         return $mappedProperties;
