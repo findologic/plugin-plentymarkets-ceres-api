@@ -46,13 +46,13 @@ class ApiResult extends Result implements Arrayable
                 'totalResults' => $this->metadata->getTotalResults(),
                 'currencySymbol' => $this->metadata->getCurrencySymbol(),
                 'landingPage' => [
-                    'name' => @$landingPage->getName(),
-                    'url' => @$landingPage->getUrl()
+                    'name' => $landingPage ? $landingPage->getName() : null,
+                    'url' => $landingPage ? $landingPage->getUrl() : null
                 ],
                 'promotion' => [
-                    'name' => @$promotion->getName(),
-                    'url' => @$promotion->getUrl(),
-                    'imageUrl' => @$promotion->getImageUrl(),
+                    'name' => $promotion ? $promotion->getName() : null,
+                    'url' => $promotion ? $promotion->getUrl() : null,
+                    'imageUrl' => $promotion ? $promotion->getImageUrl() : null,
                 ]
             ],
             'items' => array_map(fn (Item $item) => (new ApiItem($item))->toArray(), $this->items),
