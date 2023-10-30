@@ -1,24 +1,17 @@
 <?php
 
+require_once __DIR__ . '/ApiItem.php';
+require_once __DIR__ . '/ApiFilter.php';
+
+use Illuminate\Contracts\Support\Arrayable;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Variant;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Metadata;
-use FINDOLOGIC\Api\Responses\Json10\Properties\ItemVariant;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\ColorFilter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\ImageFilter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\LabelFilter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\SelectFilter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\RangeSliderFilter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\FilterValue;
 
-class ApiResult extends Result
+class ApiResult extends Result implements Arrayable
 {
-    public const RATING_FILTER_NAME = 'rating';
-    public const CAT_FILTER_NAME = 'cat';
-    public const VENDOR_FILTER_NAME = 'vendor';
-
     /** @var Metadata */
     private $metadata;
 
@@ -42,101 +35,35 @@ class ApiResult extends Result
         $this->mainFilters = $result->getMainFilters();
         $this->otherFilters = $result->getOtherFilters();
     }
-    public function __toArray()
+    public function toArray()
     {
+        $promotion = $this->metadata->getPromotion();
+        $landingPage = $this->metadata->getLandingPage();
         return [
             'metadata' => [
                 'searchConcept' => $this->metadata->getSearchConcept(),
                 'effectiveQuery' => $this->metadata->getEffectiveQuery(),
                 'totalResults' => $this->metadata->getTotalResults(),
                 'currencySymbol' => $this->metadata->getCurrencySymbol(),
-                'landingPage' => json_encode($this->metadata->getLandingPage()),
-                'promotion' => (array) $this->metadata->getPromotion()
+                'landingPage' => [
+                    'name' => $landingPage->getName(),
+                    'url' => $landingPage->getUrl()
+                ],
+                'promotion' => [
+                    'name' => $promotion->getName(),
+                    'url' => $promotion->getUrl(),
+                    'imageUrl' => $promotion->getImageUrl(),
+                ]
             ],
-            'items' => array_map(fn (Item $item) => [
-                'obj_vars' => $this->getObjectProperties($item),
-                'highlightedName' => $item->getHighlightedName(),
-                'productPlacement' => $item->getProductPlacement(),
-                'pushRules' => $item->getPushRules(),
-                'variants' => array_map(fn (ItemVariant $variant) => (array)$variant, $item->getVariants())
-            ], $this->items),
-            'variant' => (array)$this->variant,
-            'mainFilters' => $this->getFilters($this->mainFilters),//array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->mainFilters),
-            'otherFilters' => $this->getFilters($this->otherFilters)//array_map(fn (Filter $filter) => [...(array)$filter, ...$this->getFilterExtras($filter), 'filterValues' => array_map(fn (FilterValue $filterValue) => (array)$filterValue, $filter->getValues())], $this->otherFilters)
+            'items' => array_map(fn (Item $item) => (new ApiItem($item))->toArray(), $this->items),
+            'variant' => [
+                'name' => $this->variant->getName(),
+                'correctedQuery' => $this->variant->getCorrectedQuery(),
+                'improvedQuery' => $this->variant->getImprovedQuery(),
+                'didYouMeanQuery' => $this->variant->getDidYouMeanQuery(),
+            ],
+            'mainFilters' => array_map(fn (Filter $filter) => (new ApiFilter($filter))->toArray(), $this->mainFilters),
+            'otherFilters' => array_map(fn (Filter $filter) => (new ApiFilter($filter))->toArray(), $this->otherFilters)
         ];
-    }
-
-    private function getObjectProperties(mixed $item, ReflectionClass $parentClass = null):array
-    {
-        $mappedProperties = [];
-        $reflectionClass = $parentClass ? $parentClass : new ReflectionClass(get_class($item));
-
-        foreach($reflectionClass->getProperties() as $property){
-            /** @var $property ReflectionProperty */
-            $property->setAccessible(true);
-            $mappedProperties[$property->getName()] = $property->getValue($item);
-        }
-
-        if($reflectionClass->getParentClass()){
-            array_merge($mappedProperties, $this->getObjectProperties($item, $reflectionClass->getParentClass()));
-        }
-
-        return $mappedProperties;
-    }
-
-    private function getFilters(array $filters):array
-    {
-        $filtered = [];
-
-        foreach ($filters as $filter) {
-            /** @var $filter Filter */
-            $filtered[] = array_merge($this->getFilterExtras($filter), array_merge((array)$filter, $this->getFilterValues($filter->getValues())));
-
-        }
-
-        return $filtered;
-    }
-
-    private function getFilterValues(array $filterValues):array
-    {
-        $filtered = [];
-
-        foreach ($filterValues as $filterValue) {
-            /** @var $filter FilterValue */
-            $filtered[] = (array)$filterValue;
-
-        }
-
-        return $filtered;
-    }    
-
-    private function getFilterExtras(Filter|RangeSliderFilter $filter):array
-    {
-        switch (true) {
-            case $filter instanceof LabelFilter:
-                if ($filter->getName() === self::CAT_FILTER_NAME) {
-                    return [ 'type' => 'labelFilter'];
-                }
-
-                return [ 'type' => 'labelFilter'];
-            case $filter instanceof SelectFilter:
-                if ($filter->getName() === self::CAT_FILTER_NAME) {
-                    return [ 'type' => 'selectFilter'];
-                }
-
-                return [ 'type' => 'selectFilter'];
-            case $filter instanceof RangeSliderFilter:
-                if ($filter->getName() === self::RATING_FILTER_NAME) {
-                    return [ 'type' => 'rangeSliderFilter'];
-                }
-
-                return [ 'type' => 'rangeSliderFilter', 'totalRange' => (array)$filter->getTotalRange(), 'selectedRange' => (array)$filter->getSelectedRange()];
-            case $filter instanceof ColorFilter:
-                return [ 'type' => 'colorPickerFilter'];
-            case $filter instanceof ImageFilter:
-                return [ 'type' => 'vendorImageFilter'];
-            default:
-                throw new \Exception('The submitted filter is unknown.');
-        }
     }
 }
