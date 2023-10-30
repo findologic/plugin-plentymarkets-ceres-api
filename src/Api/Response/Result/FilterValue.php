@@ -4,11 +4,11 @@ namespace Findologic\Api\Response\Result;
 
 class FilterValue
 {
-    protected string $name;
+    protected ?string $name;
 
-    protected bool $selected;
+    protected ?bool $selected;
 
-    protected float $weight;
+    protected ?float $weight;
 
     protected ?int $frequency;
 
@@ -20,7 +20,7 @@ class FilterValue
 
     protected ?string $image;
 
-    function __construct(array $filterValue)
+    function __construct(array $filterValue = [])
     {
         $this->name = $filterValue['name'];
         $this->selected = $filterValue['selected'];
