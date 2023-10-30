@@ -18,12 +18,9 @@ class Result
     /** @var Filter[] */
     private $otherFilters;
 
-    public function __construct(array $result = null)
+    public function __construct(array $result = [])
     {
-        if (!$result) {
-            return;
-        }
-        $this->metadata = pluginApp(Metadata::class, $result['metadata']);
+        $this->metadata = pluginApp(Metadata::class, [$result['metadata']]);
         $this->items = array_map(fn ($item) => pluginApp(Item::class, $item), [$result['items']]);
         $this->variant = pluginApp(Variant::class, [$result['variant']]);
         $this->mainFilters = array_map(fn ($mainFilter) => pluginApp(Filter::class, [$mainFilter]), $result['mainFilters']);
