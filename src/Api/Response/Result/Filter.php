@@ -4,11 +4,11 @@ namespace Findologic\Api\Response\Result;
 
 class Filter
 {
-    protected string $name;
+    protected ?string $name;
 
-    protected string $displayName;
+    protected ?string $displayName;
 
-    protected string $selectMode;
+    protected ?string $selectMode;
 
     protected ?string $cssClass;
 
@@ -16,15 +16,15 @@ class Filter
 
     protected ?string $combinationOperation;
 
-    protected float $stepSize;
+    protected ?float $stepSize;
 
-    protected string $unit;
+    protected ?string $unit;
 
-    protected array $totalRange;
+    protected ?array $totalRange;
 
-    protected array $selectedRange;
+    protected ?array $selectedRange;
 
-    protected int $pinnedFilterValueCount;
+    protected ?int $pinnedFilterValueCount;
 
     protected string $type;
 
@@ -51,7 +51,7 @@ class Filter
     /**
      * Get the value of name
      */
-    public function getName():string
+    public function getName():?string
     {
         return $this->name;
     }
@@ -59,7 +59,7 @@ class Filter
     /**
      * Get the value of displayName
      */
-    public function getDisplayName():string
+    public function getDisplayName():?string
     {
         return $this->displayName;
     }
@@ -67,7 +67,7 @@ class Filter
     /**
      * Get the value of selectMode
      */
-    public function getSelectMode():string
+    public function getSelectMode():?string
     {
         return $this->selectMode;
     }
@@ -99,7 +99,7 @@ class Filter
     /**
      * Get the value of values
      */
-    public function getValues():array
+    public function getValues():?array
     {
         return $this->values;
     }
@@ -107,7 +107,7 @@ class Filter
     /**
      * Get the value of type
      */ 
-    public function getType():string
+    public function getType():?string
     {
         return $this->type;
     }
@@ -115,7 +115,7 @@ class Filter
     /**
      * Get the value of stepSize
      */ 
-    public function getStepSize():float
+    public function getStepSize():?float
     {
         return $this->stepSize;
     }
@@ -123,7 +123,7 @@ class Filter
     /**
      * Get the value of unit
      */ 
-    public function getUnit():string
+    public function getUnit():?string
     {
         return $this->unit;
     }
@@ -131,7 +131,7 @@ class Filter
     /**
      * Get the value of totalRange
      */ 
-    public function getTotalRange():array
+    public function getTotalRange():?array
     {
         return $this->totalRange;
     }
@@ -139,7 +139,7 @@ class Filter
     /**
      * Get the value of selectedRange
      */ 
-    public function getSelectedRange():array
+    public function getSelectedRange():?array
     {
         return $this->selectedRange;
     }
