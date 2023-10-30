@@ -17,8 +17,12 @@ class Request
 
     private array $order;
 
-    public function __construct(array $request)
+    public function __construct(?array $request)
     {
+        if (!$request) {
+            return;
+        }
+
         $this->query = $request['query'];
         $this->first = $request['first'];
         $this->count = $request['count'];
@@ -29,7 +33,7 @@ class Request
 
     /**
      * Get the value of query
-     */ 
+     */
     public function getQuery()
     {
         return $this->query;
@@ -37,7 +41,7 @@ class Request
 
     /**
      * Get the value of first
-     */ 
+     */
     public function getFirst()
     {
         return $this->first;
@@ -45,7 +49,7 @@ class Request
 
     /**
      * Get the value of count
-     */ 
+     */
     public function getCount()
     {
         return $this->count;
@@ -53,7 +57,7 @@ class Request
 
     /**
      * Get the value of serviceId
-     */ 
+     */
     public function getServiceId()
     {
         return $this->serviceId;
@@ -61,7 +65,7 @@ class Request
 
     /**
      * Get the value of usergroup
-     */ 
+     */
     public function getUsergroup()
     {
         return $this->usergroup;
@@ -69,7 +73,7 @@ class Request
 
     /**
      * Get the value of order
-     */ 
+     */
     public function getOrder()
     {
         return $this->order;
