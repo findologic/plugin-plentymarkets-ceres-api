@@ -12,8 +12,8 @@ class Response{
 
     public function __construct(array $response)
     {
-        $this->request = pluginApp(Request::class, $response['request']);
-        $this->result = pluginApp(Result::class, $response['result']);;
+        $this->request = pluginApp(Request::class, $response['response']['request']);
+        $this->result = pluginApp(Result::class, $response['response']['result']);;
     }
 
     /**
