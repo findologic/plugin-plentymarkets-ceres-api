@@ -27,7 +27,6 @@ use Plenty\Plugin\Log\Loggable;
  */
 class ResponseParser
 {
-    use Loggable;
     // protected FiltersParser $filtersParser;
 
     protected Response $response;
@@ -39,6 +38,7 @@ class ResponseParser
     protected HttpRequest $request;
 
     public function __construct(
+        
         LoggerFactory $loggerFactory,
         PluginConfig $pluginConfig
     ) {
@@ -208,7 +208,7 @@ class ResponseParser
     public function setResponse(?array $response)
     {
         if($response) $this->response = pluginApp(Response::class, $response);
-        $this->getLogger(__METHOD__)->error('response class', $this->response);
+        $this->logger->error('response class', $this->response);
         return $this;
     }
 
