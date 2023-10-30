@@ -4,6 +4,7 @@ namespace Findologic\Api\Response\Request;
 
 class Order
 {
+    const API_NAMESPACE = 'FINDOLOGIC\Api\Responses\Json10\Properties\Order';
 
     private string $field;
 
@@ -13,9 +14,9 @@ class Order
 
     public function __construct(array $order)
     {
-        $this->field = $order['field'];
-        $this->relevanceBased = $order['relevanceBased'];
-        $this->direction = $order['direction'];
+        $this->field = $order[self::API_NAMESPACE . 'field'];
+        $this->relevanceBased = $order[self::API_NAMESPACE . 'relevanceBased'];
+        $this->direction = $order[self::API_NAMESPACE . 'direction'];
     }
 
     /**
@@ -32,7 +33,7 @@ class Order
 
     /**
      * Get the value of field
-     */ 
+     */
     public function getField()
     {
         return $this->field;
@@ -40,7 +41,7 @@ class Order
 
     /**
      * Get the value of relevanceBased
-     */ 
+     */
     public function getRelevanceBased()
     {
         return $this->relevanceBased;
@@ -48,7 +49,7 @@ class Order
 
     /**
      * Get the value of direction
-     */ 
+     */
     public function getDirection()
     {
         return $this->direction;

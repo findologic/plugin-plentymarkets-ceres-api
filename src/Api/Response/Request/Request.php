@@ -4,6 +4,7 @@ namespace Findologic\Api\Response\Request;
 
 class Request
 {
+    const API_NAMESPACE = 'FINDOLOGIC\Api\Responses\Json10\Properties\Request';
 
     private ?string $query;
 
@@ -19,15 +20,11 @@ class Request
 
     public function __construct(?array $request = null)
     {
-        if (!$request) {
-            return;
-        }
-
-        $this->query = $request['query'];
-        $this->first = $request['first'];
-        $this->count = $request['count'];
-        $this->serviceId = $request['serviceId'];
-        $this->usergroup = $request['usergroup'];
+        $this->query = $request[self::API_NAMESPACE . 'query'];
+        $this->first = $request[self::API_NAMESPACE . 'first'];
+        $this->count = $request[self::API_NAMESPACE . 'count'];
+        $this->serviceId = $request[self::API_NAMESPACE . 'serviceId'];
+        $this->usergroup = $request[self::API_NAMESPACE . 'usergroup'];
         $this->order = pluginApp(Order::class, $request['order']);
     }
 
