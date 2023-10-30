@@ -52,7 +52,6 @@ class SearchService implements SearchServiceInterface
         protected ConfigRepository $configRepository,
         protected PluginInfoService $pluginInfoService
     ) {
-        $this->re
         $this->logger = $loggerFactory->getLogger(
             Plugin::PLUGIN_NAMESPACE,
             Plugin::PLUGIN_IDENTIFIER
