@@ -9,8 +9,8 @@ class Promotion
     private ?string $link;
 
     public function __construct(
-        string $link,
-        string $image
+        ?string $link,
+        ?string $image
     ) {
         $this->image = $image;
         $this->link = $link;
