@@ -19,6 +19,7 @@ use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Api\Response\Json10\Filter\Filter;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessage;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessageFactory;
+use Plenty\Plugin\Log\Loggable;
 
 /**
  * Class ResponseParser
@@ -26,6 +27,7 @@ use Findologic\Struct\QueryInfoMessage\QueryInfoMessageFactory;
  */
 class ResponseParser
 {
+    use Loggable;
     // protected FiltersParser $filtersParser;
 
     protected Response $response;
@@ -206,7 +208,7 @@ class ResponseParser
     public function setResponse(?array $response)
     {
         if($response) $this->response = pluginApp(Response::class, $response);
-
+        $this->getLogger(__METHOD__)->error('response class', $this->response);
         return $this;
     }
 
