@@ -17,7 +17,7 @@ class Request
 
     private array $order;
 
-    public function __construct(?array $request)
+    public function __construct(?array $request = null)
     {
         if (!$request) {
             return;
