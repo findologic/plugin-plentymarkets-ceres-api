@@ -36,7 +36,7 @@ class FilterValue
     /**
      * Get the value of name
      */
-    public function getName():string
+    public function getName():?string
     {
         return $this->name;
     }
@@ -44,7 +44,7 @@ class FilterValue
     /**
      * Get the value of selected
      */
-    public function isSelected():bool
+    public function isSelected():?bool
     {
         return $this->selected;
     }
@@ -52,7 +52,7 @@ class FilterValue
     /**
      * Get the value of weight
      */
-    public function getWeight():float
+    public function getWeight():?float
     {
         return $this->weight;
     }
