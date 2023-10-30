@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/ApiItem.php';
 require_once __DIR__ . '/ApiFilter.php';
+require_once __DIR__ . '/Arrayable.php';
 
-use Illuminate\Contracts\Support\Arrayable;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Variant;

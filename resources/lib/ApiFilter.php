@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Contracts\Support\Arrayable;
+require_once __DIR__ . '/Arrayable.php';
+
+
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\RangeSliderFilter;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\FilterValue;

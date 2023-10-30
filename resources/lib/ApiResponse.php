@@ -1,9 +1,8 @@
 <?php
 
 require_once __DIR__ . '/ApiResult.php';
+require_once __DIR__ . '/Arrayable.php';
 
-// use FindologicApi\Components\ApiResult;
-use Illuminate\Contracts\Support\Arrayable;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Request;

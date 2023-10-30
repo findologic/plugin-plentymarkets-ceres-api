@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Contracts\Support\Arrayable;
+require_once __DIR__ . '/Arrayable.php';
+
 use FINDOLOGIC\Api\Responses\Json10\Properties\Item;
 use FINDOLOGIC\Api\Responses\Json10\Properties\BaseItem;
 use FINDOLOGIC\Api\Responses\Json10\Properties\ItemVariant;
