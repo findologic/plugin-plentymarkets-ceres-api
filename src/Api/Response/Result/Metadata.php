@@ -31,8 +31,8 @@ class Metadata
         $this->effectiveQuery = $metadata['effectiveQuery'];
         $this->totalResults = $metadata['totalResults'];
         $this->currencySymbol = $metadata['currencySymbol'];
-        $this->landingPage = pluginApp(LandingPage::class, [$metadata['landingPage']['url'], $metadata['landingPage']['name']]);
-        $this->promotion = pluginApp(Promotion::class, [$metadata['promotion']['url'], $metadata['promotion']['imageUrl']]);
+        $this->landingPage = $metadata['landingPage']['url'] ? pluginApp(LandingPage::class, [$metadata['landingPage']['url'], $metadata['landingPage']['name']]) : null;
+        $this->promotion = $metadata['promotion']['url'] ? pluginApp(Promotion::class, [$metadata['promotion']['url'], $metadata['promotion']['imageUrl']]) : null;
     }
 
     /**

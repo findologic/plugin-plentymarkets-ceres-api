@@ -205,10 +205,10 @@ class ResponseParser
      *
      * @return  self
      */ 
-    public function setResponse(?array $response)
+    public function setResponse(array $response)
     {
-        if($response) $this->response = pluginApp(Response::class, $response);
-        $this->logger->error('response class', $this->response);
+        $this->response = pluginApp(Response::class, $response);
+        $this->logger->error('response class', (array)$this->response);
         return $this;
     }
 
