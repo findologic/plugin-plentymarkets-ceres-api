@@ -183,7 +183,12 @@ class Middleware extends PlentyMiddleware
             'Ceres.Search.Query',
             function (ExternalSearch $externalSearch) use ($request) {
                 if (true) {
-                    $this->searchService->handleSearchQuery($request, $externalSearch);
+                    try{
+                        $this->searchService->handleSearchQuery($request, $externalSearch);
+                    }
+                    catch(\Exception | \Throwable $e){
+                        ($this->getLoggerObject())->error('Search error', (array)$e);
+                    }
                 }
             }
         );
