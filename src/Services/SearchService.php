@@ -107,9 +107,9 @@ class SearchService implements SearchServiceInterface
     {
         $this->search($request, $externalSearch);
         $hasSelectedFilters = $request->get('attrib') !== null;
-        $landingPageUrl = $this->responseParser->getLandingPageExtension();
-        if ($landingPageUrl->getLink()) {
-            $this->doPageRedirect($landingPageUrl->getLink());
+        $landingPage = $this->responseParser->getLandingPageExtension();
+        if ($landingPage) {
+            $this->doPageRedirect($landingPage->getLink());
             return;
         }
 
