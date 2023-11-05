@@ -209,7 +209,7 @@ class ResponseParser
     public function setResponse(?array $response)
     {
         if($response) $this->response = pluginApp(Response::class, $response);
-        $this->logger->error('response class', json_encode($this->response));
+        $this->logger->error('filters extension', json_decode(json_encode($this->getFiltersExtension()), true));
         return $this;
     }
 
