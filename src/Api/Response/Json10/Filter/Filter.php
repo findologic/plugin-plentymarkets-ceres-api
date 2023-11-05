@@ -192,6 +192,9 @@ abstract class Filter extends BaseFilter
         $categoryFilter = pluginApp(CategoryFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         foreach ($filter->getValues() as $item) {
+            if(!$item->getName()){
+                continue;
+            }
             $levels = explode('_', $item->getName());
             $currentValue = $categoryFilter;
 
