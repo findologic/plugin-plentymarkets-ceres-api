@@ -212,7 +212,7 @@ class ResponseParser
         $filtersExtension = $this->getFiltersExtension();
         $filters = $filtersExtension->getFilters();
         $filter = $filters[0];
-        $this->logger->error('response log', [$filter->getName(), $filters, $filtersExtension]);
+        $this->logger->error('response log', [$filter, $filters, $filtersExtension]);
         return $this;
     }
 
