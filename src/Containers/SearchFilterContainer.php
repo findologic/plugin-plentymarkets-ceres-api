@@ -6,6 +6,7 @@ use Findologic\Constants\Plugin;
 use Findologic\Services\SearchService;
 use Findologic\Api\Response\Response;
 use Plenty\Modules\Category\Models\Category;
+use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Templates\Twig;
 
 /**
@@ -14,6 +15,7 @@ use Plenty\Plugin\Templates\Twig;
  */
 class SearchFilterContainer
 {
+    use Loggable;
     public function call(Twig $twig, SearchService $searchService): string
     {
         if (!$searchService->getResults()) {
@@ -28,7 +30,7 @@ class SearchFilterContainer
         if ($currentCategory !== null && $currentCategory->level > 1) {
             $showCategoryFilter = false;
         }
-
+        $this->getLogger(__METHOD__)->error('facets', ['facets' => $searchResults->getFiltersExtension()]);
         return $twig->render(
             'Findologic::Category.Item.Partials.SearchFilters',
             [
