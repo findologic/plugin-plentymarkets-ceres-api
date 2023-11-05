@@ -18,7 +18,10 @@ class FindologicItemSearchContext extends ItemSearchContext implements ContextIn
         /** @var SearchService $searchService */
         $searchService = pluginApp(SearchService::class);
         $searchResults = $searchService->getResults();
-        $this->getLogger(__METHOD__)->error('facets', ['facets' => json_decode(json_encode($searchResults->getFiltersExtension()), true)]);
+        $filtersExtension = $searchResults->getFiltersExtension();
+        $filters = $filtersExtension->getFilters();
+        $filter = $filters[0];
+        $this->getLogger(__METHOD__)->error('facets', [$filter, $filters, $filtersExtension]);
         $this->facets = $searchResults->getFiltersExtension();
     }
 }
