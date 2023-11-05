@@ -45,13 +45,13 @@ class Filter
         $this->totalRange = $filter['totalRange'];
         $this->selectedRange = $filter['selectedRange'];
         $this->pinnedFilterValueCount = $filter['pinnedFilterValueCount'];
-        $this->values = array_map(fn ($filterValue) => pluginApp(FilterValue::class, $filterValue), $filter['values']);
+        $this->values = array_map(fn ($filterValue) => pluginApp(FilterValue::class, [$filterValue]), $filter['values']);
     }
 
     /**
      * Get the value of name
      */
-    public function getName():?string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -59,7 +59,7 @@ class Filter
     /**
      * Get the value of displayName
      */
-    public function getDisplayName():?string
+    public function getDisplayName(): ?string
     {
         return $this->displayName;
     }
@@ -67,7 +67,7 @@ class Filter
     /**
      * Get the value of selectMode
      */
-    public function getSelectMode():?string
+    public function getSelectMode(): ?string
     {
         return $this->selectMode;
     }
@@ -75,7 +75,7 @@ class Filter
     /**
      * Get the value of cssClass
      */
-    public function getCssClass():?string
+    public function getCssClass(): ?string
     {
         return $this->cssClass;
     }
@@ -83,7 +83,7 @@ class Filter
     /**
      * Get the value of noAvailableFiltersText
      */
-    public function getNoAvailableFiltersText():?string
+    public function getNoAvailableFiltersText(): ?string
     {
         return $this->noAvailableFiltersText;
     }
@@ -91,7 +91,7 @@ class Filter
     /**
      * Get the value of combinationOperation
      */
-    public function getCombinationOperation():?string
+    public function getCombinationOperation(): ?string
     {
         return $this->combinationOperation;
     }
@@ -99,47 +99,47 @@ class Filter
     /**
      * Get the value of values
      */
-    public function getValues():?array
+    public function getValues(): ?array
     {
         return $this->values;
     }
 
     /**
      * Get the value of type
-     */ 
-    public function getType():?string
+     */
+    public function getType(): ?string
     {
         return $this->type;
     }
 
     /**
      * Get the value of stepSize
-     */ 
-    public function getStepSize():?float
+     */
+    public function getStepSize(): ?float
     {
         return $this->stepSize;
     }
 
     /**
      * Get the value of unit
-     */ 
-    public function getUnit():?string
+     */
+    public function getUnit(): ?string
     {
         return $this->unit;
     }
 
     /**
      * Get the value of totalRange
-     */ 
-    public function getTotalRange():?array
+     */
+    public function getTotalRange(): ?array
     {
         return $this->totalRange;
     }
 
     /**
      * Get the value of selectedRange
-     */ 
-    public function getSelectedRange():?array
+     */
+    public function getSelectedRange(): ?array
     {
         return $this->selectedRange;
     }
