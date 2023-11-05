@@ -376,6 +376,7 @@ class SearchService implements SearchServiceInterface
         $productId = $this->responseParser->getProductIds()[0];
 
         if (strpos($productId, '_')) {
+            $this->logger->error('getProductDetailUrl', ['explode' => $productId]);
             $productId = explode('_', $productId)[0];
         }
 

@@ -6,10 +6,11 @@ use Findologic\Constants\Plugin;
 use Findologic\Api\Response\Response;
 use Findologic\Api\Response\Result\Filter;
 use Findologic\Api\Response\Filter\BaseFilter;
+use Plenty\Plugin\Log\Loggable;
 
 class QueryInfoMessageFactory
 {
-
+    use Loggable;
     protected Response $response;
     protected string $queryString;
 
@@ -106,9 +107,11 @@ class QueryInfoMessageFactory
         }
 
         $filterValues = [];
+        $this->getLogger(__METHOD__)->error('getFilterValues1', ['explode' => $params[$name]]);
         $joinedFilterValues = explode(Plugin::FILTER_HANDLER_DELIMITER, $params[$name]);
 
         foreach ($joinedFilterValues as $joinedFilterValue) {
+            $this->getLogger(__METHOD__)->error('getFilterValues2', ['explode' => $joinedFilterValue]);
             $filterValues[] = str_contains($joinedFilterValue, Plugin::FILTER_VALUE_DELIMITER)
                 ? explode(Plugin::FILTER_VALUE_DELIMITER, $joinedFilterValue)[1]
                 : $joinedFilterValue;

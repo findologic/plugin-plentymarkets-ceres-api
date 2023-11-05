@@ -166,6 +166,7 @@ class ResponseParser
         $selectedCategory = $requestParams['attrib']['cat'][0] ?? null;
 
         if (strpos($selectedCategory, '_') !== false) {
+            $this->logger->error('getSelectedCategoryName', ['explode' => $selectedCategory]);
             $categories = explode('_', $selectedCategory);
 
             $selectedCategory = end($categories);
@@ -208,7 +209,7 @@ class ResponseParser
     public function setResponse(?array $response)
     {
         if($response) $this->response = pluginApp(Response::class, $response);
-        $this->logger->error('response class', (array)$this->response);
+        $this->logger->error('response class', json_encode($this->response));
         return $this;
     }
 
