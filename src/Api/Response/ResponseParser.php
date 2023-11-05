@@ -101,7 +101,7 @@ class ResponseParser
         $filtersExtension = pluginApp(FiltersExtension::class);
         foreach ($apiFilters as $apiFilter) {
             $filter = Filter::getInstance($apiFilter);
-            $this->logger->error('filter', (array)$filter);
+            // $this->logger->error('filter', (array)$filter);
             if ($filter && count($filter->getValues()) >= 1) {
                 $filtersExtension->addFilter($filter);
             }
@@ -210,7 +210,7 @@ class ResponseParser
     {
         if($response) $this->response = pluginApp(Response::class, $response);
         $filters = $this->getFiltersExtension();
-        $filter = $filters->getFilters()[0];
+        $filter = ($filters->getFilters())[0];
         $this->logger->error('response log', $filter->getName());
         return $this;
     }
