@@ -78,7 +78,7 @@ abstract class Filter extends BaseFilter
         $customFilter = pluginApp(LabelTextFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]));
+            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
         }
 
         return $customFilter;
@@ -89,7 +89,7 @@ abstract class Filter extends BaseFilter
         $customFilter = pluginApp(SelectDropdownFilter::class,[$filter->getName(), $filter->getDisplayName()]);
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]));
+            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
         }
 
         return $customFilter;
@@ -124,7 +124,7 @@ abstract class Filter extends BaseFilter
         }
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]));
+            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
         }
 
         if ($filter->getTotalRange()['min'] && $filter->getTotalRange()['max']) {

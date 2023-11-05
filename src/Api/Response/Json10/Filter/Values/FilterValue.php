@@ -21,20 +21,20 @@ class FilterValue
      * The uuid is generated only for the values in which we need a unique ID for selection in storefront
      */
     public function __construct(
-        private string $id,
+        // private string $id,
         private string $name,
         ?string $filterName = null
     ) {
         $this->translated = pluginApp(TranslatedName::class, [$name]);
         if ($filterName !== null) {
-            $this->uuid = sprintf('%s%s%s', $filterName, self::DELIMITER, $id);
+            $this->uuid = sprintf('%s%s', $filterName, self::DELIMITER);
         }
     }
 
-    public function getId(): string
-    {
-        return $this->id;
-    }
+    // public function getId(): string
+    // {
+    //     return $this->id;
+    // }
 
     public function getName(): string
     {
