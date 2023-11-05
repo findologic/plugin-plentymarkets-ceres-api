@@ -209,9 +209,10 @@ class ResponseParser
     public function setResponse(?array $response)
     {
         if($response) $this->response = pluginApp(Response::class, $response);
-        $filters = $this->getFiltersExtension();
-        $filter = ($filters->getFilters())[0];
-        $this->logger->error('response log', $filter->getName());
+        $filtersExtension = $this->getFiltersExtension();
+        $filters = $filtersExtension->getFilters();
+        $filter = $filters[0];
+        $this->logger->error('response log', [$filter->getName(), $filters, $filtersExtension]);
         return $this;
     }
 
