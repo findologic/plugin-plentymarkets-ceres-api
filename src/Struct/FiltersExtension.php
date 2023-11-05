@@ -20,7 +20,7 @@ class FiltersExtension
 
     public function addFilter($filter): self
     {
-        $this->filters[$filter->getId()] = $filter;
+        $this->filters[] = $filter;
 
         return $this;
     }
