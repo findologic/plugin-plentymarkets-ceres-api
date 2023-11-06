@@ -26,8 +26,8 @@ abstract class BaseFilter
      * @param FilterValue[] $values
      */
     public function __construct(
-        string $id,
-        string $name,
+        ?string $id,
+        ?string $name,
         bool $isMain = false,
         ?string $selectMode,
         ?string $cssClass,

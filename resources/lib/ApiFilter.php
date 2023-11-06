@@ -20,7 +20,7 @@ class ApiFilter implements Arrayable
     public const CAT_FILTER_NAME = 'cat';
     public const VENDOR_FILTER_NAME = 'vendor';
 
-    public function __construct(private Filter $filter)
+    public function __construct(private Filter|RangeSliderFilter $filter)
     {
     }
 
@@ -34,6 +34,8 @@ class ApiFilter implements Arrayable
             'cssClass' => $this->filter->getCssClass(),
             'noAvailableFiltersText' => $this->filter->getNoAvailableFiltersText(),
             'combinationOperation' => $this->filter->getCombinationOperation(),
+            'stepSize' => method_exists($this->filter, 'getStep') ? $this->filter->getStepSize() : null,
+            'unit' => method_exists($this->filter, 'getUnit') ? $this->filter->getUnit() : null,
             'values' => array_map(fn (FilterValue|ImageFilterValue|ColorFilterValue|RangeSliderValue $value) => [
                 'name' => $value->getName(),
                 'selected' => $value->isSelected(),

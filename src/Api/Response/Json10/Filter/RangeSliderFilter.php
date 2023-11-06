@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Findologic\Api\Response\Json10\Filter;
 
+use Findologic\Api\Response\Result\Filter as ResultFilter;
+
 class RangeSliderFilter extends Filter
 {
     public string $minKey;
@@ -22,11 +24,19 @@ class RangeSliderFilter extends Filter
 
     public array $selectedRange = [];
 
-    public function __construct(string $id, string $name, bool $isMain = false, ?string $selectMode, ?string $cssClass, ?string $noAvailableFiltersText, ?string $combinationOperation, ?string $type)
+    public function __construct(ResultFilter $filter, bool $isMain = false)
     {
-        parent::__construct($id, $name, $isMain, $selectMode, $cssClass, $noAvailableFiltersText, $combinationOperation, $type);
-        $this->minKey = sprintf('min-%s', $id);
-        $this->maxKey = sprintf('max-%s', $id);
+        parent::__construct(
+            $filter->getName(),
+            $filter->getDisplayName(),
+            $isMain, $filter->getSelectMode(),
+            $filter->getCssClass(),
+            $filter->getNoAvailableFiltersText(),
+            $filter->getCombinationOperation(),
+            $filter->getType()
+        );
+        $this->minKey = sprintf('min-%s', $filter->getName());
+        $this->maxKey = sprintf('max-%s', $filter->getName());
     }
 
     public function getMinKey(): string
