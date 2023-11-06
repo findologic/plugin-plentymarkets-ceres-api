@@ -22,9 +22,9 @@ class RangeSliderFilter extends Filter
 
     public array $selectedRange = [];
 
-    public function __construct(string $id, string $name, array $values = [])
+    public function __construct(string $id, string $name, bool $isMain = false)
     {
-        parent::__construct($id, $name, $values);
+        parent::__construct($id, $name, $isMain);
         $this->minKey = sprintf('min-%s', $id);
         $this->maxKey = sprintf('max-%s', $id);
     }
