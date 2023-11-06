@@ -18,38 +18,35 @@ abstract class Filter extends BaseFilter
     private const FILTER_RANGE_MIN = 'min';
     private const FILTER_RANGE_MAX = 'max';
 
-    /** @var FilterValue[] */
-    public array $values;
-
     /**
      * Builds a new filter instance. May return null for unsupported filter types. Throws an exception for unknown
      * filter types.
      */
-    public static function getInstance(ResultFilter $filter): ?Filter
+    public static function getInstance(ResultFilter $filter, bool $isMain): ?Filter
     {
         switch ($filter->getType()) {
             case 'labelFilter':
                 if ($filter->getName() === BaseFilter::CAT_FILTER_NAME) {
-                    return static::handleCategoryFilter($filter);
+                    return static::handleCategoryFilter($filter, $isMain);
                 }
 
-                return static::handleLabelTextFilter($filter);
+                return static::handleLabelTextFilter($filter, $isMain);
             case 'selectFilter':
                 if ($filter->getName() === BaseFilter::CAT_FILTER_NAME) {
-                    return static::handleCategoryFilter($filter);
+                    return static::handleCategoryFilter($filter, $isMain);
                 }
 
-                return static::handleSelectDropdownFilter($filter);
+                return static::handleSelectDropdownFilter($filter, $isMain);
             case 'rangeSliderFilter':
                 if ($filter->getName() === BaseFilter::RATING_FILTER_NAME) {
-                    return static::handleRatingFilter($filter);
+                    return static::handleRatingFilter($filter, $isMain);
                 }
 
-                return static::handleRangeSliderFilter($filter);
+                return static::handleRangeSliderFilter($filter, $isMain);
             case 'colorPickerFilter':
-                return static::handleColorPickerFilter($filter);
+                return static::handleColorPickerFilter($filter, $isMain);
             case 'vendorImageFilter':
-                return static::handleVendorImageFilter($filter);
+                return static::handleVendorImageFilter($filter, $isMain);
             default:
                 throw new InvalidArgumentException('The submitted filter is unknown.');
         }
@@ -73,9 +70,9 @@ abstract class Filter extends BaseFilter
         return null;
     }
 
-    private static function handleLabelTextFilter(ResultFilter $filter): LabelTextFilter
+    private static function handleLabelTextFilter(ResultFilter $filter, bool $isMain): LabelTextFilter
     {
-        $customFilter = pluginApp(LabelTextFilter::class,[$filter->getName(), $filter->getDisplayName()]);
+        $customFilter = pluginApp(LabelTextFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain]);
 
         foreach ($filter->getValues() as $item) {
             $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
@@ -84,9 +81,9 @@ abstract class Filter extends BaseFilter
         return $customFilter;
     }
 
-    private static function handleSelectDropdownFilter(ResultFilter $filter): SelectDropdownFilter
+    private static function handleSelectDropdownFilter(ResultFilter $filter, bool $isMain): SelectDropdownFilter
     {
-        $customFilter = pluginApp(SelectDropdownFilter::class,[$filter->getName(), $filter->getDisplayName()]);
+        $customFilter = pluginApp(SelectDropdownFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain]);
 
         foreach ($filter->getValues() as $item) {
             $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
@@ -95,9 +92,9 @@ abstract class Filter extends BaseFilter
         return $customFilter;
     }
 
-    private static function handleRangeSliderFilter(ResultFilter $filter): RangeSliderFilter
+    private static function handleRangeSliderFilter(ResultFilter $filter, bool $isMain): RangeSliderFilter
     {
-        $customFilter = pluginApp(RangeSliderFilter::class,[$filter->getName(), $filter->getDisplayName()]);
+        $customFilter = pluginApp(RangeSliderFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain]);
         $unit = $filter->getUnit();
         $step = $filter->getStepSize();
 
@@ -148,9 +145,9 @@ abstract class Filter extends BaseFilter
         return $customFilter;
     }
 
-    private static function handleColorPickerFilter(ResultFilter $filter): ColorPickerFilter
+    private static function handleColorPickerFilter(ResultFilter $filter, bool $isMain): ColorPickerFilter
     {
-        $customFilter = pluginApp(ColorPickerFilter::class,[$filter->getName(), $filter->getDisplayName()]);
+        $customFilter = pluginApp(ColorPickerFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain]);
 
         /** @var ResultFilterValue $item */
         foreach ($filter->getValues() as $item) {
@@ -170,9 +167,9 @@ abstract class Filter extends BaseFilter
         return $customFilter;
     }
 
-    private static function handleVendorImageFilter(ResultFilter $filter): VendorImageFilter
+    private static function handleVendorImageFilter(ResultFilter $filter, bool $isMain): VendorImageFilter
     {
-        $customFilter = pluginApp(VendorImageFilter::class,[$filter->getName(), $filter->getDisplayName()]);
+        $customFilter = pluginApp(VendorImageFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain]);
 
         /** @var ApiImageFilterValue $item */
         foreach ($filter->getValues() as $item) {
@@ -187,9 +184,9 @@ abstract class Filter extends BaseFilter
         return $customFilter;
     }
 
-    private static function handleCategoryFilter(ResultFilter $filter): CategoryFilter
+    private static function handleCategoryFilter(ResultFilter $filter, bool $isMain): CategoryFilter
     {
-        $categoryFilter = pluginApp(CategoryFilter::class,[$filter->getName(), $filter->getDisplayName()]);
+        $categoryFilter = pluginApp(CategoryFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain]);
 
         foreach ($filter->getValues() as $item) {
             if(!$item->getName()){
@@ -214,14 +211,14 @@ abstract class Filter extends BaseFilter
         return $categoryFilter;
     }
 
-    private static function handleRatingFilter(ResultFilter $filter): ?RatingFilter
+    private static function handleRatingFilter(ResultFilter $filter, bool $isMain): ?RatingFilter
     {
         $totalRange = $filter->getTotalRange();
         if ($totalRange['min'] === $totalRange['max']) {
             return null;
         }
 
-        $customFilter = pluginApp(RatingFilter::class,[$filter->getName(), $filter->getDisplayName()]);
+        $customFilter = pluginApp(RatingFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain]);
 
         if ($totalRange['max']) {
             $customFilter->setMaxPoints(ceil($totalRange['max']));

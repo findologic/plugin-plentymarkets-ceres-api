@@ -93,15 +93,18 @@ class ResponseParser
 
     public function getFiltersExtension(): FiltersExtension
     {
-        $apiFilters = array_merge(
-            $this->response->getResult()->getMainFilters() ?? [],
-            $this->response->getResult()->getOtherFilters() ?? []
-        );
-
+        $mainFilters = $this->response->getResult()->getMainFilters();
+        $otherFilters = $this->response->getResult()->getOtherFilters();
         $filtersExtension = pluginApp(FiltersExtension::class);
-        foreach ($apiFilters as $apiFilter) {
-            $filter = Filter::getInstance($apiFilter);
-            // $this->logger->error('filter', (array)$filter);
+        foreach ($mainFilters as $mainFilter) {
+            $filter = Filter::getInstance($mainFilter, true);
+            if ($filter && count($filter->getValues()) >= 1) {
+                $filtersExtension->addFilter($filter);
+            }
+        }
+
+        foreach ($otherFilters as $otherFilter) {
+            $filter = Filter::getInstance($otherFilter, false);
             if ($filter && count($filter->getValues()) >= 1) {
                 $filtersExtension->addFilter($filter);
             }

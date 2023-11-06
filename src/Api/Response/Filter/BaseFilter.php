@@ -14,7 +14,9 @@ abstract class BaseFilter
 
     public string $id;
     public string $name;
+    /** @var FilterValue[] */
     public array $values = [];
+    public bool $isMain;
 
     /**
      * @param FilterValue[] $values
@@ -22,11 +24,11 @@ abstract class BaseFilter
     public function __construct(
         string $id,
         string $name,
-        array $values = [],
+        bool $isMain = false
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->values = $values;
+        $this->isMain = $isMain;
     }
 
     public function getDisplayType(): ?string
