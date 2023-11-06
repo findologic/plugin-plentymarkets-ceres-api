@@ -8,13 +8,13 @@ abstract class BaseFilter
     public const CAT_FILTER_NAME = 'cat';
     public const VENDOR_FILTER_NAME = 'vendor';
 
-    protected ?string $displayType;
+    public ?string $displayType;
 
-    protected bool $hidden = false;
+    public bool $hidden = false;
 
-    protected string $id;
-    protected string $name;
-    protected array $values = [];
+    public string $id;
+    public string $name;
+    public array $values = [];
 
     /**
      * @param FilterValue[] $values

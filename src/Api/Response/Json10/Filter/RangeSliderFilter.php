@@ -6,21 +6,21 @@ namespace Findologic\Api\Response\Json10\Filter;
 
 class RangeSliderFilter extends Filter
 {
-    private string $minKey;
+    public string $minKey;
 
-    private string $maxKey;
+    public string $maxKey;
 
-    private ?float $min = null;
+    public ?float $min = null;
 
-    private ?float $max = null;
+    public ?float $max = null;
 
-    private ?float $step = null;
+    public ?float $step = null;
 
-    private string $unit = '';
+    public string $unit = '';
 
-    private array $totalRange = [];
+    public array $totalRange = [];
 
-    private array $selectedRange = [];
+    public array $selectedRange = [];
 
     public function __construct(string $id, string $name, array $values = [])
     {

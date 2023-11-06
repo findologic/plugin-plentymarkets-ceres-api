@@ -6,5 +6,5 @@ namespace Findologic\Api\Response\Json10\Filter;
 
 class ColorPickerFilter extends Filter
 {
-    protected ?string $displayType = 'color';
+    public ?string $displayType = 'color';
 }

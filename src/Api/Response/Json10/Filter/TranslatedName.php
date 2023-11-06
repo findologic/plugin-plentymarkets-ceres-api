@@ -7,7 +7,7 @@ namespace Findologic\Api\Response\Json10\Filter;
 class TranslatedName
 {
     public function __construct(
-        private string $name
+        public string $name
     ) {
     }
 

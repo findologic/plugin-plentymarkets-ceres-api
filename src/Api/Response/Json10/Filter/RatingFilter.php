@@ -6,7 +6,7 @@ namespace Findologic\Api\Response\Json10\Filter;
 
 class RatingFilter extends Filter
 {
-    private float $maxPoints = 0;
+    public float $maxPoints = 0;
 
     public function setMaxPoints(float $maxPoints): RatingFilter
     {
