@@ -94,7 +94,7 @@ abstract class Filter extends BaseFilter
 
     private static function handleRangeSliderFilter(ResultFilter $filter, bool $isMain): RangeSliderFilter
     {
-        $customFilter = pluginApp(RangeSliderFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $customFilter = pluginApp(RangeSliderFilter::class,[$filter, $isMain]);
         $unit = $filter->getUnit();
         $step = $filter->getStepSize();
 
