@@ -4,12 +4,15 @@ require_once __DIR__ . '/Arrayable.php';
 
 
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\RangeSliderFilter;
-use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\FilterValue;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\ColorFilter;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\ImageFilter;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\LabelFilter;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\SelectFilter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\RangeSliderFilter;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\FilterValue;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\ColorFilterValue;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\ImageFilterValue;
+use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Values\RangeSliderValue;
 
 class ApiFilter implements Arrayable
 {
@@ -31,11 +34,15 @@ class ApiFilter implements Arrayable
             'cssClass' => $this->filter->getCssClass(),
             'noAvailableFiltersText' => $this->filter->getNoAvailableFiltersText(),
             'combinationOperation' => $this->filter->getCombinationOperation(),
-            'values' => array_map(fn (FilterValue $value) => [
+            'values' => array_map(fn (FilterValue|ImageFilterValue|ColorFilterValue|RangeSliderValue $value) => [
                 'name' => $value->getName(),
                 'selected' => $value->isSelected(),
                 'weight' => $value->getWeight(),
-                'frequency' => $value->getFrequency()
+                'frequency' => $value->getFrequency(),
+                'image' => method_exists($value, 'getImage') ? $value->getImage() : null,
+                'color' => method_exists($value, 'getColor') ? $value->getColor() : null,
+                'min' => method_exists($value, 'getMin') ? $value->getMin() : null,
+                'max' => method_exists($value, 'getMax') ? $value->getMax() : null
             ], $this->filter->getValues()),
         ]);
     }
