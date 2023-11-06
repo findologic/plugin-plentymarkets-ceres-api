@@ -20,8 +20,8 @@
           rel="nofollow"
         >
           <img
-            :src="value.imageUrl"
-            :width="value.imageUrl ? '80px' : ''"
+            :src="value.media.url"
+            :width="value.media.url ? '80px' : ''"
             @error="handleImageError($event, value)"
           >
           <span v-text="value.name" />
