@@ -28,10 +28,10 @@ abstract class BaseFilter
         string $id,
         string $name,
         bool $isMain = false,
-        string $selectMode,
-        string $cssClass,
-        string $noAvailableFiltersText,
-        string $combinationOperation
+        ?string $selectMode,
+        ?string $cssClass,
+        ?string $noAvailableFiltersText,
+        ?string $combinationOperation
     ) {
         $this->id = $id;
         $this->name = $name;
