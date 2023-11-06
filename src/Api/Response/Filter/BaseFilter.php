@@ -17,18 +17,29 @@ abstract class BaseFilter
     /** @var FilterValue[] */
     public array $values = [];
     public bool $isMain;
-
+    public ?string $selectMode;
+    public ?string $cssClass;
+    public ?string $noAvailableFiltersText;
+    public ?string $combinationOperation;
     /**
      * @param FilterValue[] $values
      */
     public function __construct(
         string $id,
         string $name,
-        bool $isMain = false
+        bool $isMain = false,
+        string $selectMode,
+        string $cssClass,
+        string $noAvailableFiltersText,
+        string $combinationOperation
     ) {
         $this->id = $id;
         $this->name = $name;
         $this->isMain = $isMain;
+        $this->selectMode = $selectMode;
+        $this->cssClass = $cssClass;
+        $this->noAvailableFiltersText = $noAvailableFiltersText;
+        $this->combinationOperation = $combinationOperation;
     }
 
     public function getDisplayType(): ?string
