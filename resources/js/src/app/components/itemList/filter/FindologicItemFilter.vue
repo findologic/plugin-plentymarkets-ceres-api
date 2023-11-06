@@ -18,16 +18,16 @@
         v-text="selectedValuesCount"
       />
     </div>
-    <div v-if="facet.findologicFilterType === 'range-slider'">
+    <div v-if="facet.findologicFilterType === 'rangeSliderFilter'">
       <item-range-slider :facet="facet" />
     </div>
-    <div v-else-if="facet.findologicFilterType === 'image'">
+    <div v-else-if="facet.findologicFilterType === 'vendorImageFilter'">
       <item-filter-image
         :facet="facet"
         :fallback-image="fallbackImageImageFilter"
       />
     </div>
-    <div v-else-if="facet.findologicFilterType === 'color'">
+    <div v-else-if="facet.findologicFilterType === 'colorPickerFilter'">
       <div v-if="!facet.noAvailableFiltersText">
         <item-color-tiles
           :facet="facet"
@@ -51,7 +51,7 @@
         v-text="facet.noAvailableFiltersText"
       />
     </div>
-    <div v-else-if="facet.findologicFilterType === 'select' && (facet.id !== 'cat' || shouldShowCategoryFilter)">
+    <div v-else-if="facet.findologicFilterType === 'selectFilter' && (facet.id !== 'cat' || shouldShowCategoryFilter)">
       <div v-if="!facet.noAvailableFiltersText">
         <item-dropdown :facet="facet" />
       </div>

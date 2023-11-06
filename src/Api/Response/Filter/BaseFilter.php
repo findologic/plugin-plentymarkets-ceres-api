@@ -21,6 +21,7 @@ abstract class BaseFilter
     public ?string $cssClass;
     public ?string $noAvailableFiltersText;
     public ?string $combinationOperation;
+    public ?string $findologicFilterType;
     /**
      * @param FilterValue[] $values
      */
@@ -31,7 +32,8 @@ abstract class BaseFilter
         ?string $selectMode,
         ?string $cssClass,
         ?string $noAvailableFiltersText,
-        ?string $combinationOperation
+        ?string $combinationOperation,
+        ?string $findologicFilterType
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -40,6 +42,7 @@ abstract class BaseFilter
         $this->cssClass = $cssClass;
         $this->noAvailableFiltersText = $noAvailableFiltersText;
         $this->combinationOperation = $combinationOperation;
+        $this->findologicFilterType = $findologicFilterType;
     }
 
     public function getDisplayType(): ?string
