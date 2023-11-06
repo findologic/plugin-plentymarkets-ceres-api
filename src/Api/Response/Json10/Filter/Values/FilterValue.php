@@ -10,9 +10,9 @@ class FilterValue
 {
     public const DELIMITER = '>';
 
-    protected ?string $uuid;
+    public ?string $uuid;
 
-    private TranslatedName $translated;
+    public TranslatedName $translated;
 
     /**
      * @param string|null $filterName

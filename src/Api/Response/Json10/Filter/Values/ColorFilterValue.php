@@ -6,9 +6,9 @@ namespace Findologic\Api\Response\Json10\Filter\Values;
 
 class ColorFilterValue extends ColorImageFilterValue
 {
-    protected string $displayType = 'color';
+    public string $displayType = 'color';
 
-    private ?string $colorHexCode;
+    public ?string $colorHexCode;
 
     public function getColorHexCode(): ?string
     {

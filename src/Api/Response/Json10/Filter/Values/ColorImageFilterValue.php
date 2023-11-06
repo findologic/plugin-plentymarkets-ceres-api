@@ -8,9 +8,9 @@ use Findologic\Api\Response\Json10\Filter\Media;
 
 abstract class ColorImageFilterValue extends FilterValue
 {
-    protected string $displayType;
+    public string $displayType;
 
-    protected ?Media $media;
+    public ?Media $media;
 
     public function getMedia(): ?Media
     {

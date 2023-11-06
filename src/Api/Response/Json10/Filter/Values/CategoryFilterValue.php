@@ -6,12 +6,12 @@ namespace Findologic\Api\Response\Json10\Filter\Values;
 
 class CategoryFilterValue extends FilterValue
 {
-    private bool $selected = false;
+    public bool $selected = false;
 
     /** @var CategoryFilterValue[] */
-    private array $values = [];
+    public array $values = [];
 
-    private int $frequency = 0;
+    public int $frequency = 0;
 
     public function isSelected(): bool
     {
