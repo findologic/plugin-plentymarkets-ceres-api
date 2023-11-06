@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="facet.name && ((typeof facet.minValue === 'undefined' && typeof facet.maxValue === 'undefined') || (facet.minValue !== facet.maxValue))"
+    v-if="facet.name && ((typeof facet.min === 'undefined' && typeof facet.max === 'undefined') || (facet.min !== facet.max))"
     class="card"
     :class="[facet.cssClass, 'col-md-' + filtersPerRow]"
   >

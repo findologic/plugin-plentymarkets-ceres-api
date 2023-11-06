@@ -21,10 +21,10 @@ export interface Facet {
     select?: string;
     values?: FacetValue[];
     findologicFilterType?: string;
-    minValue?: number;
-    min?: string;
-    maxValue?: number;
-    max?: string;
+    // minValue?: number;
+    min?: number;
+    // maxValue?: number;
+    max?: number;
     step?: number;
     unit?: string;
     noAvailableFiltersText?: string;

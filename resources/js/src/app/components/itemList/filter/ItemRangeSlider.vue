@@ -143,8 +143,8 @@ export default defineComponent({
 
     onMounted(() => {
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
-      valueFrom.value = (values ? values.min : props.facet.minValue) || '';
-      valueTo.value = (values ? values.max : props.facet.maxValue) || '';
+      valueFrom.value = (values ? values.min : props.facet.min) || '';
+      valueTo.value = (values ? values.max : props.facet.max) || '';
       applyText.value = TranslationService.translate('Ceres::Template.itemApply');
       // round values so it wouldn't have decimals
       valueFrom.value = Math.floor(valueFrom.value);
@@ -168,8 +168,8 @@ export default defineComponent({
           start: [valueFrom.value, valueTo.value],
           connect: true,
           range: {
-            'min': Math.min(valueFrom.value, props.facet.minValue ?? 0),
-            'max': Math.max(valueTo.value, props.facet.maxValue ?? Number.MAX_SAFE_INTEGER)
+            'min': Math.min(valueFrom.value, props.facet.min ?? 0),
+            'max': Math.max(valueTo.value, props.facet.max ?? Number.MAX_SAFE_INTEGER)
           },
           format: {
             to: function(value: number) {
