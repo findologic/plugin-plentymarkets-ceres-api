@@ -19,7 +19,7 @@ abstract class Filter extends BaseFilter
     private const FILTER_RANGE_MAX = 'max';
 
     /** @var FilterValue[] */
-    protected array $values;
+    public array $values;
 
     /**
      * Builds a new filter instance. May return null for unsupported filter types. Throws an exception for unknown
