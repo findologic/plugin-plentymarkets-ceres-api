@@ -77,7 +77,7 @@ export default defineComponent({
     const isLoading = computed(() => root.$store.state.isLoading);
 
     const updateFacet = (facetValue: FacetValue): void => {
-      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
+      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
     };
 
     const injectSvgImages = async () => {

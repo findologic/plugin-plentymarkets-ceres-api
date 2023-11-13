@@ -167,13 +167,13 @@ export default defineComponent({
     const isLoading = computed(() => store.itemList?.isLoading || false);
 
     const updateFacet = (facetValue: FacetValue): void => {
-      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
+      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
     };
 
     const getSubCategoryValue = (parentCategory: FacetValue, subCategory: Facet): FacetValue => {
       return {
         id: subCategory.id,
-        name: parentCategory.name + '_' + subCategory.name
+        name: parentCategory.translated.name + '_' + subCategory.translated.name
       } as FacetValue;
     };
 

@@ -18,7 +18,7 @@ export interface Facet {
     type?: string;
     isMain?: boolean;
     itemCount?: number;
-    select?: string;
+    selectMode?: string;
     values?: FacetValue[];
     findologicFilterType?: string;
     // minValue?: number;
@@ -31,13 +31,21 @@ export interface Facet {
     cssClass?: string;
 }
 
+export interface Media {
+    url?: string;
+}
+
+export interface TranslatedName {
+    name?: string;
+}
+
 export interface FacetValue {
-    count?: number;
+    frequency?: number;
     id?: string;
-    name: string;
-    imageUrl?: string;
+    translated: TranslatedName;
+    media?: Media;
     selected: boolean;
-    items: FacetValue[];
+    values: FacetValue[];
 }
 
 export interface ColorFacet extends Facet {
