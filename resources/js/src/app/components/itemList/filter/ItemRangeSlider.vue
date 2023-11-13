@@ -181,6 +181,23 @@ export default defineComponent({
             }
           }
         });
+        console.log({slider, {
+          step: props.facet.step,
+          start: [valueFrom.value, valueTo.value],
+          connect: true,
+          range: {
+            'min': Math.min(valueFrom.value, props.facet.minValue ?? 0),
+            'max': Math.max(valueTo.value, props.facet.maxValue ?? Number.MAX_SAFE_INTEGER)
+          },
+          format: {
+            to: function(value: number) {
+              return value.toFixed(decimalNumber);
+            },
+            from: function(value: string) {
+              return Number(Number(value).toFixed(decimalNumber));
+            }
+          }
+        }})
 
         slider.on('update', function (values: (number | string)[]) {
           valueFrom.value = values[0].toString();
