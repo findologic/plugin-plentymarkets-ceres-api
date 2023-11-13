@@ -181,7 +181,7 @@ export default defineComponent({
             }
           }
         });
-        console.log({slider, {
+        console.log({slider, pass : {
           step: props.facet.step,
           start: [valueFrom.value, valueTo.value],
           connect: true,
