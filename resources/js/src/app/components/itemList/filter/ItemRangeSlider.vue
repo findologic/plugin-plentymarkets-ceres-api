@@ -197,7 +197,7 @@ export default defineComponent({
             }
           }
         });
-        console.log({slider});
+        console.log({slider, element});
 
         slider.on('update', function (values: (number | string)[]) {
           valueFrom.value = values[0].toString();
