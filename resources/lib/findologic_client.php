@@ -47,7 +47,7 @@ function setSearchParams(Request|SearchNavigationRequest $request): Request
     if (isset($parameters['attrib'])) {
         $attributes = $parameters['attrib'];
         foreach ($attributes as $filterName => $value) {
-            $request->addAttribute($filterName, $value);
+            $request->addAttribute($filterName, $value[0]);
         }
     }
 

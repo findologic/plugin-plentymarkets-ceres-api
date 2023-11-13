@@ -102,12 +102,12 @@ abstract class Filter extends BaseFilter
             $customFilter->setUnit($unit);
         }
 
-        // if ($step !== null) {
-        //     $customFilter->setStep($step);
-        // }
-        // else{
+        if ($step !== null) {
+            $customFilter->setStep($step);
+        }
+        else{
             $customFilter->setStep(0.01);
-        // }
+        }
 
         if ($filter->getTotalRange()) {
             $customFilter->setTotalRange([
