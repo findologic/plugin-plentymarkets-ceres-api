@@ -24,12 +24,12 @@
             :width="value.media.url ? '80px' : ''"
             @error="handleImageError($event, value)"
           >
-          <span v-text="value.name" />
+          <span v-text="value.translated.name" />
         </label>
         <div
-          v-if="value.count"
+          v-if="value.frequency"
           class="filter-badge"
-          v-text="value.count"
+          v-text="value.frequency"
         />
       </div>
     </div>

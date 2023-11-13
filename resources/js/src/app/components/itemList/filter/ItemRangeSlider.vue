@@ -163,6 +163,23 @@ export default defineComponent({
 
       $(document).ready(function () {
         const element: noUiSlider.target = document.getElementById(sanitizedFacetId.value) as noUiSlider.target;
+        console.log({
+          step: props.facet.step,
+          start: [valueFrom.value, valueTo.value],
+          connect: true,
+          range: {
+            'min': Math.min(valueFrom.value, props.facet.min ?? 0),
+            'max': Math.max(valueTo.value, props.facet.max ?? Number.MAX_SAFE_INTEGER)
+          },
+          format: {
+            to: function(value: number) {
+              return value.toFixed(decimalNumber);
+            },
+            from: function(value: string) {
+              return Number(Number(value).toFixed(decimalNumber));
+            }
+          }
+        });
         const slider = noUiSlider.create(element, {
           step: props.facet.step,
           start: [valueFrom.value, valueTo.value],
