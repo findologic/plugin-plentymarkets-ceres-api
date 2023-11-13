@@ -141,7 +141,7 @@ class UrlBuilder {
 
         const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
 
-        if (facetId === 'price' || facet.findologicFilterType === 'range-slider') {
+        if (facetId === 'price' || facet.findologicFilterType === 'rangeSliderFilter') {
             const facetVal = facetValue as PriceFacetValue;
 
             if (facetVal.max !== Number.MAX_SAFE_INTEGER) {

@@ -156,7 +156,7 @@ export default class Url extends Vue {
 
         const attributes = params[Constants.PARAMETER_ATTRIBUTES];
 
-        if (facetId === 'price' || this.facet.findologicFilterType === 'range-slider') {
+        if (facetId === 'price' || this.facet.findologicFilterType === 'rangeSliderFilter') {
             attributes[facetId] = {
                 min: facetValue.min,
                 max: facetValue.max
