@@ -11,8 +11,8 @@
         :checked="value.selected"
         class="form-check-input hidden-xs-up"
         type="checkbox"
-        @change="selected(value.name)"
-        @click="selected(value.name)"
+        @change="selected(value.translated.name)"
+        @click="selected(value.translated.name)"
       >
       <label
         :for="'option-' + value.id"
