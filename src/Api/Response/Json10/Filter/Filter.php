@@ -52,6 +52,15 @@ abstract class Filter extends BaseFilter
         }
     }
 
+    private static function isEmptyFilterValue(ResultFilterValue $filterValue)
+    {
+        if ($filterValue->getName()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function addValue(FilterValue $filterValue): self
     {
         $this->values[] = $filterValue;
@@ -72,10 +81,10 @@ abstract class Filter extends BaseFilter
 
     private static function handleLabelTextFilter(ResultFilter $filter, bool $isMain): LabelTextFilter
     {
-        $customFilter = pluginApp(LabelTextFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $customFilter = pluginApp(LabelTextFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
+            if(!self::isEmptyFilterValue($item)) $customFilter->addValue(pluginApp(FilterValue::class, [$item->getName(), $filter->getName()]));
         }
 
         return $customFilter;
@@ -83,10 +92,10 @@ abstract class Filter extends BaseFilter
 
     private static function handleSelectDropdownFilter(ResultFilter $filter, bool $isMain): SelectDropdownFilter
     {
-        $customFilter = pluginApp(SelectDropdownFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $customFilter = pluginApp(SelectDropdownFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
+            if(!self::isEmptyFilterValue($item)) $customFilter->addValue(pluginApp(FilterValue::class, [$item->getName(), $filter->getName()]));
         }
 
         return $customFilter;
@@ -94,7 +103,7 @@ abstract class Filter extends BaseFilter
 
     private static function handleRangeSliderFilter(ResultFilter $filter, bool $isMain): RangeSliderFilter
     {
-        $customFilter = pluginApp(RangeSliderFilter::class,[$filter, $isMain]);
+        $customFilter = pluginApp(RangeSliderFilter::class, [$filter, $isMain]);
         $unit = $filter->getUnit();
         $step = $filter->getStepSize();
 
@@ -106,7 +115,7 @@ abstract class Filter extends BaseFilter
         //     $customFilter->setStep($step);
         // }
         // else{
-            $customFilter->setStep(0.01);
+        $customFilter->setStep(0.01);
         // }
 
         if ($filter->getTotalRange()) {
@@ -124,7 +133,7 @@ abstract class Filter extends BaseFilter
         }
 
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $filter->getName()]));
+            if(!self::isEmptyFilterValue($item)) $customFilter->addValue(pluginApp(FilterValue::class, [$item->getName(), $filter->getName()]));
         }
 
         if ($filter->getTotalRange()['min'] && $filter->getTotalRange()['max']) {
@@ -150,18 +159,20 @@ abstract class Filter extends BaseFilter
 
     private static function handleColorPickerFilter(ResultFilter $filter, bool $isMain): ColorPickerFilter
     {
-        $customFilter = pluginApp(ColorPickerFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $customFilter = pluginApp(ColorPickerFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
         /** @var ResultFilterValue $item */
         foreach ($filter->getValues() as $item) {
             $imageUrls[$item->getName()] = $item->getImage();
-
-            $filterValue = pluginApp(ColorFilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]);
+            if(!self::isEmptyFilterValue($item)) {
+                continue;
+            }
+            $filterValue = pluginApp(ColorFilterValue::class, [$item->getName(), $item->getName(), $filter->getName()]);
             $filterValue->setColorHexCode($item->getColor());
 
             self::setColorPickerDisplayType($item, $filterValue);
 
-            $media = pluginApp(Media::class,[$item->getImage()]);
+            $media = pluginApp(Media::class, [$item->getImage()]);
             $filterValue->setMedia($media);
 
             $customFilter->addValue($filterValue);
@@ -172,13 +183,16 @@ abstract class Filter extends BaseFilter
 
     private static function handleVendorImageFilter(ResultFilter $filter, bool $isMain): VendorImageFilter
     {
-        $customFilter = pluginApp(VendorImageFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $customFilter = pluginApp(VendorImageFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
         /** @var ApiImageFilterValue $item */
         foreach ($filter->getValues() as $item) {
             $imageUrls[$item->getName()] = $item->getImage();
-            $filterValue = pluginApp(ImageFilterValue::class,[$item->getName(), $item->getName(), $filter->getName()]);
-            $media = pluginApp(Media::class,[$item->getImage()]);
+            if(!self::isEmptyFilterValue($item)) {
+                continue;
+            }
+            $filterValue = pluginApp(ImageFilterValue::class, [$item->getName(), $item->getName(), $filter->getName()]);
+            $media = pluginApp(Media::class, [$item->getImage()]);
             $filterValue->setMedia($media);
             $customFilter->addValue($filterValue);
             $filterValue->setDisplayType('media');
@@ -189,10 +203,10 @@ abstract class Filter extends BaseFilter
 
     private static function handleCategoryFilter(ResultFilter $filter, bool $isMain): CategoryFilter
     {
-        $categoryFilter = pluginApp(CategoryFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $categoryFilter = pluginApp(CategoryFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
         foreach ($filter->getValues() as $item) {
-            if(!$item->getName()){
+            if (!$item->getName()) {
                 continue;
             }
             $levels = explode('_', $item->getName());
@@ -200,7 +214,7 @@ abstract class Filter extends BaseFilter
 
             foreach ($levels as $level) {
                 if (!$foundValue = $currentValue->searchValue($level)) {
-                    $foundValue = pluginApp(CategoryFilterValue::class,[$level, $level]);
+                    $foundValue = pluginApp(CategoryFilterValue::class, [$level, $level]);
                     $foundValue->setSelected($item->isSelected());
                     $foundValue->setFrequency($item->getFrequency());
 
@@ -221,7 +235,7 @@ abstract class Filter extends BaseFilter
             return null;
         }
 
-        $customFilter = pluginApp(RatingFilter::class,[$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $customFilter = pluginApp(RatingFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
         if ($totalRange['max']) {
             $customFilter->setMaxPoints(ceil($totalRange['max']));
@@ -229,7 +243,7 @@ abstract class Filter extends BaseFilter
 
         /** @var ApiRangeSliderValue $item */
         foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class,[$item->getName(), $item->getName()]));
+            if(!self::isEmptyFilterValue($item)) $customFilter->addValue(pluginApp(FilterValue::class, [$item->getName(), $item->getName()]));
         }
 
         return $customFilter;
