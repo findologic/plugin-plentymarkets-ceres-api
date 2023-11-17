@@ -13,19 +13,19 @@
         >
           <div
             class="fl-color-tile-background"
-            :style="{backgroundColor: colorValue.hexValue}"
+            :style="{backgroundColor: colorValue.colorHexCode}"
             :title="colorValue.name"
           >
             <img
-              v-if="!colorValue.colorImageUrl && !colorValue.hexValue"
+              v-if="!colorValue.media.url && !colorValue.colorHexCode"
               class="fl-color-tile-image"
               :alt="colorValue.name"
               :src="fallbackImage"
             >
             <img
-              v-else-if="colorValue.colorImageUrl"
+              v-else-if="colorValue.media.url"
               class="fl-color-tile-image"
-              :src="colorValue.colorImageUrl"
+              :src="colorValue.media.url"
               @error="handleImageError($event, colorValue)"
             >
             <div
@@ -75,7 +75,7 @@ export default defineComponent({
     const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
       const target = event.target as HTMLImageElement;
 
-      if (!colorValue.hexValue) {
+      if (!colorValue.colorHexCode) {
         target.src = props.fallbackImage;
       } else {
         target.remove();

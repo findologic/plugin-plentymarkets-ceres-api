@@ -53,8 +53,9 @@ export interface ColorFacet extends Facet {
 }
 
 export interface ColorFacetValue extends FacetValue {
-    hexValue: string|null;
+    colorHexCode: string|null;
     colorImageUrl?: string|null;
+    media: Media;
 }
 
 export interface CategoryFacet extends Facet {
