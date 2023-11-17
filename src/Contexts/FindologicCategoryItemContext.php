@@ -18,7 +18,9 @@ class FindologicCategoryItemContext extends CategoryItemContext implements Conte
         /** @var SearchService $searchService */
         $searchService = pluginApp(SearchService::class);
         $searchResults = $searchService->getResults();
+        $filtersExtension = $searchResults->getFiltersExtension();
+        $filters = $filtersExtension->getFilters();
         $this->getLogger(__METHOD__)->error('facets', ['facets' => $searchResults->getFiltersExtension()]);
-        $this->facets = $searchResults->getFiltersExtension();
+        $this->facets = $filters;
     }
 }
