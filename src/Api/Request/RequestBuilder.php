@@ -9,6 +9,7 @@ use Plenty\Plugin\Log\LoggerFactory;
 use Findologic\Components\PluginConfig;
 use Plenty\Log\Contracts\LoggerContract;
 use Findologic\Services\PluginInfoService;
+use Plenty\Modules\Category\Models\Category;
 use IO\Services\WebstoreConfigurationService;
 use Plenty\Plugin\Http\Request as HttpRequest;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
@@ -196,7 +197,7 @@ class RequestBuilder
      * @param int|null $category
      * @return string
      */
-    protected function getRequestType(HttpRequest $httpRequest, ?int $category = null): string
+    protected function getRequestType(HttpRequest $httpRequest, ?Category $category = null): string
     {
         $requestType = $category ? self::CATEGORY_REQUEST_TYPE : self::DEFAULT_REQUEST_TYPE;
 
