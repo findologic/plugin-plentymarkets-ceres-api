@@ -47,9 +47,7 @@ function setSearchParams(Request|SearchNavigationRequest $request): Request
     if (isset($parameters['attrib'])) {
         $attributes = $parameters['attrib'];
         foreach ($attributes as $key => $attrib) {
-            foreach ($attrib as $specifier => $value) {
-                $request->addAttribute($key, $value, $specifier);
-            }
+            $request->addAttribute($key, $attrib);
             // $request->addPushAttrib($filterName, $value);
         }
     }
