@@ -135,7 +135,7 @@ class SearchService implements SearchServiceInterface
         }
         $this->getLogger(__METHOD__)->error('doSearch end',$this->responseParser->parseTotalResults());
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults([1280], 1);
+        $externalSearch->setResults([135], 1);
     }
 
     /**
