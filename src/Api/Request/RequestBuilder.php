@@ -83,7 +83,7 @@ class RequestBuilder
      * @param int $requestType
      * @param HttpRequest $httpRequest
      * @param ExternalSearch $externalSearch
-     * @param int|null $category
+     * @param Category|null $category
      * @return array
      */
     public function build(int $requestType, HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
@@ -194,7 +194,7 @@ class RequestBuilder
 
     /**
      * @param HttpRequest $httpRequest
-     * @param int|null $category
+     * @param Category|null $category
      * @return string
      */
     protected function getRequestType(HttpRequest $httpRequest, ?Category $category = null): string
