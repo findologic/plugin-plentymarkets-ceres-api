@@ -79,16 +79,17 @@ class ResponseParser
 
     public function getProductIds() :array
     {
-        return array_map(
-            function (Item $product) {
-                if ($this->pluginConfig->get(Plugin::CONFIG_USE_VARIANTS)) {
-                    return count($product->getVariants()) ? $product->getVariants()[0]->getId() : $product->getId();
-                } else {
-                    return $product->getId();
+        $productIds = [];
+        foreach ($this->response->getResult()->getItems() as $item) {
+            if ($this->pluginConfig->get(Plugin::CONFIG_USE_VARIANTS)) {
+                foreach ($item->getVariants() as $variant) {
+                    $productIds[] = $variant->getId();
                 }
-            },
-            $this->response->getResult()->getItems()
-        );
+            } else {
+                $productIds[] = $item->getId();
+            }
+        }
+        return $productIds;
     }
 
     public function getFiltersExtension(): FiltersExtension
