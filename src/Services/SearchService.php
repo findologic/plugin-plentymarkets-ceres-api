@@ -105,6 +105,7 @@ class SearchService implements SearchServiceInterface
      */
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
+        $this->getLogger(__METHOD__)->error('doSearch',[$externalSearch->getResults(), $externalSearch->getDocuments()]);
         $this->search($request, $externalSearch);
         $hasSelectedFilters = $request->get('attrib') !== null;
         $landingPage = $this->responseParser->getLandingPageExtension();
@@ -116,6 +117,7 @@ class SearchService implements SearchServiceInterface
         if ($this->responseParser->parseTotalResults() == 0 && !$hasSelectedFilters) {
             return;
         } elseif ($this->responseParser->parseTotalResults() == 0 && $hasSelectedFilters) {
+            $this->getLogger(__METHOD__)->error('doSearch set empty',[]);
             $externalSearch->setResults([]);
 
             return;
@@ -126,14 +128,14 @@ class SearchService implements SearchServiceInterface
         } else {
             $variationIds = $this->responseParser->getProductIds();
         }
-
+        $this->getLogger(__METHOD__)->error('doSearch variationIds',$variationIds);
         if ($redirectUrl = $this->getRedirectUrl($request, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
             return;
         }
-
+        $this->getLogger(__METHOD__)->error('doSearch end',$this->responseParser->parseTotalResults());
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults($variationIds, $this->responseParser->parseTotalResults());
+        $externalSearch->setResults([1280], 1);
     }
 
     /**
@@ -160,7 +162,7 @@ class SearchService implements SearchServiceInterface
     {
         // $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
         // $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
-
+        $this->getLogger(__METHOD__)->error('doNavigation',[]);
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
             // $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));

@@ -9,10 +9,11 @@ use Findologic\Api\Response\Json10\Filter\TranslatedName;
 class FilterValue
 {
     public const DELIMITER = '>';
-
     public ?string $uuid;
-
     public TranslatedName $translated;
+    public ?int $frequency;
+    protected ?bool $selected;
+    protected ?float $weight;
 
     /**
      * @param string|null $filterName
@@ -23,9 +24,15 @@ class FilterValue
     public function __construct(
         // private string $id,
         private string $name,
-        ?string $filterName = null
+        ?string $filterName = null,
+        ?int $frequency = null,
+        ?bool $selected = null,
+        ?float $weight = null
     ) {
         $this->translated = pluginApp(TranslatedName::class, [$name]);
+        $this->frequency = $frequency;
+        $this->selected = $selected;
+        $this->weight = $weight;
         if ($filterName !== null) {
             $this->uuid = sprintf('%s%s', $filterName, self::DELIMITER);
         }
@@ -49,5 +56,9 @@ class FilterValue
     public function getUuid(): ?string
     {
         return $this->uuid;
+    }
+    public function getFrequency()
+    {
+            return $this->frequency;
     }
 }

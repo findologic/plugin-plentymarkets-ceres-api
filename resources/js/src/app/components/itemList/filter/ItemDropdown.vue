@@ -1,7 +1,7 @@
 <template>
   <div class="fl-dropdown">
     <div
-      v-for="value in facet.values.slice(0, facet.itemCount)"
+      v-for="value in facet.values"
       :key="value.id"
       class="form-check"
     >
@@ -27,7 +27,7 @@
       />
     </div>
     <div
-      v-if="facet.values.slice(facet.itemCount, facet.values.length).length"
+      v-if="facet.values.length"
       class="fl-dropdown-container custom-select"
       tabindex="0"
       @click="toggle()"
@@ -39,12 +39,12 @@
         class="fl-dropdown-content form-check"
       >
         <li
-          v-for="value in facet.values.slice(facet.itemCount, facet.values.length)"
+          v-for="value in facet.values"
           :key="value.id"
           class="fl-dropdown-item"
           :class="{'form-check-label': !value.selected}"
           rel="nofollow"
-          @click="selected(value.name)"
+          @click="selected(value.translated.name)"
         >
           <input
             :id="'option-' + value.id"
@@ -57,12 +57,12 @@
             :for="'option-' + value.id"
             :class="{'form-check-label': value.selected}"
             rel="nofollow"
-            v-text="value.name"
+            v-text="value.translated.name"
           />
           <div
-            v-if="value.count"
+            v-if="value.frequency"
             class="filter-badge"
-            v-text="value.count"
+            v-text="value.frequency"
           />
         </li>
       </ul>

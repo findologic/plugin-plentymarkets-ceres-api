@@ -78,12 +78,12 @@
           :for="'option-' + value.id"
           class="form-check-label"
           rel="nofollow"
-          v-text="value.name"
+          v-text="value.translated.name"
         />
         <div
-          v-if="value.count"
+          v-if="value.frequency"
           class="filter-badge"
-          v-text="value.count"
+          v-text="value.frequency"
         />
       </div>
     </div>

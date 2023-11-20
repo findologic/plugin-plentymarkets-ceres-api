@@ -94,7 +94,7 @@ export default defineComponent({
         return Number.MAX_SAFE_INTEGER;
       }
 
-      const maxValue = facet.values[facet.values?.length - 1].translated.name.split(' - ')[1];
+      const maxValue = "999";//facet.values[facet.values?.length - 1].translated.name.split(' - ')[1];
 
       return maxValue ? parseFloat(maxValue) : Number.MAX_SAFE_INTEGER;
     };
@@ -175,14 +175,14 @@ export default defineComponent({
             'min': Math.min(valueFrom.value, props.facet.min ?? 0),
             'max': Math.max(valueTo.value, props.facet.max ?? Number.MAX_SAFE_INTEGER)
           },
-          format: {
-            to: function(value: number) {
-              return value.toFixed(decimalNumber);
-            },
-            from: function(value: string) {
-              return Number(Number(value).toFixed(decimalNumber));
-            }
-          }
+          // format: {
+          //   to: function(value: number) {
+          //     return value.toFixed(decimalNumber);
+          //   },
+          //   from: function(value: string) {
+          //     return Number(Number(value).toFixed(decimalNumber));
+          //   }
+          // }
         });
         const slider = noUiSlider.create(element, {
           step: props.facet.step,
@@ -192,14 +192,14 @@ export default defineComponent({
             'min': Math.min(valueFrom.value, props.facet.min ?? 0),
             'max': Math.max(valueTo.value, props.facet.max ?? Number.MAX_SAFE_INTEGER)
           },
-          format: {
-            to: function(value: number) {
-              return value.toFixed(decimalNumber);
-            },
-            from: function(value: string) {
-              return Number(Number(value).toFixed(decimalNumber));
-            }
-          }
+          // format: {
+          //   to: function(value: number) {
+          //     return value.toFixed(decimalNumber);
+          //   },
+          //   from: function(value: string) {
+          //     return Number(Number(value).toFixed(decimalNumber));
+          //   }
+          // }
         });
         console.log({slider, element});
 
