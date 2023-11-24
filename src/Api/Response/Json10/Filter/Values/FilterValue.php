@@ -23,7 +23,7 @@ class FilterValue
      */
     public function __construct(
         // private string $id,
-        private string $name,
+        private ?string $name,
         ?string $filterName = null,
         ?int $frequency = null,
         ?bool $selected = null,
