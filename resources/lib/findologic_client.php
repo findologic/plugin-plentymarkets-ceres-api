@@ -119,7 +119,7 @@ try {
 
     $request = Request::getInstance($requestType);
     $request = setDefaultValues($request);
-
+    $requestUrl = $request->buildRequestUrl($config);
     // $shopUrl = \SdkRestApi::getParam('shopUrl');
     // $shopKey = \SdkRestApi::getParam('shopKey');
     // $revision = \SdkRestApi::getParam('revision');
@@ -140,7 +140,7 @@ try {
 
     $apiResponse = $findologicClient->send($request);
     $response = new ApiResponse($apiResponse);
-    return ['response' => $response->toArray()];
+    return ['response' => $response->toArray(), 'requestUrl' => $requestUrl, 'body' => $request->getBody()];
 } catch (\Throwable | \Exception $t) {
     return ['error' => (string)$t, 'request' => (array)$request];
 }
