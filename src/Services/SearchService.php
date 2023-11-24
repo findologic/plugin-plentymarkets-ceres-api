@@ -596,7 +596,7 @@ class SearchService implements SearchServiceInterface
         $i = 0;
         do {
             $responseData = $this->client->call($request);
-
+            $this->logger->error('request url, f', $request);
             $error = $this->validateResponse($responseData);
             if (!$error) {
                 return $responseData;
