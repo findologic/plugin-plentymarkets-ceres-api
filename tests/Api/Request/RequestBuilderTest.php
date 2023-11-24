@@ -64,29 +64,29 @@ class RequestBuilderTest extends TestCase
     {
         $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->setMethods([])
             ->getMock();
         $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->setMethods([])
             ->getMock();
         $this->logger = $this->getMockBuilder(LoggerContract::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->setMethods([])
             ->getMock();
         $this->webstoreConfigurationService = $this->getMockBuilder(WebstoreConfigurationService::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->setMethods([])
             ->getMock();
         $this->loggerFactory = $this->getMockBuilder(LoggerFactory::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->setMethods([])
             ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
-        $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->onlyMethods([])->getMock();
+        $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->setMethods()->getMock();
         $this->pluginInfoService = $this->getMockBuilder(PluginInfoService::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
+            ->setMethods([])
             ->getMock();
     }
 
