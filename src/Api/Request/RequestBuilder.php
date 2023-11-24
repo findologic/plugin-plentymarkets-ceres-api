@@ -188,6 +188,7 @@ class RequestBuilder
      */
     protected function setDefaultValues($request, $requestType)
     {
+        $this->logger->error('request url', $this->getUrl($requestType));
         $request->setUrl($this->getUrl($requestType));
         $request->setParam('revision', $this->getPluginVersion());
         $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
