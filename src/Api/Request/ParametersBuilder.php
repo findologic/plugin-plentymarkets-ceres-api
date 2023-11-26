@@ -85,7 +85,7 @@ class ParametersBuilder
     }
 
     /**
-     * @param Category $category
+     * @param ?Category $category
      * @return string
      */
     public function getCategoryName($category)
@@ -96,7 +96,7 @@ class ParametersBuilder
             $categoryTree = $this->getCategoryTree($category);
             $categoryName = implode('_', $categoryTree);
         } catch (Exception $e) {
-            $this->logger->error('Could not get category name', ['category' => $category->toArray()]);
+            $this->logger->error('Could not get category name', ['category' => $category?->toArray()]);
             $this->logger->logException($e);
         }
 

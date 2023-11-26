@@ -62,10 +62,6 @@ class RequestBuilderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
         $this->pluginConfig = $this->getMockBuilder(PluginConfig::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -83,10 +79,20 @@ class RequestBuilderTest extends TestCase
             ->setMethods([])
             ->getMock();
         $this->loggerFactory->expects($this->any())->method('getLogger')->willReturn($this->logger);
-        $this->tagsHelper = $this->getMockBuilder(Tags::class)->disableOriginalConstructor()->setMethods()->getMock();
+        $this->tagsHelper = $this->getMockBuilder(Tags::class)
+            ->disableOriginalConstructor()
+            ->setMethodsExcept(['isTagPage', 'getTagIdFromUri'])
+            ->getMock();
         $this->pluginInfoService = $this->getMockBuilder(PluginInfoService::class)
             ->disableOriginalConstructor()
             ->setMethods([])
+            ->getMock();
+            $this->parametersBuilder = $this->getMockBuilder(ParametersBuilder::class)
+            ->setConstructorArgs([
+                'loggerFactory' => $this->loggerFactory,
+                'tagsHelper' => $this->tagsHelper,
+            ])
+            ->setMethodsExcept(['setSearchParams', 'getCategoryName', 'getCategoryTree'])
             ->getMock();
     }
 
@@ -94,7 +100,7 @@ class RequestBuilderTest extends TestCase
     {
         return [
             'Build alive request' => [
-                'https://service.findologic.com/ps/xml_2.1/alivetest.php',
+                'https://service.findologic.com/ps/json_1.0/alivetest.php',
                 [
                     'shopkey' => 'TESTSHOPKEY'
                 ]
@@ -110,15 +116,14 @@ class RequestBuilderTest extends TestCase
      */
     public function testBuildAliveRequest(string $expectedUrl, array $expectedParams)
     {
-        $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject']);
-        $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
-
+        $requestBuilderMock = $this->getRequestBuilderMock(['buildAliveRequest', 'getUrl', 'getShopUrl']);
         $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('TESTSHOPKEY');
 
         /** @var Request|MockObject $result */
         $result = $requestBuilderMock->buildAliveRequest();
-        $this->assertEquals($expectedUrl, $result->getUrl());
-        $this->assertEquals($expectedParams, $result->getParams());
+
+        $this->assertEquals($expectedUrl, $result['shopUrl']);
+        $this->assertEquals($expectedParams['shopkey'], $result['shopKey']);
     }
 
     public function buildProvider()
@@ -126,7 +131,7 @@ class RequestBuilderTest extends TestCase
         return [
             'Build - No user ip provided' => [
                 false,
-                'https://service.findologic.com/ps/xml_2.1/index.php',
+                'https://service.findologic.com/ps/json_1.0/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -138,7 +143,7 @@ class RequestBuilderTest extends TestCase
             ],
             'Category page request' => [
                 '127.0.0.1',
-                'https://service.findologic.com/ps/xml_2.1/selector.php',
+                'https://service.findologic.com/ps/json_1.0/selector.php',
                 true,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -151,7 +156,7 @@ class RequestBuilderTest extends TestCase
             ],
             'Search page request' => [
                 '127.0.0.1',
-                'https://service.findologic.com/ps/xml_2.1/index.php',
+                'https://service.findologic.com/ps/json_1.0/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -194,14 +199,15 @@ class RequestBuilderTest extends TestCase
 
         $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('TESTSHOPKEY');
 
-        $requestBuilderMock = $this->getRequestBuilderMock(['createRequestObject', 'getUserIp', 'getPluginVersion']);
-        $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
+        $requestBuilderMock = $this->getRequestBuilderMock([]);
+        // $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
         $requestBuilderMock->expects($this->any())->method('getUserIp')->willReturn($userIp);
         $requestBuilderMock->expects($this->any())->method('getPluginVersion')->willReturn('0.0.1');
 
         $this->pluginInfoService->method('getPluginVersion')->with('ceres')->willReturn('5.0.30');
+        // $this->tagsHelper->method('isTagPage')->willReturn(false);
 
-        $this->parametersBuilder->expects($this->any())->method('setSearchParams')->willReturnArgument(0);
+        // $this->parametersBuilder->expects($this->any())->method('setSearchParams')->willReturnArgument(0);
 
         $categoryMock = null;
 
@@ -213,8 +219,8 @@ class RequestBuilderTest extends TestCase
         }
 
         /** @var Request|MockObject $result */
-        $result = $requestBuilderMock->build($httpRequestMock, $searchQueryMock, $categoryMock);
-
+        $result = $requestBuilderMock->build(RequestBuilder::TYPE_SEARCH, $httpRequestMock, $searchQueryMock, $categoryMock);
+        print_r($result);
         $this->assertEquals($expectedUrl, $result->getUrl());
         $this->assertEquals($expectedParams, $result->getParams());
     }
@@ -235,7 +241,7 @@ class RequestBuilderTest extends TestCase
             'No domain is configured' => [
                 '',
                 '',
-                'https://service.findologic.com/ps/xml_2.1/index.php'
+                'https://service.findologic.com/ps/json_1.0/index.php'
             ]
         ];
     }
@@ -268,18 +274,18 @@ class RequestBuilderTest extends TestCase
      * @param array|null $methods
      * @return RequestBuilder|MockObject
      */
-    protected function getRequestBuilderMock($methods = null)
+    protected function getRequestBuilderMock($methods)
     {
         return $this->getMockBuilder(RequestBuilder::class)
-            ->setConstructorArgs([
-                'parametersBuilder' => $this->parametersBuilder,
-                'pluginConfig' => $this->pluginConfig,
-                'loggerFactory' => $this->loggerFactory,
-                'webstoreConfigurationService' => $this->webstoreConfigurationService,
-                'tagsHelper' => $this->tagsHelper,
-                'pluginInfoService' => $this->pluginInfoService
-            ])
-            ->setMethods($methods)
-            ->getMock();
+        ->setConstructorArgs([
+            'parametersBuilder' => $this->parametersBuilder,
+            'pluginConfig' => $this->pluginConfig,
+            'loggerFactory' => $this->loggerFactory,
+            'webstoreConfigurationService' => $this->webstoreConfigurationService,
+            'tagsHelper' => $this->tagsHelper,
+            'pluginInfoService' => $this->pluginInfoService
+        ])
+        ->setMethodsExcept($methods)
+        ->getMock();
     }
 }
