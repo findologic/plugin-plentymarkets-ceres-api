@@ -63,6 +63,10 @@ export default defineComponent({
       default: ''
     }
   },
+  selected : (value: string, other:any) =>{
+        console.log({value, other});
+        UrlBuilder.updateSelectedFilters(this.props.facet, this.props.facet.id, value);
+    },
   setup: (props: ItemFilterImageProps, { root }) => {
     const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
       const target = event.target as HTMLImageElement;
@@ -81,10 +85,6 @@ export default defineComponent({
       UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
     };
 
-    const selected = (value: string) =>{
-        console.log({value});
-        UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, value);
-    }
     const injectSvgImages = async () => {
       await nextTick();
       SVGInjector(document.getElementsByClassName('fl-svg'));
@@ -96,7 +96,6 @@ export default defineComponent({
       handleImageError,
       isLoading,
       updateFacet,
-      selected
     };
   }
 });
