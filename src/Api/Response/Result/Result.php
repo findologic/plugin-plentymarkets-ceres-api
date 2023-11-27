@@ -25,10 +25,10 @@ class Result
         $this->variant = pluginApp(Variant::class, [$result['variant']]);
         $filterValueId = 0;
         $this->mainFilters = array_map(function($mainFilter) use (&$filterValueId){
-            return pluginApp(Filter::class, [$mainFilter, ++$filterValueId]);
+            return pluginApp(Filter::class, [$mainFilter, $filterValueId]);
         }, $result['mainFilters']);
         $this->otherFilters = array_map(function ($otherFilter) use(&$filterValueId){
-            return pluginApp(Filter::class, [$otherFilter, ++$filterValueId]);
+            return pluginApp(Filter::class, [$otherFilter, $filterValueId]);
         }, $result['otherFilters']);
     }
 

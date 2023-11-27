@@ -46,8 +46,8 @@ class Filter
         $this->selectedRange = $filter['selectedRange'];
         $this->pinnedFilterValueCount = $filter['pinnedFilterValueCount'];
 
-        $this->values = array_map(function ($filterValue) use ($filterValueId){
-            return pluginApp(FilterValue::class, [$filterValue, $filterValueId]);
+        $this->values = array_map(function ($filterValue) use (&$filterValueId){
+            return pluginApp(FilterValue::class, [$filterValue, ++$filterValueId]);
         }, $filter['values']);
     }
 
