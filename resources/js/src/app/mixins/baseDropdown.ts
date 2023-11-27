@@ -41,6 +41,7 @@ export default class BaseDropdown extends Mixins<Vue, BaseDropdownInterface>(Vue
     }
 
     selected(value: string) {
+        console.log({value});
         UrlBuilder.updateSelectedFilters(this.facet, this.facetData.id, value);
     }
 
