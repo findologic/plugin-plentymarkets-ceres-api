@@ -1,6 +1,7 @@
 <template>
   <div class="fl-dropdown">
     <div
+      v-if="facet.values[0].frequency"
       v-for="value in facet.values"
       :key="value.id"
       class="form-check"
@@ -18,12 +19,12 @@
         :for="'option-' + value.id"
         class="form-check-label"
         rel="nofollow"
-        v-text="value.name"
+        v-text="value.translated.name"
       />
       <div
-        v-if="value.count"
+        v-if="value.frequency"
         class="filter-badge"
-        v-text="value.count"
+        v-text="value.frequency"
       />
     </div>
     <div
