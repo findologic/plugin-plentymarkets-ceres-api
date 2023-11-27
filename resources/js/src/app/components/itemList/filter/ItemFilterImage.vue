@@ -63,10 +63,6 @@ export default defineComponent({
       default: ''
     }
   },
-  selected : (value: string, other:any) =>{
-        console.log({value, other});
-        UrlBuilder.updateSelectedFilters(this.props.facet, this.props.facet.id, value);
-    },
   setup: (props: ItemFilterImageProps, { root }) => {
     const handleImageError = (event: Event, colorValue: ColorFacetValue): void => {
       const target = event.target as HTMLImageElement;
@@ -81,7 +77,6 @@ export default defineComponent({
     const isLoading = computed(() => root.$store.state.isLoading);
 
     const updateFacet = (facetValue: FacetValue): void => {
-      console.log('before call', {facetValue, facet: props.facet});
       UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
     };
 
