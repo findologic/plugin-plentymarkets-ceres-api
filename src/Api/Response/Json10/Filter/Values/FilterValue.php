@@ -13,7 +13,7 @@ class FilterValue
     public const DELIMITER = '>';
     public ?string $uuid;
     public TranslatedName $translated;
-    public int $id;
+    public string $id;
     public ?int $frequency;
     public ?bool $selected;
     public ?float $weight;
@@ -38,7 +38,7 @@ class FilterValue
         }
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }

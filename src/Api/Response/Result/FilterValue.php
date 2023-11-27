@@ -4,7 +4,7 @@ namespace Findologic\Api\Response\Result;
 
 class FilterValue
 {
-    protected int $id;
+    protected string $id;
     protected ?string $name;
 
     protected ?bool $selected;
@@ -21,9 +21,9 @@ class FilterValue
 
     protected ?string $image;
 
-    function __construct(array $filterValue = [], int $filterValueId)
+    function __construct(array $filterValue = [])
     {
-        $this->id = $filterValueId;
+        $this->id = uniqid();
         $this->name = $filterValue['name'];
         $this->selected = $filterValue['selected'];
         $this->weight = $filterValue['weight'];
@@ -67,7 +67,7 @@ class FilterValue
     {
         return $this->image;
     }
-    public function getId():int
+    public function getId():string
     {
         return $this->id;
     }

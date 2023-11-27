@@ -23,13 +23,8 @@ class Result
         $this->metadata = pluginApp(Metadata::class, [$result['metadata']]);
         if(!empty($result['items'])) $this->items = array_map(fn ($item) => pluginApp(Item::class, $item), [$result['items']]);
         $this->variant = pluginApp(Variant::class, [$result['variant']]);
-        $filterValueId = 0;
-        $this->mainFilters = array_map(function($mainFilter) use (&$filterValueId){
-            return pluginApp(Filter::class, [$mainFilter, $filterValueId]);
-        }, $result['mainFilters']);
-        $this->otherFilters = array_map(function ($otherFilter) use(&$filterValueId){
-            return pluginApp(Filter::class, [$otherFilter, $filterValueId]);
-        }, $result['otherFilters']);
+        $this->mainFilters = array_map(fn ($mainFilter) => pluginApp(Filter::class, [$mainFilter]), $result['mainFilters']);
+        $this->otherFilters = array_map(fn ($otherFilter) => pluginApp(Filter::class, [$otherFilter]), $result['otherFilters']);
     }
 
     /**

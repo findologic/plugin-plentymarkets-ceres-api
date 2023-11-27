@@ -31,7 +31,7 @@ class Filter
     /** @var FilterValue[] */
     protected $values = [];
 
-    function __construct(array $filter, int $filterValueId)
+    function __construct(array $filter)
     {
         $this->name = $filter['name'];
         $this->displayName = $filter['displayName'];
@@ -45,10 +45,7 @@ class Filter
         $this->totalRange = $filter['totalRange'];
         $this->selectedRange = $filter['selectedRange'];
         $this->pinnedFilterValueCount = $filter['pinnedFilterValueCount'];
-
-        $this->values = array_map(function ($filterValue) use (&$filterValueId){
-            return pluginApp(FilterValue::class, [$filterValue, ++$filterValueId]);
-        }, $filter['values']);
+        $this->values = array_map(fn ($filterValue) => pluginApp(FilterValue::class, [$filterValue]), $filter['values']);
     }
 
     /**
