@@ -5,47 +5,42 @@ declare(strict_types=1);
 namespace Findologic\Api\Response\Json10\Filter\Values;
 
 use Findologic\Api\Response\Json10\Filter\TranslatedName;
+use Findologic\Api\Response\Result\Filter as ResultFilter;
+use Findologic\Api\Response\Result\FilterValue as ResultFilterValue;
 
 class FilterValue
 {
     public const DELIMITER = '>';
     public ?string $uuid;
     public TranslatedName $translated;
+    public int $id;
     public ?int $frequency;
-    protected ?bool $selected;
-    protected ?float $weight;
+    public ?bool $selected;
+    public ?float $weight;
 
-    /**
-     * @param string|null $filterName
-     * This can be null because we do not want to set this for all filter values.
-     * For e.g the category filter does not need to have a unique ID as its value is already unique.
-     * The uuid is generated only for the values in which we need a unique ID for selection in storefront
-     */
     public function __construct(
-        // private string $id,
-        private ?string $name,
-        ?string $filterName = null,
-        ?int $frequency = null,
-        ?bool $selected = null,
-        ?float $weight = null
+        ?ResultFilter $filter,
+        ResultFilterValue $filterValue
     ) {
-        $this->translated = pluginApp(TranslatedName::class, [$name]);
-        $this->frequency = $frequency;
-        $this->selected = $selected;
-        $this->weight = $weight;
+        $this->translated = pluginApp(TranslatedName::class, [$filterValue->getName()]);
+        $this->frequency = $filterValue->getFrequency();
+        $this->selected = $filterValue->isSelected();
+        $this->weight = $filterValue->getWeight();
+        $this->id = $filterValue->getId();
+        
+        if($filter){
+            $filterName = $filter->getName();
+        }else{
+            $filterName = $filterValue->getName();
+        }
         if ($filterName !== null) {
             $this->uuid = sprintf('%s%s', $filterName, self::DELIMITER);
         }
     }
 
-    // public function getId(): string
-    // {
-    //     return $this->id;
-    // }
-
-    public function getName(): string
+    public function getId(): int
     {
-        return $this->name;
+        return $this->id;
     }
 
     public function getTranslated(): TranslatedName
@@ -60,5 +55,29 @@ class FilterValue
     public function getFrequency()
     {
             return $this->frequency;
+    }
+
+    /**
+     * Set the value of translated
+     *
+     * @return  self
+     */ 
+    public function setTranslated($translated)
+    {
+        $this->translated = $translated;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of uuid
+     *
+     * @return  self
+     */ 
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 }
