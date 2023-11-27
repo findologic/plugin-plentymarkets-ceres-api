@@ -5,8 +5,8 @@ namespace Findologic\Struct;
 
 class Promotion
 {
-    private ?string $image;
-    private ?string $link;
+    public ?string $image;
+    public ?string $link;
 
     public function __construct(
         ?string $link,
