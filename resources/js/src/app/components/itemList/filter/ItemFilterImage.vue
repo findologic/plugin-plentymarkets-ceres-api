@@ -77,6 +77,7 @@ export default defineComponent({
     const isLoading = computed(() => root.$store.state.isLoading);
 
     const updateFacet = (facetValue: FacetValue): void => {
+      console.log('before call', {facetValue, facet: props.facet});
       UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
     };
 
