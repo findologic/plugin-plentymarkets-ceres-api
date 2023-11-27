@@ -30,13 +30,16 @@ class SearchFilterContainer
         if ($currentCategory !== null && $currentCategory->level > 1) {
             $showCategoryFilter = false;
         }
-        $this->getLogger(__METHOD__)->error('facets', ['facets' => $searchResults->getFiltersExtension()]);
+
+        $filtersExtension = $searchResults->getFiltersExtension();
+        $filters = $filtersExtension->getFilters();
+        $this->getLogger(__METHOD__)->error('facets', ['facets container' => $filters]);
         return $twig->render(
             'Findologic::Category.Item.Partials.SearchFilters',
             [
                 'resultsCount' => $searchResults->parseTotalResults(),
-                'facets' => $searchResults->getFiltersExtension(),
-                'currentCategory' => null !== $currentCategory ? $currentCategory['details'] : [],
+                'facets' => $filters,
+                'currentCategory' => null !== $currentCategory ? $currentCategory->details : [],
                 'showCategoryFilter' => $showCategoryFilter
             ]
         );
