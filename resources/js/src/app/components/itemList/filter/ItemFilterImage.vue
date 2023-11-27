@@ -81,6 +81,10 @@ export default defineComponent({
       UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
     };
 
+    const selected = (value: string) =>{
+        console.log({value});
+        UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, value);
+    }
     const injectSvgImages = async () => {
       await nextTick();
       SVGInjector(document.getElementsByClassName('fl-svg'));
@@ -91,7 +95,8 @@ export default defineComponent({
     return {
       handleImageError,
       isLoading,
-      updateFacet
+      updateFacet,
+      selected
     };
   }
 });
