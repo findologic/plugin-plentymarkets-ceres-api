@@ -188,7 +188,7 @@ class UrlBuilder {
         params[Constants.PARAMETER_ATTRIBUTES] = attributes;
         delete params[Constants.PARAMETER_PAGE];
 
-        document.location.search = '?' + $.param(params);
+        //document.location.search = '?' + $.param(params);
     }
 
     /**
