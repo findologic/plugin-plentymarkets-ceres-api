@@ -190,10 +190,10 @@ abstract class Filter extends BaseFilter
         $categoryFilter = pluginApp(CategoryFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
         foreach ($filter->getValues() as $item) {
-            if (!$item->getName()) {
+            if (!$item->getTranslated()->getName()) {
                 continue;
             }
-            $levels = explode('_', $item->getName());
+            $levels = explode('_', $item->getTranslated()->getName());
             $currentValue = $categoryFilter;
 
             foreach ($levels as $level) {
