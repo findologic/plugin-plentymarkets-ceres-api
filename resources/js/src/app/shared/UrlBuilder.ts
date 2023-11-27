@@ -140,7 +140,7 @@ class UrlBuilder {
         }
 
         const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
-
+        console.log({facet, facetId, facetValue, params});
         if (facetId === 'price' || facet.findologicFilterType === 'rangeSliderFilter') {
             const facetVal = facetValue as PriceFacetValue;
 
