@@ -28,7 +28,7 @@
       />
     </div>
     <div
-      v-if="facet.values.length"
+      v-if="facet.values.length && !facet.values[0].frequency"
       class="fl-dropdown-container custom-select"
       tabindex="0"
       @click="toggle()"
