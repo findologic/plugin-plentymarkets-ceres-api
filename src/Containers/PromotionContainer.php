@@ -21,12 +21,13 @@ class PromotionContainer
      */
     public function call(Twig $twig, SearchService $searchService): string
     {
-        if (!$searchService->getResults()) {
-            return '';
-        }
+        // if (!$searchService->getResults()) {
+        //     return '';
+        // }
 
         $searchResults = $searchService->getResults();
-        // throw new \Exception(json_encode($searchResults->getPromotionExtension()));
+        $this->getLogger(__METHOD__)->error('promotion', $searchResults->getPromotionExtension());
+        throw new \Exception(json_encode($searchResults->getPromotionExtension()));
         return $twig->render(
             'Findologic::Category.Item.Partials.Promotion',
             [
