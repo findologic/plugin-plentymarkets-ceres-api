@@ -61,7 +61,7 @@ abstract class Filter extends BaseFilter
     public function searchValue(string $needle): ?FilterValue
     {
         foreach ($this->values as $value) {
-            if ($value->getName() === $needle) {
+            if ($value->getTranslated()->getName() === $needle) {
                 return $value;
             }
         }
