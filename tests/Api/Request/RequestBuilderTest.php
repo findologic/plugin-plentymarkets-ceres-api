@@ -2,22 +2,23 @@
 
 namespace Findologic\Tests\Api\Request;
 
-use Findologic\Api\Request\RequestBuilder;
-use Findologic\Api\Request\ParametersBuilder;
-use Findologic\Api\Request\Request;
-use Ceres\Helper\ExternalSearch;
 use Findologic\Helpers\Tags;
-use Findologic\Services\PluginInfoService;
-use IO\Services\CategoryService;
-use IO\Services\WebstoreConfigurationService;
-use Plenty\Modules\System\Models\WebstoreConfiguration;
-use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Log\LoggerFactory;
-use Plenty\Log\Contracts\LoggerContract;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Findologic\Components\PluginConfig;
+use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
+use IO\Services\CategoryService;
+use Findologic\Api\Request\Request;
+use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Components\PluginConfig;
+use Plenty\Log\Contracts\LoggerContract;
+use Findologic\Api\Request\RequestBuilder;
+use Findologic\Services\PluginInfoService;
+use PHPUnit\Framework\MockObject\MockObject;
+use Plenty\Modules\Category\Models\Category;
+use Findologic\Api\Request\ParametersBuilder;
+use IO\Services\WebstoreConfigurationService;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Modules\System\Models\WebstoreConfiguration;
 
 /**
  * Class RequestBuilderTest
@@ -134,8 +135,7 @@ class RequestBuilderTest extends TestCase
                 'https://service.findologic.com/ps/json_1.0/index.php',
                 false,
                 [
-                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY',
+                    'shopKey' => 'TESTSHOPKEY',
                     'revision' => '0.0.1',
                     'shopType' => 'Plentymarkets',
                     'shopVersion' => '5.0.30'
@@ -146,9 +146,8 @@ class RequestBuilderTest extends TestCase
                 'https://service.findologic.com/ps/json_1.0/selector.php',
                 true,
                 [
-                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY',
-                    'userip' => '127.0.0.1',
+                    'shopKey' => 'TESTSHOPKEY',
+                    'userIp' => '127.0.0.1',
                     'revision' => '0.0.1',
                     'shopType' => 'Plentymarkets',
                     'shopVersion' => '5.0.30'
@@ -159,9 +158,8 @@ class RequestBuilderTest extends TestCase
                 'https://service.findologic.com/ps/json_1.0/index.php',
                 false,
                 [
-                    'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
-                    'shopkey' => 'TESTSHOPKEY',
-                    'userip' => '127.0.0.1',
+                    'shopKey' => 'TESTSHOPKEY',
+                    'userIp' => '127.0.0.1',
                     'revision' => '0.0.1',
                     'shopType' => 'Plentymarkets',
                     'shopVersion' => '5.0.30'
@@ -199,30 +197,27 @@ class RequestBuilderTest extends TestCase
 
         $this->pluginConfig->expects($this->once())->method('getShopKey')->willReturn('TESTSHOPKEY');
 
-        $requestBuilderMock = $this->getRequestBuilderMock([]);
-        // $requestBuilderMock->expects($this->any())->method('createRequestObject')->willReturn(new Request());
+        $requestBuilderMock = $this->getRequestBuilderMock(['build', 'getUrl', 'getShopUrl', 'setDefaultValues']);
         $requestBuilderMock->expects($this->any())->method('getUserIp')->willReturn($userIp);
         $requestBuilderMock->expects($this->any())->method('getPluginVersion')->willReturn('0.0.1');
 
         $this->pluginInfoService->method('getPluginVersion')->with('ceres')->willReturn('5.0.30');
-        // $this->tagsHelper->method('isTagPage')->willReturn(false);
-
-        // $this->parametersBuilder->expects($this->any())->method('setSearchParams')->willReturnArgument(0);
 
         $categoryMock = null;
 
         if ($category) {
-            $categoryMock = $this->getMockBuilder(CategoryService::class)
-                ->disableOriginalConstructor()
-                ->setMethods([])
-                ->getMock();
+            $categoryMock = $this->createMock(Category::class);
         }
 
-        /** @var Request|MockObject $result */
+        /** @var array|MockObject $result */
         $result = $requestBuilderMock->build(RequestBuilder::TYPE_SEARCH, $httpRequestMock, $searchQueryMock, $categoryMock);
-        print_r($result);
-        $this->assertEquals($expectedUrl, $result->getUrl());
-        $this->assertEquals($expectedParams, $result->getParams());
+
+        $this->assertEquals($expectedUrl, $result['shopUrl']);
+
+        foreach ($expectedParams as $key => $value) {
+            $this->assertEquals($value, $result[$key]);
+        }
+        
     }
 
     public function getUrlProvider()
@@ -265,7 +260,7 @@ class RequestBuilderTest extends TestCase
             $webstoreConfigMock
         );
 
-        $requestBuilderMock = $this->getRequestBuilderMock();
+        $requestBuilderMock = $this->getRequestBuilderMock(['getUrl', 'getShopUrl']);
 
         $this->assertEquals($generatedUrl, $requestBuilderMock->getUrl());
     }

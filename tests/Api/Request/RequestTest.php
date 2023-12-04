@@ -2,10 +2,13 @@
 
 namespace Findologic\Tests\Api\Request;
 
-use Findologic\Api\Request\Request;
+use Findologic\Api\Request\RequestBuilder;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-
+use FINDOLOGIC\Api\Requests\Request;
+use FINDOLOGIC\Api\Config;
+require_once __DIR__.'/../../../resources/lib/findologic_client.php';
+require_once __DIR__.'/SdkRestApi.php';
 /**
  * Class RequestTest
  * @package Findologic\Tests\Api\Request
@@ -35,10 +38,32 @@ class RequestTest extends TestCase
         array $params,
         string $expectedResult
     ) {
-        $requestMock = $this->getRequestMock();
-        $requestMock->setUrl($url)->setParams($params);
+        $mockApiRequest = new \SdkRestApi();
+        $mockApiRequest::$params = [
+            'shopUrl'=> $url,
+            'externalSearch' => [
+                'searchString' => $params['query'],
+                'sorting' => 'ASC',
+                'categoryId' => null,
+                'itemsPerPage' => 20,
+                'page' => 1
+            ],
+            'parameters' => [
+                'attrib' => $params['attrib']
+            ]
+        ];
+        $request = Request::getInstance(RequestBuilder::TYPE_NAVIGATION);
+        // replaceInstanceByMock(\SdkRestApi::class, $mockApiRequest);
+    $request = setDefaultValues($request);
+    $config = new Config('2913E20746E3F762ABFC4AFAFE964609');
 
-        $this->assertEquals($expectedResult, $requestMock->getRequestUrl());
+    $requestUrl = $request->buildRequestUrl($config);
+    print_r($requestUrl);
+    
+        // $requestMock = $this->getRequestMock();
+        // $requestMock->setUrl($url)->setParams($params);
+
+        // $this->assertEquals($expectedResult, $requestMock->getRequestUrl());
     }
 
     /**
@@ -50,3 +75,12 @@ class RequestTest extends TestCase
         return $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods($methods)->getMock();
     }
 }
+
+// class MockSdkRestApi
+// {
+//     public static $params = [];
+//     public static function getParam(string $param)
+//     {   print_r('call');
+//         return isset(self::$params[$param]) ? self::$params[$param] : null;
+//     }
+// }

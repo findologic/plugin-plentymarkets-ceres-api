@@ -17,6 +17,15 @@ $classLoader->add('Findologic\Tests', __DIR__);
  */
 global $classInstances;
 $classInstances = [];
+if (!function_exists('replaceInstanceByMock')) {
+    function replaceInstanceByMock(
+        string $abstract,
+        $mock
+    ) {
+        global $mockClassList;
+        $mockClassList[$abstract] = $mock;
+    }
+}
 if (!function_exists('pluginApp')) {
     function pluginApp(string $class) {
         global $classInstances;

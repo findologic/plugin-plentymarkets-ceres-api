@@ -18,7 +18,7 @@
   "scripts": {
     "lint": "./vendor/bin/phpcs --standard=phpcs.xml",
     "fix": "./vendor/bin/phpcbf --standard=phpcs.xml",
-    "test": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.xml  --filter testBuild",
+    "test": "XDEBUG_MODE=coverage phpunit -c tests/phpunit.xml  --filter testGetRequestUrl",
     "test-win": "phpunit -c tests/phpunit.xml --filter testBuild"
   },
   "repositories": [

@@ -96,7 +96,7 @@ class RequestBuilder
     }
 
     /**
-     * @return self
+     * @return array
      */
     public function buildAliveRequest()
     {
