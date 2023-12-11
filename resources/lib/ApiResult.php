@@ -53,7 +53,8 @@ class ApiResult extends Result implements Arrayable
                     'name' => $promotion ? $promotion->getName() : null,
                     'url' => $promotion ? $promotion->getUrl() : null,
                     'imageUrl' => $promotion ? $promotion->getImageUrl() : null,
-                ]
+                ],
+                'promo-log' => (array)$this->metadata->getPromotion()
             ],
             'items' => array_map(fn (Item $item) => (new ApiItem($item))->toArray(), $this->items),
             'variant' => [
