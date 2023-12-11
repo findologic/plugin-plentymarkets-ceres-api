@@ -27,7 +27,7 @@ class PromotionContainer
 
         $searchResults = $searchService->getResults();
         $this->getLogger(__METHOD__)->error('promotion', $searchResults->getPromotionExtension());
-        throw new \Exception(json_encode($searchResults->getPromotionExtension()));
+        // throw new \Exception(json_encode($searchResults->getPromotionExtension()));
         return $twig->render(
             'Findologic::Category.Item.Partials.Promotion',
             [
