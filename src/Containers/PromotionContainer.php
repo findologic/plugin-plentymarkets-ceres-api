@@ -2,6 +2,7 @@
 
 namespace Findologic\Containers;
 
+use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Templates\Twig;
 use Findologic\Services\SearchService;
 use Findologic\Api\Response\Response;
@@ -12,6 +13,7 @@ use Findologic\Api\Response\Response;
  */
 class PromotionContainer
 {
+    use Loggable;
     /**
      * @param Twig $twig
      * @param SearchService $searchService
@@ -24,7 +26,8 @@ class PromotionContainer
         }
 
         $searchResults = $searchService->getResults();
-
+        $this->getLogger(__METHOD__)->debug('searchResults', $searchResults);
+        throw new \Exception(json_encode($searchResults));
         return $twig->render(
             'Findologic::Category.Item.Partials.Promotion',
             [
