@@ -1,14 +1,12 @@
 <?php
 
-// require_once __DIR__ . '/RequestBuilder.php';
 require_once __DIR__ . '/ApiResponse.php';
 use FINDOLOGIC\Api\Client;
 use FINDOLOGIC\Api\Config;
 use FINDOLOGIC\Api\Requests\Request;
 use FINDOLOGIC\Api\Definitions\OutputAdapter;
 use FINDOLOGIC\Api\Requests\SearchNavigation\SearchNavigationRequest;
-// use FindologicApi\Components\ApiResponse;
-// use FindologicApi\Components\RequestBuilder;
+
 const SORT_MAPPING = [
     'sorting.price.avg_asc' => 'price ASC',
     'sorting.price.avg_desc' => 'price DESC',
@@ -46,12 +44,17 @@ function setSearchParams(Request|SearchNavigationRequest $request): Request
 
     if (isset($parameters['attrib'])) {
         $attributes = $parameters['attrib'];
+
         foreach ($attributes as $key => $attrib) {
             if($key === 'price'){
                 $request->addAttribute($key, $attrib['min'], 'min');
                 $request->addAttribute($key, $attrib['max'], 'max');
             }
-            else $request->addAttribute($key, $attrib[0]);
+            else {
+                foreach($attrib as $attributeValue){
+                    $request->addAttribute($key, $attributeValue);
+                }
+            }
         }
     }
 
@@ -59,7 +62,7 @@ function setSearchParams(Request|SearchNavigationRequest $request): Request
         isset($parameters['forceOriginalQuery'])
         && $parameters['forceOriginalQuery'] != false
     ) {
-        $request->setForceOriginalQuery(true);
+        $request->setForceOriginalQuery();
     }
 
     if (\SdkRestApi::getParam('isTagPage')) {
@@ -120,23 +123,6 @@ try {
     $request = Request::getInstance($requestType);
     $request = setDefaultValues($request);
     $requestUrl = $request->buildRequestUrl($config);
-    // $shopUrl = \SdkRestApi::getParam('shopUrl');
-    // $shopKey = \SdkRestApi::getParam('shopKey');
-    // $revision = \SdkRestApi::getParam('revision');
-    // $userIp = \SdkRestApi::getParam('userIp');
-    // $shopType = \SdkRestApi::getParam('shopType');
-    // $shopVersion = \SdkRestApi::getParam('shopVersion');
-    // $params = \SdkRestApi::getParam('params');
-    // $externalSearch = \SdkRestApi::getParam('externalSearch');
-    // $isTagPage = \SdkRestApi::getParam('isTagPage');
-    // $tagId = \SdkRestApi::getParam('tagId');
-    // $categoryName = \SdkRestApi::getParam('categoryName');
-    // $category = \SdkRestApi::getParam('category');
-    // $aliveRequest = \SdkRestApi::getParam('aliveRequest');
-    // if ($aliveRequest) {
-    //     $request = (new RequestBuilder($requestType, $shopUrl, $shopKey))->buildAliveRequest();
-    // } else 
-    //$request = (new RequestBuilder($requestType, $shopUrl, $shopKey, $revision, $userIp, $shopType, $shopVersion, $params, $externalSearch, $isTagPage, $tagId, $categoryName, $category))->setDefaultValues()->setSearchParams();
 
     $apiResponse = $findologicClient->send($request);
     $response = new ApiResponse($apiResponse);

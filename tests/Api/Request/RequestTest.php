@@ -4,11 +4,12 @@ namespace Findologic\Tests\Api\Request;
 
 use Findologic\Api\Request\RequestBuilder;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use FINDOLOGIC\Api\Requests\Request;
 use FINDOLOGIC\Api\Config;
-require_once __DIR__.'/../../../resources/lib/findologic_client.php';
-require_once __DIR__.'/SdkRestApi.php';
+
+require_once __DIR__ . '/../../../resources/lib/findologic_client.php';
+require_once __DIR__ . '/SdkRestApi.php';
+
 /**
  * Class RequestTest
  * @package Findologic\Tests\Api\Request
@@ -21,7 +22,8 @@ class RequestTest extends TestCase
             [
                 'http://test.com/index.php',
                 ['query' => 'test', 'attrib' => ['color' => ['red', 'blue']]],
-                'http://test.com/index.php?query=test&attrib%5Bcolor%5D%5B0%5D=red&attrib%5Bcolor%5D%5B1%5D=blue'
+                'https://service.findologic.com/ps/http://test.com/index.php/selector.php?shopurl=http%3A%2F%2Ftest.com%2Findex.php&shopkey=2913E20746E3F762ABFC4AFAFE964609&outputAdapter=JSON_1.0&query=test&properties%5B0%5D=variation_id&attrib%5Bcolor%5D%5B0%5D=red&attrib%5Bcolor%5D%5B1%5D=blue&count=20',
+                '2913E20746E3F762ABFC4AFAFE964609'
             ]
         ];
     }
@@ -32,15 +34,16 @@ class RequestTest extends TestCase
      * @param string $url
      * @param array $params
      * @param string $expectedResult
+     * @param string $shopkey
      */
     public function testGetRequestUrl(
         string $url,
         array $params,
-        string $expectedResult
+        string $expectedResult,
+        string $shopkey
     ) {
-        $mockApiRequest = new \SdkRestApi();
-        $mockApiRequest::$params = [
-            'shopUrl'=> $url,
+        \SdkRestApi::$params = [
+            'shopUrl' => $url,
             'externalSearch' => [
                 'searchString' => $params['query'],
                 'sorting' => 'ASC',
@@ -53,34 +56,12 @@ class RequestTest extends TestCase
             ]
         ];
         $request = Request::getInstance(RequestBuilder::TYPE_NAVIGATION);
-        // replaceInstanceByMock(\SdkRestApi::class, $mockApiRequest);
-    $request = setDefaultValues($request);
-    $config = new Config('2913E20746E3F762ABFC4AFAFE964609');
 
-    $requestUrl = $request->buildRequestUrl($config);
-    print_r($requestUrl);
-    
-        // $requestMock = $this->getRequestMock();
-        // $requestMock->setUrl($url)->setParams($params);
+        $request = setDefaultValues($request);
+        $config = new Config($shopkey);
 
-        // $this->assertEquals($expectedResult, $requestMock->getRequestUrl());
-    }
+        $requestUrl = $request->buildRequestUrl($config);
 
-    /**
-     * @param null $methods
-     * @return Request|MockObject
-     */
-    protected function getRequestMock($methods = null)
-    {
-        return $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods($methods)->getMock();
+        $this->assertEquals($expectedResult, $requestUrl);
     }
 }
-
-// class MockSdkRestApi
-// {
-//     public static $params = [];
-//     public static function getParam(string $param)
-//     {   print_r('call');
-//         return isset(self::$params[$param]) ? self::$params[$param] : null;
-//     }
-// }

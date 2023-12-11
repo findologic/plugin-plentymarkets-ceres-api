@@ -2,34 +2,36 @@
 
 namespace Findologic\Tests\Services;
 
+use ReflectionException;
 use Findologic\Api\Client;
-use Findologic\Api\Request\Request;
-use Findologic\Api\Request\RequestBuilder;
-use Findologic\Api\Response\Response;
-use Findologic\Api\Response\ResponseParser;
-use Findologic\Constants\Plugin;
-use Findologic\Services\FallbackSearchService;
-use Findologic\Services\PluginInfoService;
-use Findologic\Services\SearchService;
-use Findologic\Services\Search\ParametersHandler;
+use PHPUnit\Framework\TestCase;
 use Ceres\Helper\ExternalSearch;
-use Findologic\Tests\Helpers\MockResponseHelper;
+use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
-use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
-use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
+use Findologic\Api\Request\Request;
+use Plenty\Plugin\ConfigRepository;
+use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Api\Response\Response;
+use Findologic\Services\SearchService;
 use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
-use Plenty\Modules\Category\Models\Category;
-use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
-use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
-use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
-use Plenty\Modules\Webshop\Helpers\UrlQuery;
-use Plenty\Plugin\ConfigRepository;
-use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Log\LoggerFactory;
-use PHPUnit\Framework\TestCase;
+use Findologic\Api\Request\RequestBuilder;
+use Findologic\Services\PluginInfoService;
+use Findologic\Api\Response\ResponseParser;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionException;
+use Plenty\Modules\Category\Models\Category;
+use Plenty\Modules\Webshop\Helpers\UrlQuery;
+use Findologic\Services\FallbackSearchService;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Tests\Helpers\MockResponseHelper;
+use FINDOLOGIC\Api\Responses\Xml21\Xml21Response;
+use Findologic\Services\Search\ParametersHandler;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
+require_once __DIR__ . '/../../resources/lib/ApiResponse.php';
 
 /**
  * Class SearchServiceTest
@@ -1414,6 +1416,10 @@ class SearchServiceTest extends TestCase
 
     public function testRetryMechanismAndEnsureItGetsLogged()
     {
+        
+        $response = new Xml21Response($this->getMockResponse('someResultsWithFilters.xml'));
+        $apiResponse = new \ApiResponse($response);
+        print_r($apiResponse->toArray());
         $requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();

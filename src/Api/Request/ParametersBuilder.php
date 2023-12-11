@@ -77,8 +77,10 @@ class ParametersBuilder
         ];
 
         $request['isTagPage'] = $this->tagsHelper->isTagPage($httpRequest);
-        $request['tagId'] = $this->tagsHelper->getTagIdFromUri($httpRequest);
-        $request['category'] = $category;
+        if ($this->tagsHelper->isTagPage($httpRequest)) {
+            $request['tagId'] = $this->tagsHelper->getTagIdFromUri($httpRequest);
+        }
+        $request['category'] = $category ? true : false;
         $request['categoryName'] = $this->getCategoryName($category);
 
         return $request;
