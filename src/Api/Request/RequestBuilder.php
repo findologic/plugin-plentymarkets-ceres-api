@@ -88,7 +88,6 @@ class RequestBuilder
         $request = $this->createRequestObject();
         $request = $this->setDefaultValues($request, $this->getRequestType($httpRequest, $category));
         $request = $this->parametersBuilder->setSearchParams($request, $httpRequest, $externalSearch, $category);
-        $this->logger->error('request url', $request->getUrl());
 
         return $request;
     }
