@@ -63,8 +63,8 @@ class ApiResult extends Result implements Arrayable
                 'improvedQuery' => $this->variant->getImprovedQuery(),
                 'didYouMeanQuery' => $this->variant->getDidYouMeanQuery(),
             ],
-            'mainFilters' => array_map(fn (Filter $filter) => (new ApiFilter($filter))->toArray(), $this->mainFilters),
-            'otherFilters' => array_map(fn (Filter $filter) => (new ApiFilter($filter))->toArray(), $this->otherFilters)
+            'mainFilters' => array_map(fn (Filter $filter) => (new ApiFilter($filter))->toArray(), $this->mainFilters ?? []),
+            'otherFilters' => array_map(fn (Filter $filter) => (new ApiFilter($filter))->toArray(), $this->otherFilters ?? [])
         ];
     }
 }
