@@ -80,15 +80,14 @@ class RequestBuilder
     }
 
     /**
-     * @param int $requestType
      * @param HttpRequest $httpRequest
      * @param ExternalSearch $externalSearch
      * @param Category|null $category
      * @return array
      */
-    public function build(int $requestType, HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
+    public function build(HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
     {
-        $this->request['requestType'] = $requestType;
+        $this->request['requestType'] = $this->getRequestType($httpRequest, $category);
         $this->setDefaultValues($this->getRequestType($httpRequest, $category));
         $this->request = array_merge($this->request, $this->parametersBuilder->setSearchParams($httpRequest, $externalSearch, $category));
 

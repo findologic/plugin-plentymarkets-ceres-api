@@ -243,7 +243,6 @@ class SearchService implements SearchServiceInterface
         }
 
         $apiRequest = $this->requestBuilder->build(
-            RequestBuilder::TYPE_SEARCH,
             $request,
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
