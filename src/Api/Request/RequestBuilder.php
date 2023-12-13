@@ -198,10 +198,10 @@ class RequestBuilder
      */
     protected function getRequestType(HttpRequest $httpRequest, ?Category $category = null): string
     {
-        $requestType = $category ? self::CATEGORY_REQUEST_TYPE : self::DEFAULT_REQUEST_TYPE;
+        $requestType = $category ? self::TYPE_NAVIGATION : self::TYPE_SEARCH;
 
         if ($this->tagsHelper->isTagPage($httpRequest)) {
-            $requestType = self::CATEGORY_REQUEST_TYPE;
+            $requestType = self::TYPE_NAVIGATION;
         }
 
         return $requestType;
