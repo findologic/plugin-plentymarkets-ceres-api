@@ -109,19 +109,9 @@ class RequestBuilder
      * @param string $type
      * @return string
      */
-    public function getUrl(string $type = self::DEFAULT_REQUEST_TYPE): string
+    public function getUrl(): string
     {
-        $url = $this->getShopUrl();
-
-        // if ($type == self::ALIVE_REQUEST_TYPE) {
-        //     $url .= 'alivetest.php';
-        // } elseif ($type == self::CATEGORY_REQUEST_TYPE) {
-        //     $url .= 'selector.php';
-        // } else {
-        //     $url .= 'index.php';
-        // }
-
-        return $url;
+        return $this->getShopUrl();
     }
 
     /**
@@ -178,7 +168,7 @@ class RequestBuilder
      */
     protected function setDefaultValues(string $requestType): self
     {
-        $this->request['shopUrl'] = $this->getUrl($requestType);
+        $this->request['shopUrl'] = $this->getUrl();
         $this->request['shopKey'] = $this->pluginConfig->getShopKey();
         $this->request['revision'] = $this->getPluginVersion();
 

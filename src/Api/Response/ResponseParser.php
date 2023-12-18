@@ -27,7 +27,7 @@ use Plenty\Plugin\Log\Loggable;
  */
 class ResponseParser
 {
-    // protected FiltersParser $filtersParser;
+    use Loggable;
 
     protected Response $response;
 
@@ -79,21 +79,10 @@ class ResponseParser
 
     public function getProductIds() :array
     {
-        // $productIds = [];
-        // foreach ($this->response->getResult()->getItems() as $item) {
-        //     if ($this->pluginConfig->get(Plugin::CONFIG_USE_VARIANTS)) {
-        //         foreach ($item->getVariants() as $variant) {
-        //             $productIds[] = $variant->getId();
-        //         }
-        //     } else {
-        //         $productIds[] = $item->getId();
-        //     }
-        // }
-        // return $productIds;
-
         return array_map(
             function (Item $product) {
                 if ($this->pluginConfig->get(Plugin::CONFIG_USE_VARIANTS)) {
+                    $this->getLogger(__METHOD__)->error('variants', $product->getVariants());
                     return count($product->getVariants()) ? $product->getVariants()[0]->getId() : $product->getId();
                 } 
                 else if(array_key_exists('variation_id', $product->getProperties())){
