@@ -117,7 +117,6 @@ class SearchService implements SearchServiceInterface
         if ($this->responseParser->parseTotalResults() == 0 && !$hasSelectedFilters) {
             return;
         } elseif ($this->responseParser->parseTotalResults() == 0 && $hasSelectedFilters) {
-            $this->getLogger(__METHOD__)->error('doSearch set empty',[]);
             $externalSearch->setResults([]);
 
             return;
@@ -135,7 +134,7 @@ class SearchService implements SearchServiceInterface
         }
         $this->getLogger(__METHOD__)->error('doSearch end',$this->responseParser->parseTotalResults());
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults($variationIds);
+        $externalSearch->setResults($variationIds, $this->responseParser->parseTotalResults());
     }
 
     /**
