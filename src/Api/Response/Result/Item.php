@@ -19,7 +19,7 @@ class Item extends BaseItem
         $this->highlightedName = $item['highlightedName'];
         $this->productPlacement = $item['productPlacement'];
         $this->pushRules = $item['pushRules'];
-        $this->variants = $item['variants'];
+        $this->variants = array_map(fn ($variant) => pluginApp(Variants::class, [$variant]), $item['variants']);
     }
 
 
@@ -53,5 +53,40 @@ class Item extends BaseItem
     public function getHighlightedName()
     {
         return $this->highlightedName;
+    }
+}
+
+class Variants {
+
+    public string $id;
+    public float $score;
+    public string $url;
+    public ?string $name;
+    public array $ordernumbers;
+    public ?string $matchingOrdernumber;
+    public float $price;
+    public ?string $summary;
+    public array $attributes;
+    public array $properties;
+    public string $imageUrl;
+
+    function __construct(array $variant)
+    {
+        $this->id = $variant['id'];
+        $this->score = $variant['score'];
+        $this->url = $variant['url'];
+        $this->name = $variant['name'];
+        $this->ordernumbers = $variant['ordernumbers'];
+        $this->matchingOrdernumber = $variant['matchingOrdernumber'];
+        $this->price = $variant['price'];
+        $this->summary = $variant['summary'];
+        $this->attributes = $variant['attributes'];
+        $this->properties = $variant['properties'];
+        $this->imageUrl = $variant['imageUrl'];
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 }
