@@ -5,6 +5,7 @@ namespace Findologic\Tests\Api\Response;
 use PHPUnit\Framework\TestCase;
 use Findologic\Api\Response\Response;
 use Plenty\Plugin\Translation\Translator;
+use Findologic\Api\Response\ResponseParser;
 use PHPUnit\Framework\MockObject\MockObject;
 use Findologic\Tests\Helpers\MockResponseHelper;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
@@ -24,7 +25,7 @@ class ResponseTest extends TestCase
         $this->response = new \ApiResponse(new Json10Response($this->getMockResponse('someResults.json')));
     }
 
-    public function testResposneCanCreateResults(){
+    public function testResponseCanCreateResults(){
         
         $result = new \ApiResult($this->response->result);
         $this->assertInstanceOf(\ApiResult::class , $result);
@@ -44,6 +45,11 @@ class ResponseTest extends TestCase
         $this->assertNotEmpty($resultArray['result']['otherFilters']);
 
         print_r($resultArray);
+    }
+
+    public function testQueryInfoMessage(){
+        $responseParserMock = $this->createMock(ResponseParser::class);
+        $responseParserMock->method
     }
 
     /**
