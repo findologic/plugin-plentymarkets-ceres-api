@@ -2,10 +2,12 @@
 
 namespace Findologic\Tests\Api\Response;
 
-use Findologic\Api\Response\Response;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Findologic\Api\Response\Response;
 use Plenty\Plugin\Translation\Translator;
+use PHPUnit\Framework\MockObject\MockObject;
+use Findologic\Tests\Helpers\MockResponseHelper;
+use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 
 /**
  * Class ResponseParserTest
@@ -13,17 +15,35 @@ use Plenty\Plugin\Translation\Translator;
  */
 class ResponseTest extends TestCase
 {
-    /**
-     * @var Translator|MockObject
-     */
-    protected $translator;
+    use MockResponseHelper;
+    
+    protected \ApiResponse $response;
 
     public function setUp(): void
     {
-        $this->translator = $this->getMockBuilder(Translator::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['trans'])
-            ->getMock();
+        $this->response = new \ApiResponse(new Json10Response($this->getMockResponse('someResults.json')));
+    }
+
+    public function testResposneCanCreateResults(){
+        
+        $result = new \ApiResult($this->response->result);
+        $this->assertInstanceOf(\ApiResult::class , $result);
+
+        $resultArray = $this->response->toArray();
+        
+        $this->assertNotEmpty($resultArray['result']);
+
+        $this->assertNotEmpty($resultArray['result']['metadata']);
+
+        $this->assertNotEmpty($resultArray['result']['items']);
+
+        $this->assertNotEmpty($resultArray['result']['variant']);
+
+        $this->assertNotEmpty($resultArray['result']['mainFilters']);
+
+        $this->assertNotEmpty($resultArray['result']['otherFilters']);
+
+        print_r($resultArray);
     }
 
     /**
@@ -47,6 +67,11 @@ class ResponseTest extends TestCase
             ->willReturnOnConsecutiveCalls($queryInfoMessageData, $filtersData);
 
         $responseMock->getQueryInfoMessage();
+    }
+
+    public function FunctionName(Type $var = null)
+    {
+        # code...
     }
 
     public function getQueryInfoMessageProvider(): array

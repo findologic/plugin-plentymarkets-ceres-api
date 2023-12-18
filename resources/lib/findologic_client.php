@@ -126,7 +126,7 @@ try {
 
     $apiResponse = $findologicClient->send($request);
     $response = new ApiResponse($apiResponse);
-    return ['response' => $response->toArray(), 'requestUrl' => $requestUrl];
+    return ['response' => $response->toArray(), 'requestUrl' => $requestUrl, 'request' => $request->getParams()];
 } catch (\Throwable | \Exception $t) {
     return ['error' => (string)$t, 'request' => (array)$request];
 }

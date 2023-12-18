@@ -6,26 +6,19 @@ require_once __DIR__ . '/Arrayable.php';
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Result;
 use FINDOLOGIC\Api\Responses\Json10\Properties\Request;
-use FINDOLOGIC\Api\Responses\Xml21\Xml21Response;
 
 class ApiResponse extends Json10Response implements Arrayable
 {
     /** @var Request */
-    private $request;
+    public $request;
 
     /** @var Result */
-    private $result;
+    public $result;
 
-    public function __construct(Json10Response|Xml21Response $response)
+    public function __construct(Json10Response $response)
     {
-        if ($response instanceof Json10Response){
-            $this->request = $response->getRequest();
-            $this->result = $response->getResult();
-        }
-        else {
-            $this->result = $response->getResults();
-        }
-        
+        $this->request = $response->getRequest();
+        $this->result = $response->getResult();
     }
     public function toArray()
     {

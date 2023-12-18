@@ -13,19 +13,19 @@ use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
 class ApiResult extends Result implements Arrayable
 {
     /** @var Metadata */
-    private $metadata;
+    public $metadata;
 
     /** @var Item[] */
-    private $items = [];
+    public $items = [];
 
     /** @var Variant */
-    private $variant;
+    public $variant;
 
     /** @var Filter[] */
-    private $mainFilters;
+    public $mainFilters;
 
     /** @var Filter[] */
-    private $otherFilters;
+    public $otherFilters;
 
     function __construct(Result $result)
     {
@@ -54,7 +54,6 @@ class ApiResult extends Result implements Arrayable
                     'url' => $promotion ? $promotion->getUrl() : null,
                     'imageUrl' => $promotion ? $promotion->getImageUrl() : null,
                 ],
-                'promo-log' => (array)$this->metadata->getPromotion()
             ],
             'items' => array_map(fn (Item $item) => (new ApiItem($item))->toArray(), $this->items),
             'variant' => [
