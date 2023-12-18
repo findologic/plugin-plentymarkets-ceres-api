@@ -52,7 +52,7 @@ function setSearchParams(Request|SearchNavigationRequest $request): Request
             }
             else {
                 foreach($attrib as $attributeValue){
-                    $request->addAttribute($key, $attributeValue, 0);
+                    $request->addAttribute($key, $attributeValue);
                 }
             }
         }
