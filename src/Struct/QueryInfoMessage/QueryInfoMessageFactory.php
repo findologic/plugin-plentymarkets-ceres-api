@@ -95,8 +95,11 @@ class QueryInfoMessageFactory
         return $queryInfoMessage;
     }
 
-    private function isFilterSet(array $params, string $name): bool
+    private function isFilterSet(?array $params, string $name): bool
     {
+        if(!$params){
+            return false;
+        }
         return isset($params[$name]) && !empty($params[$name]);
     }
 
