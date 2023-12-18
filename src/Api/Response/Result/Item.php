@@ -21,7 +21,7 @@ class Item extends BaseItem
         $this->highlightedName = $item['highlightedName'];
         $this->productPlacement = $item['productPlacement'];
         $this->pushRules = $item['pushRules'];
-        $this->variants = array_map(fn ($variant) => pluginApp(Variants::class, [$variant]), $item['variants']);
+        $this->variants = array_map(fn ($variant) => pluginApp(BaseItem::class, [$variant]), $item['variants']);
     }
 
 
