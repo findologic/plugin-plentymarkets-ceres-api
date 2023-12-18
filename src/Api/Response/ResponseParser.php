@@ -82,8 +82,9 @@ class ResponseParser
         return array_map(
             function (Item $product) {
                 if ($this->pluginConfig->get(Plugin::CONFIG_USE_VARIANTS) && count($product->getVariants())) {
-                    $this->getLogger(__METHOD__)->error('variants', $product->getVariants());
-                    return  $product->getVariants()[0]->getId();
+                    $variants = $product->getVariants();
+                    $this->getLogger(__METHOD__)->error('variants', $variants[0]);
+                    return  $variants[0]->getId();
                 } 
                 else if(array_key_exists('variation_id', $product->getProperties())){
                     return $product->getProperties()['variation_id'];
