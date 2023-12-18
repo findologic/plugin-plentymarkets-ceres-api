@@ -2,8 +2,6 @@
 
 namespace Findologic\Api\Response\Result;
 
-use Findologic\Api\Response\Result\Variants;
-
 class Item extends BaseItem
 {
     private string $highlightedName;

@@ -106,6 +106,7 @@ class SearchService implements SearchServiceInterface
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
         $this->getLogger(__METHOD__)->error('doSearch',[$externalSearch->getResults(), $externalSearch->getDocuments()]);
+        $this->getLogger(__METHOD__)->error('vars',$this->responseParser->getProductIds());
         $this->search($request, $externalSearch);
         $hasSelectedFilters = $request->get('attrib') !== null;
         $landingPage = $this->responseParser->getLandingPageExtension();
