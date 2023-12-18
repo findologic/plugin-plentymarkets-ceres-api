@@ -78,7 +78,7 @@ class ResponseParser
     }
 
     public function getProductIds() :array
-    {
+    {$this->getLogger(__METHOD__)->error('items', $this->response->getResult()->getItems());
         return array_map(
             function (Item $product) {
                 if ($this->pluginConfig->get(Plugin::CONFIG_USE_VARIANTS) && count($product->getVariants())) {
