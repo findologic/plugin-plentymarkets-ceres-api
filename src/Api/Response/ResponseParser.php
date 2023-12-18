@@ -74,7 +74,7 @@ class ResponseParser
 
     public function parseTotalResults() :int
     {
-        return $this->response->getResult()->getMetadata()->getTotalResults();
+        return $this->response->getResult()->getMetadata()->getTotalResults() ?: 0;
     }
 
     public function getProductIds() :array
