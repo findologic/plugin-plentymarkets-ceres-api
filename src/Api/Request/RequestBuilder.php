@@ -113,13 +113,13 @@ class RequestBuilder
     {
         $url = $this->getShopUrl() . '/';
 
-        if ($type == self::ALIVE_REQUEST_TYPE) {
-            $url .= 'alivetest.php';
-        } elseif ($type == self::CATEGORY_REQUEST_TYPE) {
-            $url .= 'selector.php';
-        } else {
-            $url .= 'index.php';
-        }
+        // if ($type == self::ALIVE_REQUEST_TYPE) {
+        //     $url .= 'alivetest.php';
+        // } elseif ($type == self::CATEGORY_REQUEST_TYPE) {
+        //     $url .= 'selector.php';
+        // } else {
+        //     $url .= 'index.php';
+        // }
 
         return $url;
     }
