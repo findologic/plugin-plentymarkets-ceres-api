@@ -111,7 +111,7 @@ class RequestBuilder
      */
     public function getUrl(string $type = self::DEFAULT_REQUEST_TYPE): string
     {
-        $url = $this->getShopUrl() . '/';
+        $url = $this->getShopUrl();
 
         // if ($type == self::ALIVE_REQUEST_TYPE) {
         //     $url .= 'alivetest.php';
