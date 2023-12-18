@@ -4,8 +4,8 @@ namespace Findologic\Struct\QueryInfoMessage;
 
 class VendorInfoMessage extends QueryInfoMessage
 {
-    protected string $filterName;
-    protected string $filterValue;
+    public string $filterName;
+    public string $filterValue;
 
     public function __construct(
         string $filterName,

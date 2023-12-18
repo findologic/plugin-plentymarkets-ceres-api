@@ -3,12 +3,12 @@
     <h1
       id="searchPageTitle"
       class="h2"
-      v-html="queryInfoMessage"
+      v-html="queryInfoMessage.query"
     />
     <p
       v-if="smartText.length > 0"
       class="smart-did-you-mean"
-      v-html="smartText"
+      v-html="smartText[smartText.type]"
     />
   </div>
 </template>
@@ -20,12 +20,23 @@ export default defineComponent({
   name: 'SmartDidYouMean',
   props: {
     smartText: {
-      type: String,
-      default: '',
+      type: Object,
+      default: () => {
+        return {
+          type: '',
+          didYouMeanQuery: '',
+          improvedQuery: '',
+          correctedQuery: ''
+        };
+      }
     },
     queryInfoMessage: {
-      type: String,
-      default: '',
+      type: Object,
+      default: () => {
+        return {
+          query: '',
+        };
+      },
     },
   }
 });

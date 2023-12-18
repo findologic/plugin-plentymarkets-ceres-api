@@ -4,7 +4,7 @@ namespace Findologic\Struct\QueryInfoMessage;
 
 class SearchTermQueryInfoMessage extends QueryInfoMessage
 {
-    protected string $query;
+    public string $query;
 
     public function __construct(
         string $query

@@ -4,7 +4,7 @@ namespace Findologic\Struct\QueryInfoMessage;
 
 class ShoppingGuideInfoMessage extends QueryInfoMessage
 {
-    protected string $shoppingGuide;
+    public string $shoppingGuide;
 
     public function __construct(string $shoppingGuide)
     {

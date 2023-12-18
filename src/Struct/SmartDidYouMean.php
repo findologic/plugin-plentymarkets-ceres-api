@@ -9,15 +9,15 @@ class SmartDidYouMean
     protected const IMPROVED = 'improved';
     protected const CORRECTED = 'corrected';
 
-    private ?string $link;
-    private ?string $type;
+    public ?string $link;
+    public ?string $type;
 
     public function __construct(
-        private ?string $originalQuery,
-        private ?string $effectiveQuery,
-        private ?string $correctedQuery,
-        private ?string $didYouMeanQuery,
-        private ?string $improvedQuery,
+        public ?string $originalQuery,
+        public ?string $effectiveQuery,
+        public ?string $correctedQuery,
+        public ?string $didYouMeanQuery,
+        public ?string $improvedQuery,
         ?string $controllerPath
     ) {
         $this->originalQuery = htmlentities($originalQuery ?? '');
