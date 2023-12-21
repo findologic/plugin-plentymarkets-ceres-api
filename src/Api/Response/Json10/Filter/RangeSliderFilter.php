@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Findologic\Api\Response\Json10\Filter;
 
+use Plenty\Plugin\Log\Loggable;
 use Findologic\Api\Response\Result\Filter as ResultFilter;
 
 class RangeSliderFilter extends Filter
 {
+    use Loggable;
     public string $minKey;
 
     public string $maxKey;
@@ -35,6 +37,7 @@ class RangeSliderFilter extends Filter
             $filter->getCombinationOperation(),
             $filter->getType()
         );
+        $this->getLogger(__METHOD__)->error('range slider', $filter->getTotalRange());
         $this->totalRange = $filter->getTotalRange();
         $this->minKey = sprintf('min-%s', $filter->getName());
         $this->maxKey = sprintf('max-%s', $filter->getName());
