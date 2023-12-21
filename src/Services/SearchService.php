@@ -105,8 +105,6 @@ class SearchService implements SearchServiceInterface
      */
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $this->getLogger(__METHOD__)->error('doSearch',[$externalSearch->getResults(), $externalSearch->getDocuments()]);
-        
         $this->search($request, $externalSearch);
         $hasSelectedFilters = $request->get('attrib') !== null;
         $landingPage = $this->responseParser->getLandingPageExtension();
@@ -128,13 +126,12 @@ class SearchService implements SearchServiceInterface
         } else {
             $variationIds = $this->responseParser->getProductIds();
         }
-        $this->getLogger(__METHOD__)->error('doSearch variationIds',$variationIds);
+
         if ($redirectUrl = $this->getRedirectUrl($request, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
             return;
         }
-        $this->getLogger(__METHOD__)->error('vars',$this->responseParser->getProductIds());
-        $this->getLogger(__METHOD__)->error('doSearch end',$this->responseParser->parseTotalResults());
+
         /** @var ExternalSearch $searchQuery */
         $externalSearch->setResults($variationIds, $this->responseParser->parseTotalResults());
     }

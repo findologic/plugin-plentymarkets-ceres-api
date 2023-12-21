@@ -35,6 +35,7 @@ class RangeSliderFilter extends Filter
             $filter->getCombinationOperation(),
             $filter->getType()
         );
+        $this->totalRange = $filter->getTotalRange();
         $this->minKey = sprintf('min-%s', $filter->getName());
         $this->maxKey = sprintf('max-%s', $filter->getName());
     }

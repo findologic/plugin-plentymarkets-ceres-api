@@ -21,14 +21,18 @@ export interface Facet {
     selectMode?: string;
     values?: FacetValue[];
     findologicFilterType?: string;
-    // minValue?: number;
     min?: number;
-    // maxValue?: number;
     max?: number;
     step?: number;
     unit?: string;
     noAvailableFiltersText?: string;
     cssClass?: string;
+    totalRange? : TotalRange;
+}
+
+export interface TotalRange {
+    min?: number;
+    max?: number;
 }
 
 export interface Media {
