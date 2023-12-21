@@ -108,13 +108,6 @@ abstract class Filter extends BaseFilter
             $customFilter->setStep(0.01);
         }
 
-        // if ($filter->getTotalRange()) {
-        //     $customFilter->setTotalRange([
-        //         self::FILTER_RANGE_MIN => $filter->getTotalRange()['min'],
-        //         self::FILTER_RANGE_MAX => $filter->getTotalRange()['max'],
-        //     ]);
-        // }
-
         if ($filter->getSelectedRange()) {
             $customFilter->setSelectedRange([
                 self::FILTER_RANGE_MIN => $filter->getSelectedRange()['min'],

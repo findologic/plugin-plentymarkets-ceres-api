@@ -27,12 +27,12 @@ export interface Facet {
     unit?: string;
     noAvailableFiltersText?: string;
     cssClass?: string;
-    totalRange? : TotalRange;
+    totalRange : TotalRange;
 }
 
 export interface TotalRange {
-    min?: number;
-    max?: number;
+    min: number;
+    max: number;
 }
 
 export interface Media {
