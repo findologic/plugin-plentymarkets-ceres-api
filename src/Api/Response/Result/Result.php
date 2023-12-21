@@ -21,7 +21,7 @@ class Result
     public function __construct(array $result = [])
     {
         $this->metadata = pluginApp(Metadata::class, [$result['metadata']]);
-        $this->items = array_map(fn ($item) => pluginApp(Item::class, $item), $result['items'] ?: []);
+        $this->items = array_map(fn ($item) => pluginApp(Item::class, [$item]), $result['items'] ?: []);
         $this->variant = pluginApp(Variant::class, [$result['variant']]);
         $this->mainFilters = array_map(fn ($mainFilter) => pluginApp(Filter::class, [$mainFilter]), $result['mainFilters']);
         $this->otherFilters = array_map(fn ($otherFilter) => pluginApp(Filter::class, [$otherFilter]), $result['otherFilters']);
