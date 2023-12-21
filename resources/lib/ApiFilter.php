@@ -69,7 +69,19 @@ class ApiFilter implements Arrayable
                     return ['type' => 'rangeSliderFilter'];
                 }
 
-                return ['type' => 'rangeSliderFilter', 'totalRange' => (array)$filter->getTotalRange(), 'selectedRange' => (array)$filter->getSelectedRange()];
+                $totalRange = $filter->getTotalRange();
+                $selectedRange = $filter->getSelectedRange();
+                return [
+                    'type' => 'rangeSliderFilter',
+                    'totalRange' =>[
+                        'min' => $totalRange->getMin(),
+                        'max' => $totalRange->getMax()
+                    ],
+                    'selectedRange' =>[
+                        'min' => $selectedRange->getMin(),
+                        'max' => $selectedRange->getMax()
+                    ]
+                ];
             case $filter instanceof ColorFilter:
                 return ['type' => 'colorPickerFilter'];
             case $filter instanceof ImageFilter:
