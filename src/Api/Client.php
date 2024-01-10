@@ -46,10 +46,14 @@ class Client
 
         try {
             $requestArray = $this->requestToArray($request);
+            $start_time = microtime(true);
             $response = $this->libraryCallContract->call(
                 'Findologic::http_library',
                 ['request' => $requestArray]
             );
+            $end_time = microtime(true);
+            $execution_time = $end_time - $start_time;
+            $this->logger->error('Client class.', "Script Execution Time: " . number_format($execution_time, 4) . " seconds");
 
             if (is_array($response) && array_key_exists('error', $response) && $response['error']) {
                 $this->logger->error('Exception while handling search query.', ['response' => $response]);

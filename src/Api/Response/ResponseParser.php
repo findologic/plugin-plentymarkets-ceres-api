@@ -38,6 +38,7 @@ class ResponseParser
     public function parse(HttpRequest $request, $responseData): Response
     {
         /** @var Response $response */
+        $start_time = microtime(true);
         $response = $this->createResponseObject();
 
         if (!is_string($responseData) || $responseData === '') {
@@ -65,7 +66,9 @@ class ResponseParser
             $this->logger->error('Parsing XML failed', ['xmlString' => $responseData]);
             $this->logger->logException($e);
         }
-
+        $end_time = microtime(true);
+        $execution_time = $end_time - $start_time;
+        $this->logger->error('Parser class', "Script Execution Time: " . number_format($execution_time, 4) . " seconds");
         return $response;
     }
 
