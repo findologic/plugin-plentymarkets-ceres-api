@@ -27,13 +27,31 @@ if (!function_exists('replaceInstanceByMock')) {
     }
 }
 if (!function_exists('pluginApp')) {
-    function pluginApp(string $class) {
-        global $classInstances;
-        if (!isset($classInstances[$class])) {
-            return null;
+    function pluginApp(
+        string $abstract,
+        array $parameters = []
+    ) {
+        try {
+            $reflector = new ReflectionClass($abstract);
+        } catch (ReflectionException $e) {
+            throw new Exception("Target class [$abstract] does not exist.", 0, $e);
         }
 
-        return $classInstances[$class];
+        global $mockClassList;
+        if (isset($mockClassList[$abstract])) {
+            return $mockClassList[$abstract];
+        }
+
+        if ($reflector->isAbstract()) {
+            var_dump(['getNamespaceName' => $reflector->getNamespaceName()]);
+        }
+
+        $constructor = $reflector->getConstructor();
+        if (is_null($constructor)) {
+            return new $abstract();
+        }
+
+        return new $abstract(...array_values($parameters));
     }
 }
 

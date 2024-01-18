@@ -34,17 +34,17 @@ class Filter
     function __construct(array $filter)
     {
         $this->name = $filter['name'];
-        $this->displayName = $filter['displayName'];
-        $this->selectMode = $filter['selectMode'];
-        $this->cssClass = $filter['cssClass'];
-        $this->noAvailableFiltersText = $filter['noAvailableFiltersText'];
-        $this->combinationOperation = $filter['combinationOperation'];
-        $this->type = $filter['type'];
-        $this->stepSize = $filter['stepSize'];
-        $this->unit = $filter['unit'];
-        $this->totalRange = $filter['totalRange'];
-        $this->selectedRange = $filter['selectedRange'];
-        $this->pinnedFilterValueCount = $filter['pinnedFilterValueCount'];
+        $this->displayName = @$filter['displayName'];
+        $this->selectMode = @$filter['selectMode'];
+        $this->cssClass = @$filter['cssClass'];
+        $this->noAvailableFiltersText = @$filter['noAvailableFiltersText'];
+        $this->combinationOperation = @$filter['combinationOperation'];
+        $this->type = @$filter['type'];
+        $this->stepSize = @$filter['stepSize'];
+        $this->unit = @$filter['unit'];
+        $this->totalRange = @$filter['totalRange'];
+        $this->selectedRange = @$filter['selectedRange'];
+        $this->pinnedFilterValueCount = @$filter['pinnedFilterValueCount'];
         $this->values = array_map(fn ($filterValue) => pluginApp(FilterValue::class, [$filterValue]), $filter['values']);
     }
 

@@ -49,7 +49,7 @@ class ResponseTest extends TestCase
 
     public function testQueryInfoMessage(){
         $responseParserMock = $this->createMock(ResponseParser::class);
-        $responseParserMock->method
+        // $responseParserMock->method
     }
 
     /**

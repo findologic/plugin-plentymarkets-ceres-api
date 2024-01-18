@@ -9,13 +9,13 @@ use Plenty\Plugin\Log\Loggable;
 class Response
 {
     use Loggable;
-    private Request $request;
+    private ?Request $request;
 
     private Result $result;
 
     public function __construct(array $response)
     {
-        $this->request = pluginApp(Request::class, [$response['request']]);
+        $this->request = array_key_exists('request', $response) ? pluginApp(Request::class, [$response['request']]) : null;
         $this->result = pluginApp(Result::class, [$response['result']]);;
     }
 
