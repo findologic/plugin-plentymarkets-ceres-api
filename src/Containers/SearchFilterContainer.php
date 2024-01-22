@@ -33,8 +33,7 @@ class SearchFilterContainer
 
         $filtersExtension = $searchResults->getFiltersExtension();
         $filters = $filtersExtension->getFilters();
-        $this->getLogger(__METHOD__)->error('facets', ['facets container' => $filters]);
-        // throw new \Exception(json_encode($filters));
+
         return $twig->render(
             'Findologic::Category.Item.Partials.SearchFilters',
             [

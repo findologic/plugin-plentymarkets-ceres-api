@@ -110,11 +110,9 @@ class QueryInfoMessageFactory
         }
 
         $filterValues = [];
-        $this->getLogger(__METHOD__)->error('getFilterValues1', ['explode' => $params[$name]]);
         $joinedFilterValues = explode(Plugin::FILTER_HANDLER_DELIMITER, $params[$name]);
 
         foreach ($joinedFilterValues as $joinedFilterValue) {
-            $this->getLogger(__METHOD__)->error('getFilterValues2', ['explode' => $joinedFilterValue]);
             $filterValues[] = str_contains($joinedFilterValue, Plugin::FILTER_VALUE_DELIMITER)
                 ? explode(Plugin::FILTER_VALUE_DELIMITER, $joinedFilterValue)[1]
                 : $joinedFilterValue;

@@ -210,13 +210,13 @@ abstract class Filter extends BaseFilter
     private static function handleRatingFilter(ResultFilter $filter, bool $isMain): ?RatingFilter
     {
         $totalRange = $filter->getTotalRange();
-        if ($totalRange['min'] === $totalRange['max']) {
+        if ($totalRange && $totalRange['min'] === $totalRange['max']) {
             return null;
         }
 
         $customFilter = pluginApp(RatingFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
 
-        if ($totalRange['max']) {
+        if ($totalRange && $totalRange['max']) {
             $customFilter->setMaxPoints(ceil($totalRange['max']));
         }
 

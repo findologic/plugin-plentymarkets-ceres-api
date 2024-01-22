@@ -160,7 +160,7 @@ class SearchService implements SearchServiceInterface
     {
         // $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
         // $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
-        $this->getLogger(__METHOD__)->error('doNavigation',[]);
+
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
             // $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
@@ -375,7 +375,6 @@ class SearchService implements SearchServiceInterface
         $productId = $this->responseParser->getProductIds()[0];
 
         if (strpos($productId, '_')) {
-            $this->logger->error('getProductDetailUrl', ['explode' => $productId]);
             $productId = explode('_', $productId)[0];
         }
 

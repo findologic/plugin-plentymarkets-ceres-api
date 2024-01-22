@@ -5,16 +5,30 @@ declare(strict_types=1);
 namespace Findologic\Tests\Api\Response;
 
 use PHPUnit\Framework\TestCase;
+use Plenty\Plugin\Http\Request;
+use Findologic\Struct\Promotion;
 use Plenty\Plugin\Log\LoggerFactory;
 use Findologic\Api\Response\Response;
 use Findologic\Components\PluginConfig;
+use Findologic\Api\Response\Result\Filter as ResultFilter;
 use Findologic\Api\Response\ResponseParser;
 use Findologic\Tests\Overrides\BaseTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\HttpFoundation\Request;
+use Findologic\Api\Response\Json10\Filter\Media;
 use FINDOLOGIC\Api\Responses\Xml21\Xml21Response;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
+use Findologic\Api\Response\Json10\Filter\RatingFilter;
+use Findologic\Api\Response\Json10\Filter\CategoryFilter;
+use Findologic\Api\Response\Json10\Filter\ColorPickerFilter;
+use Findologic\Api\Response\Json10\Filter\RangeSliderFilter;
+use Findologic\Api\Response\Json10\Filter\VendorImageFilter;
 use FINDOLOGIC\Api\Responses\Response as FindologicResponse;
+use Findologic\Api\Response\Json10\Filter\Values\FilterValue;
+use Findologic\Api\Response\Json10\Filter\SelectDropdownFilter;
+use Findologic\Api\Response\Json10\Filter\Values\ColorFilterValue;
+use Findologic\Api\Response\Json10\Filter\Values\ImageFilterValue;
+use Findologic\Api\Response\Json10\Filter\Values\CategoryFilterValue;
+use Findologic\Api\Response\Result\FilterValue as ResultFilterValue;
 require_once __DIR__ . '/../../../resources/lib/ApiResponse.php';
 
 class Json10ResponseParserTest extends BaseTestCase
@@ -29,19 +43,19 @@ class Json10ResponseParserTest extends BaseTestCase
     public function productIdsResponseProvider(): array
     {
         return [
-            // 'default mock ids' => [
-            //     'response' => new Json10Response($this->getMockResponse()),
-            //     'expectedIds' => [
-            //         '019111105-37900',
-            //         '029214085-37860'
-            //     ]
-            // ],
-            // 'response without products' => [
-            //     'response' => new Json10Response(
-            //         $this->getMockResponse('JSONResponse/demoResponseWithNoResults.json')
-            //     ),
-            //     'expectedIds' => []
-            // ],
+            'default mock ids' => [
+                'response' => new Json10Response($this->getMockResponse()),
+                'expectedIds' => [
+                    '019111105-37900',
+                    '029214085-37860'
+                ]
+            ],
+            'response without products' => [
+                'response' => new Json10Response(
+                    $this->getMockResponse('JSONResponse/demoResponseWithNoResults.json')
+                ),
+                'expectedIds' => []
+            ],
             'response with one product' => [
                 'response' => new Json10Response(
                     $this->getMockResponse('JSONResponse/demoResponseWithOneProduct.json')
@@ -100,14 +114,10 @@ class Json10ResponseParserTest extends BaseTestCase
     public function testProductIdsAreParsedAsExpected(FindologicResponse $response, array $expectedIds): void
     {
 
-        $result = new \ApiResponse($response);
-        $apiResponse = $result->toArray();
-        unset($r['request']);
-        $pluginResponse = new Response($apiResponse);
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse($pluginResponse);
-
-        // $this->assertInstanceOf(\ApiResponse::class , $result);
+        $responseParser->setResponse($apiResponse);
 
         $this->assertEquals($expectedIds, $responseParser->getProductIds());
     }
@@ -117,12 +127,12 @@ class Json10ResponseParserTest extends BaseTestCase
         $expectedIds = ['variant-1_1', 'main-2'];
 
         $response = new Json10Response($this->getMockResponse('JSONResponse/demoResponseWithVariants.json'));
-        $result = new \ApiResponse($response);
-        $apiResponse = $result->toArray();
-        unset($r['request']);
-        $pluginResponse = new Response($apiResponse);
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse($pluginResponse);
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
+        $pluginConfigMock = $this->createMock(PluginConfig::class);
+        $pluginConfigMock->method('get')->willReturn(true);
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $pluginConfigMock);
+        $responseParser->setResponse($apiResponse);
 
         $ids = $responseParser->getProductIds();
         $this->assertEquals($expectedIds, $ids);
@@ -131,15 +141,12 @@ class Json10ResponseParserTest extends BaseTestCase
     public function testSmartDidYouMeanExtensionIsReturned(): void
     {
         $response = new Json10Response($this->getMockResponse('JSONResponse/demoResponseWithDidYouMeanQuery.json'));
-        $result = new \ApiResponse($response);
-        $apiResponse = $result->toArray();
-        unset($r['request']);
-        $pluginResponse = new Response($apiResponse);
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse($pluginResponse);
-
-        $request = new Request();
-        $extension = $responseParser->getSmartDidYouMeanExtension($request);
+        $responseParser->setResponse($apiResponse);
+        $responseParser->setRequest($this->createMock(Request::class));
+        $extension = $responseParser->getSmartDidYouMeanExtension();
 
         $this->assertEquals('did-you-mean', $extension->getType());
         $this->assertEquals('?search=didYouMean&forceOriginalQuery=1', $extension->getLink());
@@ -150,12 +157,10 @@ class Json10ResponseParserTest extends BaseTestCase
     public function testLandingPageUriIsReturned(): void
     {
         $response = new Json10Response($this->getMockResponse('JSONResponse/demoResponseWithLandingPage.json'));
-        $result = new \ApiResponse($response);
-        $apiResponse = $result->toArray();
-        unset($r['request']);
-        $pluginResponse = new Response($apiResponse);
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse($pluginResponse);
+        $responseParser->setResponse($apiResponse);
 
         $this->assertEquals('https://blubbergurken.io', $responseParser->getLandingPageExtension()->getLink());
     }
@@ -163,25 +168,20 @@ class Json10ResponseParserTest extends BaseTestCase
     public function testNoLandingPageIsReturnedIfResponseDoesNotHaveALandingPage(): void
     {
         $response = new Json10Response($this->getMockResponse());
-        $result = new \ApiResponse($response);
-        $apiResponse = $result->toArray();
-        unset($r['request']);
-        $pluginResponse = new Response($apiResponse);
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse($pluginResponse);
-
+        $responseParser->setResponse($apiResponse);
         $this->assertNull($responseParser->getLandingPageExtension());
     }
 
     public function testPromotionExtensionIsReturned(): void
     {
         $response = new Json10Response($this->getMockResponse());
-        $result = new \ApiResponse($response);
-        $apiResponse = $result->toArray();
-        unset($r['request']);
-        $pluginResponse = new Response($apiResponse);
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse($pluginResponse);
+        $responseParser->setResponse($apiResponse);
         $promotion = $responseParser->getPromotionExtension();
 
         $this->assertInstanceOf(Promotion::class, $promotion);
@@ -191,43 +191,43 @@ class Json10ResponseParserTest extends BaseTestCase
 
     public function filterResponseProvider(): array
     {
-        $expectedCategoryFilter = new CategoryFilter('cat', 'Kategorie');
+        $expectedCategoryFilter = @new CategoryFilter('cat', 'Kategorie');
         $expectedCategoryFilter->addValue(
-            (new CategoryFilterValue('Buch', 'Buch'))
+            (new CategoryFilterValue(null, new ResultFilterValue(['name' => 'Buch'])))
                 ->setFrequency(5)
                 ->addValue(
-                    (new CategoryFilterValue('Beste Bücher', 'Beste Bücher'))
+                    (new CategoryFilterValue(null, new ResultFilterValue(['name' => 'Beste Bücher'])))
                 )
         );
 
         $vendor = 'vendor';
         $expectedVendorFilter = new VendorImageFilter($vendor, 'Hersteller');
         $expectedVendorFilter->addValue(
-            (new ImageFilterValue('Anderson, Gusikowski and Barton', 'Anderson, Gusikowski and Barton', $vendor))
+            (new ImageFilterValue(null, new ResultFilterValue(['name' => 'Anderson, Gusikowski and Barton'])))
                 ->setDisplayType('media')
                 ->setMedia(new Media('https://demo.findologic.com/vendor/anderson_gusikowski_and_barton.png'))
         );
         $expectedVendorFilter->addValue(
-            (new ImageFilterValue('Bednar Ltd', 'Bednar Ltd', $vendor))
+            (new ImageFilterValue(null, new ResultFilterValue(['name' => 'Bednar Ltd'])))
                 ->setDisplayType('media')
                 ->setMedia(new Media('https://demo.findologic.com/vendor/bednar_ltd.png'))
         );
         $expectedVendorFilter->addValue(
-            (new ImageFilterValue('Buckridge-Fisher', 'Buckridge-Fisher', $vendor))
+            (new ImageFilterValue(null, new ResultFilterValue(['name' => 'Buckridge-Fisher'])))
                 ->setDisplayType('media')
                 ->setMedia(new Media('https://demo.findologic.com/vendor/buckridge_fisher.png'))
         );
         $expectedVendorFilter->addValue(
-            (new ImageFilterValue('Connelly, Eichmann and Weissnat', 'Connelly, Eichmann and Weissnat', $vendor))
+            (new ImageFilterValue(null, new ResultFilterValue(['name' => 'Connelly, Eichmann and Weissnat'])))
                 ->setDisplayType('media')
                 ->setMedia(new Media('https://demo.findologic.com/vendor/connelly_eichmann_and_weissnat.png'))
         );
 
         $price = 'price';
-        $expectedPriceFilter = new RangeSliderFilter($price, 'Preis');
-        $expectedPriceFilter->addValue(new FilterValue('0.39 - 13.40', '0.39 - 13.40', $price));
-        $expectedPriceFilter->addValue(new FilterValue('13.45 - 25.99', '13.45 - 25.99', $price));
-        $expectedPriceFilter->addValue(new FilterValue('26.00 - 40.30', '26.00 - 40.30', $price));
+        $expectedPriceFilter = new RangeSliderFilter(new ResultFilter(['name' => $price, 'displayName' => 'Preis', 'type' => $price]));
+        $expectedPriceFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => '0.39 - 13.40'])));
+        $expectedPriceFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => '13.45 - 25.99'])));
+        $expectedPriceFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => '26.00 - 40.30'])));
         $expectedPriceFilter->setMin(0.355);
         $expectedPriceFilter->setMax(3239.1455);
         $expectedPriceFilter->setStep(0.1);
@@ -242,26 +242,27 @@ class Json10ResponseParserTest extends BaseTestCase
         ]);
 
         $expectedRatingFilter = new RatingFilter('rating', 'Rating');
+        // $expectedRatingFilter->setTo
         $expectedRatingFilter->setMaxPoints(5.0);
-        $expectedRatingFilter->addValue(new FilterValue('0.00 - 0.00', '0.00 - 0.00'));
-        $expectedRatingFilter->addValue(new FilterValue('0.00 - 0.00', '0.00 - 0.00'));
+        $expectedRatingFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => '0.00 - 0.00'])));
+        $expectedRatingFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => '0.00 - 0.00'])));
 
         $color = 'Farbe';
         $expectedColorFilter = new ColorPickerFilter($color, 'Farbe');
         $expectedColorFilter->addValue(
-            (new ColorFilterValue('beige', 'beige', $color))
+            (new ColorFilterValue(null, new ResultFilterValue(['name' => 'beige'])))
                 ->setColorHexCode('#F5F5DC')
                 ->setMedia(new Media('https://blubbergurken.io/farbfilter/beige.gif'))
                 ->setDisplayType('media')
         );
         $expectedColorFilter->addValue(
-            (new ColorFilterValue('blau', 'blau', $color))
+            (new ColorFilterValue(null, new ResultFilterValue(['name' => 'blau'])))
                 ->setColorHexCode('#3c6380')
                 ->setMedia(new Media('https://blubbergurken.io/farbfilter/blau.gif'))
                 ->setDisplayType('media')
         );
         $expectedColorFilter->addValue(
-            (new ColorFilterValue('braun', 'braun', $color))
+            (new ColorFilterValue(null, new ResultFilterValue(['name' => 'braun'])))
                 ->setColorHexCode('#94651e')
                 ->setMedia(new Media('https://blubbergurken.io/farbfilter/braun.gif'))
                 ->setDisplayType('media')
@@ -269,9 +270,9 @@ class Json10ResponseParserTest extends BaseTestCase
 
         $material = 'Material';
         $expectedSelectDropdownFilter = new SelectDropdownFilter($material, 'Material');
-        $expectedSelectDropdownFilter->addValue(new FilterValue('Hartgepäck', 'Hartgepäck', $material));
-        $expectedSelectDropdownFilter->addValue(new FilterValue('Leder', 'Leder', $material));
-        $expectedSelectDropdownFilter->addValue(new FilterValue('Nylon', 'Nylon', $material));
+        $expectedSelectDropdownFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => 'Hartgepäck'])));
+        $expectedSelectDropdownFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => 'Leder'])));
+        $expectedSelectDropdownFilter->addValue(new FilterValue(null, new ResultFilterValue(['name' => 'Nylon'])));
 
         return [
             'response including all filter types' => [
@@ -279,12 +280,12 @@ class Json10ResponseParserTest extends BaseTestCase
                     $this->getMockResponse('JSONResponse/demoResponseWithAllFilterTypes.json')
                 ),
                 'expectedFilters' => [
-                    'cat' => $expectedCategoryFilter,
-                    'vendor' => $expectedVendorFilter,
-                    'price' => $expectedPriceFilter,
-                    'Farbe' => $expectedColorFilter,
-                    'Material' => $expectedSelectDropdownFilter,
-                    'rating' => $expectedRatingFilter
+                    $expectedCategoryFilter,
+                    $expectedVendorFilter,
+                    $expectedPriceFilter,
+                    $expectedColorFilter,
+                    $expectedSelectDropdownFilter,
+                    $expectedRatingFilter
                 ]
             ],
             'response without results' => [
@@ -306,19 +307,19 @@ class Json10ResponseParserTest extends BaseTestCase
                 'expectedFilters' => [
                     'Farbe' => (new ColorPickerFilter('Farbe', 'Farbe'))
                         ->addValue(
-                            (new ColorFilterValue('beige', 'beige', $color))
+                            (new ColorFilterValue(null, new ResultFilterValue(['name' => 'beige'])))
                                 ->setMedia(new Media(''))
                                 ->setColorHexCode('#F5F5DC')
                                 ->setDisplayType('color')
                         )
                         ->addValue(
-                            (new ColorFilterValue('blau', 'blau', $color))
+                            (new ColorFilterValue(null, new ResultFilterValue(['name' => 'blau'])))
                                 ->setMedia(new Media(''))
                                 ->setColorHexCode('#3c6380')
                                 ->setDisplayType('color')
                         )
                         ->addValue(
-                            (new ColorFilterValue('braun', 'braun', $color))
+                            (new ColorFilterValue(null, new ResultFilterValue(['name' => 'braun'])))
                                 ->setMedia(new Media(''))
                                 ->setColorHexCode('')
                                 ->setDisplayType('none')
@@ -333,12 +334,19 @@ class Json10ResponseParserTest extends BaseTestCase
      */
     public function testFiltersAreReturnedAsExpected(Json10Response $response, array $expectedFilters): void
     {
-        $responseParser = new Json10ResponseParser($response);
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser->setResponse($apiResponse);
 
         $filtersExtension = $responseParser->getFiltersExtension();
         $filters = $filtersExtension->getFilters();
 
-        $this->assertEquals($expectedFilters, $filters);
+        for ($i=0; $i < count($filters); $i++) { 
+            $expectedFilter = (array)$expectedFilters[$i];
+            $filter = $filters[$i];
+            $this->assertEquals($expectedFilter, $filter);
+        }
     }
 
     public static function smartSuggestBlocksProvider(): array

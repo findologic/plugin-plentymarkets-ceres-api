@@ -12,7 +12,6 @@ use Findologic\Components\PluginConfig;
 use Findologic\Struct\FiltersExtension;
 use Findologic\Api\Response\Result\Item;
 use Plenty\Log\Contracts\LoggerContract;
-// use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\FinSearch\Struct\Pagination;
 use Symfony\Component\HttpFoundation\Request;
 use Plenty\Plugin\Http\Request as HttpRequest;
@@ -173,7 +172,6 @@ class ResponseParser
         $selectedCategory = $requestParams['attrib']['cat'][0] ?? null;
 
         if (strpos($selectedCategory, '_') !== false) {
-            $this->logger->error('getSelectedCategoryName', ['explode' => $selectedCategory]);
             $categories = explode('_', $selectedCategory);
 
             $selectedCategory = end($categories);
@@ -215,7 +213,7 @@ class ResponseParser
      */ 
     public function setResponse(array $response)
     {
-        if($response) $this->response = pluginApp(Response::class, $response);
+        if($response) $this->response = pluginApp(Response::class, [$response]);
 
         return $this;
     }

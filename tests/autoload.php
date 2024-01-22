@@ -42,10 +42,6 @@ if (!function_exists('pluginApp')) {
             return $mockClassList[$abstract];
         }
 
-        if ($reflector->isAbstract()) {
-            var_dump(['getNamespaceName' => $reflector->getNamespaceName()]);
-        }
-
         $constructor = $reflector->getConstructor();
         if (is_null($constructor)) {
             return new $abstract();
