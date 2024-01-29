@@ -26,7 +26,7 @@ class SmartDidYouMeanContainer
         }
 
         $searchResults = $searchService->getResults();
-
+        $this->getLogger(__METHOD__)->error('$searchResults->getQueryInfoMessage()', $searchResults->getQueryInfoMessage());
         return $twig->render(
             'Findologic::Category.Item.Partials.SmartDidYouMean',
             [
