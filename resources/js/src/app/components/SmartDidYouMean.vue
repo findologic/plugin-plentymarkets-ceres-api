@@ -10,6 +10,7 @@
       class="smart-did-you-mean"
       v-html="smartText[`${smartText.type}Query`]"
     />
+    <button v-on:click="console.log(smartText)">Click</button>
   </div>
 </template>
 
