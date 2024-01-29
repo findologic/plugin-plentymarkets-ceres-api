@@ -14,12 +14,16 @@ class QueryInfoMessageFactory
     protected Response $response;
     protected string $queryString;
 
+    protected ?int $count;
+
     public function __construct(
         Response $response,
-        string $queryString
+        string $queryString,
+        ?int $count
     ) {
         $this->response = $response;
         $this->queryString = $queryString;
+        $this->count = $count;
     }
 
     public function getQueryInfoMessage(array $params): QueryInfoMessage
@@ -89,7 +93,8 @@ class QueryInfoMessageFactory
         /** @var SearchTermQueryInfoMessage $queryInfoMessage */
         $queryInfoMessage = QueryInfoMessage::buildInstance(
             QueryInfoMessage::TYPE_QUERY,
-            $this->queryString
+            $this->queryString,
+            $this->count
         );
 
         return $queryInfoMessage;

@@ -125,7 +125,8 @@ class ResponseParser
     {
         $queryString = $this->response->getRequest()->getQuery() ?? '';
         $params = (array) $this->request->all();
-        $queryInfoMessageFactory = pluginApp(QueryInfoMessageFactory::class, [$this->response, $queryString]);
+        $count = $this->parseTotalResults();
+        $queryInfoMessageFactory = pluginApp(QueryInfoMessageFactory::class, [$this->response, $queryString, $count]);
         
         return $queryInfoMessageFactory->getQueryInfoMessage($params);
     }
