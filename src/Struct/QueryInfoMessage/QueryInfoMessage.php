@@ -21,13 +21,14 @@ abstract class QueryInfoMessage
         string $type,
         ?string $query = null,
         ?string $filterName = null,
-        ?string $filterValue = null
+        ?string $filterValue = null,
+        ?int $count = 0
     ): self {
         switch ($type) {
             case self::TYPE_QUERY:
                 static::assertQueryIsNotEmpty($query);
 
-                return pluginApp(SearchTermQueryInfoMessage::class, [$query]);
+                return pluginApp(SearchTermQueryInfoMessage::class, [$query, $count]);
             case self::TYPE_CATEGORY:
                 static::assertFilterNameAndValueAreNotEmpty($filterName, $filterValue);
 

@@ -94,6 +94,8 @@ class QueryInfoMessageFactory
         $queryInfoMessage = QueryInfoMessage::buildInstance(
             QueryInfoMessage::TYPE_QUERY,
             $this->queryString,
+            null,
+            null,
             $this->count
         );
 
