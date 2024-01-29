@@ -7,7 +7,7 @@ use Plenty\Plugin\Translation\Translator;
 
 class SmartDidYouMean
 {
-    protected const DID_YOU_MEAN = 'did-you-mean';
+    protected const DID_YOU_MEAN = 'didYouMean';
     protected const IMPROVED = 'improved';
     protected const CORRECTED = 'corrected';
 
