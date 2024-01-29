@@ -213,7 +213,7 @@ class ResponseParser
      */ 
     public function setResponse(array $response)
     {
-        if($response) $this->response = pluginApp(Response::class, [$response]);
+        if($response) $this->response = pluginApp(Response::class, [$response['response']]);
 
         return $this;
     }
