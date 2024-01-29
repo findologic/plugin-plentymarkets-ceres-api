@@ -2,6 +2,8 @@
 
 namespace Findologic\Struct;
 
+use Plenty\Plugin\Translation\Translator;
+
 
 class SmartDidYouMean
 {
@@ -12,6 +14,8 @@ class SmartDidYouMean
     public ?string $link;
     public ?string $type;
 
+    private Translator $translator;
+
     public function __construct(
         public ?string $originalQuery,
         public ?string $effectiveQuery,
@@ -20,11 +24,30 @@ class SmartDidYouMean
         public ?string $improvedQuery,
         ?string $controllerPath
     ) {
+        $this->translator = pluginApp(Translator::class);
         $this->originalQuery = htmlentities($originalQuery ?? '');
         $this->effectiveQuery = htmlentities($effectiveQuery ?? '');
-        $this->correctedQuery = htmlentities($correctedQuery ?? '');
-        $this->didYouMeanQuery = htmlentities($didYouMeanQuery ?? '');
-        $this->improvedQuery = htmlentities($improvedQuery ?? '');
+        $this->correctedQuery = $this->translator->trans(
+            'Findologic::Template.correctedQuery',
+            [
+                'originalQuery' => $originalQuery,
+                'alternativeQuery' => htmlentities($correctedQuery ?? '')
+            ]
+        );
+        $this->didYouMeanQuery = $this->translator->trans(
+            'Findologic::Template.didYouMeanQuery',
+            [
+                'originalQuery' => $originalQuery,
+                'alternativeQuery' => htmlentities($didYouMeanQuery ?? '')
+            ]
+        );
+        $this->improvedQuery = $this->translator->trans(
+            'Findologic::Template.improvedQuery',
+            [
+                'originalQuery' => $originalQuery,
+                'alternativeQuery' => htmlentities($improvedQuery ?? '')
+            ]
+        );
 
         $this->type = $this->defineType();
         $this->link = $this->createLink($controllerPath);
