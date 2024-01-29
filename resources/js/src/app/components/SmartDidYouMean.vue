@@ -10,7 +10,6 @@
       class="smart-did-you-mean"
       v-html="smartText[`${smartText.type}Query`]"
     />
-    <button v-on:click="console.log(smartText)">Click</button>
   </div>
 </template>
 
@@ -39,6 +38,10 @@ export default defineComponent({
         };
       },
     },
+  },
+  onMounted : (props)=>{
+    console.log('smartText', this.smartText)
+    console.log('props', props)
   }
 });
 </script>

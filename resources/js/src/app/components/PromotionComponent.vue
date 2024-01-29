@@ -28,9 +28,6 @@ export default defineComponent({
         };
       }
     }
-  },
-  onMounted : (props)=>{
-    console.log('mounted', props)
   }
 });
 </script>
