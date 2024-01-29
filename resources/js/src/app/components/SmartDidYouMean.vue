@@ -6,9 +6,9 @@
       v-html="queryInfoMessage.query"
     />
     <p
-      v-if="smartText.length > 0"
+      v-if="smartText.type"
       class="smart-did-you-mean"
-      v-html="smartText[smartText.type]"
+      v-html="smartText[`${smartText.type}Query`]"
     />
   </div>
 </template>
