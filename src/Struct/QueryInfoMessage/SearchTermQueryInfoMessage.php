@@ -20,7 +20,7 @@ class SearchTermQueryInfoMessage extends QueryInfoMessage
                 'query' => $query,
                 'hits' => $count
             ]
-        );;
+        );
     }
 
     public function getQuery(): string
