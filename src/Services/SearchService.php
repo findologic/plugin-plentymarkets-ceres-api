@@ -185,7 +185,7 @@ class SearchService implements SearchServiceInterface
         }
 
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults(array_slice($variationIds, -10), $results->getResultsCount());
+        $externalSearch->setResults($variationIds, $results->getResultsCount());
     }
 
     /**
