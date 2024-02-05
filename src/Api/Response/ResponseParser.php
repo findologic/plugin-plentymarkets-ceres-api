@@ -3,6 +3,7 @@
 namespace Findologic\Api\Response;
 
 use Exception;
+use Plenty\Plugin\Log\Loggable;
 use Findologic\Constants\Plugin;
 use Findologic\Struct\Promotion;
 use Findologic\Struct\LandingPage;
@@ -18,7 +19,6 @@ use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Api\Response\Json10\Filter\Filter;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessage;
 use Findologic\Struct\QueryInfoMessage\QueryInfoMessageFactory;
-use Plenty\Plugin\Log\Loggable;
 
 /**
  * Class ResponseParser

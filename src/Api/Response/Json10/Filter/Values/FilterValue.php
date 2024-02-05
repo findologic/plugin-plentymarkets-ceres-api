@@ -13,7 +13,7 @@ class FilterValue
     public const DELIMITER = '>';
     public ?string $uuid;
     public TranslatedName $translated;
-    public string $id;
+    public ?string $id;
     public ?int $frequency;
     public ?bool $selected;
     public ?float $weight;
@@ -77,6 +77,58 @@ class FilterValue
     public function setUuid($uuid)
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of frequency
+     *
+     * @return  self
+     */ 
+    public function setFrequency($frequency)
+    {
+        if ($frequency === null) {
+            $frequency = 0;
+        }
+
+        $this->frequency = $frequency;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of selected
+     *
+     * @return  self
+     */ 
+    public function setSelected($selected)
+    {
+        $this->selected = $selected;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of weight
+     *
+     * @return  self
+     */ 
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
 
         return $this;
     }

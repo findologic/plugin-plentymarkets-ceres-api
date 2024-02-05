@@ -77,4 +77,76 @@ abstract class BaseFilter
     {
         $this->hidden = $hidden;
     }
+
+    /**
+     * Set the value of isMain
+     *
+     * @return  self
+     */ 
+    public function setIsMain($isMain)
+    {
+        $this->isMain = $isMain;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of selectMode
+     *
+     * @return  self
+     */ 
+    public function setSelectMode($selectMode)
+    {
+        $this->selectMode = $selectMode;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of findologicFilterType
+     *
+     * @return  self
+     */ 
+    public function setFindologicFilterType($findologicFilterType)
+    {
+        $this->findologicFilterType = $findologicFilterType;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of noAvailableFiltersText
+     *
+     * @return  self
+     */ 
+    public function setNoAvailableFiltersText($noAvailableFiltersText)
+    {
+        $this->noAvailableFiltersText = $noAvailableFiltersText;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of combinationOperation
+     *
+     * @return  self
+     */ 
+    public function setCombinationOperation($combinationOperation)
+    {
+        $this->combinationOperation = $combinationOperation;
+
+        return $this;
+    }
+
+        /**
+         * Set the value of cssClass
+         *
+         * @return  self
+         */ 
+        public function setCssClass($cssClass)
+        {
+                $this->cssClass = $cssClass;
+
+                return $this;
+        }
 }

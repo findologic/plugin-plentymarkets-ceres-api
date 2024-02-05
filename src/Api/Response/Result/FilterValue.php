@@ -4,7 +4,7 @@ namespace Findologic\Api\Response\Result;
 
 class FilterValue
 {
-    protected string $id;
+    protected ?string $id;
     protected ?string $name;
 
     protected ?bool $selected;
@@ -23,7 +23,7 @@ class FilterValue
 
     function __construct(array $filterValue = [])
     {
-        $this->id = uniqid();
+        $this->id = $filterValue['name'];
         $this->name = $filterValue['name'];
         $this->selected = $filterValue['selected'];
         $this->weight = $filterValue['weight'];
@@ -70,5 +70,12 @@ class FilterValue
     public function getId():string
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 }

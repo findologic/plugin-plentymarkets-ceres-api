@@ -16,13 +16,6 @@ class CategoryFilterValue extends FilterValue
         return $this->selected;
     }
 
-    public function setSelected(?bool $selected): CategoryFilterValue
-    {
-        $this->selected = $selected;
-
-        return $this;
-    }
-
     /**
      * @return CategoryFilterValue[]
      */
@@ -51,16 +44,5 @@ class CategoryFilterValue extends FilterValue
         }
 
         return null;
-    }
-
-    public function setFrequency(?int $frequency): CategoryFilterValue
-    {
-        if ($frequency === null) {
-            $frequency = 0;
-        }
-
-        $this->frequency = $frequency;
-
-        return $this;
     }
 }
