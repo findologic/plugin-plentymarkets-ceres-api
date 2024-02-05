@@ -185,7 +185,7 @@ class SearchService implements SearchServiceInterface
         }
         $this->logger->error('Test log Findologic Support', ['externalSearchResults' => array_slice($variationIds, -50)]);
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults(array_slice($variationIds, -50), $results->getResultsCount());
+        $externalSearch->setResults(array_slice($variationIds, -10), $results->getResultsCount());
     }
 
     /**
