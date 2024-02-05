@@ -176,16 +176,16 @@ class SearchService implements SearchServiceInterface
         if ($this->shouldFilterInvalidProducts()) {
             $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
         } else {
-            $variationIds = $results->getVariationIds();
+            $variationIds = $results->getProductsIds();
         }
 
         if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
             return;
         }
-        $this->logger->error('Test log Findologic Support', ['externalSearchResults' => array_slice($variationIds, -50)]);
+        // $this->logger->error('Test log Findologic Support', ['externalSearchResults' => array_slice($variationIds, -50)]);
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults(array_slice($variationIds, -10), $results->getResultsCount());
+        $externalSearch->setResults($variationIds, $results->getResultsCount());
     }
 
     /**
