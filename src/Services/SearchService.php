@@ -176,7 +176,7 @@ class SearchService implements SearchServiceInterface
         if ($this->shouldFilterInvalidProducts()) {
             $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
         } else {
-            $variationIds = $results->getProductsIds();
+            $variationIds = $results->getVariationIds();
         }
 
         if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
