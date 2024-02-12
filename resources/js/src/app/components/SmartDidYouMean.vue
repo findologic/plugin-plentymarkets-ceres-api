@@ -38,10 +38,6 @@ export default defineComponent({
         };
       },
     },
-  },
-  onMounted : (props)=>{
-    console.log('smartText', this.smartText)
-    console.log('props', props)
   }
 });
 </script>

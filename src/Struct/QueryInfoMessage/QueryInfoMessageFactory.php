@@ -88,12 +88,12 @@ class QueryInfoMessageFactory
         return $vendorInfoMessage;
     }
 
-    private function buildSearchTermQueryInfoMessage(): SearchTermQueryInfoMessage
+    private function buildSearchTermQueryInfoMessage(string $effectiveQuery): SearchTermQueryInfoMessage
     {
         /** @var SearchTermQueryInfoMessage $queryInfoMessage */
         $queryInfoMessage = QueryInfoMessage::buildInstance(
             QueryInfoMessage::TYPE_QUERY,
-            $this->queryString,
+            $effectiveQuery ?: $this->queryString,
             null,
             null,
             $this->count

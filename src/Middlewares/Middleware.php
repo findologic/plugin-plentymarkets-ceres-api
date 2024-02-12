@@ -141,10 +141,8 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.search',
             function (TemplateContainer $templateContainer) {
-                if (true) {
                     $templateContainer->setContext(FindologicItemSearchContext::class);
                     return false;
-                }
 
                 return true;
             }
@@ -153,10 +151,8 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'IO.ctx.category.item',
             function (TemplateContainer $templateContainer) {
-                if (true) {
                     $templateContainer->setContext(FindologicCategoryItemContext::class);
                     return false;
-                }
 
                 return true;
             }
@@ -172,8 +168,8 @@ class Middleware extends PlentyMiddleware
         );
 
         $this->eventDispatcher->listen('IO.Component.Import', function (ComponentContainer $container) {
-            if ($container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter' &&
-                true
+            if (
+                $container->getOriginComponentTemplate() === 'Ceres::ItemList.Components.Filter.ItemFilter'
             ) {
                 $container->setNewComponentTemplate('Findologic::ItemList.Components.Filter.ItemFilter');
             }
@@ -182,13 +178,10 @@ class Middleware extends PlentyMiddleware
         $this->eventDispatcher->listen(
             'Ceres.Search.Query',
             function (ExternalSearch $externalSearch) use ($request) {
-                if (true) {
-                    try{
-                        $this->searchService->handleSearchQuery($request, $externalSearch);
-                    }
-                    catch(\Exception | \Throwable $e){
-                        ($this->getLoggerObject())->error('Search error', (array)$e);
-                    }
+                try {
+                    $this->searchService->handleSearchQuery($request, $externalSearch);
+                } catch (\Exception | \Throwable $e) {
+                    ($this->getLoggerObject())->error('Search error', (array) $e);
                 }
             }
         );

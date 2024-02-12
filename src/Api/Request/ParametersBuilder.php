@@ -13,7 +13,6 @@ use Ceres\Helper\ExternalSearch;
 use Plenty\Plugin\Http\Request as HttpRequest;
 
 
-
 class ParametersBuilder
 {
 

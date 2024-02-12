@@ -9,7 +9,6 @@ use Findologic\Struct\Promotion;
 use Findologic\Struct\LandingPage;
 use Plenty\Plugin\Log\LoggerFactory;
 use Findologic\Struct\SmartDidYouMean;
-use Findologic\Components\PluginConfig;
 use Findologic\Struct\FiltersExtension;
 use Findologic\Api\Response\Result\Item;
 use Plenty\Log\Contracts\LoggerContract;
@@ -32,17 +31,14 @@ class ResponseParser
 
     protected LoggerContract $logger;
 
-    protected PluginConfig $pluginConfig;
 
     protected HttpRequest $request;
 
     public function __construct(
         
-        LoggerFactory $loggerFactory,
-        PluginConfig $pluginConfig
+        LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
-        $this->pluginConfig = $pluginConfig;
     }
 
     public function parseQuery() :array
@@ -51,9 +47,6 @@ class ResponseParser
 
         if ($this->response->getRequest()->getQuery()) {
             $query['query'] = $this->response->getRequest()->getQuery();
-            // $query['searchedWordCount'] = $data->query->searchWordCount->__toString();
-            // $query['foundWordCount'] = $data->query->foundWordCount->__toString();
-
             $query['first'] = $this->response->getRequest()->getFirst();
             $query['count'] = $this->response->getRequest()->getCount();
         }
@@ -80,7 +73,7 @@ class ResponseParser
     {
         return array_map(
             function (Item $product) {
-                if ($this->pluginConfig->get(Plugin::CONFIG_USE_VARIANTS) && count($product->getVariants())) {
+                if (count($product->getVariants())) {
                     return  $product->getVariants()[0]->getId();
                 } 
                 else if(array_key_exists('variation_id', $product->getProperties())){

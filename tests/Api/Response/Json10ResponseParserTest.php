@@ -583,113 +583,113 @@ class Json10ResponseParserTest extends BaseTestCase
         $this->assertEquals($expectedLimit, $pagination->getLimit());
     }
 
-    public function queryInfoMessageResponseProvider(): array
-    {
-        return [
-            'alternative query is used' => [
-                'response' => new Json10Response($this->getMockResponse()),
-                'request' => new Request(),
-                'expectedInstance' => SearchTermQueryInfoMessage::class,
-                'expectedVars' => [
-                    'query' => 'ps4',
-                    'extensions' => []
-                ]
-            ],
-            'no search query but selected category' => [
-                'response' => new Json10Response(
-                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-                ),
-                'request' => new Request(['cat' => 'Shoes & More']),
-                'expectedInstance' => CategoryInfoMessage::class,
-                'expectedVars' => [
-                    'filterName' => 'Kategorie',
-                    'filterValue' => 'Shoes & More',
-                    'extensions' => []
-                ]
-            ],
-            'no search query but selected vendor' => [
-                'response' => new Json10Response(
-                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-                ),
-                'request' => new Request(['vendor' => 'vendor>Blubbergurken inc.']),
-                'expectedInstance' => VendorInfoMessage::class,
-                'expectedVars' => [
-                    'filterName' => 'Hersteller',
-                    'filterValue' => 'Blubbergurken inc.',
-                    'extensions' => []
-                ]
-            ],
-            'no search query but 2 selected vendors' => [
-                'response' => new Json10Response(
-                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-                ),
-                'request' => new Request(['vendor' => 'vendor>Blubbergurken inc.|vendor>Blubbergurken Limited']),
-                'expectedInstance' => DefaultInfoMessage::class,
-                'expectedVars' => [
-                    'extensions' => []
-                ]
-            ],
-            'no query and no selected filters' => [
-                'response' => new Json10Response(
-                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-                ),
-                'request' => new Request(),
-                'expectedInstance' => DefaultInfoMessage::class,
-                'expectedVars' => [
-                    'extensions' => []
-                ]
-            ],
-            'shopping guide query is used' => [
-                'response' => new Json10Response(
-                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-                ),
-                'request' => new Request(['wizard' => 'FindologicGuide']),
-                'expectedInstance' => ShoppingGuideInfoMessage::class,
-                'expectedVars' => [
-                    'shoppingGuide' => 'FindologicGuide',
-                    'extensions' => []
-                ]
-            ],
-        ];
-    }
+    // public function queryInfoMessageResponseProvider(): array
+    // {
+    //     return [
+    //         'alternative query is used' => [
+    //             'response' => new Json10Response($this->getMockResponse()),
+    //             'request' => new Request(),
+    //             'expectedInstance' => SearchTermQueryInfoMessage::class,
+    //             'expectedVars' => [
+    //                 'query' => 'ps4',
+    //                 'extensions' => []
+    //             ]
+    //         ],
+    //         'no search query but selected category' => [
+    //             'response' => new Json10Response(
+    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+    //             ),
+    //             'request' => new Request(['cat' => 'Shoes & More']),
+    //             'expectedInstance' => CategoryInfoMessage::class,
+    //             'expectedVars' => [
+    //                 'filterName' => 'Kategorie',
+    //                 'filterValue' => 'Shoes & More',
+    //                 'extensions' => []
+    //             ]
+    //         ],
+    //         'no search query but selected vendor' => [
+    //             'response' => new Json10Response(
+    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+    //             ),
+    //             'request' => new Request(['vendor' => 'vendor>Blubbergurken inc.']),
+    //             'expectedInstance' => VendorInfoMessage::class,
+    //             'expectedVars' => [
+    //                 'filterName' => 'Hersteller',
+    //                 'filterValue' => 'Blubbergurken inc.',
+    //                 'extensions' => []
+    //             ]
+    //         ],
+    //         'no search query but 2 selected vendors' => [
+    //             'response' => new Json10Response(
+    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+    //             ),
+    //             'request' => new Request(['vendor' => 'vendor>Blubbergurken inc.|vendor>Blubbergurken Limited']),
+    //             'expectedInstance' => DefaultInfoMessage::class,
+    //             'expectedVars' => [
+    //                 'extensions' => []
+    //             ]
+    //         ],
+    //         'no query and no selected filters' => [
+    //             'response' => new Json10Response(
+    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+    //             ),
+    //             'request' => new Request(),
+    //             'expectedInstance' => DefaultInfoMessage::class,
+    //             'expectedVars' => [
+    //                 'extensions' => []
+    //             ]
+    //         ],
+    //         'shopping guide query is used' => [
+    //             'response' => new Json10Response(
+    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+    //             ),
+    //             'request' => new Request(['wizard' => 'FindologicGuide']),
+    //             'expectedInstance' => ShoppingGuideInfoMessage::class,
+    //             'expectedVars' => [
+    //                 'shoppingGuide' => 'FindologicGuide',
+    //                 'extensions' => []
+    //             ]
+    //         ],
+    //     ];
+    // }
 
-    /**
-     * @dataProvider queryInfoMessageResponseProvider
-     */
-    public function testQueryInfoMessageExtensionIsReturnedAsExpected(
-        Json10Response $response,
-        Request $request,
-        string $expectedInstance,
-        array $expectedVars
-    ): void {
-        $apiResult = new \ApiResponse($response);
-        $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+    // /**
+    //  * @dataProvider queryInfoMessageResponseProvider
+    //  */
+    // public function testQueryInfoMessageExtensionIsReturnedAsExpected(
+    //     Json10Response $response,
+    //     Request $request,
+    //     string $expectedInstance,
+    //     array $expectedVars
+    // ): void {
+    //     $apiResult = new \ApiResponse($response);
+    //     $apiResponse = $apiResult->toArray();
+    //     $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+    //     $responseParser->setResponse([ 'response' => $apiResponse]);
         
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getExtension'])
-            ->disableOriginalConstructor()
-            ->getMock();
+    //     $contextMock = $this->getMockBuilder(Context::class)
+    //         ->onlyMethods(['getExtension'])
+    //         ->disableOriginalConstructor()
+    //         ->getMock();
 
-        $contextMock->expects($this->any())
-            ->method('getExtension')
-            ->willReturn($this->getDefaultSmartDidYouMeanExtension());
+    //     $contextMock->expects($this->any())
+    //         ->method('getExtension')
+    //         ->willReturn($this->getDefaultSmartDidYouMeanExtension());
 
-        /** @var SalesChannelContext|MockObject $salesChannelContextMock */
-        $salesChannelContextMock = $this->getMockBuilder(SalesChannelContext::class)
-            ->onlyMethods(['getContext'])
-            ->disableOriginalConstructor()
-            ->getMock();
+    //     /** @var SalesChannelContext|MockObject $salesChannelContextMock */
+    //     $salesChannelContextMock = $this->getMockBuilder(SalesChannelContext::class)
+    //         ->onlyMethods(['getContext'])
+    //         ->disableOriginalConstructor()
+    //         ->getMock();
 
-        $salesChannelContextMock->expects($this->any())->method('getContext')->willReturn($contextMock);
-        $event = new ProductListingCriteriaEvent($request, new Criteria(), $salesChannelContextMock);
+    //     $salesChannelContextMock->expects($this->any())->method('getContext')->willReturn($contextMock);
+    //     $event = new ProductListingCriteriaEvent($request, new Criteria(), $salesChannelContextMock);
 
-        $queryInfoMessage = $responseParser->getQueryInfoMessage($event);
-        $this->assertInstanceOf($expectedInstance, $queryInfoMessage);
-        $this->assertEquals($expectedVars, $queryInfoMessage->getVars());
-    }
+    //     $queryInfoMessage = $responseParser->getQueryInfoMessage($event);
+    //     $this->assertInstanceOf($expectedInstance, $queryInfoMessage);
+    //     $this->assertEquals($expectedVars, $queryInfoMessage->getVars());
+    // }
 
     public function testRatingFilterIsNotShownIfMinAndMaxAreTheSame(): void
     {

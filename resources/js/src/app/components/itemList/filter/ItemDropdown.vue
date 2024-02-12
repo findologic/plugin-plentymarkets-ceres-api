@@ -1,7 +1,6 @@
 <template>
   <div class="fl-dropdown">
     <div
-      v-if="facet.values[0].frequency"
       v-for="value in facet.values"
       :key="value.id"
       class="form-check"

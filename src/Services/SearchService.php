@@ -197,6 +197,7 @@ class SearchService implements SearchServiceInterface
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.', ['url' => $request->getRequestUri()]);
             $this->logger->logException($e);
+            throw new Exception('Exception while handling search query.');
         }
 
         return $this->responseParser;
@@ -246,11 +247,8 @@ class SearchService implements SearchServiceInterface
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
 
-        //$this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
 
         $this->responseParser->setResponse($this->requestWithRetries($apiRequest))->setRequest($request);
-
-        // return $this->results;
     }
 
     /**
@@ -349,7 +347,6 @@ class SearchService implements SearchServiceInterface
             return false;
         }
 
-        // $dataQueryInfoMessage = $this->responseParser->getQueryInfoMessage();//$this->getResults()->getData(Response::DATA_QUERY_INFO_MESSAGE);
         $smartDidYouMean = $this->responseParser->getSmartDidYouMeanExtension();
 
         // if theres no smartdidyoumean type return true
@@ -358,10 +355,6 @@ class SearchService implements SearchServiceInterface
         }
 
         return false;
-        // $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-        //     ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
-        
-        // return $type !== 'corrected' && $type !== 'improved';
     }
 
     /**

@@ -17,6 +17,7 @@ use Plenty\Plugin\Log\Loggable;
 class Client
 {
     use Loggable;
+
     private LibraryCallContract $libraryCall;
 
     protected LoggerContract $logger;
@@ -28,8 +29,6 @@ class Client
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
         $this->libraryCall = $libraryCallContract;
         $this->pluginConfig = $pluginConfig;
-        // $this->config = pluginApp(ApiConfig::class, $pluginConfig->getShopKey());
-        // $this->findologicClient = pluginApp(FindologicClient::class,$this->config);
     }
 
     /**

@@ -24,6 +24,7 @@ class SmartDidYouMean
         public ?string $improvedQuery,
         ?string $controllerPath
     ) {
+        $this->type = $this->defineType();
         $this->translator = pluginApp(Translator::class);
         $this->originalQuery = htmlentities($originalQuery ?? '');
         $this->effectiveQuery = htmlentities($effectiveQuery ?? '');
@@ -49,7 +50,6 @@ class SmartDidYouMean
             ]
         );
 
-        $this->type = $this->defineType();
         $this->link = $this->createLink($controllerPath);
     }
 
