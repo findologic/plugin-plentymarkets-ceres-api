@@ -183,7 +183,7 @@ class SearchService implements SearchServiceInterface
             $this->doPageRedirect($redirectUrl);
             return;
         }
-        // $this->logger->error('Test log Findologic Support', ['externalSearchResults' => array_slice($variationIds, -50)]);
+        $this->logger->error('Test log Findologic Support', ['externalSearchResults' => $variationIds]);
         /** @var ExternalSearch $searchQuery */
         $externalSearch->setResults($variationIds, $results->getResultsCount());
     }
