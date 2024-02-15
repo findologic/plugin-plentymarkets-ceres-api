@@ -73,6 +73,7 @@
                             :placeholder="$translate('Ceres::Template.headerSearchPlaceholder')"
                             :aria-label="$translate('Ceres::Template.headerSearchTerm')"
                             v-model="searchString"
+                            @keyup.enter="search()"
                             @input="onValueChanged($event.target.value)"
                             @focus="isSearchFocused = true"
                             @blur="onBlurSearchField($event)"
