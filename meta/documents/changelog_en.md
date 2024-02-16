@@ -1,5 +1,10 @@
 # Release Notes for Findologic
 
+## 5.1.3 (2024-02-16)
+
+### Fixed
+- [PLENTY-486] A bug was fixed, where the filters were not reset after a new search.
+
 ## 5.1.2 (2023-09-25)
 
 ### Fixed
