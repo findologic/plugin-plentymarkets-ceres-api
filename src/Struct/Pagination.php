@@ -1,6 +1,6 @@
 <?php
 
-namespace Findologic\FinSearch\Struct;
+namespace Findologic\Struct;
 
 
 class Pagination

@@ -11,6 +11,7 @@
     "phpunit/phpunit": "^8",
     "plentymarkets/plugin-ceres": "^5.0",
     "plentymarkets/plugin-io": "^5.0",
+    "plentymarkets/plugin-interface": "dev-stable7",
     "findologic/findologic-api": "1.8.0"
   },
   "scripts": {
@@ -65,6 +66,8 @@
     }
   },
   "config": {
-    "allow-plugins": {}
+    "allow-plugins": {
+      "kylekatarnls/update-helper": false
+    }
   }
 }

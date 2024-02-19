@@ -210,7 +210,7 @@ abstract class Filter extends BaseFilter
     private static function handleRatingFilter(ResultFilter $filter, bool $isMain): ?RatingFilter
     {
         $totalRange = $filter->getTotalRange();
-        if ($totalRange && $totalRange['min'] === $totalRange['max']) {
+        if (!$totalRange || $totalRange['min'] === $totalRange['max']) {
             return null;
         }
 

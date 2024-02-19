@@ -119,7 +119,7 @@ class Json10ResponseParserTest extends BaseTestCase
 
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
 
         $this->assertEquals($expectedIds, $responseParser->getProductIds());
@@ -146,7 +146,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $response = new Json10Response($this->getMockResponse('JSONResponse/demoResponseWithDidYouMeanQuery.json'));
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
         $responseParser->setRequest($this->createMock(Request::class));
         $extension = $responseParser->getSmartDidYouMeanExtension();
@@ -162,7 +162,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $response = new Json10Response($this->getMockResponse('JSONResponse/demoResponseWithLandingPage.json'));
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
 
         $this->assertEquals('https://blubbergurken.io', $responseParser->getLandingPageExtension()->getLink());
@@ -173,7 +173,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $response = new Json10Response($this->getMockResponse());
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
         $this->assertNull($responseParser->getLandingPageExtension());
     }
@@ -183,7 +183,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $response = new Json10Response($this->getMockResponse());
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
         $promotion = $responseParser->getPromotionExtension();
 
@@ -416,7 +416,7 @@ class Json10ResponseParserTest extends BaseTestCase
     {
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
 
         $filtersExtension = $responseParser->getFiltersExtension();
@@ -427,106 +427,6 @@ class Json10ResponseParserTest extends BaseTestCase
             $filter = $filters[$i];
 
             $this->assertEquals($expectedFilter, $filter);
-        }
-    }
-
-    public static function smartSuggestBlocksProvider(): array
-    {
-        return [
-            'No smart suggest blocks are sent and category filter is not in response' => [
-                'type' => 'cat',
-                'demoResponse' => 'demoResponseWithoutFilters.json',
-                'flBlocks' => [],
-                'expectedFilterName' => null,
-                'expectedInstanceOf' => CategoryFilter::class,
-                'isHidden' => null
-            ],
-            'Smart suggest blocks are sent and category filter is not in response' => [
-                'type' => 'cat',
-                'demoResponse' => 'demoResponseWithoutFilters.json',
-                'flBlocks' => ['cat' => 'Category'],
-                'expectedFilterName' => 'Category',
-                'expectedInstanceOf' => CategoryFilter::class,
-                'isHidden' => true
-            ],
-            'No smart suggest blocks are sent and category filter is available in response' => [
-                'type' => 'cat',
-                'demoResponse' => 'demoResponseWithCategoryFilter.json',
-                'flBlocks' => [],
-                'expectedFilterName' => 'Kategorie',
-                'expectedInstanceOf' => CategoryFilter::class,
-                'isHidden' => false
-            ],
-            'No smart suggest blocks are sent and vendor filter is not in response' => [
-                'type' => 'vendor',
-                'demoResponse' => 'demoResponseWithoutFilters.json',
-                'flBlocks' => [],
-                'expectedFilterName' => null,
-                'expectedInstanceOf' => VendorImageFilter::class,
-                'isHidden' => null
-            ],
-            'Smart suggest blocks are sent and vendor filter is not in response' => [
-                'type' => 'vendor',
-                'demoResponse' => 'demoResponseWithoutFilters.json',
-                'flBlocks' => ['vendor' => 'Manufacturer'],
-                'expectedFilterName' => 'Manufacturer',
-                'expectedInstanceOf' => VendorImageFilter::class,
-                'isHidden' => true
-            ],
-            'No smart suggest blocks are sent and vendor filter is available in response' => [
-                'type' => 'vendor',
-                'demoResponse' => 'demoResponseWithVendorFilter.json',
-                'flBlocks' => [],
-                'expectedFilterName' => 'Hersteller',
-                'expectedInstanceOf' => VendorImageFilter::class,
-                'isHidden' => false
-            ],
-            'No smart suggest blocks are sent and text vendor filter is available in response' => [
-                'type' => 'vendor',
-                'demoResponse' => 'demoResponseWithTextVendorFilter.json',
-                'flBlocks' => [],
-                'expectedFilterName' => 'Hersteller',
-                'expectedInstanceOf' => LabelTextFilter::class,
-                'isHidden' => false
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider smartSuggestBlocksProvider
-     */
-    public function testHiddenFiltersBasedOnSmartSuggestBlocks(
-        string $type,
-        string $demoResponse,
-        array $smartSuggestBlocks,
-        ?string $expectedFilterName,
-        ?string $expectedInstanceOf,
-        ?bool $isHidden
-    ): void {
-        $response = new Json10Response(
-            $this->getMockResponse(sprintf('JSONResponse/%s', $demoResponse))
-        );
-
-        $apiResult = new \ApiResponse($response);
-        $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
-
-        $filtersExtension = $responseParser->getFiltersExtension();
-        $filtersExtension = $responseParser->getFiltersWithSmartSuggestBlocks(
-            $filtersExtension,
-            $smartSuggestBlocks,
-            [$type => 'Some Value']
-        );
-
-        $filters = $filtersExtension->getFilters();
-        $filter = end($filters);
-        if ($expectedFilterName === null) {
-            $this->assertNotInstanceOf($expectedInstanceOf, $filter);
-        } else {
-            $this->assertInstanceOf($expectedInstanceOf, $filter);
-            $this->assertSame($expectedFilterName, $filter->getName());
-            $this->assertSame($isHidden, $filter->isHidden());
         }
     }
 
@@ -573,7 +473,7 @@ class Json10ResponseParserTest extends BaseTestCase
     ): void {
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
 
         $pagination = $responseParser->getPaginationExtension($limit, $offset);
@@ -664,7 +564,7 @@ class Json10ResponseParserTest extends BaseTestCase
     // ): void {
     //     $apiResult = new \ApiResponse($response);
     //     $apiResponse = $apiResult->toArray();
-    //     $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+    //     $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
     //     $responseParser->setResponse([ 'response' => $apiResponse]);
         
 
@@ -698,7 +598,7 @@ class Json10ResponseParserTest extends BaseTestCase
         );
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
-        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $this->createMock(PluginConfig::class));
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
         $responseParser->setResponse([ 'response' => $apiResponse]);
         $filtersExtension = $responseParser->getFiltersExtension();
 
@@ -707,6 +607,6 @@ class Json10ResponseParserTest extends BaseTestCase
 
     protected function getMockResponse(string $path = 'JSONResponse/demo.json'): string
     {
-        return file_get_contents(__DIR__ . '/../../MockData/' . $path);
+        return file_get_contents(__DIR__ . '/../../MockResponses/' . $path);
     }
 }

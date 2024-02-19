@@ -6,6 +6,6 @@ trait MockResponseHelper
 {
     public function getMockResponse($file = 'JSONResponse/demo.json'): string
     {
-        return file_get_contents(__DIR__ . '/../MockData/' . $file);
+        return file_get_contents(__DIR__ . '/../MockResponses/' . $file);
     }
 }
