@@ -10,28 +10,34 @@ use Findologic\Struct\Promotion;
 use Plenty\Plugin\Log\LoggerFactory;
 use Findologic\Api\Response\Response;
 use Findologic\Components\PluginConfig;
+use Plenty\Plugin\Translation\Translator;
 use Findologic\Api\Response\ResponseParser;
 use Findologic\Tests\Overrides\BaseTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Findologic\Api\Response\Json10\Filter\Media;
 use Findologic\Api\Response\Json10\Filter\Filter;
-use FINDOLOGIC\Api\Responses\Xml21\Xml21Response;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use Findologic\Api\Response\Json10\Filter\RatingFilter;
 use Findologic\Api\Response\Json10\Filter\CategoryFilter;
 use Findologic\Api\Response\Json10\Filter\TranslatedName;
+use Findologic\Struct\QueryInfoMessage\VendorInfoMessage;
 use Findologic\Api\Response\Json10\Filter\LabelTextFilter;
 use Findologic\Api\Response\Result\Filter as ResultFilter;
+use Findologic\Struct\QueryInfoMessage\DefaultInfoMessage;
+use Findologic\Struct\QueryInfoMessage\CategoryInfoMessage;
 use Findologic\Api\Response\Json10\Filter\ColorPickerFilter;
 use Findologic\Api\Response\Json10\Filter\RangeSliderFilter;
 use Findologic\Api\Response\Json10\Filter\VendorImageFilter;
 use FINDOLOGIC\Api\Responses\Response as FindologicResponse;
 use Findologic\Api\Response\Json10\Filter\Values\FilterValue;
 use Findologic\Api\Response\Json10\Filter\SelectDropdownFilter;
+use Findologic\Struct\QueryInfoMessage\ShoppingGuideInfoMessage;
 use Findologic\Api\Response\Json10\Filter\Values\ColorFilterValue;
 use Findologic\Api\Response\Json10\Filter\Values\ImageFilterValue;
+use Findologic\Struct\QueryInfoMessage\SearchTermQueryInfoMessage;
 use Findologic\Api\Response\Result\FilterValue as ResultFilterValue;
 use Findologic\Api\Response\Json10\Filter\Values\CategoryFilterValue;
+
 require_once __DIR__ . '/../../../resources/lib/ApiResponse.php';
 
 class Json10ResponseParserTest extends BaseTestCase
@@ -41,6 +47,11 @@ class Json10ResponseParserTest extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        global $classInstances;
+        $translatorMock = $this->createMock(Translator::class);
+        $translatorMock->method('trans')->willReturn('');
+        $classInstances[Translator::class] = $translatorMock;
+        $classInstances[Request::class] = $this->createMock(Request::class);
     }
 
     public function productIdsResponseProvider(): array
@@ -120,7 +131,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
 
         $this->assertEquals($expectedIds, $responseParser->getProductIds());
     }
@@ -135,7 +146,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $pluginConfigMock = $this->createMock(PluginConfig::class);
         $pluginConfigMock->method('get')->willReturn(true);
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class), $pluginConfigMock);
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
 
         $ids = $responseParser->getProductIds();
         $this->assertEquals($expectedIds, $ids);
@@ -147,13 +158,12 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
         $responseParser->setRequest($this->createMock(Request::class));
         $extension = $responseParser->getSmartDidYouMeanExtension();
 
-        $this->assertEquals('did-you-mean', $extension->getType());
-        $this->assertEquals('?search=didYouMean&forceOriginalQuery=1', $extension->getLink());
-        $this->assertEquals('didYouMean', $extension->getDidYouMeanQuery());
+        $this->assertEquals('didYouMean', $extension->getType());
+        $this->assertEquals('?search=&forceOriginalQuery=1', $extension->getLink());
         $this->assertEquals('query', $extension->getOriginalQuery());
     }
 
@@ -163,7 +173,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
 
         $this->assertEquals('https://blubbergurken.io', $responseParser->getLandingPageExtension()->getLink());
     }
@@ -174,7 +184,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
         $this->assertNull($responseParser->getLandingPageExtension());
     }
 
@@ -184,7 +194,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
         $promotion = $responseParser->getPromotionExtension();
 
         $this->assertInstanceOf(Promotion::class, $promotion);
@@ -206,11 +216,11 @@ class Json10ResponseParserTest extends BaseTestCase
 
         $vendor = 'vendor';
         $expectedVendorFilter = (new VendorImageFilter($vendor, 'Hersteller'))
-        ->setIsMain(true)
-        ->setSelectMode('multiple')
-        ->setFindologicFilterType('vendorImageFilter')
-        ->setCombinationOperation('and')
-        ->setNoAvailableFiltersText('Keine Hersteller');
+            ->setIsMain(true)
+            ->setSelectMode('multiple')
+            ->setFindologicFilterType('vendorImageFilter')
+            ->setCombinationOperation('and')
+            ->setNoAvailableFiltersText('Keine Hersteller');
         $expectedVendorFilter->addValue(
             (new ImageFilterValue(null, new ResultFilterValue(['name' => 'Anderson, Gusikowski and Barton'])))
                 ->setDisplayType('media')
@@ -248,23 +258,24 @@ class Json10ResponseParserTest extends BaseTestCase
         $expectedPriceFilter = new RangeSliderFilter(new ResultFilter(['name' => $price, 'displayName' => 'Preis', 'type' => $price]));
         $expectedPriceFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $price])))
-            ->setId('0.39 - 13.40')
-            ->setTranslated(pluginApp(TranslatedName::class, ['0.39 - 13.40']))
-            ->setSelected(false)
-            ->setWeight(0.51743012666702));
-        $expectedPriceFilter->addValue(
-            (new FilterValue(null, new ResultFilterValue(['name' => $price])))
-            ->setId('13.45 - 25.99')
-            ->setTranslated(pluginApp(TranslatedName::class, ['13.45 - 25.99']))
-            ->setSelected(false)
-            ->setWeight(0.50098878145218)
+                ->setId('0.39 - 13.40')
+                ->setTranslated(pluginApp(TranslatedName::class, ['0.39 - 13.40']))
+                ->setSelected(false)
+                ->setWeight(0.51743012666702)
         );
         $expectedPriceFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $price])))
-            ->setId('26.00 - 40.30')
-            ->setTranslated(pluginApp(TranslatedName::class, ['26.00 - 40.30']))
-            ->setSelected(false)
-            ->setWeight(0.3976277410984)
+                ->setId('13.45 - 25.99')
+                ->setTranslated(pluginApp(TranslatedName::class, ['13.45 - 25.99']))
+                ->setSelected(false)
+                ->setWeight(0.50098878145218)
+        );
+        $expectedPriceFilter->addValue(
+            (new FilterValue(null, new ResultFilterValue(['name' => $price])))
+                ->setId('26.00 - 40.30')
+                ->setTranslated(pluginApp(TranslatedName::class, ['26.00 - 40.30']))
+                ->setSelected(false)
+                ->setWeight(0.3976277410984)
         );
         $expectedPriceFilter->setMin(0.355);
         $expectedPriceFilter->setMax(3239.1455);
@@ -326,7 +337,7 @@ class Json10ResponseParserTest extends BaseTestCase
                 ->setSelected(false)
                 ->setWeight(0.038716815412045)
                 ->setFrequency(35)
-            );
+        );
         $expectedSelectDropdownFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $material])))
                 ->setId('Leder')
@@ -417,13 +428,17 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
 
         $filtersExtension = $responseParser->getFiltersExtension();
         $filters = $filtersExtension->getFilters();
 
-        for ($i=0; $i < count($filters); $i++) {
-            $expectedFilter = (array)$expectedFilters[$i];
+        if (empty($filters)) {
+            $this->assertEmpty($expectedFilters);
+        }
+
+        for ($i = 0; $i < count($filters); $i++) {
+            $expectedFilter = (array) $expectedFilters[$i];
             $filter = $filters[$i];
 
             $this->assertEquals($expectedFilter, $filter);
@@ -474,7 +489,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
 
         $pagination = $responseParser->getPaginationExtension($limit, $offset);
 
@@ -483,113 +498,96 @@ class Json10ResponseParserTest extends BaseTestCase
         $this->assertEquals($expectedLimit, $pagination->getLimit());
     }
 
-    // public function queryInfoMessageResponseProvider(): array
-    // {
-    //     return [
-    //         'alternative query is used' => [
-    //             'response' => new Json10Response($this->getMockResponse()),
-    //             'request' => new Request(),
-    //             'expectedInstance' => SearchTermQueryInfoMessage::class,
-    //             'expectedVars' => [
-    //                 'query' => 'ps4',
-    //                 'extensions' => []
-    //             ]
-    //         ],
-    //         'no search query but selected category' => [
-    //             'response' => new Json10Response(
-    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-    //             ),
-    //             'request' => new Request(['cat' => 'Shoes & More']),
-    //             'expectedInstance' => CategoryInfoMessage::class,
-    //             'expectedVars' => [
-    //                 'filterName' => 'Kategorie',
-    //                 'filterValue' => 'Shoes & More',
-    //                 'extensions' => []
-    //             ]
-    //         ],
-    //         'no search query but selected vendor' => [
-    //             'response' => new Json10Response(
-    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-    //             ),
-    //             'request' => new Request(['vendor' => 'vendor>Blubbergurken inc.']),
-    //             'expectedInstance' => VendorInfoMessage::class,
-    //             'expectedVars' => [
-    //                 'filterName' => 'Hersteller',
-    //                 'filterValue' => 'Blubbergurken inc.',
-    //                 'extensions' => []
-    //             ]
-    //         ],
-    //         'no search query but 2 selected vendors' => [
-    //             'response' => new Json10Response(
-    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-    //             ),
-    //             'request' => new Request(['vendor' => 'vendor>Blubbergurken inc.|vendor>Blubbergurken Limited']),
-    //             'expectedInstance' => DefaultInfoMessage::class,
-    //             'expectedVars' => [
-    //                 'extensions' => []
-    //             ]
-    //         ],
-    //         'no query and no selected filters' => [
-    //             'response' => new Json10Response(
-    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-    //             ),
-    //             'request' => new Request(),
-    //             'expectedInstance' => DefaultInfoMessage::class,
-    //             'expectedVars' => [
-    //                 'extensions' => []
-    //             ]
-    //         ],
-    //         'shopping guide query is used' => [
-    //             'response' => new Json10Response(
-    //                 $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
-    //             ),
-    //             'request' => new Request(['wizard' => 'FindologicGuide']),
-    //             'expectedInstance' => ShoppingGuideInfoMessage::class,
-    //             'expectedVars' => [
-    //                 'shoppingGuide' => 'FindologicGuide',
-    //                 'extensions' => []
-    //             ]
-    //         ],
-    //     ];
-    // }
+    public function queryInfoMessageResponseProvider(): array
+    {
+        return [
+            'alternative query is used' => [
+                'response' => new Json10Response($this->getMockResponse()),
+                'request' => ['attrib' => []],
+                'expectedInstance' => SearchTermQueryInfoMessage::class,
+                'expectedVars' => [
+                    'query' => 'ps4',
+                    'extensions' => []
+                ]
+            ],
+            'no search query but selected category' => [
+                'response' => new Json10Response(
+                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+                ),
+                'request' => ['attrib' => ['cat' => 'Shoes & More']],
+                'expectedInstance' => CategoryInfoMessage::class,
+                'expectedVars' => [
+                    'filterName' => 'Kategorie',
+                    'filterValue' => 'Shoes & More',
+                    'extensions' => []
+                ]
+            ],
+            'no search query but selected vendor' => [
+                'response' => new Json10Response(
+                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+                ),
+                'request' => ['attrib' => ['vendor' => 'vendor>Blubbergurken inc.']],
+                'expectedInstance' => DefaultInfoMessage::class,
+                'expectedVars' => [
+                    'filterName' => 'Hersteller',
+                    'filterValue' => 'Blubbergurken inc.',
+                    'extensions' => []
+                ]
+            ],
+            'no search query but 2 selected vendors' => [
+                'response' => new Json10Response(
+                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+                ),
+                'request' => ['attrib' => ['vendor' => 'vendor>Blubbergurken inc.|vendor>Blubbergurken Limited']],
+                'expectedInstance' => DefaultInfoMessage::class,
+                'expectedVars' => [
+                    'extensions' => []
+                ]
+            ],
+            'no query and no selected filters' => [
+                'response' => new Json10Response(
+                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+                ),
+                'request' => ['attrib' => []],
+                'expectedInstance' => DefaultInfoMessage::class,
+                'expectedVars' => [
+                    'extensions' => []
+                ]
+            ],
+            'shopping guide query is used' => [
+                'response' => new Json10Response(
+                    $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
+                ),
+                'request' => ['attrib' => ['wizard' => 'FindologicGuide']],
+                'expectedInstance' => ShoppingGuideInfoMessage::class,
+                'expectedVars' => [
+                    'shoppingGuide' => 'FindologicGuide',
+                    'extensions' => []
+                ]
+            ],
+        ];
+    }
 
-    // /**
-    //  * @dataProvider queryInfoMessageResponseProvider
-    //  */
-    // public function testQueryInfoMessageExtensionIsReturnedAsExpected(
-    //     Json10Response $response,
-    //     Request $request,
-    //     string $expectedInstance,
-    //     array $expectedVars
-    // ): void {
-    //     $apiResult = new \ApiResponse($response);
-    //     $apiResponse = $apiResult->toArray();
-    //     $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-    //     $responseParser->setResponse([ 'response' => $apiResponse]);
-        
+    /**
+     * @dataProvider queryInfoMessageResponseProvider
+     */
+    public function testQueryInfoMessageExtensionIsReturnedAsExpected(
+        Json10Response $response,
+        array $request,
+        string $expectedInstance,
+        array $expectedVars
+    ): void {
+        $apiResult = new \ApiResponse($response);
+        $apiResponse = $apiResult->toArray();
+        $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
+        $responseParser->setResponse(['response' => $apiResponse]);
+        $requestMock = $this->createMock(Request::class);
+        $requestMock->method('all')->willReturn($request);
+        $responseParser->setRequest($requestMock);
 
-    //     $contextMock = $this->getMockBuilder(Context::class)
-    //         ->onlyMethods(['getExtension'])
-    //         ->disableOriginalConstructor()
-    //         ->getMock();
-
-    //     $contextMock->expects($this->any())
-    //         ->method('getExtension')
-    //         ->willReturn($this->getDefaultSmartDidYouMeanExtension());
-
-    //     /** @var SalesChannelContext|MockObject $salesChannelContextMock */
-    //     $salesChannelContextMock = $this->getMockBuilder(SalesChannelContext::class)
-    //         ->onlyMethods(['getContext'])
-    //         ->disableOriginalConstructor()
-    //         ->getMock();
-
-    //     $salesChannelContextMock->expects($this->any())->method('getContext')->willReturn($contextMock);
-    //     $event = new ProductListingCriteriaEvent($request, new Criteria(), $salesChannelContextMock);
-
-    //     $queryInfoMessage = $responseParser->getQueryInfoMessage($event);
-    //     $this->assertInstanceOf($expectedInstance, $queryInfoMessage);
-    //     $this->assertEquals($expectedVars, $queryInfoMessage->getVars());
-    // }
+        $queryInfoMessage = $responseParser->getQueryInfoMessage();
+        $this->assertInstanceOf($expectedInstance, $queryInfoMessage);
+    }
 
     public function testRatingFilterIsNotShownIfMinAndMaxAreTheSame(): void
     {
@@ -599,7 +597,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $apiResult = new \ApiResponse($response);
         $apiResponse = $apiResult->toArray();
         $responseParser = new ResponseParser($this->createMock(LoggerFactory::class));
-        $responseParser->setResponse([ 'response' => $apiResponse]);
+        $responseParser->setResponse(['response' => $apiResponse]);
         $filtersExtension = $responseParser->getFiltersExtension();
 
         $this->assertEmpty($filtersExtension->getFilters());

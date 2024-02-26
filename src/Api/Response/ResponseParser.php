@@ -205,7 +205,7 @@ class ResponseParser
      *
      * @return  self
      */ 
-    public function setResponse(array $response)
+    public function setResponse(?array $response)
     {
         if($response) $this->response = pluginApp(Response::class, [$response['response']]);
 

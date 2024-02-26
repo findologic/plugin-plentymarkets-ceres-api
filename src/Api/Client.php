@@ -40,9 +40,7 @@ class Client
         $response = null;
 
         try {
-            $this->getLogger(__METHOD__)->error('request', $request);
             $response = $this->libraryCall->call('Findologic::findologic_client', $request);
-            $this->getLogger(__METHOD__)->error('response', $response);
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.', ['request' => $request['params']]);
             $this->logger->logException($e);

@@ -197,7 +197,7 @@ class SearchService implements SearchServiceInterface
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.', ['url' => $request->getRequestUri()]);
             $this->logger->logException($e);
-            throw new Exception('Exception while handling search query.');
+            throw $e;
         }
 
         return $this->responseParser;
@@ -248,7 +248,8 @@ class SearchService implements SearchServiceInterface
         );
 
 
-        $this->responseParser->setResponse($this->requestWithRetries($apiRequest))->setRequest($request);
+        $this->responseParser->setResponse($this->requestWithRetries($apiRequest));
+        $this->responseParser->setRequest($request);
     }
 
     /**

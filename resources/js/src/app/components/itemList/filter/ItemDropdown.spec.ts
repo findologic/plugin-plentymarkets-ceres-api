@@ -30,22 +30,22 @@ describe('ItemDropdown', () => {
             itemCount: 3,
             name: 'Test',
             noAvailableFiltersText: '',
-            select: 'multiple',
+            selectMode: 'multiple',
             type: '',
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
-                    name: '22220',
+                    translated: { name : '22220' },
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
-                    name: '22221',
+                    translated: { name: '22221' },
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };
@@ -70,22 +70,22 @@ describe('ItemDropdown', () => {
             itemCount: 1,
             name: 'Test',
             noAvailableFiltersText: '',
-            select: 'multiple',
+            selectMode: 'multiple',
             type: '',
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
-                    name: '22220',
+                    translated: { name : '22220' },
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
-                    name: '22221',
+                    translated: { name : '22221' },
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };

@@ -31,21 +31,23 @@ describe('ItemCategoryDropdown', () => {
             itemCount: 6,
             name: 'Category',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             type: '',
             values: [
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '4',
                     items: [],
-                    name: 'Living Room',
+                    values: [],
+                    translated: { name : 'Living Room' },
                     selected: false
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
                     items: [],
-                    name: 'Office',
+                    values: [],
+                    translated: { name : 'Office' },
                     selected: false
                 }
             ]
@@ -76,29 +78,32 @@ describe('ItemCategoryDropdown', () => {
             itemCount: 6,
             name: 'Category',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             type: '',
             values: [
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '4',
                     items: [
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '5',
-                            items: [],
-                            name: 'Armchairs & Stools',
+                            values: [],
+                            items : [],
+                            translated: { name : 'Armchairs & Stools' },
                             selected: false
                         },
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '6',
-                            items: [],
-                            name: 'Sofas',
+                            items : [],
+                            values: [],
+                            translated: { name : 'Sofas' },
                             selected: false
                         }
                     ],
-                    name: 'Living Room',
+                    values : [],
+                    translated: { name : 'Living Room' },
                     selected: true
                 }
             ]
@@ -137,51 +142,57 @@ describe('ItemCategoryDropdown', () => {
             itemCount: 6,
             name: 'Category',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             type: '',
             values: [
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '4',
+                    values: [],
                     items: [
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '5',
                             items: [],
-                            name: 'Armchairs & Stools',
+                            values: [],
+                            translated: { name : 'Armchairs & Stools' },
                             selected: false
                         },
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '6',
                             items: [],
-                            name: 'Sofas',
+                            values: [],
+                            translated: { name : 'Sofas' },
                             selected: false
                         }
                     ],
-                    name: 'Living Room',
+                    translated: { name : 'Living Room' },
                     selected: false
                 },
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '5',
+                    values: [],
                     items: [
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '8',
                             items: [],
-                            name: 'Something',
+                            values: [],
+                            translated: { name : 'Something' },
                             selected: false
                         },
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '9',
                             items: [],
-                            name: 'Something else',
+                            values: [],
+                            translated: { name : 'Something else' },
                             selected: false
                         }
                     ],
-                    name: 'Not Living Room',
+                    translated: { name : 'Not Living Room' },
                     selected: false
                 }
             ]

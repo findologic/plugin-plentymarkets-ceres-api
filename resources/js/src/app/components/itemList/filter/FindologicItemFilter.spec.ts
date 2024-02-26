@@ -34,22 +34,22 @@ describe('FindologicItemFilter', () => {
       itemCount: 3,
       name: 'Facet name',
       noAvailableFiltersText: '',
-      select: 'multiple',
+      selectMode: 'multiple',
       type: '',
       values: [
         {
-          count: 9,
+          frequency: 9,
           id: '20',
-          name: '22220',
+          translated: { name : '22220' },
           selected: false,
-          items: []
+          values: []
         },
         {
-          count: 1,
+          frequency: 1,
           id: '21',
-          name: '22221',
+          translated: { name : '22221' },
           selected: false,
-          items: []
+          values: []
         }
       ]
     };
@@ -158,22 +158,22 @@ describe('FindologicItemFilter', () => {
       itemCount: 3,
       name: 'Test',
       noAvailableFiltersText: '',
-      select: 'multiple',
+      selectMode: 'multiple',
       type: '',
       values: [
         {
-          count: 9,
+          frequency: 9,
           id: '20',
-          name: '22220',
+          translated: { name : '22220' },
           selected: false,
-          items: []
+          values: []
         },
         {
-          count: 1,
+          frequency: 1,
           id: '21',
-          name: '22221',
+          translated: { name : '22221' },
           selected: false,
-          items: []
+          values: []
         }
       ]
     };
@@ -211,21 +211,23 @@ describe('FindologicItemFilter', () => {
       itemCount: 6,
       name: 'Category',
       noAvailableFiltersText: '',
-      select: 'single',
+      selectMode: 'single',
       type: '',
       values: [
         {
-          count: 4,
+          frequency: 4,
           id: '4',
           items: [],
-          name: 'Living Room',
+          values: [],
+          translated: { name : 'Living Room' },
           selected: false
         },
         {
-          count: 1,
+          frequency: 1,
           id: '21',
           items: [],
-          name: 'Office',
+          values: [],
+          translated: { name : 'Office' },
           selected: false
         }
       ]
@@ -266,32 +268,32 @@ describe('FindologicItemFilter', () => {
       itemCount: 8,
       name: 'Color',
       noAvailableFiltersText: '',
-      select: 'multiselect',
+      selectMode: 'multiselect',
       type: '',
       values: [
         {
-          count: 4,
-          hexValue: '#0000FF',
+          frequency: 4,
+          colorHexCode: '#0000FF',
           id: '10',
-          name: 'blue',
+          translated: { name : 'blue' },
           selected: false,
-          items: []
+          values: []
         },
         {
           colorImageUrl: 'https://plugin.demo.findologic.com/yellow.png',
-          count: 5,
-          hexValue: '#FF0000',
+          frequency: 5,
+          colorHexCode: '#FF0000',
           id: '11',
-          name: 'red',
+          translated: { name : 'red' },
           selected: false,
-          items: []
+          values: []
         },
         {
-          name: 'Unknown',
-          hexValue: null,
+          translated: { name : 'Unknown' },
+          colorHexCode: null,
           id: '12',
           selected: false,
-          items: []
+          values: []
         }
       ]
     };
@@ -331,13 +333,13 @@ describe('FindologicItemFilter', () => {
           itemCount: 3,
           name: 'Test',
           noAvailableFiltersText: '',
-          select: 'multiple',
+          selectMode: 'multiple',
           type: '',
           values: [
             {
-              count: 9,
+              frequency: 9,
               id: '20',
-              name: '22220',
+              translated : { name: '22220' },
               selected: false
             }
           ]
@@ -355,14 +357,15 @@ describe('FindologicItemFilter', () => {
           itemCount: 6,
           name: 'Category',
           noAvailableFiltersText: '',
-          select: 'single',
+          selectMode: 'single',
           type: '',
           values: [
             {
-              count: 4,
+              frequency: 4,
               id: '4',
               items: [],
-              name: 'Living Room',
+              values: [],
+              translated: { name : 'Living Room' },
               selected: false
             }
           ]
@@ -380,15 +383,15 @@ describe('FindologicItemFilter', () => {
           itemCount: 8,
           name: 'Color',
           noAvailableFiltersText: '',
-          select: 'multiselect',
+          selectMode: 'multiselect',
           type: '',
           values: [
             {
               colorImageUrl: 'https://plugin.demo.findologic.com/yellow.png',
-              count: 5,
-              hexValue: '#FF0000',
+              frequency: 5,
+              colorHexCode: '#FF0000',
               id: '11',
-              name: 'red',
+              translated: { name : 'red' },
               selected: false
             }
           ]

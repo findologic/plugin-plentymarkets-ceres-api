@@ -27,7 +27,7 @@ export interface Facet {
     unit?: string;
     noAvailableFiltersText?: string;
     cssClass?: string;
-    totalRange : TotalRange;
+    totalRange? : TotalRange;
 }
 
 export interface TotalRange {
@@ -59,7 +59,7 @@ export interface ColorFacet extends Facet {
 export interface ColorFacetValue extends FacetValue {
     colorHexCode: string|null;
     colorImageUrl?: string|null;
-    media: Media;
+    media?: Media;
 }
 
 export interface CategoryFacet extends Facet {

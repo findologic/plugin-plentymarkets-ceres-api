@@ -22,8 +22,8 @@ if (!function_exists('replaceInstanceByMock')) {
         string $abstract,
         $mock
     ) {
-        global $mockClassList;
-        $mockClassList[$abstract] = $mock;
+        global $classInstances;
+        $classInstances[$abstract] = $mock;
     }
 }
 if (!function_exists('pluginApp')) {
@@ -37,9 +37,9 @@ if (!function_exists('pluginApp')) {
             throw new Exception("Target class [$abstract] does not exist.", 0, $e);
         }
 
-        global $mockClassList;
-        if (isset($mockClassList[$abstract])) {
-            return $mockClassList[$abstract];
+        global $classInstances;
+        if (isset($classInstances[$abstract])) {
+            return $classInstances[$abstract];
         }
 
         $constructor = $reflector->getConstructor();
