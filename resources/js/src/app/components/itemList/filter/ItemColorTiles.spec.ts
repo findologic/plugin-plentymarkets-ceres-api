@@ -12,7 +12,7 @@ describe('ItemColorTiles', () => {
             id: 'Color',
             values: [
                 {
-                    translated: { name : 'Red'},
+                    translated: { name : 'Red' },
                     colorHexCode: '#ff0000',
                     colorImageUrl : '',
                     media : { url : '' },
@@ -20,7 +20,7 @@ describe('ItemColorTiles', () => {
                     values: []
                 },
                 {
-                    translated: { name : 'Colorful'},
+                    translated: { name : 'Colorful' },
                     colorHexCode: null,
                     colorImageUrl: 'https://your-store.com/images/colors/colorful.png',
                     media : { url : 'https://your-store.com/images/colors/colorful.png' },
@@ -28,7 +28,7 @@ describe('ItemColorTiles', () => {
                     values: []
                 },
                 {
-                    translated: { name : 'Unknown'},
+                    translated: { name : 'Unknown' },
                     colorHexCode: null,
                     media : { url : '' },
                     colorImageUrl: '',

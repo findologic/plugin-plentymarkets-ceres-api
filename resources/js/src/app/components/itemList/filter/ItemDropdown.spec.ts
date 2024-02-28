@@ -97,7 +97,7 @@ describe('ItemDropdown', () => {
         };
 
         const wrapper = shallowMount(ItemDropdown, { propsData: { facet }, store, localVue });
-        const rr = wrapper.findAll(':scope > div.form-check');
+
         expect(wrapper.findAll(':scope > *').length).toBe(2);
         expect(wrapper.findAll(':scope > div.form-check').length).toBe(1);
         expect(wrapper.findAll(':scope > div.fl-dropdown-container.custom-select ul li').length).toBe(1);
@@ -139,7 +139,7 @@ describe('ItemDropdown', () => {
         };
 
         const wrapper = shallowMount(ItemDropdown, { propsData: { facet }, store, localVue });
-        const t = wrapper.findAll(':scope > *');
+
         expect(wrapper.findAll(':scope > *').length).toBe(1);
         const options = wrapper.findAll(':scope > div.fl-dropdown-container.custom-select ul li');
         expect(options.length).toBe(2);

@@ -123,7 +123,7 @@ describe('ItemCategoryDropdown', () => {
         expect(categories.at(0).find('label').text()).toBe('Living Room');
 
         const subcategories = categories.at(0).findAll('ul.subcategories li');
-        expect(subcategories.length).toBe(2);console.log(subcategories.length)
+        expect(subcategories.length).toBe(2);
         expect(subcategories.at(0).find('label').text()).toBe('Armchairs & Stools');
         expect(subcategories.at(1).find('label').text()).toBe('Sofas');
     });
