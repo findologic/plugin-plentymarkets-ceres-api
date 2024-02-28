@@ -24,7 +24,7 @@ describe('ItemDropdown', () => {
     it('does not show a dropdown if the fixed value count is greater than the available filter values', () => {
         const facet: Facet = {
             cssClass: '',
-            findologicFilterType: 'select',
+            findologicFilterType: 'selectFilter',
             id: 'test',
             isMain: false,
             itemCount: 3,
@@ -64,7 +64,7 @@ describe('ItemDropdown', () => {
     it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', () => {
         const facet: Facet = {
             cssClass: '',
-            findologicFilterType: 'select',
+            findologicFilterType: 'selectFilter',
             id: 'test',
             isMain: false,
             itemCount: 1,
@@ -97,7 +97,7 @@ describe('ItemDropdown', () => {
         };
 
         const wrapper = shallowMount(ItemDropdown, { propsData: { facet }, store, localVue });
-
+        const rr = wrapper.findAll(':scope > div.form-check');
         expect(wrapper.findAll(':scope > *').length).toBe(2);
         expect(wrapper.findAll(':scope > div.form-check').length).toBe(1);
         expect(wrapper.findAll(':scope > div.fl-dropdown-container.custom-select ul li').length).toBe(1);
@@ -106,28 +106,28 @@ describe('ItemDropdown', () => {
     it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', async () => {
         const facet: Facet = {
             cssClass: '',
-            findologicFilterType: 'select',
+            findologicFilterType: 'selectFilter',
             id: 'test',
             isMain: false,
             itemCount: 0,
             name: 'Test',
             noAvailableFiltersText: '',
-            select: 'multiple',
+            selectMode: 'multiple',
             type: '',
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
-                    name: '22220',
+                    translated: { name: '22220' },
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
-                    name: '22221',
+                    translated: { name: '22221' },
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };
@@ -139,7 +139,7 @@ describe('ItemDropdown', () => {
         };
 
         const wrapper = shallowMount(ItemDropdown, { propsData: { facet }, store, localVue });
-
+        const t = wrapper.findAll(':scope > *');
         expect(wrapper.findAll(':scope > *').length).toBe(1);
         const options = wrapper.findAll(':scope > div.fl-dropdown-container.custom-select ul li');
         expect(options.length).toBe(2);

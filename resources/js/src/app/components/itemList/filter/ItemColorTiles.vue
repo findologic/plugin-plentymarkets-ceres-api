@@ -17,13 +17,13 @@
             :title="colorValue.translated.name"
           >
             <img
-              v-if="!colorValue.media.url && !colorValue.colorHexCode"
+              v-if="(!colorValue.media || !colorValue.media.url) && !colorValue.colorHexCode"
               class="fl-color-tile-image"
               :alt="colorValue.translated.name"
               :src="fallbackImage"
             >
             <img
-              v-else-if="colorValue.media.url"
+              v-else-if="colorValue.media && colorValue.media.url"
               class="fl-color-tile-image"
               :src="colorValue.media.url"
               @error="handleImageError($event, colorValue)"

@@ -37,7 +37,6 @@ describe('ItemCategoryDropdown', () => {
                 {
                     frequency: 4,
                     id: '4',
-                    items: [],
                     values: [],
                     translated: { name : 'Living Room' },
                     selected: false
@@ -45,7 +44,6 @@ describe('ItemCategoryDropdown', () => {
                 {
                     frequency: 1,
                     id: '21',
-                    items: [],
                     values: [],
                     translated: { name : 'Office' },
                     selected: false
@@ -84,25 +82,22 @@ describe('ItemCategoryDropdown', () => {
                 {
                     frequency: 4,
                     id: '4',
-                    items: [
+                    values: [
                         {
                             frequency: 2,
                             id: '5',
                             values: [],
-                            items : [],
                             translated: { name : 'Armchairs & Stools' },
                             selected: false
                         },
                         {
                             frequency: 2,
                             id: '6',
-                            items : [],
                             values: [],
                             translated: { name : 'Sofas' },
                             selected: false
                         }
                     ],
-                    values : [],
                     translated: { name : 'Living Room' },
                     selected: true
                 }
@@ -128,7 +123,7 @@ describe('ItemCategoryDropdown', () => {
         expect(categories.at(0).find('label').text()).toBe('Living Room');
 
         const subcategories = categories.at(0).findAll('ul.subcategories li');
-        expect(subcategories.length).toBe(2);
+        expect(subcategories.length).toBe(2);console.log(subcategories.length)
         expect(subcategories.at(0).find('label').text()).toBe('Armchairs & Stools');
         expect(subcategories.at(1).find('label').text()).toBe('Sofas');
     });
@@ -148,12 +143,10 @@ describe('ItemCategoryDropdown', () => {
                 {
                     frequency: 4,
                     id: '4',
-                    values: [],
-                    items: [
+                    values: [
                         {
                             frequency: 2,
                             id: '5',
-                            items: [],
                             values: [],
                             translated: { name : 'Armchairs & Stools' },
                             selected: false
@@ -161,7 +154,6 @@ describe('ItemCategoryDropdown', () => {
                         {
                             frequency: 2,
                             id: '6',
-                            items: [],
                             values: [],
                             translated: { name : 'Sofas' },
                             selected: false
@@ -173,12 +165,10 @@ describe('ItemCategoryDropdown', () => {
                 {
                     frequency: 4,
                     id: '5',
-                    values: [],
-                    items: [
+                    values: [
                         {
                             frequency: 2,
                             id: '8',
-                            items: [],
                             values: [],
                             translated: { name : 'Something' },
                             selected: false
@@ -186,7 +176,6 @@ describe('ItemCategoryDropdown', () => {
                         {
                             frequency: 2,
                             id: '9',
-                            items: [],
                             values: [],
                             translated: { name : 'Something else' },
                             selected: false

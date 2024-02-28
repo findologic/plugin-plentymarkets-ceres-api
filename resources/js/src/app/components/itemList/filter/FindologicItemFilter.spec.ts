@@ -28,7 +28,7 @@ describe('FindologicItemFilter', () => {
   it('Shows the facet name', async () => {
     const facet: Facet = {
       cssClass: '',
-      findologicFilterType: 'select',
+      findologicFilterType: 'selectFilter',
       id: 'test',
       isMain: false,
       itemCount: 3,
@@ -81,13 +81,13 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'test',
           isMain: false,
           itemCount: 0,
           name: 'Facet name',
           noAvailableFiltersText: 'No values available for this dropdown',
-          select: 'multiple',
+          selectMode: 'multiple',
           type: '',
           values: []
         } as Facet,
@@ -96,13 +96,13 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'cat',
           isMain: false,
           itemCount: 0,
           name: 'Category',
           noAvailableFiltersText: 'No values available for this category dropdown',
-          select: 'single',
+          selectMode: 'single',
           type: '',
           values: []
         } as CategoryFacet,
@@ -111,13 +111,13 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'color',
+          findologicFilterType: 'colorPickerFilter',
           id: 'Color',
           isMain: false,
           itemCount: 0,
           name: 'Color',
           noAvailableFiltersText: 'No values available for this color filter',
-          select: 'multiselect',
+          selectMode: 'multiselect',
           type: '',
           values: []
         } as Facet,
@@ -152,7 +152,7 @@ describe('FindologicItemFilter', () => {
   it('Renders dropdown facet values correctly in the respective filter container', () => {
     const dropdownFacet: Facet = {
       cssClass: '',
-      findologicFilterType: 'select',
+      findologicFilterType: 'selectFilter',
       id: 'test',
       isMain: false,
       itemCount: 3,
@@ -205,7 +205,7 @@ describe('FindologicItemFilter', () => {
   it('Renders category facet values correctly in the respective filter container', async () => {
     const categoryFacet: CategoryFacet = {
       cssClass: '',
-      findologicFilterType: 'select',
+      findologicFilterType: 'selectFilter',
       id: 'cat',
       isMain: false,
       itemCount: 6,
@@ -217,7 +217,6 @@ describe('FindologicItemFilter', () => {
         {
           frequency: 4,
           id: '4',
-          items: [],
           values: [],
           translated: { name : 'Living Room' },
           selected: false
@@ -225,7 +224,6 @@ describe('FindologicItemFilter', () => {
         {
           frequency: 1,
           id: '21',
-          items: [],
           values: [],
           translated: { name : 'Office' },
           selected: false
@@ -262,7 +260,7 @@ describe('FindologicItemFilter', () => {
   it('Renders color facet values correctly in the respective filter container', () => {
     const colorFacet: ColorFacet = {
       cssClass: '',
-      findologicFilterType: 'color',
+      findologicFilterType: 'colorPickerFilter',
       id: 'Color',
       isMain: false,
       itemCount: 8,
@@ -327,7 +325,7 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'test',
           isMain: false,
           itemCount: 3,
@@ -351,7 +349,7 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'cat',
           isMain: false,
           itemCount: 6,
@@ -363,7 +361,6 @@ describe('FindologicItemFilter', () => {
             {
               frequency: 4,
               id: '4',
-              items: [],
               values: [],
               translated: { name : 'Living Room' },
               selected: false
@@ -377,7 +374,7 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'color',
+          findologicFilterType: 'colorPickerFilter',
           id: 'Color',
           isMain: false,
           itemCount: 8,
