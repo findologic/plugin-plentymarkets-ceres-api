@@ -17,7 +17,7 @@ export interface Facet {
     name?: string;
     type?: string;
     isMain?: boolean;
-    itemCount?: number;
+    pinnedFilterValueCount?: number;
     selectMode?: string;
     values?: FacetValue[];
     findologicFilterType?: string;

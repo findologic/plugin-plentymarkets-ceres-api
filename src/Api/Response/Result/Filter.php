@@ -143,4 +143,12 @@ class Filter
     {
         return $this->selectedRange;
     }
+
+    /**
+     * Get the value of pinnedFilterValueCount
+     */ 
+    public function getPinnedFilterValueCount()
+    {
+        return $this->pinnedFilterValueCount;
+    }
 }

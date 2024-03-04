@@ -82,7 +82,7 @@ abstract class Filter extends BaseFilter
 
     private static function handleSelectDropdownFilter(ResultFilter $filter, bool $isMain): SelectDropdownFilter
     {
-        $customFilter = pluginApp(SelectDropdownFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
+        $customFilter = pluginApp(SelectDropdownFilter::class, [$filter, $isMain]);
 
         foreach ($filter->getValues() as $item) {
             $customFilter->addValue(pluginApp(FilterValue::class, [$filter, $item]));

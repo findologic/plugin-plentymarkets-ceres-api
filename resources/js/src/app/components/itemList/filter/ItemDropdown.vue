@@ -1,7 +1,7 @@
 <template>
   <div class="fl-dropdown">
     <div
-      v-for="value in facet.values"
+      v-for="value in facet.values.slice(0, facet.pinnedFilterValueCount)"
       :key="value.id"
       class="form-check"
     >
@@ -27,7 +27,7 @@
       />
     </div>
     <div
-      v-if="facet.values.length && !facet.values[0].frequency"
+      v-if="facet.values.slice(facet.pinnedFilterValueCount, facet.values.length).length"
       class="fl-dropdown-container custom-select"
       tabindex="0"
       @click="toggle()"
@@ -39,7 +39,7 @@
         class="fl-dropdown-content form-check"
       >
         <li
-          v-for="value in facet.values"
+          v-for="value in facet.values.slice(facet.pinnedFilterValueCount, facet.values.length)"
           :key="value.id"
           class="fl-dropdown-item"
           :class="{'form-check-label': !value.selected}"

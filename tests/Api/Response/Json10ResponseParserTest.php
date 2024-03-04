@@ -325,7 +325,7 @@ class Json10ResponseParserTest extends BaseTestCase
         );
 
         $material = 'Material';
-        $expectedSelectDropdownFilter = (new SelectDropdownFilter($material, 'Material'))
+        $expectedSelectDropdownFilter = (new SelectDropdownFilter(new ResultFilter(['name' => $material, 'displayName' => 'Material', 'type' => $material])))
             ->setSelectMode('multiple')
             ->setCssClass('fl-material')
             ->setCombinationOperation('and')
