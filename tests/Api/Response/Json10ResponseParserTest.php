@@ -514,7 +514,7 @@ class Json10ResponseParserTest extends BaseTestCase
                 'response' => new Json10Response(
                     $this->getMockResponse('JSONResponse/demoResponseWithoutQuery.json')
                 ),
-                'request' => ['attrib' => ['cat' => 'Shoes & More']],
+                'request' => ['attrib' => ['cat' => ['Shoes & More']]],
                 'expectedInstance' => CategoryInfoMessage::class,
                 'expectedVars' => [
                     'filterName' => 'Kategorie',
