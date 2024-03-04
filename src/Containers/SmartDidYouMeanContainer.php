@@ -26,8 +26,7 @@ class SmartDidYouMeanContainer
         }
 
         $searchResults = $searchService->getResults();
-        $this->getLogger(__METHOD__)->error('$searchResults->getQueryInfoMessage()', $searchResults->getQueryInfoMessage());
-        $this->getLogger(__METHOD__)->error('$searchResults->getSmartDidYouMeanExtension()', $searchResults->getSmartDidYouMeanExtension());
+
         return $twig->render(
             'Findologic::Category.Item.Partials.SmartDidYouMean',
             [
