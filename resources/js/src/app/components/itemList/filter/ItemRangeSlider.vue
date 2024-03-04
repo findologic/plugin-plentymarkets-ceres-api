@@ -74,12 +74,11 @@ export default defineComponent({
   setup: (props: ItemRangeSliderProps, { root }) => {
     const valueFrom = ref();
     const valueTo = ref();
+    const sanitizedFacetId = ref('');
     const facet = props.facet;
     const applyText = ref('');
-    const sanitizedFacetId = ref('');
-
     const isLoading = computed(() => root.$store.state.isLoading);
-
+    
     const isDisabled = computed(() => {
         return parseFloat(valueFrom.value) > parseFloat(valueTo.value) ||
           isNaN(valueFrom.value) ||
@@ -146,14 +145,13 @@ export default defineComponent({
       // round values so it wouldn't have decimals
       valueFrom.value = Math.floor(valueFrom.value);
       valueTo.value = Math.ceil(valueTo.value);
-
       sanitizedFacetId.value = 'fl-range-slider-' + props.facet.id
             .replace(/\W/g, '-')
             .replace(/-+/, '-')
             .replace(/-$/, '')
             + '-'
             + randomRangeSliderId;
-      
+
       // Determine number of decimals in the slider
       let decimalNumber = 2;
 
@@ -203,8 +201,8 @@ export default defineComponent({
     return {
       valueFrom,
       valueTo,
-      sanitizedFacetId,
       isDisabled,
+      sanitizedFacetId,
       isLoading,
       triggerFilter,
       watch,
