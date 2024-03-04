@@ -149,9 +149,8 @@ class QueryInfoMessageFactory
             $this->response->getResult()->getMainFilters() ?? [],
             $this->response->getResult()->getOtherFilters() ?? []
         );
-        $this->getLogger(__METHOD__)->error('cats', $params);
-        $categories = explode('_', $params['attrib']['cat']);
-        $category = end($categories);
+
+        $category = end($params['attrib']['cat']);
 
         $catFilter = array_filter(
             $filters,
