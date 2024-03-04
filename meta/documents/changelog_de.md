@@ -1,33 +1,39 @@
 # Release Notes für Findologic
 
+## 5.1.3 (2024-02-16)
+
+### Behoben
+- [PLENTY-486] Ein Bug wurde behoben, wodurch Filter nach neuer Suche nicht zurückgesetzt wurden.
+
+## 5.1.2 (2023-09-25)
+
+### Behoben
+- [PLENTY-480] Ein Bug wurde behoben, wodurch Bereichsslider vom selben Filter nicht doppelt gerendert werden konnten.
+
 ## 5.1.1 (2023-06-19)
 
-## Behoben
-
+### Behoben
 - [PLENTY-478] Ein Bug wurde behoben, wodurch Kategorieseiten mit SSR eine Fehlermeldung gerendert sind.
 
 ## 5.1.0 (2023-05-09)
 
-## Hinzugefügt
-
+### Hinzugefügt
 - [PLENTY-474] Die Containerverknüpfung für Filter wurde wieder hinzugefügt.
 
-## Behoben
-
+### Behoben
 - [PLENTY-473] Ein Fehler wurde behoben, wodurch die falsche Sortierung bei der Suche verwendet wurde.
 
 ## 5.0.0 (2023-04-17)
 
-## Hinzugefügt
-
+### Hinzugefügt
 - [PLENTY-335] Die Komponenten im Plugin werden nun serverseitig gerendert, wenn es für Plenty konfiguriert wurde.
 
 ## 4.1.0 (2023-01-10)
 
-## Hinzugefügt
+### Hinzugefügt
 * [PLENTY-458] Die Anzahl der Dezimalstellen von Bereichsslider ist nun im Plugin konfigurierbar.
 
-## Behoben
+### Behoben
 * [PLENTY-462] Ein Fehler wurde behoben, wodurch die Relevanz bei Verwendung einer Kategorie für die Suchergebnisse nicht verfügbar war.
 
 ## 4.0.8 (2022-10-10)
