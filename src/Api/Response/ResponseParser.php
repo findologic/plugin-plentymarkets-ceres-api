@@ -31,17 +31,16 @@ class ResponseParser
 
     protected LoggerContract $logger;
 
-
     protected HttpRequest $request;
 
     public function __construct(
-        
+
         LoggerFactory $loggerFactory
     ) {
         $this->logger = $loggerFactory->getLogger(Plugin::PLUGIN_NAMESPACE, Plugin::PLUGIN_IDENTIFIER);
     }
 
-    public function parseQuery() :array
+    public function parseQuery(): array
     {
         $query = [];
 
@@ -64,22 +63,20 @@ class ResponseParser
         return $this->response->getResult()->getMetadata()->getPromotion();
     }
 
-    public function parseTotalResults() :int
+    public function parseTotalResults(): int
     {
         return $this->response->getResult()->getMetadata()->getTotalResults() ?: 0;
     }
 
-    public function getProductIds() :array
+    public function getProductIds(): array
     {
         return array_map(
             function (Item $product) {
                 if (count($product->getVariants())) {
-                    return  $product->getVariants()[0]->getId();
-                } 
-                else if(array_key_exists('variation_id', $product->getProperties())){
+                    return $product->getVariants()[0]->getId();
+                } else if (array_key_exists('variation_id', $product->getProperties())) {
                     return $product->getProperties()['variation_id'];
-                }
-                else {
+                } else {
                     return $product->getId();
                 }
             },
@@ -120,24 +117,19 @@ class ResponseParser
         $params = (array) $this->request->all();
         $count = $this->parseTotalResults();
         $queryInfoMessageFactory = pluginApp(QueryInfoMessageFactory::class, [$this->response, $queryString, $count]);
-        
+
         return $queryInfoMessageFactory->getQueryInfoMessage($params);
     }
 
     protected function parseQueryInfoMessage(HttpRequest $request): array
     {
 
-        // Not sure about this one, fix after
-        // $queryStringType = isset($data->query->queryString->attributes()->type)
-        //     ? $data->query->queryString->attributes()->type->__toString()
-        //     : null;
-
         $requestParams = (array) $request->all();
 
         return [
             'originalQuery' => $this->response->getRequest()->getQuery(),
-            'didYouMeanQuery' =>$this->response->getResult()->getVariant()->getDidYouMeanQuery(),
-            'currentQuery' => $this->response->getResult()->getMetadata()->getEffectiveQuery() ,
+            'didYouMeanQuery' => $this->response->getResult()->getVariant()->getDidYouMeanQuery(),
+            'currentQuery' => $this->response->getResult()->getMetadata()->getEffectiveQuery(),
             'queryStringType' => '',//$queryStringType,
             'selectedCategoryName' => $this->getSelectedCategoryName($requestParams),
             'selectedVendorName' => $this->getSelectedVendorName($requestParams),
@@ -147,13 +139,16 @@ class ResponseParser
 
     public function getSmartDidYouMeanExtension(): SmartDidYouMean
     {
-        return pluginApp(SmartDidYouMean::class,[
-            $this->response->getRequest()->getQuery(),
-            $this->response->getResult()->getMetadata()->getEffectiveQuery(),
-            $this->response->getResult()->getVariant()->getCorrectedQuery(),
-            $this->response->getResult()->getVariant()->getDidYouMeanQuery(),
-            $this->response->getResult()->getVariant()->getImprovedQuery(),
-            $this->request->getRequestUri()]
+        return pluginApp(
+            SmartDidYouMean::class,
+            [
+                $this->response->getRequest()->getQuery(),
+                $this->response->getResult()->getMetadata()->getEffectiveQuery(),
+                $this->response->getResult()->getVariant()->getCorrectedQuery(),
+                $this->response->getResult()->getVariant()->getDidYouMeanQuery(),
+                $this->response->getResult()->getVariant()->getImprovedQuery(),
+                $this->request->getRequestUri()
+            ]
         );
     }
 
@@ -192,31 +187,19 @@ class ResponseParser
         return $requestParams['attrib']['wizard'][0] ?? null;
     }
 
-    /**
-     * Get the value of response
-     */
     public function getResponse(): Response
     {
         return $this->response;
     }
 
-    /**
-     * Set the value of response
-     *
-     * @return  self
-     */ 
     public function setResponse(?array $response)
     {
-        if($response) $this->response = pluginApp(Response::class, [$response['response']]);
+        if ($response)
+            $this->response = pluginApp(Response::class, [$response['response']]);
 
         return $this;
     }
 
-    /**
-     * Set the value of request
-     *
-     * @return  self
-     */ 
     public function setRequest($request)
     {
         $this->request = $request;

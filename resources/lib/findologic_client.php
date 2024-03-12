@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/ApiResponse.php';
+
 use FINDOLOGIC\Api\Client;
 use FINDOLOGIC\Api\Config;
 use FINDOLOGIC\Api\Requests\Request;

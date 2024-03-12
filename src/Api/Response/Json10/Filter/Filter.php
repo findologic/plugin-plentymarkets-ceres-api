@@ -38,10 +38,6 @@ abstract class Filter extends BaseFilter
 
                 return static::handleSelectDropdownFilter($filter, $isMain);
             case 'rangeSliderFilter':
-                if ($filter->getName() === BaseFilter::RATING_FILTER_NAME) {
-                    return static::handleRatingFilter($filter, $isMain);
-                }
-
                 return static::handleRangeSliderFilter($filter, $isMain);
             case 'colorPickerFilter':
                 return static::handleColorPickerFilter($filter, $isMain);
@@ -193,7 +189,6 @@ abstract class Filter extends BaseFilter
                 if (!$foundValue = $currentValue->searchValue($level)) {
                     $foundValue = pluginApp(CategoryFilterValue::class, [null, $item]);
                     $foundValue->setTranslated(pluginApp(TranslatedName::class, [$level]));
-                    $foundValue->setUuid(sprintf('%s%s', $level, FilterValue::DELIMITER));
                     $foundValue->setSelected($item->isSelected());
                     $foundValue->setFrequency($item->getFrequency());
 
@@ -205,26 +200,6 @@ abstract class Filter extends BaseFilter
         }
 
         return $categoryFilter;
-    }
-
-    private static function handleRatingFilter(ResultFilter $filter, bool $isMain): ?RatingFilter
-    {
-        $totalRange = $filter->getTotalRange();
-        if (!$totalRange || $totalRange['min'] === $totalRange['max']) {
-            return null;
-        }
-
-        $customFilter = pluginApp(RatingFilter::class, [$filter->getName(), $filter->getDisplayName(), $isMain, $filter->getSelectMode(), $filter->getCssClass(), $filter->getNoAvailableFiltersText(), $filter->getCombinationOperation(), $filter->getType()]);
-
-        if ($totalRange && $totalRange['max']) {
-            $customFilter->setMaxPoints(ceil($totalRange['max']));
-        }
-
-        foreach ($filter->getValues() as $item) {
-            $customFilter->addValue(pluginApp(FilterValue::class, [null, $item]));
-        }
-
-        return $customFilter;
     }
 
     private static function setColorPickerDisplayType(ResultFilterValue $item, ColorFilterValue $filterValue): void

@@ -37,7 +37,7 @@ class ApiFilter implements Arrayable
             'stepSize' => method_exists($this->filter, 'getStepSize') ? $this->filter->getStepSize() : null,
             'unit' => method_exists($this->filter, 'getUnit') ? $this->filter->getUnit() : null,
             'pinnedFilterValueCount' => method_exists($this->filter, 'getPinnedFilterValueCount') ? $this->filter->getPinnedFilterValueCount() : 0,
-            'values' => array_map(fn (FilterValue|ImageFilterValue|ColorFilterValue|RangeSliderValue $value) => [
+            'values' => array_map(fn(FilterValue|ImageFilterValue|ColorFilterValue|RangeSliderValue $value) => [
                 'name' => $value->getName(),
                 'selected' => $value->isSelected(),
                 'weight' => $value->getWeight(),
@@ -54,31 +54,19 @@ class ApiFilter implements Arrayable
     {
         switch (true) {
             case $filter instanceof LabelFilter:
-                if ($filter->getName() === self::CAT_FILTER_NAME) {
-                    return ['type' => 'labelFilter'];
-                }
-
                 return ['type' => 'labelFilter'];
             case $filter instanceof SelectFilter:
-                if ($filter->getName() === self::CAT_FILTER_NAME) {
-                    return ['type' => 'selectFilter'];
-                }
-
                 return ['type' => 'selectFilter'];
             case $filter instanceof RangeSliderFilter:
-                if ($filter->getName() === self::RATING_FILTER_NAME) {
-                    return ['type' => 'rangeSliderFilter'];
-                }
-
                 $totalRange = $filter->getTotalRange();
                 $selectedRange = $filter->getSelectedRange();
                 return [
                     'type' => 'rangeSliderFilter',
-                    'totalRange' =>[
+                    'totalRange' => [
                         'min' => $totalRange->getMin(),
                         'max' => $totalRange->getMax()
                     ],
-                    'selectedRange' =>[
+                    'selectedRange' => [
                         'min' => $selectedRange->getMin(),
                         'max' => $selectedRange->getMax()
                     ]

@@ -12,20 +12,19 @@ use FINDOLOGIC\Api\Responses\Json10\Properties\Filter\Filter;
 
 class ApiResult extends Result implements Arrayable
 {
-    /** @var Metadata */
-    public $metadata;
+
+    public Metadata $metadata;
 
     /** @var Item[] */
-    public $items = [];
+    public array $items = [];
 
-    /** @var Variant */
-    public $variant;
-
-    /** @var Filter[] */
-    public $mainFilters;
+    public Variant $variant;
 
     /** @var Filter[] */
-    public $otherFilters;
+    public array $mainFilters;
+
+    /** @var Filter[] */
+    public array $otherFilters;
 
     function __construct(Result $result)
     {

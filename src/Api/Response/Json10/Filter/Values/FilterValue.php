@@ -10,12 +10,14 @@ use Findologic\Api\Response\Result\FilterValue as ResultFilterValue;
 
 class FilterValue
 {
-    public const DELIMITER = '>';
-    public ?string $uuid;
     public TranslatedName $translated;
+
     public ?string $id;
+
     public ?int $frequency;
+
     public ?bool $selected;
+
     public ?float $weight;
 
     public function __construct(
@@ -27,18 +29,9 @@ class FilterValue
         $this->selected = $filterValue->isSelected();
         $this->weight = $filterValue->getWeight();
         $this->id = $filterValue->getId();
-        
-        if($filter){
-            $filterName = $filter->getName();
-        }else{
-            $filterName = $filterValue->getName();
-        }
-        if ($filterName !== null) {
-            $this->uuid = sprintf('%s%s', $filterName, self::DELIMITER);
-        }
     }
 
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -48,57 +41,26 @@ class FilterValue
         return $this->translated;
     }
 
-    public function getUuid(): ?string
-    {
-        return $this->uuid;
-    }
-    public function getFrequency()
+    public function getFrequency(): ?int
     {
             return $this->frequency;
     }
 
-    /**
-     * Set the value of translated
-     *
-     * @return  self
-     */ 
-    public function setTranslated($translated)
+    public function setTranslated($translated): self
     {
         $this->translated = $translated;
 
         return $this;
     }
 
-    /**
-     * Set the value of uuid
-     *
-     * @return  self
-     */ 
-    public function setUuid($uuid)
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * Set the value of frequency
-     *
-     * @return  self
-     */ 
-    public function setFrequency($frequency)
+    public function setFrequency($frequency): self
     {
         if ($frequency === null) {
             $frequency = 0;
@@ -109,24 +71,14 @@ class FilterValue
         return $this;
     }
 
-    /**
-     * Set the value of selected
-     *
-     * @return  self
-     */ 
-    public function setSelected($selected)
+    public function setSelected($selected): self
     {
         $this->selected = $selected;
 
         return $this;
     }
 
-    /**
-     * Set the value of weight
-     *
-     * @return  self
-     */ 
-    public function setWeight($weight)
+    public function setWeight($weight): self
     {
         $this->weight = $weight;
 

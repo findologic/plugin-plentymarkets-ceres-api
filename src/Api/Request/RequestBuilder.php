@@ -99,19 +99,10 @@ class RequestBuilder
      */
     public function buildAliveRequest()
     {
-        $this->request['shopUrl'] = $this->getUrl(self::ALIVE_REQUEST_TYPE);
+        $this->request['shopUrl'] = $this->getShopUrl();
         $this->request['shopKey'] = $this->pluginConfig->getShopKey();
         $this->request['aliveRequest'] = true;
         return $this->request;
-    }
-
-    /**
-     * @param string $type
-     * @return string
-     */
-    public function getUrl(): string
-    {
-        return $this->getShopUrl();
     }
 
     /**
@@ -149,7 +140,7 @@ class RequestBuilder
     /**
      * @return string
      */
-    public function getShopUrl(): string
+    private function getShopUrl(): string
     {
         if (!empty($this->webstoreConfig->domainSsl)) {
             return preg_replace('(^https?://)', '', $this->webstoreConfig->domainSsl);
@@ -164,11 +155,11 @@ class RequestBuilder
 
     /**
      * @param string $requestType
-     * @return Request
+     * @return RequestBuilder
      */
     protected function setDefaultValues(string $requestType): self
     {
-        $this->request['shopUrl'] = $this->getUrl();
+        $this->request['shopUrl'] = $this->getShopUrl();
         $this->request['shopKey'] = $this->pluginConfig->getShopKey();
         $this->request['revision'] = $this->getPluginVersion();
 

@@ -9,17 +9,17 @@ use FINDOLOGIC\Api\Responses\Json10\Properties\Request;
 
 class ApiResponse extends Json10Response implements Arrayable
 {
-    /** @var Request */
-    public $request;
 
-    /** @var Result */
-    public $result;
+    public Request $request;
+
+    public Result $result;
 
     public function __construct(Json10Response $response)
     {
         $this->request = $response->getRequest();
         $this->result = $response->getResult();
     }
+
     public function toArray()
     {
         return [
