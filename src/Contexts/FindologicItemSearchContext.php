@@ -20,7 +20,7 @@ class FindologicItemSearchContext extends ItemSearchContext implements ContextIn
         $searchResults = $searchService->getResults();
         $filtersExtension = $searchResults->getFiltersExtension();
         $filters = $filtersExtension->getFilters();
-        $filter = $filters[0];
+
         $this->facets = $filters;
     }
 }
