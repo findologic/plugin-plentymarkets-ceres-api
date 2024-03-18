@@ -19,7 +19,6 @@ use Findologic\Api\Response\Json10\Filter\Filter;
 use FINDOLOGIC\Api\Responses\Json10\Json10Response;
 use Findologic\Api\Response\Json10\Filter\RatingFilter;
 use Findologic\Api\Response\Json10\Filter\CategoryFilter;
-use Findologic\Api\Response\Json10\Filter\TranslatedName;
 use Findologic\Struct\QueryInfoMessage\VendorInfoMessage;
 use Findologic\Api\Response\Json10\Filter\LabelTextFilter;
 use Findologic\Api\Response\Result\Filter as ResultFilter;
@@ -259,21 +258,21 @@ class Json10ResponseParserTest extends BaseTestCase
         $expectedPriceFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $price])))
                 ->setId('0.39 - 13.40')
-                ->setTranslated(pluginApp(TranslatedName::class, ['0.39 - 13.40']))
+                ->setName('0.39 - 13.40')
                 ->setSelected(false)
                 ->setWeight(0.51743012666702)
         );
         $expectedPriceFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $price])))
                 ->setId('13.45 - 25.99')
-                ->setTranslated(pluginApp(TranslatedName::class, ['13.45 - 25.99']))
+                ->setName('13.45 - 25.99')
                 ->setSelected(false)
                 ->setWeight(0.50098878145218)
         );
         $expectedPriceFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $price])))
                 ->setId('26.00 - 40.30')
-                ->setTranslated(pluginApp(TranslatedName::class, ['26.00 - 40.30']))
+                ->setName('26.00 - 40.30')
                 ->setSelected(false)
                 ->setWeight(0.3976277410984)
         );
@@ -333,7 +332,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $expectedSelectDropdownFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $material])))
                 ->setId('Hartgepäck')
-                ->setTranslated(pluginApp(TranslatedName::class, ['Hartgepäck']))
+                ->setName('Hartgepäck')
                 ->setSelected(false)
                 ->setWeight(0.038716815412045)
                 ->setFrequency(35)
@@ -341,7 +340,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $expectedSelectDropdownFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $material])))
                 ->setId('Leder')
-                ->setTranslated(pluginApp(TranslatedName::class, ['Leder']))
+                ->setName('Leder')
                 ->setSelected(false)
                 ->setWeight(0.63053095340729)
                 ->setFrequency(1238)
@@ -349,7 +348,7 @@ class Json10ResponseParserTest extends BaseTestCase
         $expectedSelectDropdownFilter->addValue(
             (new FilterValue(null, new ResultFilterValue(['name' => $material])))
                 ->setId('Nylon')
-                ->setTranslated(pluginApp(TranslatedName::class, ['Nylon']))
+                ->setName('Nylon')
                 ->setSelected(false)
                 ->setWeight(0.12168141454458)
                 ->setFrequency(110)
