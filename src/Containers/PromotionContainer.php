@@ -2,10 +2,8 @@
 
 namespace Findologic\Containers;
 
-use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Templates\Twig;
 use Findologic\Services\SearchService;
-use Findologic\Api\Response\Response;
 
 /**
  * Class PromotionContainer
@@ -13,7 +11,6 @@ use Findologic\Api\Response\Response;
  */
 class PromotionContainer
 {
-    use Loggable;
     /**
      * @param Twig $twig
      * @param SearchService $searchService

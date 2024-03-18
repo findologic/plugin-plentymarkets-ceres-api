@@ -44,82 +44,51 @@ class BaseItem
         $this->imageUrl = $item['imageUrl'];
     }
 
-
-    /**
-     * Get the value of id
-     */ 
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Get the value of score
-     */ 
     public function getScore()
     {
         return $this->score;
     }
 
-    /**
-     * Get the value of url
-     */ 
     public function getUrl()
     {
         return $this->url;
     }
 
-    /**
-     * Get the value of name
-     */ 
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * Get the value of ordernumbers
-     */ 
     public function getOrdernumbers()
     {
         return $this->ordernumbers;
     }
 
-    /**
-     * Get the value of matchingOrdernumber
-     */ 
     public function getMatchingOrdernumber()
     {
         return $this->matchingOrdernumber;
     }
 
-    /**
-     * Get the value of price
-     */ 
     public function getPrice()
     {
         return $this->price;
     }
 
-    /**
-     * Get the value of attributes
-     */ 
     public function getAttributes()
     {
         return $this->attributes;
     }
 
-    /**
-     * Get the value of properties
-     */ 
     public function getProperties()
     {
         return $this->properties;
     }
 
-    /**
-     * Get the value of imageUrl
-     */ 
     public function getImageUrl()
     {
         return $this->imageUrl;

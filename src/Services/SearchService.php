@@ -107,8 +107,8 @@ class SearchService implements SearchServiceInterface
     {
         $this->search($request, $externalSearch);
         $hasSelectedFilters = $request->get('attrib') !== null;
-        $landingPage = $this->responseParser->getLandingPageExtension();
-        if ($landingPage) {
+
+        if ($landingPage = $this->responseParser->getLandingPageExtension()) {
             $this->doPageRedirect($landingPage->getLink());
             return;
         }
@@ -181,7 +181,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @inheritdoc
      */
-    public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch):ResponseParser
+    public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch): ResponseParser
     {
         $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
@@ -197,7 +197,6 @@ class SearchService implements SearchServiceInterface
         } catch (Exception $e) {
             $this->logger->error('Exception while handling search query.', ['url' => $request->getRequestUri()]);
             $this->logger->logException($e);
-            throw $e;
         }
 
         return $this->responseParser;
@@ -394,7 +393,6 @@ class SearchService implements SearchServiceInterface
         $resultDocuments = $result['documents'];
         $firstResultData = $resultDocuments[0]['data'];
 
-        // $query = $response->getData(Response::DATA_QUERY)['query'];
         $query = $this->responseParser->parseQuery()['query'];
         $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
 

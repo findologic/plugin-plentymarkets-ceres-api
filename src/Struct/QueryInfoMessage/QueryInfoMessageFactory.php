@@ -116,16 +116,7 @@ class QueryInfoMessageFactory
             return null;
         }
 
-        $filterValues = [];
-        $joinedFilterValues = explode(Plugin::FILTER_HANDLER_DELIMITER, $params[$name]);
-
-        foreach ($joinedFilterValues as $joinedFilterValue) {
-            $filterValues[] = str_contains($joinedFilterValue, Plugin::FILTER_VALUE_DELIMITER)
-                ? explode(Plugin::FILTER_VALUE_DELIMITER, $joinedFilterValue)[1]
-                : $joinedFilterValue;
-        }
-
-        return $filterValues;
+        return $params[$name];
     }
 
     private function hasQuery(): bool

@@ -2,13 +2,16 @@
 
 namespace Findologic\Struct;
 
-
 class Pagination
 {
     public const DEFAULT_LIMIT = 24;
+
     private ?int $limit;
+
     private ?int $offset;
+
     private ?int $total;
+
     public function __construct(
         ?int $limit,
         ?int $offset,
