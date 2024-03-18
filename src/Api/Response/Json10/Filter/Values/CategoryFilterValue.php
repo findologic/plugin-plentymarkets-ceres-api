@@ -38,7 +38,7 @@ class CategoryFilterValue extends FilterValue
     public function searchValue(string $needle): ?CategoryFilterValue
     {
         foreach ($this->values as $value) {
-            if ($value->getTranslated()->getName() === $needle) {
+            if ($value->getName() === $needle) {
                 return $value;
             }
         }
