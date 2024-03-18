@@ -20,16 +20,16 @@
           rel="nofollow"
         >
           <img
-            :src="value.imageUrl"
-            :width="value.imageUrl ? '80px' : ''"
+            :src="value.media.url"
+            :width="value.media.url ? '80px' : ''"
             @error="handleImageError($event, value)"
           >
           <span v-text="value.name" />
         </label>
         <div
-          v-if="value.count"
+          v-if="value.frequency"
           class="filter-badge"
-          v-text="value.count"
+          v-text="value.frequency"
         />
       </div>
     </div>
@@ -90,7 +90,7 @@ export default defineComponent({
     return {
       handleImageError,
       isLoading,
-      updateFacet
+      updateFacet,
     };
   }
 });

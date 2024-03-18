@@ -24,28 +24,28 @@ describe('ItemDropdown', () => {
     it('does not show a dropdown if the fixed value count is greater than the available filter values', () => {
         const facet: Facet = {
             cssClass: '',
-            findologicFilterType: 'select',
+            findologicFilterType: 'selectFilter',
             id: 'test',
             isMain: false,
-            itemCount: 3,
+            pinnedFilterValueCount: 3,
             name: 'Test',
             noAvailableFiltersText: '',
-            select: 'multiple',
+            selectMode: 'multiple',
             type: '',
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
-                    name: '22220',
+                    name : '22220',
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
                     name: '22221',
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };
@@ -64,28 +64,28 @@ describe('ItemDropdown', () => {
     it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', () => {
         const facet: Facet = {
             cssClass: '',
-            findologicFilterType: 'select',
+            findologicFilterType: 'selectFilter',
             id: 'test',
             isMain: false,
-            itemCount: 1,
+            pinnedFilterValueCount: 1,
             name: 'Test',
             noAvailableFiltersText: '',
-            select: 'multiple',
+            selectMode: 'multiple',
             type: '',
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
-                    name: '22220',
+                    name : '22220',
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
-                    name: '22221',
+                    name : '22221',
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };
@@ -106,28 +106,28 @@ describe('ItemDropdown', () => {
     it('shows one filter value inside a dropdown if there are two options and the fixed item count is set to 1', async () => {
         const facet: Facet = {
             cssClass: '',
-            findologicFilterType: 'select',
+            findologicFilterType: 'selectFilter',
             id: 'test',
             isMain: false,
-            itemCount: 0,
+            pinnedFilterValueCount: 0,
             name: 'Test',
             noAvailableFiltersText: '',
-            select: 'multiple',
+            selectMode: 'multiple',
             type: '',
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
                     name: '22220',
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
                     name: '22221',
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };

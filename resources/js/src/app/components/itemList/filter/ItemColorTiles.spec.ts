@@ -12,23 +12,28 @@ describe('ItemColorTiles', () => {
             id: 'Color',
             values: [
                 {
-                    name: 'Red',
-                    hexValue: '#ff0000',
+                    name : 'Red',
+                    colorHexCode: '#ff0000',
+                    colorImageUrl : '',
+                    media : { url : '' },
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    name: 'Colorful',
-                    hexValue: null,
+                    name : 'Colorful',
+                    colorHexCode: null,
                     colorImageUrl: 'https://your-store.com/images/colors/colorful.png',
+                    media : { url : 'https://your-store.com/images/colors/colorful.png' },
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    name: 'Unknown',
-                    hexValue: null,
+                    name : 'Unknown',
+                    colorHexCode: null,
+                    media : { url : '' },
+                    colorImageUrl: '',
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };

@@ -132,7 +132,7 @@ class UrlBuilder {
     /**
      * Update url with selected filters
      */
-    updateSelectedFilters(facet: Facet, facetId: string, facetValue: string|PriceFacetValue): void {
+    updateSelectedFilters(facet: Facet, facetId: string, facetValue: string|null|PriceFacetValue): void {
         const params = this.getSearchParams();
 
         if (!(Constants.PARAMETER_ATTRIBUTES in params)) {
@@ -141,7 +141,7 @@ class UrlBuilder {
 
         const attributes = params[Constants.PARAMETER_ATTRIBUTES] as Attributes;
 
-        if (facetId === 'price' || facet.findologicFilterType === 'range-slider') {
+        if (facetId === 'price' || facet.findologicFilterType === 'rangeSliderFilter') {
             const facetVal = facetValue as PriceFacetValue;
 
             if (facetVal.max !== Number.MAX_SAFE_INTEGER) {
@@ -154,7 +154,7 @@ class UrlBuilder {
                     min: facetVal.min,
                 };
             }
-        } else if (facet.select === 'single') {
+        } else if (facet.selectMode === 'single') {
             const facetVal = facetValue as string;
 
             if (attributes[facetId] && Object.values(attributes[facetId]).includes(facetVal)) {
@@ -205,7 +205,7 @@ class UrlBuilder {
 
         if (!(facetId in attributes)) {
             return false;
-        } else if (facetId !== 'cat' && facet.select === 'single' && attributes[facetId] === facetValue) {
+        } else if (facetId !== 'cat' && facet.selectMode === 'single' && attributes[facetId] === facetValue) {
             return true;
         } else if (facetId === 'cat') {
             return this.getKeyBySuffix(attributes[facetId], facetValue) !== -1;

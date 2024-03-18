@@ -1,6 +1,6 @@
 <div class="row mt-3">
     <smart-did-you-mean
             :smart-text="{{ smart_did_you_mean | json_encode}}"
-            :query-info-message="{{  query_info_message | striptags('<strong>,<a>') | raw | json_encode }}"
+            :query-info-message="{{  query_info_message | json_encode }}"
     />
 </div>

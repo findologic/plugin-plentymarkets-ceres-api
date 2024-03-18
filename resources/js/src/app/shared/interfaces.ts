@@ -17,27 +17,35 @@ export interface Facet {
     name?: string;
     type?: string;
     isMain?: boolean;
-    itemCount?: number;
-    select?: string;
+    pinnedFilterValueCount?: number;
+    selectMode?: string;
     values?: FacetValue[];
     findologicFilterType?: string;
-    minValue?: number;
-    min?: string;
-    maxValue?: number;
-    max?: string;
+    min?: number;
+    max?: number;
     step?: number;
     unit?: string;
     noAvailableFiltersText?: string;
     cssClass?: string;
+    totalRange? : TotalRange;
+}
+
+export interface TotalRange {
+    min: number;
+    max: number;
+}
+
+export interface Media {
+    url?: string;
 }
 
 export interface FacetValue {
-    count?: number;
+    frequency?: number;
     id?: string;
     name: string;
-    imageUrl?: string;
+    media?: Media;
     selected: boolean;
-    items: FacetValue[];
+    values: FacetValue[];
 }
 
 export interface ColorFacet extends Facet {
@@ -45,8 +53,9 @@ export interface ColorFacet extends Facet {
 }
 
 export interface ColorFacetValue extends FacetValue {
-    hexValue: string|null;
+    colorHexCode: string|null;
     colorImageUrl?: string|null;
+    media?: Media;
 }
 
 export interface CategoryFacet extends Facet {
@@ -54,7 +63,7 @@ export interface CategoryFacet extends Facet {
 }
 
 export interface CategoryFacetValue extends FacetValue {
-    items: CategoryFacetValue[];
+    values: CategoryFacetValue[];
 }
 
 export interface ItemListData {

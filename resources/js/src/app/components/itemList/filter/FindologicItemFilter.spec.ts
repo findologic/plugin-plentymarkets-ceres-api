@@ -28,28 +28,28 @@ describe('FindologicItemFilter', () => {
   it('Shows the facet name', async () => {
     const facet: Facet = {
       cssClass: '',
-      findologicFilterType: 'select',
+      findologicFilterType: 'selectFilter',
       id: 'test',
       isMain: false,
-      itemCount: 3,
+      pinnedFilterValueCount: 3,
       name: 'Facet name',
       noAvailableFiltersText: '',
-      select: 'multiple',
+      selectMode: 'multiple',
       type: '',
       values: [
         {
-          count: 9,
+          frequency: 9,
           id: '20',
-          name: '22220',
+          name : '22220',
           selected: false,
-          items: []
+          values: []
         },
         {
-          count: 1,
+          frequency: 1,
           id: '21',
-          name: '22221',
+          name : '22221',
           selected: false,
-          items: []
+          values: []
         }
       ]
     };
@@ -81,13 +81,13 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'test',
           isMain: false,
-          itemCount: 0,
+          pinnedFilterValueCount: 0,
           name: 'Facet name',
           noAvailableFiltersText: 'No values available for this dropdown',
-          select: 'multiple',
+          selectMode: 'multiple',
           type: '',
           values: []
         } as Facet,
@@ -96,13 +96,13 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'cat',
           isMain: false,
-          itemCount: 0,
+          pinnedFilterValueCount: 0,
           name: 'Category',
           noAvailableFiltersText: 'No values available for this category dropdown',
-          select: 'single',
+          selectMode: 'single',
           type: '',
           values: []
         } as CategoryFacet,
@@ -111,13 +111,13 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'color',
+          findologicFilterType: 'colorPickerFilter',
           id: 'Color',
           isMain: false,
-          itemCount: 0,
+          pinnedFilterValueCount: 0,
           name: 'Color',
           noAvailableFiltersText: 'No values available for this color filter',
-          select: 'multiselect',
+          selectMode: 'multiselect',
           type: '',
           values: []
         } as Facet,
@@ -152,28 +152,28 @@ describe('FindologicItemFilter', () => {
   it('Renders dropdown facet values correctly in the respective filter container', () => {
     const dropdownFacet: Facet = {
       cssClass: '',
-      findologicFilterType: 'select',
+      findologicFilterType: 'selectFilter',
       id: 'test',
       isMain: false,
-      itemCount: 3,
+      pinnedFilterValueCount: 3,
       name: 'Test',
       noAvailableFiltersText: '',
-      select: 'multiple',
+      selectMode: 'multiple',
       type: '',
       values: [
         {
-          count: 9,
+          frequency: 9,
           id: '20',
-          name: '22220',
+          name : '22220',
           selected: false,
-          items: []
+          values: []
         },
         {
-          count: 1,
+          frequency: 1,
           id: '21',
-          name: '22221',
+          name : '22221',
           selected: false,
-          items: []
+          values: []
         }
       ]
     };
@@ -205,27 +205,27 @@ describe('FindologicItemFilter', () => {
   it('Renders category facet values correctly in the respective filter container', async () => {
     const categoryFacet: CategoryFacet = {
       cssClass: '',
-      findologicFilterType: 'select',
+      findologicFilterType: 'selectFilter',
       id: 'cat',
       isMain: false,
-      itemCount: 6,
+      pinnedFilterValueCount: 6,
       name: 'Category',
       noAvailableFiltersText: '',
-      select: 'single',
+      selectMode: 'single',
       type: '',
       values: [
         {
-          count: 4,
+          frequency: 4,
           id: '4',
-          items: [],
-          name: 'Living Room',
+          values: [],
+          name : 'Living Room',
           selected: false
         },
         {
-          count: 1,
+          frequency: 1,
           id: '21',
-          items: [],
-          name: 'Office',
+          values: [],
+          name : 'Office',
           selected: false
         }
       ]
@@ -260,38 +260,38 @@ describe('FindologicItemFilter', () => {
   it('Renders color facet values correctly in the respective filter container', () => {
     const colorFacet: ColorFacet = {
       cssClass: '',
-      findologicFilterType: 'color',
+      findologicFilterType: 'colorPickerFilter',
       id: 'Color',
       isMain: false,
-      itemCount: 8,
+      pinnedFilterValueCount: 8,
       name: 'Color',
       noAvailableFiltersText: '',
-      select: 'multiselect',
+      selectMode: 'multiselect',
       type: '',
       values: [
         {
-          count: 4,
-          hexValue: '#0000FF',
+          frequency: 4,
+          colorHexCode: '#0000FF',
           id: '10',
-          name: 'blue',
+          name : 'blue',
           selected: false,
-          items: []
+          values: []
         },
         {
           colorImageUrl: 'https://plugin.demo.findologic.com/yellow.png',
-          count: 5,
-          hexValue: '#FF0000',
+          frequency: 5,
+          colorHexCode: '#FF0000',
           id: '11',
-          name: 'red',
+          name : 'red',
           selected: false,
-          items: []
+          values: []
         },
         {
-          name: 'Unknown',
-          hexValue: null,
+          name : 'Unknown',
+          colorHexCode: null,
           id: '12',
           selected: false,
-          items: []
+          values: []
         }
       ]
     };
@@ -325,17 +325,17 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'test',
           isMain: false,
-          itemCount: 3,
+          pinnedFilterValueCount: 3,
           name: 'Test',
           noAvailableFiltersText: '',
-          select: 'multiple',
+          selectMode: 'multiple',
           type: '',
           values: [
             {
-              count: 9,
+              frequency: 9,
               id: '20',
               name: '22220',
               selected: false
@@ -349,20 +349,20 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'select',
+          findologicFilterType: 'selectFilter',
           id: 'cat',
           isMain: false,
-          itemCount: 6,
+          pinnedFilterValueCount: 6,
           name: 'Category',
           noAvailableFiltersText: '',
-          select: 'single',
+          selectMode: 'single',
           type: '',
           values: [
             {
-              count: 4,
+              frequency: 4,
               id: '4',
-              items: [],
-              name: 'Living Room',
+              values: [],
+              name : 'Living Room',
               selected: false
             }
           ]
@@ -374,21 +374,21 @@ describe('FindologicItemFilter', () => {
       {
         facet: {
           cssClass: '',
-          findologicFilterType: 'color',
+          findologicFilterType: 'colorPickerFilter',
           id: 'Color',
           isMain: false,
-          itemCount: 8,
+          pinnedFilterValueCount: 8,
           name: 'Color',
           noAvailableFiltersText: '',
-          select: 'multiselect',
+          selectMode: 'multiselect',
           type: '',
           values: [
             {
               colorImageUrl: 'https://plugin.demo.findologic.com/yellow.png',
-              count: 5,
-              hexValue: '#FF0000',
+              frequency: 5,
+              colorHexCode: '#FF0000',
               id: '11',
-              name: 'red',
+              name : 'red',
               selected: false
             }
           ]

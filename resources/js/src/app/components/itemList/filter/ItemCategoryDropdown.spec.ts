@@ -28,24 +28,24 @@ describe('ItemCategoryDropdown', () => {
             findologicFilterType: 'select',
             id: 'cat',
             isMain: false,
-            itemCount: 6,
+            pinnedFilterValueCount: 6,
             name: 'Category',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             type: '',
             values: [
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '4',
-                    items: [],
-                    name: 'Living Room',
+                    values: [],
+                    name : 'Living Room',
                     selected: false
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
-                    items: [],
-                    name: 'Office',
+                    values: [],
+                    name : 'Office',
                     selected: false
                 }
             ]
@@ -73,32 +73,32 @@ describe('ItemCategoryDropdown', () => {
             findologicFilterType: 'select',
             id: 'cat',
             isMain: false,
-            itemCount: 6,
+            pinnedFilterValueCount: 6,
             name: 'Category',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             type: '',
             values: [
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '4',
-                    items: [
+                    values: [
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '5',
-                            items: [],
-                            name: 'Armchairs & Stools',
+                            values: [],
+                            name : 'Armchairs & Stools',
                             selected: false
                         },
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '6',
-                            items: [],
-                            name: 'Sofas',
+                            values: [],
+                            name : 'Sofas',
                             selected: false
                         }
                     ],
-                    name: 'Living Room',
+                    name : 'Living Room',
                     selected: true
                 }
             ]
@@ -110,7 +110,7 @@ describe('ItemCategoryDropdown', () => {
             facets: [facet]
         };
 
-        UrlBuilder.getSelectedFilters = jest.fn(() => [{ id: 'cat', name: 'Living Room' }]);
+        UrlBuilder.getSelectedFilters = jest.fn(() => [{ id: 'cat', name: 'Living Room'}]);
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
         await localVue.nextTick();
@@ -134,54 +134,54 @@ describe('ItemCategoryDropdown', () => {
             findologicFilterType: 'select',
             id: 'cat',
             isMain: false,
-            itemCount: 6,
+            pinnedFilterValueCount: 6,
             name: 'Category',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             type: '',
             values: [
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '4',
-                    items: [
+                    values: [
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '5',
-                            items: [],
-                            name: 'Armchairs & Stools',
+                            values: [],
+                            name : 'Armchairs & Stools',
                             selected: false
                         },
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '6',
-                            items: [],
-                            name: 'Sofas',
+                            values: [],
+                            name : 'Sofas',
                             selected: false
                         }
                     ],
-                    name: 'Living Room',
+                    name : 'Living Room',
                     selected: false
                 },
                 {
-                    count: 4,
+                    frequency: 4,
                     id: '5',
-                    items: [
+                    values: [
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '8',
-                            items: [],
-                            name: 'Something',
+                            values: [],
+                            name : 'Something',
                             selected: false
                         },
                         {
-                            count: 2,
+                            frequency: 2,
                             id: '9',
-                            items: [],
-                            name: 'Something else',
+                            values: [],
+                            name : 'Something else',
                             selected: false
                         }
                     ],
-                    name: 'Not Living Room',
+                    name : 'Not Living Room',
                     selected: false
                 }
             ]

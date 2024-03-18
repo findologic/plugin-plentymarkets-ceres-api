@@ -78,18 +78,22 @@ class ParametersBuilderTest extends TestCase
                     'name' => 'Category'
                 ],
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
+                    'parameters' => [
+                        'attrib' => [
+                            'color' => ['red', 'blue'],
+                            'cat' => ['Category 2']
+                        ]
                     ],
-                    'attrib' => [
-                        'color' => ['red', 'blue'],
-                        'cat' => ['Category 2']
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => 2
                     ],
-                    'selected' => ['cat' => ['Category']],
-                    'order' => 'price ASC',
-                    'count' => 0,
-                    'first' => 0
+                    'isTagPage' => null,
+                    'category' => 1,
+                    'categoryName' => 'Category'
                 ]
             ],
             'Category page request with subcategory selected' => [
@@ -105,18 +109,22 @@ class ParametersBuilderTest extends TestCase
                     'name' => 'Category'
                 ],
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
+                    'parameters' => [
+                        'attrib' => [
+                            'color' => ['red', 'blue'],
+                            'cat' => ['Category 2', 'Category 1']
+                        ]
                     ],
-                    'attrib' => [
-                        'color' => ['red', 'blue'],
-                        'cat' => ['Category 2', 'Category 1']
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => 2
                     ],
-                    'selected' => ['cat' => ['Category']],
-                    'order' => 'price ASC',
-                    'count' => 0,
-                    'first' => 0
+                    'isTagPage' => null,
+                    'category' => 1,
+                    'categoryName' => 'Category',
                 ]
             ],
             'Category page request with same price slider min and max values' => [
@@ -134,20 +142,24 @@ class ParametersBuilderTest extends TestCase
                     'name' => 'Category'
                 ],
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
-                    ],
-                    'attrib' => [
-                        'price' => [
-                            'min' => 77,
-                            'max' => 77
+                    'parameters' => [
+                        'attrib' => [
+                            'price' => [
+                                'min' => 77,
+                                'max' => 77
+                            ]
                         ]
                     ],
-                    'selected' => ['cat' => ['Category']],
-                    'order' => 'price ASC',
-                    'count' => 0,
-                    'first' => 0
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => 2
+                    ],
+                    'isTagPage' => null,
+                    'category' => 1,
+                    'categoryName' => 'Category',
                 ]
             ],
             'Search page request' => [
@@ -160,16 +172,22 @@ class ParametersBuilderTest extends TestCase
                 'requestUri' => 'https://www.test.com/search?query=Test',
                 'category' => false,
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
+                    'parameters' => [
+                        'attrib' => [
+                            'size' => ['l', 'xl'],
+                            'cat' => 'Category'
+                        ]
                     ],
-                    'attrib' => [
-                        'size' => ['l', 'xl'],
-                        'cat' => 'Category'
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => null
                     ],
-                    'order' => 'price ASC',
-                    'count' => 10
+                    'isTagPage' => null,
+                    'category' => null,
+                    'categoryName' => null,
                 ]
             ],
             'Search page request with same price slider min and max values' => [
@@ -184,18 +202,24 @@ class ParametersBuilderTest extends TestCase
                 'requestUri' => 'https://www.test.com/search?query=Test',
                 'category' => false,
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
-                    ],
-                    'attrib' => [
-                        'price' => [
-                            'min' => 77,
-                            'max' => 77
+                    'parameters' => [
+                        'attrib' => [
+                            'price' => [
+                                'min' => 77,
+                                'max' => 77
+                            ]
                         ]
                     ],
-                    'order' => 'price ASC',
-                    'count' => 10
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => null
+                    ],
+                    'isTagPage' => null,
+                    'category' => null,
+                    'categoryName' => null,
                 ]
             ],
             'Force original query enabled' => [
@@ -209,17 +233,23 @@ class ParametersBuilderTest extends TestCase
                 'requestUri' => 'https://www.test.com/search?query=Test',
                 'category' => false,
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
+                    'parameters' => [
+                        'attrib' => [
+                            'size' => ['l', 'xl'],
+                            'cat' => 'Category'
+                        ],
+                        Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => true
                     ],
-                    'attrib' => [
-                        'size' => ['l', 'xl'],
-                        'cat' => 'Category'
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => null
                     ],
-                    'order' => 'price ASC',
-                    'count' => 10,
-                    Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => true
+                    'isTagPage' => null,
+                    'category' => null,
+                    'categoryName' => null,
                 ]
             ],
             'Force original query disabled' => [
@@ -233,16 +263,23 @@ class ParametersBuilderTest extends TestCase
                 'requestUri' => 'https://www.test.com/search?query=Test',
                 'category' => false,
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
+                    'parameters' => [
+                        'attrib' => [
+                            'size' => ['l', 'xl'],
+                            'cat' => 'Category'
+                        ],
+                        Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => 0
                     ],
-                    'attrib' => [
-                        'size' => ['l', 'xl'],
-                        'cat' => 'Category'
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => null
                     ],
-                    'order' => 'price ASC',
-                    'count' => 10
+                    'isTagPage' => false,
+                    'category' => false,
+                    'categoryName' => '',
                 ]
             ],
             'Tag page request' => [
@@ -256,19 +293,24 @@ class ParametersBuilderTest extends TestCase
                 'requestUri' => 'https://www.test.com/aaaaa_t125',
                 'category' => false,
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
+                    'parameters' => [
+                        'attrib' => [
+                            'size' => ['l', 'xl'],
+                            'cat' => 'Category'
+                        ],
+                        Plugin::API_PARAMETER_FORCE_ORIGINAL_QUERY => 0
                     ],
-                    'attrib' => [
-                        'size' => ['l', 'xl'],
-                        'cat' => 'Category'
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => null
                     ],
-                    'order' => 'price ASC',
-                    'count' => 10,
-                    'selected' => [
-                        'cat_id' => [125]
-                    ]
+                    'isTagPage' => 1,
+                    'tagId' => 125,
+                    'category' => false,
+                    'categoryName' => '',
                 ]
             ],
             'Request with same attributes' => [
@@ -283,17 +325,24 @@ class ParametersBuilderTest extends TestCase
                 'requestUri' => 'https://www.test.com/search?query=Test',
                 'category' => false,
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
-                    ],
+                    'parameters' => [
                     'attrib' => [
                         'vendor' => [
                             'A & C Design',
+                            'A & C Design',
                         ]
                     ],
-                    'order' => 'price ASC',
-                    'count' => 10
+                    ],
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => null
+                    ],
+                    'isTagPage' => false,
+                    'category' => false,
+                    'categoryName' => '',
                 ]
             ],
             'Request with same attributes and range slider filter with same min and max' => [
@@ -312,21 +361,28 @@ class ParametersBuilderTest extends TestCase
                 'requestUri' => 'https://www.test.com/search?query=Test',
                 'category' => false,
                 'expectedParameters' => [
-                    'query' => 'Test',
-                    'properties' => [
-                        0 => 'variation_id'
-                    ],
-                    'attrib' => [
-                        'vendor' => [
-                            'A & C Design',
+                    'parameters' => [
+                        'attrib' => [
+                            'vendor' => [
+                                'A & C Design',
+                                'A & C Design',
+                            ],
+                            'price' => [
+                                'min' => 77,
+                                'max' => 77
+                            ],
                         ],
-                        'price' => [
-                            'min' => 77,
-                            'max' => 77
-                        ],
                     ],
-                    'order' => 'price ASC',
-                    'count' => 10
+                    'externalSearch' => [
+                        'searchString' => 'Test',
+                        'sorting' => 'sorting.price.avg_asc',
+                        'itemsPerPage' => 10,
+                        'page' => 1,
+                        'categoryId' => null
+                    ],
+                    'isTagPage' => false,
+                    'category' => false,
+                    'categoryName' => '',
                 ]
             ],
         ];
@@ -342,8 +398,6 @@ class ParametersBuilderTest extends TestCase
      */
     public function testSetSearchParams(array $parameters, string $requestUri, $category, array $expectedParameters)
     {
-        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods(null)->getMock();
-
         $httpRequestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -377,13 +431,12 @@ class ParametersBuilderTest extends TestCase
         }
 
         $result = $parametersBuilderMock->setSearchParams(
-            $requestMock,
             $httpRequestMock,
             $searchQueryMock,
             $categoryMock
         );
 
-        $this->assertEquals($expectedParameters, $result->getParams());
+        $this->assertEquals($expectedParameters, $result);
     }
 
     public function testGetCategoryName()

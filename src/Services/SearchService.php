@@ -3,27 +3,25 @@
 namespace Findologic\Services;
 
 use Exception;
-use Findologic\Api\Request\Request;
-use Findologic\Api\Request\RequestBuilder;
-use Findologic\Api\Response\Response;
-use Findologic\Api\Response\ResponseParser;
-use Findologic\Api\Client;
-use Findologic\Constants\Plugin;
-use Findologic\Exception\AliveException;
-use Findologic\Services\Search\ParametersHandler;
-use Ceres\Helper\ExternalSearch;
-use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
-use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
-use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
-use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
-use Plenty\Plugin\ConfigRepository;
-use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Api\Client;
 use Plenty\Plugin\Log\Loggable;
-use Plenty\Plugin\Log\LoggerFactory;
-use Plenty\Log\Contracts\LoggerContract;
+use Ceres\Helper\ExternalSearch;
+use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
+use Plenty\Plugin\ConfigRepository;
+use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Struct\SmartDidYouMean;
+use Ceres\Helper\ExternalSearchOptions;
+use Findologic\Exception\AliveException;
+use Plenty\Log\Contracts\LoggerContract;
+use Findologic\Api\Request\RequestBuilder;
+use Findologic\Api\Response\ResponseParser;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Services\Search\ParametersHandler;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
 
 /**
  * Class SearchService
@@ -36,85 +34,30 @@ class SearchService implements SearchServiceInterface
     const DEFAULT_ITEMS_PER_PAGE = 25;
     const MAX_RETRIES = 2;
 
-    /**
-     * @var Client
-     */
-    protected $client;
+    protected LoggerContract $logger;
 
-    /**
-     * @var RequestBuilder
-     */
-    protected $requestBuilder;
-
-    /**
-     * @var ResponseParser
-     */
-    protected $responseParser;
-
-    /**
-     * @var ParametersHandler
-     */
-    protected $searchParametersHandler;
-
-    /**
-     * @var LoggerContract
-     */
-    protected $logger;
-
-    /**
-     * @var CategoryService
-     */
     protected $categoryService;
 
-    /**
-     * @var Response
-     */
-    protected $results;
+    protected bool|null $aliveTestResult;
 
-    /**
-     * @var FallbackSearchService
-     */
-    protected $fallbackSearchService;
-
-    /**
-     * @var ConfigRepository
-     */
-    protected $configRepository;
-
-    /**
-     * @var bool|null
-     */
-    protected $aliveTestResult;
-
-    /**
-     * @var PluginInfoService
-     */
-    protected $pluginInfoService;
-
-    /** @var bool $useMainVariationAsFallback */
-    protected $useMainVariationAsFallback = false;
+    protected bool $useMainVariationAsFallback = false;
 
     public function __construct(
-        Client $client,
-        RequestBuilder $requestBuilder,
-        ResponseParser $responseParser,
-        ParametersHandler $searchParametersHandler,
+        protected Client $client,
+        protected RequestBuilder $requestBuilder,
+        protected ResponseParser $responseParser,
+        protected ParametersHandler $searchParametersHandler,
         LoggerFactory $loggerFactory,
-        FallbackSearchService $fallbackSearchService,
-        ConfigRepository $configRepository,
-        PluginInfoService $pluginInfoService
+        protected FallbackSearchService $fallbackSearchService,
+        protected ConfigRepository $configRepository,
+        protected PluginInfoService $pluginInfoService
     ) {
-        $this->client = $client;
-        $this->requestBuilder = $requestBuilder;
-        $this->responseParser = $responseParser;
-        $this->searchParametersHandler = $searchParametersHandler;
         $this->logger = $loggerFactory->getLogger(
             Plugin::PLUGIN_NAMESPACE,
             Plugin::PLUGIN_IDENTIFIER
         );
-        $this->fallbackSearchService = $fallbackSearchService;
-        $this->configRepository = $configRepository;
-        $this->pluginInfoService = $pluginInfoService;
+
+        $this->aliveTestResult = null;
     }
 
     /**
@@ -143,11 +86,16 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @return Response|null
+     * @return ResponseParser|null
      */
     public function getResults()
     {
-        return $this->results;
+        return $this->responseParser;
+    }
+
+    public function getSmartDidYouMean() : SmartDidYouMean
+    {
+        return $this->responseParser->getSmartDidYouMeanExtension();
     }
 
     /**
@@ -157,35 +105,35 @@ class SearchService implements SearchServiceInterface
      */
     public function doSearch(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $results = $this->search($request, $externalSearch);
+        $this->search($request, $externalSearch);
         $hasSelectedFilters = $request->get('attrib') !== null;
 
-        if ($landingPageUrl = $results->getLandingPage()) {
-            $this->doPageRedirect($landingPageUrl);
+        if ($landingPage = $this->responseParser->getLandingPageExtension()) {
+            $this->doPageRedirect($landingPage->getLink());
             return;
         }
 
-        if ($results->getResultsCount() == 0 && !$hasSelectedFilters) {
+        if ($this->responseParser->parseTotalResults() == 0 && !$hasSelectedFilters) {
             return;
-        } elseif ($results->getResultsCount() == 0 && $hasSelectedFilters) {
+        } elseif ($this->responseParser->parseTotalResults() == 0 && $hasSelectedFilters) {
             $externalSearch->setResults([]);
 
             return;
         }
 
         if ($this->shouldFilterInvalidProducts()) {
-            $variationIds = $this->filterInvalidVariationIds($results->getVariationIds());
+            $variationIds = $this->filterInvalidVariationIds($this->responseParser->getProductIds());
         } else {
-            $variationIds = $results->getVariationIds();
+            $variationIds = $this->responseParser->getProductIds();
         }
 
-        if ($redirectUrl = $this->getRedirectUrl($request, $results, $variationIds)) {
+        if ($redirectUrl = $this->getRedirectUrl($request, $variationIds)) {
             $this->doPageRedirect($redirectUrl);
             return;
         }
 
         /** @var ExternalSearch $searchQuery */
-        $externalSearch->setResults($variationIds, $results->getResultsCount());
+        $externalSearch->setResults($variationIds, $this->responseParser->parseTotalResults());
     }
 
     /**
@@ -194,10 +142,10 @@ class SearchService implements SearchServiceInterface
      *
      * @return string|null
      */
-    public function getRedirectUrl(HttpRequest $request, Response $response, array $variationIds)
+    public function getRedirectUrl(HttpRequest $request, array $variationIds)
     {
         if ($this->shouldRedirectToProductDetailPage($variationIds, $request)) {
-            return $this->getProductDetailUrl($response);
+            return $this->getProductDetailUrl();
         }
 
         return null;
@@ -210,30 +158,30 @@ class SearchService implements SearchServiceInterface
      */
     public function doNavigation(HttpRequest $request, ExternalSearch $externalSearch)
     {
-        $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
-        $response = $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
+        // $fallbackSearchResult = $this->fallbackSearchService->getSearchResults($request, $externalSearch);
+        // $this->fallbackSearchService->createResponseFromSearchResult($fallbackSearchResult);
 
         if ($this->configRepository->get(Plugin::CONFIG_NAVIGATION_ENABLED)) {
             $this->search($request, $externalSearch);
-            $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
+            // $this->results->setData(Response::DATA_PRODUCTS, $response->getData(Response::DATA_PRODUCTS));
         } else {
-            $this->results = $response;
+            // $this->results = $response;
         }
 
         $parameters = (array) $request->all();
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
-            $total = $this->results->getData(Response::DATA_RESULTS)['count'];
+            $total = $this->responseParser->parseQuery()['count'];//$this->results->getData(Response::DATA_RESULTS)['count'];
         } else {
-            $total = $response->getData(Response::DATA_RESULTS)['count'];
+            $total = $this->responseParser->parseQuery()['count'];
         }
 
-        $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
+        // $externalSearch->setDocuments($fallbackSearchResult['itemList']['documents'], $total);
     }
 
     /**
      * @inheritdoc
      */
-    public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch)
+    public function handleSearchQuery(HttpRequest $request, ExternalSearch $externalSearch): ResponseParser
     {
         $isCategoryPage = $externalSearch->categoryId !== null ? true : false;
         $hasSelectedFilters = $request->get('attrib') !== null ? true : false;
@@ -251,7 +199,7 @@ class SearchService implements SearchServiceInterface
             $this->logger->logException($e);
         }
 
-        return $this->results;
+        return $this->responseParser;
     }
 
     /**
@@ -278,7 +226,7 @@ class SearchService implements SearchServiceInterface
     /**
      * @param HttpRequest $request
      * @param ExternalSearch $externalSearch
-     * @return Response
+     * @return void
      * @throws AliveException
      */
     public function search(HttpRequest $request, ExternalSearch $externalSearch)
@@ -298,9 +246,9 @@ class SearchService implements SearchServiceInterface
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
 
-        $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
 
-        return $this->results;
+        $this->responseParser->setResponse($this->requestWithRetries($apiRequest));
+        $this->responseParser->setRequest($request);
     }
 
     /**
@@ -312,7 +260,7 @@ class SearchService implements SearchServiceInterface
             $request = $this->requestBuilder->buildAliveRequest();
             $response = $this->client->call($request);
 
-            $this->aliveTestResult = ($response === Plugin::API_ALIVE_RESPONSE_BODY);
+            $this->aliveTestResult = ($response['response'] === Plugin::API_ALIVE_RESPONSE_BODY);
         }
 
         return $this->aliveTestResult;
@@ -399,23 +347,25 @@ class SearchService implements SearchServiceInterface
             return false;
         }
 
-        $dataQueryInfoMessage = $this->getResults()->getData(Response::DATA_QUERY_INFO_MESSAGE);
+        $smartDidYouMean = $this->responseParser->getSmartDidYouMeanExtension();
 
-        $type = !empty($dataQueryInfoMessage['didYouMeanQuery'])
-            ? 'did-you-mean' : $dataQueryInfoMessage['queryStringType'];
+        // if theres no smartdidyoumean type return true
+        if($smartDidYouMean->getType()){
+            return true;
+        }
 
-        return $type !== 'corrected' && $type !== 'improved';
+        return false;
     }
 
     /**
      * @return string|null
      */
-    private function getProductDetailUrl(Response $response)
+    private function getProductDetailUrl()
     {
         /** @var ItemSearchService $itemSearchService */
         $itemSearchService = $this->getItemSearchService();
 
-        $productId = $response->getProductsIds()[0];
+        $productId = $this->responseParser->getProductIds()[0];
 
         if (strpos($productId, '_')) {
             $productId = explode('_', $productId)[0];
@@ -443,7 +393,7 @@ class SearchService implements SearchServiceInterface
         $resultDocuments = $result['documents'];
         $firstResultData = $resultDocuments[0]['data'];
 
-        $query = $response->getData(Response::DATA_QUERY)['query'];
+        $query = $this->responseParser->parseQuery()['query'];
         $variationId = $this->getVariationIdForRedirect($query, $resultDocuments);
 
         if ($variationId !== $productId) {
@@ -589,9 +539,9 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
-     * @return mixed
+     * @return ApiResponse|null
      */
-    private function requestWithRetries(Request $request)
+    private function requestWithRetries(array $request): ?array
     {
         $i = 0;
         do {
@@ -616,13 +566,11 @@ class SearchService implements SearchServiceInterface
      * @param mixed $responseData
      * @return string|null
      */
-    private function validateResponse($responseData)
+    private function validateResponse($responseData): ?string
     {
         $errorMsg = null;
         if (is_array($responseData) && array_key_exists('error', $responseData) && $responseData['error'] === true) {
             $errorMsg = 'Plentymarkets SDK returned an error response';
-        } elseif (!is_string($responseData)) {
-            $errorMsg = 'Plentymarkets SDK returned invalid response - Expected string';
         } elseif (empty($responseData)) {
             $errorMsg = 'Plentymarkets SDK returned empty response';
         }

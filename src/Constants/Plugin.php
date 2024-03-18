@@ -14,7 +14,7 @@ class Plugin
 
     const PLENTY_PARAMETER_PAGINATION_ITEMS_PER_PAGE = 'items';
 
-    const API_OUTPUT_ADAPTER = 'XML_2.1';
+    const API_OUTPUT_ADAPTER = 'JSON_1.0';
     const API_PARAMETER_ATTRIBUTES = 'attrib';
     const API_PARAMETER_PROPERTIES = 'properties';
     const API_PARAMETER_SORT_ORDER = 'order';
@@ -46,10 +46,10 @@ class Plugin
     const CONFIG_FILTERS_STYLING_CSS_ENABLED = 'Findologic.filters_styling_css_enabled';
     const CONFIG_LOAD_NO_UI_SLIDER_STYLES_ENABLED = 'Findologic.load_no_ui_slider_styles_enabled';
     const CONFIG_MINIMAL_SEARCH_TERM_LENGTH = 'Findologic.minimalSearchTermLength';
-
     const CONFIG_IO_CATEGORY_SEARCH = 'IO.routing.category_search';
 
     const FILTER_TYPE_RANGE_SLIDER = 'range-slider';
     const FILTER_TYPE_COLOR = 'color';
     const FILTER_TYPE_IMAGE = 'image';
+
 }

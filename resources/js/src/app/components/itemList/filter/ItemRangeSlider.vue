@@ -139,8 +139,8 @@ export default defineComponent({
     onMounted(() => {
       const randomRangeSliderId = Math.random().toString(36).substring(2, 13);
       const values = UrlBuilder.getSelectedFilterValue(props.facet.id);
-      valueFrom.value = (values ? values.min : props.facet.minValue) || '';
-      valueTo.value = (values ? values.max : props.facet.maxValue) || '';
+      valueFrom.value = (values ? values.min : props.facet.totalRange.min) || '';
+      valueTo.value = (values ? values.max : props.facet.totalRange.max) || '';
       applyText.value = TranslationService.translate('Ceres::Template.itemApply');
       // round values so it wouldn't have decimals
       valueFrom.value = Math.floor(valueFrom.value);
@@ -151,6 +151,7 @@ export default defineComponent({
             .replace(/-$/, '')
             + '-'
             + randomRangeSliderId;
+
       // Determine number of decimals in the slider
       let decimalNumber = 2;
 
@@ -164,13 +165,14 @@ export default defineComponent({
 
       $(document).ready(function () {
         const element: noUiSlider.target = document.getElementById(sanitizedFacetId.value) as noUiSlider.target;
+
         const slider = noUiSlider.create(element, {
           step: props.facet.step,
           start: [valueFrom.value, valueTo.value],
           connect: true,
           range: {
-            'min': Math.min(valueFrom.value, props.facet.minValue ?? 0),
-            'max': Math.max(valueTo.value, props.facet.maxValue ?? Number.MAX_SAFE_INTEGER)
+            'min': Math.min(valueFrom.value, props.facet.totalRange.min ?? 0),
+            'max': Math.max(valueTo.value, props.facet.totalRange.max ?? Number.MAX_SAFE_INTEGER)
           },
           format: {
             to: function(value: number) {

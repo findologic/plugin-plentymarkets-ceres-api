@@ -41,16 +41,16 @@
             v-text="category.name"
           />
           <div
-            v-if="!isCategorySelected(category) && category.count"
+            v-if="!isCategorySelected(category) && category.frequency"
             class="filter-badge"
-            v-text="category.count"
+            v-text="category.frequency"
           />
           <ul
-            v-if="categoryIsSelected && category.items.length > 0 && !isInCategoryPage"
+            v-if="categoryIsSelected && category.values.length > 0 && !isInCategoryPage"
             class="form-check subcategories"
           >
             <li
-              v-for="subcategory in category.items"
+              v-for="subcategory in category.values"
               :key="subcategory.id"
               class="fl-dropdown-item"
               :class="{'form-check-label': !isCategorySelected(subcategory)}"
@@ -70,9 +70,9 @@
                 v-text="subcategory.name"
               />
               <div
-                v-if="!isCategorySelected(subcategory) && subcategory.count"
+                v-if="!isCategorySelected(subcategory) && subcategory.frequency"
                 class="filter-badge"
-                v-text="subcategory.count"
+                v-text="subcategory.frequency"
               />
             </li>
           </ul>
@@ -137,7 +137,7 @@ export default defineComponent({
           typeof props.currentCategory !== 'undefined' &&
           props.facet.values?.[0].name === props.currentCategory[0].name
       ) {
-        return props.facet.values?.[0].items;
+        return props.facet.values?.[0].values;
       }
 
       return props.facet.values;

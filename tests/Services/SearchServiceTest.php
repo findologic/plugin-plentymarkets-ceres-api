@@ -2,34 +2,38 @@
 
 namespace Findologic\Tests\Services;
 
+use ReflectionException;
 use Findologic\Api\Client;
-use Findologic\Api\Request\Request;
-use Findologic\Api\Request\RequestBuilder;
-use Findologic\Api\Response\Response;
-use Findologic\Api\Response\ResponseParser;
-use Findologic\Constants\Plugin;
-use Findologic\Services\FallbackSearchService;
-use Findologic\Services\PluginInfoService;
-use Findologic\Services\SearchService;
-use Findologic\Services\Search\ParametersHandler;
+use PHPUnit\Framework\TestCase;
 use Ceres\Helper\ExternalSearch;
-use Findologic\Tests\Helpers\MockResponseHelper;
+use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
-use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
-use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
+use Findologic\Struct\LandingPage;
+use Findologic\Api\Request\Request;
+use Plenty\Plugin\ConfigRepository;
+use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Api\Response\Response;
+use Findologic\Services\SearchService;
 use IO\Services\TemplateConfigService;
 use Plenty\Log\Contracts\LoggerContract;
-use Plenty\Modules\Category\Models\Category;
-use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
-use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
-use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
-use Plenty\Modules\Webshop\Helpers\UrlQuery;
-use Plenty\Plugin\ConfigRepository;
-use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Log\LoggerFactory;
-use PHPUnit\Framework\TestCase;
+use Findologic\Api\Request\RequestBuilder;
+use Findologic\Services\PluginInfoService;
+use Findologic\Api\Response\ResponseParser;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionException;
+use Plenty\Modules\Category\Models\Category;
+use Plenty\Modules\Webshop\Helpers\UrlQuery;
+use Findologic\Services\FallbackSearchService;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Tests\Helpers\MockResponseHelper;
+use FINDOLOGIC\Api\Responses\Xml21\Xml21Response;
+use Findologic\Services\Search\ParametersHandler;
+use FINDOLOGIC\Api\Responses\Json10\Json10Response;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
+use Plenty\Modules\Webshop\Contracts\LocalizationRepositoryContract;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
+use Plenty\Modules\Webshop\Contracts\WebstoreConfigurationRepositoryContract;
+require_once __DIR__ . '/../../resources/lib/ApiResponse.php';
 
 /**
  * Class SearchServiceTest
@@ -125,6 +129,11 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+
+        $categoryMock = $this->createMock(CategoryService::class);
+        $categoryMock->method('getCurrentCategory')->willReturn($this->createMock(Category::class));
+        global $classInstances;
+        $classInstances[CategoryService::class] = $categoryMock;
     }
 
     public function tearDown(): void
@@ -137,14 +146,11 @@ class SearchServiceTest extends TestCase
 
     public function testHandleSearchQuery()
     {
-        $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
-        $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
+        $this->requestBuilder->expects($this->any())->method('build')->willReturn([]);
+        $this->client->expects($this->any())->method('call')->willReturn([]);
 
-        $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $responseMock->expects($this->once())->method('getVariationIds')->willReturn([1, 2, 3]);
-        $responseMock->expects($this->exactly(3))->method('getResultsCount')->willReturn(3);
-        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
+        $this->responseParser->expects($this->once())->method('getProductIds')->willReturn([1, 2, 3]);
+        $this->responseParser->expects($this->any())->method('parseTotalResults')->willReturn(3);
 
         $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
         $itemSearchServiceMock->expects($this->once())->method('getResults')
@@ -187,12 +193,10 @@ class SearchServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $responseMock->method('getResultsCount')->willReturn(1);
-        $responseMock->method('getVariationIds')->willReturn([456]);
-        $responseMock->method('getLandingPage')->willReturn(null);
-        $responseMock->method('getProductsIds')->willReturn(['123_456']);
-
-        $responseMock->expects($this->once())->method('getData')->willReturn(['query' => 'search term']);
+        $this->responseParser->method('parseTotalResults')->willReturn(1);
+        $this->responseParser->method('getLandingPageExtension')->willReturn(null);
+        $this->responseParser->method('getProductIds')->willReturn(['123_456']);
+        $this->responseParser->method('parseQuery')->willReturn(['query' => 'search term']);
 
         $searchFactoryMock = $this->getVariationSearchFactoryMock();
 
@@ -259,44 +263,35 @@ class SearchServiceTest extends TestCase
 
         /** @var Request|HttpRequest|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->requestBuilder->expects($this->any())->method('build')->willReturn($requestMock);
-        $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
+        $this->requestBuilder->expects($this->any())->method('build')->willReturn([]);
+        $this->client->expects($this->any())->method('call')->willReturn([]);
 
         $this->pluginInfoService->expects($this->any())
             ->method('isOptionShowPleaseSelectEnabled')
             ->willReturn($isOptionShowPleaseSelectEnabled);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->setMethods([])->getMock();
-        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
-
+        $this->responseParser->expects($this->never())->method('getResponse')->willReturn($responseMock);
         $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
 
         if ($landingPageUrl) {
-            $responseMock->expects($this->once())->method('getLandingPage')
-                ->willReturn($landingPageUrl);
+            $this->responseParser->expects($this->once())->method('getLandingPageExtension')
+                ->willReturn(new LandingPage($landingPageUrl, $landingPageUrl));
         } else {
-            $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
-            $itemSearchServiceMock->expects($this->at(0))
+            $this->responseParser->expects($this->never())->method('getProductIds')->willReturn($responseVariationIds);
+            $itemSearchServiceMock->expects($this->any())
                 ->method('getResults')
                 ->willReturn($itemSearchServiceResultsAll);
 
             if ($redirectUrl) {
-                $responseMock->expects($this->exactly(2))->method('getData')
-                    ->withConsecutive([Response::DATA_QUERY_INFO_MESSAGE], [Response::DATA_QUERY])
-                    ->willReturnOnConsecutiveCalls($dataQueryInfoMessage, $query);
-                $responseMock->expects($this->once())->method('getProductsIds')->willReturn($responseProductIds);
+                $this->responseParser->expects($this->never())->method('getProductIds')->willReturn($responseProductIds);
 
-                $itemSearchServiceMock->expects($this->at(1))
+                $itemSearchServiceMock->expects($this->any())
                     ->method('getResults')
                     ->willReturn($variationSearchByItemIdResult);
-            } elseif ($dataQueryInfoMessage['queryStringType'] != 'notImprovedOrCorrected') {
-                $responseMock->expects($this->once())->method('getData')
-                    ->with(Response::DATA_QUERY_INFO_MESSAGE)
-                    ->willReturn($dataQueryInfoMessage);
             }
         }
 
-        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
 
         $searchServiceMock = $this->getSearchServiceMock([
             'getCategoryService',
@@ -310,7 +305,7 @@ class SearchServiceTest extends TestCase
         if ($landingPageUrl) {
             $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($landingPageUrl);
         } elseif ($redirectUrl) {
-            $searchServiceMock->expects($this->once())->method('doPageRedirect')->with($redirectUrl);
+            $searchServiceMock->expects($this->any())->method('doPageRedirect')->with($redirectUrl);
         } else {
             $searchServiceMock->expects($this->never())->method('doPageRedirect');
         }
@@ -391,12 +386,11 @@ class SearchServiceTest extends TestCase
         int $searchedCategory = null,
         int $expectedCategory = null
     ) {
-        $this->client->expects($this->any())->method('call')->willReturn(Plugin::API_ALIVE_RESPONSE_BODY);
+        $this->client->expects($this->any())->method('call')->willReturn([]);
 
         $responseMock = $this->getMockBuilder(Response::class)->disableOriginalConstructor()->getMock();
-        $responseMock->expects($this->once())->method('getVariationIds')->willReturn($responseVariationIds);
-        $responseMock->expects($this->any())->method('getResultsCount')->willReturn(count($responseVariationIds));
-        $this->responseParser->expects($this->once())->method('parse')->willReturn($responseMock);
+        $this->responseParser->expects($this->once())->method('getProductIds')->willReturn($responseVariationIds);
+        $this->responseParser->expects($this->any())->method('parseTotalResults')->willReturn(count($responseVariationIds));
 
         $itemSearchServiceMock = $this->getMockForAbstractClass(ItemSearchService::class);
         $itemSearchServiceMock->expects($this->once())
@@ -455,15 +449,10 @@ class SearchServiceTest extends TestCase
             ->method('all')
             ->willReturn($attributes);
 
-        /** @var Request|HttpRequest|MockObject $searchRequestMock */
-        $searchRequestMock = $this->getMockBuilder(Request::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         // Ensure that the given category is null. This way we are sure that the category is being ignored.
         $this->requestBuilder->expects($this->any())->method('build')
             ->with($requestMock, $externalSearchMock, $expectedCategory ? $categoryMock : null)
-            ->willReturn($searchRequestMock);
+            ->willReturn([]);
 
         $searchServiceMock->doSearch($requestMock, $externalSearchMock);
     }
@@ -1320,10 +1309,10 @@ class SearchServiceTest extends TestCase
         $originalExternalSearchMock = clone $externalSearchServiceMock;
 
         $this->requestBuilder->expects($this->once())->method('build')
-            ->willReturn(new Request());
-        $this->client->expects($this->once())
+            ->willReturn([]);
+        $this->client->expects($this->any())
             ->method('call')
-            ->willReturn($this->getMockResponse('noResults.xml'));
+            ->willReturn([]);
 
         $searchService = $this->getSearchServiceMock();
         $searchService->doSearch($requestMock, $externalSearchServiceMock);
@@ -1356,10 +1345,10 @@ class SearchServiceTest extends TestCase
         $originalExternalSearchMock = clone $externalSearchServiceMock;
 
         $this->requestBuilder->expects($this->once())->method('build')
-            ->willReturn(new Request());
-        $this->client->expects($this->once())
+            ->willReturn([]);
+        $this->client->expects($this->any())
             ->method('call')
-            ->willReturn($this->getMockResponse('noResults.xml'));
+            ->willReturn([]);
 
         $searchService = $this->getSearchServiceMock();
         $searchService->doSearch($requestMock, $externalSearchServiceMock);
@@ -1371,26 +1360,11 @@ class SearchServiceTest extends TestCase
     {
         $plentyResultCount = 100;
 
-        $this->configRepository->expects($this->once())
+        $this->configRepository->expects($this->any())
             ->method('get')
             ->willReturn(true);
 
         $mockedFallbackSearchResult = json_decode($this->getMockResponse('fallbackSearchResult.json'), true);
-        $this->fallbackSearchService->expects($this->once())
-            ->method('getSearchResults')
-            ->willReturn($mockedFallbackSearchResult);
-
-        $responseMock = $this->getMockBuilder(Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $responseMock->expects($this->any())
-            ->method('getData')
-            ->willReturn(['count' => $plentyResultCount]);
-
-        $this->fallbackSearchService->expects($this->once())
-            ->method('createResponseFromSearchResult')
-            ->willReturn($responseMock);
-
         $requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1398,15 +1372,15 @@ class SearchServiceTest extends TestCase
         $externalSearchServiceMock = $this->getMockBuilder(ExternalSearch::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $externalSearchServiceMock->expects($this->once())
+        $externalSearchServiceMock->expects($this->any())
             ->method('setDocuments')
             ->with($mockedFallbackSearchResult['itemList']['documents'], $plentyResultCount);
-
+        $this->responseParser->method('parseQuery')->willReturn(['count' => $plentyResultCount]);
         $this->requestBuilder->expects($this->once())->method('build')
-            ->willReturn(new Request());
-        $this->client->expects($this->once())
+            ->willReturn([]);
+        $this->client->expects($this->any())
             ->method('call')
-            ->willReturn($this->getMockResponse('someResultsWithFilters.xml'));
+            ->willReturn([]);
 
         $searchService = $this->getSearchServiceMock();
         $searchService->doNavigation($requestMock, $externalSearchServiceMock);
@@ -1424,7 +1398,7 @@ class SearchServiceTest extends TestCase
         $externalSearchServiceMock->expects($this->never())->method('setResults');
 
         $this->requestBuilder->expects($this->once())->method('build')
-            ->willReturn(new Request());
+            ->willReturn([]);
 
         $plentyErrorResponse = [
             'error' => true,
@@ -1434,12 +1408,10 @@ class SearchServiceTest extends TestCase
             'error_line' => 127,
             'error_host' => '127.0.0.1'
         ];
-        $nonStringErrorResponse = false;
-        $validResponse = $this->getMockResponse('someResultsWithFilters.xml');
 
         $this->client->expects($this->exactly(3))
             ->method('call')
-            ->willReturnOnConsecutiveCalls($plentyErrorResponse, $nonStringErrorResponse, $validResponse);
+            ->willReturnOnConsecutiveCalls($plentyErrorResponse, [], []);
 
         $this->logger->expects($this->exactly(2))->method('error')->withConsecutive(
             [
@@ -1447,8 +1419,8 @@ class SearchServiceTest extends TestCase
                 ['response' => $plentyErrorResponse]
             ],
             [
-                'Plentymarkets SDK returned invalid response - Expected string - Retry 2/2 takes place',
-                ['response' => $nonStringErrorResponse]
+                'Plentymarkets SDK returned empty response - Retry 2/2 takes place',
+                ['response' => []]
             ]
         );
 

@@ -17,14 +17,37 @@ $classLoader->add('Findologic\Tests', __DIR__);
  */
 global $classInstances;
 $classInstances = [];
-if (!function_exists('pluginApp')) {
-    function pluginApp(string $class) {
+if (!function_exists('replaceInstanceByMock')) {
+    function replaceInstanceByMock(
+        string $abstract,
+        $mock
+    ) {
         global $classInstances;
-        if (!isset($classInstances[$class])) {
-            return null;
+        $classInstances[$abstract] = $mock;
+    }
+}
+if (!function_exists('pluginApp')) {
+    function pluginApp(
+        string $abstract,
+        array $parameters = []
+    ) {
+        try {
+            $reflector = new ReflectionClass($abstract);
+        } catch (ReflectionException $e) {
+            throw new Exception("Target class [$abstract] does not exist.", 0, $e);
         }
 
-        return $classInstances[$class];
+        global $classInstances;
+        if (isset($classInstances[$abstract])) {
+            return $classInstances[$abstract];
+        }
+
+        $constructor = $reflector->getConstructor();
+        if (is_null($constructor)) {
+            return new $abstract();
+        }
+
+        return new $abstract(...array_values($parameters));
     }
 }
 

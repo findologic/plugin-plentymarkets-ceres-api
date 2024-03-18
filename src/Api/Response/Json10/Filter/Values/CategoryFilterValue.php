@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Findologic\Api\Response\Json10\Filter\Values;
+
+class CategoryFilterValue extends FilterValue
+{
+    public ?bool $selected = false;
+
+    /** @var CategoryFilterValue[] */
+    public array $values = [];
+
+    public function isSelected(): ?bool
+    {
+        return $this->selected;
+    }
+
+    /**
+     * @return CategoryFilterValue[]
+     */
+    public function getValues(): array
+    {
+        if (empty($this->values)) {
+            return [];
+        }
+
+        return $this->values;
+    }
+
+    public function addValue(CategoryFilterValue $filter): CategoryFilterValue
+    {
+        $this->values[] = $filter;
+
+        return $this;
+    }
+
+    public function searchValue(string $needle): ?CategoryFilterValue
+    {
+        foreach ($this->values as $value) {
+            if ($value->getName() === $needle) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+}

@@ -30,29 +30,33 @@ describe('ItemRangeSlider', () => {
             findologicFilterType: 'range-slider',
             id: 'price',
             isMain: true,
-            itemCount: 0,
-            maxValue: 149,
-            minValue: 59,
+            pinnedFilterValueCount: 0,
+            max: 149,
+            min: 59,
             name: 'Price',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             step: 0.1,
             type: '',
             unit: '£',
+            totalRange : {
+                min : 59,
+                max : 149
+            },
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
-                    name:'59 - 99',
+                    name : '59 - 99',
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
-                    name: '119 - 149',
+                    name :  '119 - 149',
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };
@@ -94,29 +98,33 @@ describe('ItemRangeSlider', () => {
             findologicFilterType: 'range-slider',
             id: 'price',
             isMain: true,
-            itemCount: 0,
-            maxValue: 149,
-            minValue: 59,
+            pinnedFilterValueCount: 0,
+            max: 149,
+            min: 59,
             name: 'Price',
             noAvailableFiltersText: '',
-            select: 'single',
+            selectMode: 'single',
             step: 0.1,
             type: '',
             unit: '£',
+            totalRange : {
+                min : 59,
+                max : 149
+            },
             values: [
                 {
-                    count: 9,
+                    frequency: 9,
                     id: '20',
-                    name:'59 - 99',
+                    name : '59 - 99',
                     selected: false,
-                    items: []
+                    values: []
                 },
                 {
-                    count: 1,
+                    frequency: 1,
                     id: '21',
-                    name: '119 - 149',
+                    name : '119 - 149',
                     selected: false,
-                    items: []
+                    values: []
                 }
             ]
         };

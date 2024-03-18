@@ -6,9 +6,11 @@ use Ceres\Contexts\CategoryItemContext;
 use Findologic\Api\Response\Response;
 use Findologic\Services\SearchService;
 use IO\Helper\ContextInterface;
+use Plenty\Plugin\Log\Loggable;
 
 class FindologicCategoryItemContext extends CategoryItemContext implements ContextInterface
 {
+    use Loggable;
     public function init($params)
     {
         parent::init($params);
@@ -16,6 +18,9 @@ class FindologicCategoryItemContext extends CategoryItemContext implements Conte
         /** @var SearchService $searchService */
         $searchService = pluginApp(SearchService::class);
         $searchResults = $searchService->getResults();
-        $this->facets = $searchResults->getData(Response::DATA_FILTERS_WIDGETS);
+        $filtersExtension = $searchResults->getFiltersExtension();
+        $filters = $filtersExtension->getFilters();
+
+        $this->facets = $filters;
     }
 }

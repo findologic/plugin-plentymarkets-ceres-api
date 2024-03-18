@@ -2,17 +2,17 @@
 
 namespace Findologic\Api\Request;
 
+use Findologic\Helpers\Tags;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
-use Findologic\Api\Client;
-use Findologic\Helpers\Tags;
-use Findologic\Services\PluginInfoService;
-use Plenty\Log\Contracts\LoggerContract;
-use Plenty\Modules\System\Models\WebstoreConfiguration;
 use Plenty\Plugin\Log\LoggerFactory;
-use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Components\PluginConfig;
+use Plenty\Log\Contracts\LoggerContract;
+use Findologic\Services\PluginInfoService;
+use Plenty\Modules\Category\Models\Category;
 use IO\Services\WebstoreConfigurationService;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Modules\System\Models\WebstoreConfiguration;
 
 /**
  * Class RequestBuilder
@@ -20,6 +20,11 @@ use IO\Services\WebstoreConfigurationService;
  */
 class RequestBuilder
 {
+    public const TYPE_SEARCH = 0;
+    public const TYPE_NAVIGATION = 1;
+    public const TYPE_SUGGEST_V3 = 2;
+    public const TYPE_ALIVETEST = 3;
+    public const TYPE_ITEM_UPDATE = 4;
     const DEFAULT_REQUEST_TYPE = 'request';
     const ALIVE_REQUEST_TYPE = 'alive';
     const CATEGORY_REQUEST_TYPE = 'category';
@@ -42,11 +47,6 @@ class RequestBuilder
     protected $logger;
 
     /**
-     * @var Request|bool $request
-     */
-    protected $request;
-
-    /**
      * @var WebstoreConfiguration
      */
     private $webstoreConfig;
@@ -60,6 +60,8 @@ class RequestBuilder
      * @var PluginInfoService
      */
     private $pluginInfoService;
+
+    private $request = [];
 
     public function __construct(
         ParametersBuilder $parametersBuilder,
@@ -80,57 +82,27 @@ class RequestBuilder
     /**
      * @param HttpRequest $httpRequest
      * @param ExternalSearch $externalSearch
-     * @param int|null $category
-     * @return bool|Request
+     * @param Category|null $category
+     * @return array
      */
     public function build(HttpRequest $httpRequest, ExternalSearch $externalSearch, $category = null)
     {
-        $request = $this->createRequestObject();
-        $request = $this->setDefaultValues($request, $this->getRequestType($httpRequest, $category));
-        $request = $this->parametersBuilder->setSearchParams($request, $httpRequest, $externalSearch, $category);
+        $this->request['requestType'] = $this->getRequestType($httpRequest, $category);
+        $this->setDefaultValues($this->getRequestType($httpRequest, $category));
+        $this->request = array_merge($this->request, $this->parametersBuilder->setSearchParams($httpRequest, $externalSearch, $category));
 
-        return $request;
+        return $this->request;
     }
 
     /**
-     * @return bool|Request
+     * @return array
      */
     public function buildAliveRequest()
     {
-        $request = $this->createRequestObject();
-        $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT, 1);
-        $request->setUrl(
-            $this->getUrl(self::ALIVE_REQUEST_TYPE)
-        )->setParam('shopkey', $this->pluginConfig->getShopKey());
-
-        return $request;
-    }
-
-    /**
-     * @return Request
-     */
-    public function createRequestObject()
-    {
-        return pluginApp(Request::class);
-    }
-
-    /**
-     * @param string $type
-     * @return string
-     */
-    public function getUrl($type = self::DEFAULT_REQUEST_TYPE)
-    {
-        $url = self::SEARCH_SERVER_URL . $this->getShopUrl() . '/';
-
-        if ($type == self::ALIVE_REQUEST_TYPE) {
-            $url .= 'alivetest.php';
-        } elseif ($type == self::CATEGORY_REQUEST_TYPE) {
-            $url .= 'selector.php';
-        } else {
-            $url .= 'index.php';
-        }
-
-        return $url;
+        $this->request['shopUrl'] = $this->getShopUrl();
+        $this->request['shopKey'] = $this->pluginConfig->getShopKey();
+        $this->request['aliveRequest'] = true;
+        return $this->request;
     }
 
     /**
@@ -160,7 +132,7 @@ class RequestBuilder
     /**
      * @return string
      */
-    public function getPluginVersion()
+    public function getPluginVersion(): string
     {
         return Plugin::PLUGIN_VERSION;
     }
@@ -168,7 +140,7 @@ class RequestBuilder
     /**
      * @return string
      */
-    public function getShopUrl()
+    private function getShopUrl(): string
     {
         if (!empty($this->webstoreConfig->domainSsl)) {
             return preg_replace('(^https?://)', '', $this->webstoreConfig->domainSsl);
@@ -182,41 +154,35 @@ class RequestBuilder
     }
 
     /**
-     * @param Request $request
      * @param string $requestType
-     * @return Request
+     * @return RequestBuilder
      */
-    protected function setDefaultValues($request, $requestType)
+    protected function setDefaultValues(string $requestType): self
     {
-        $request->setUrl($this->getUrl($requestType));
-        $request->setParam('revision', $this->getPluginVersion());
-        $request->setParam('outputAdapter', Plugin::API_OUTPUT_ADAPTER);
-        $request->setParam('shopkey', $this->pluginConfig->getShopKey());
-        $request->setConfiguration(
-            Plugin::API_CONFIGURATION_KEY_CONNECTION_TIME_OUT,
-            Client::DEFAULT_CONNECTION_TIME_OUT
-        );
+        $this->request['shopUrl'] = $this->getShopUrl();
+        $this->request['shopKey'] = $this->pluginConfig->getShopKey();
+        $this->request['revision'] = $this->getPluginVersion();
 
         if ($this->getUserIp()) {
-            $request->setParam('userip', $this->getUserIp());
+            $this->request['userIp'] = $this->getUserIp();
         }
-        $request->setParam('shopType', self::SHOPTYPE);
-        $request->setParam('shopVersion', $this->pluginInfoService->getPluginVersion('ceres'));
+        $this->request['shopType'] = self::SHOPTYPE;
+        $this->request['shopVersion'] = $this->pluginInfoService->getPluginVersion('ceres');
 
-        return $request;
+        return $this;
     }
 
     /**
      * @param HttpRequest $httpRequest
-     * @param int|null $category
+     * @param Category|null $category
      * @return string
      */
-    protected function getRequestType($httpRequest, $category = null)
+    protected function getRequestType(HttpRequest $httpRequest, ?Category $category = null): string
     {
-        $requestType = $category ? self::CATEGORY_REQUEST_TYPE : self::DEFAULT_REQUEST_TYPE;
+        $requestType = $category ? self::TYPE_NAVIGATION : self::TYPE_SEARCH;
 
         if ($this->tagsHelper->isTagPage($httpRequest)) {
-            $requestType = self::CATEGORY_REQUEST_TYPE;
+            $requestType = self::TYPE_NAVIGATION;
         }
 
         return $requestType;

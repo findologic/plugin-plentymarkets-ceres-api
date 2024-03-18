@@ -4,7 +4,6 @@ namespace Findologic\Containers;
 
 use Plenty\Plugin\Templates\Twig;
 use Findologic\Services\SearchService;
-use Findologic\Api\Response\Response;
 
 /**
  * Class PromotionContainer
@@ -28,7 +27,7 @@ class PromotionContainer
         return $twig->render(
             'Findologic::Category.Item.Partials.Promotion',
             [
-                'promotion' => $searchResults->getData(Response::DATA_PROMOTION)
+                'promotion' => $searchResults->getPromotionExtension()
             ]
         );
     }
