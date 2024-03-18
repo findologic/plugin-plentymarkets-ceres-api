@@ -24,7 +24,7 @@
             :width="value.media.url ? '80px' : ''"
             @error="handleImageError($event, value)"
           >
-          <span v-text="value.translated.name" />
+          <span v-text="value.name" />
         </label>
         <div
           v-if="value.frequency"
@@ -77,7 +77,7 @@ export default defineComponent({
     const isLoading = computed(() => root.$store.state.isLoading);
 
     const updateFacet = (facetValue: FacetValue): void => {
-      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
+      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
     };
 
     const injectSvgImages = async () => {

@@ -40,14 +40,14 @@ describe('FindologicItemFilter', () => {
         {
           frequency: 9,
           id: '20',
-          translated: { name : '22220' },
+          name : '22220',
           selected: false,
           values: []
         },
         {
           frequency: 1,
           id: '21',
-          translated: { name : '22221' },
+          name : '22221',
           selected: false,
           values: []
         }
@@ -164,14 +164,14 @@ describe('FindologicItemFilter', () => {
         {
           frequency: 9,
           id: '20',
-          translated: { name : '22220' },
+          name : '22220',
           selected: false,
           values: []
         },
         {
           frequency: 1,
           id: '21',
-          translated: { name : '22221' },
+          name : '22221',
           selected: false,
           values: []
         }
@@ -218,14 +218,14 @@ describe('FindologicItemFilter', () => {
           frequency: 4,
           id: '4',
           values: [],
-          translated: { name : 'Living Room' },
+          name : 'Living Room',
           selected: false
         },
         {
           frequency: 1,
           id: '21',
           values: [],
-          translated: { name : 'Office' },
+          name : 'Office',
           selected: false
         }
       ]
@@ -273,7 +273,7 @@ describe('FindologicItemFilter', () => {
           frequency: 4,
           colorHexCode: '#0000FF',
           id: '10',
-          translated: { name : 'blue' },
+          name : 'blue',
           selected: false,
           values: []
         },
@@ -282,12 +282,12 @@ describe('FindologicItemFilter', () => {
           frequency: 5,
           colorHexCode: '#FF0000',
           id: '11',
-          translated: { name : 'red' },
+          name : 'red',
           selected: false,
           values: []
         },
         {
-          translated: { name : 'Unknown' },
+          name : 'Unknown',
           colorHexCode: null,
           id: '12',
           selected: false,
@@ -337,7 +337,7 @@ describe('FindologicItemFilter', () => {
             {
               frequency: 9,
               id: '20',
-              translated : { name: '22220' },
+              name: '22220',
               selected: false
             }
           ]
@@ -362,7 +362,7 @@ describe('FindologicItemFilter', () => {
               frequency: 4,
               id: '4',
               values: [],
-              translated: { name : 'Living Room' },
+              name : 'Living Room',
               selected: false
             }
           ]
@@ -388,7 +388,7 @@ describe('FindologicItemFilter', () => {
               frequency: 5,
               colorHexCode: '#FF0000',
               id: '11',
-              translated: { name : 'red' },
+              name : 'red',
               selected: false
             }
           ]

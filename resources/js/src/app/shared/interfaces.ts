@@ -39,14 +39,10 @@ export interface Media {
     url?: string;
 }
 
-export interface TranslatedName {
-    name?: string;
-}
-
 export interface FacetValue {
     frequency?: number;
     id?: string;
-    translated: TranslatedName;
+    name: string;
     media?: Media;
     selected: boolean;
     values: FacetValue[];

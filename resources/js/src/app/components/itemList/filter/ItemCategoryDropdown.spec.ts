@@ -38,14 +38,14 @@ describe('ItemCategoryDropdown', () => {
                     frequency: 4,
                     id: '4',
                     values: [],
-                    translated: { name : 'Living Room' },
+                    name : 'Living Room',
                     selected: false
                 },
                 {
                     frequency: 1,
                     id: '21',
                     values: [],
-                    translated: { name : 'Office' },
+                    name : 'Office',
                     selected: false
                 }
             ]
@@ -87,18 +87,18 @@ describe('ItemCategoryDropdown', () => {
                             frequency: 2,
                             id: '5',
                             values: [],
-                            translated: { name : 'Armchairs & Stools' },
+                            name : 'Armchairs & Stools',
                             selected: false
                         },
                         {
                             frequency: 2,
                             id: '6',
                             values: [],
-                            translated: { name : 'Sofas' },
+                            name : 'Sofas',
                             selected: false
                         }
                     ],
-                    translated: { name : 'Living Room' },
+                    name : 'Living Room',
                     selected: true
                 }
             ]
@@ -110,7 +110,7 @@ describe('ItemCategoryDropdown', () => {
             facets: [facet]
         };
 
-        UrlBuilder.getSelectedFilters = jest.fn(() => [{ id: 'cat', name: 'Living Room' }]);
+        UrlBuilder.getSelectedFilters = jest.fn(() => [{ id: 'cat', name: 'Living Room'}]);
 
         const wrapper = shallowMount(ItemCategoryDropdown, { propsData: { facet }, store, localVue });
         await localVue.nextTick();
@@ -148,18 +148,18 @@ describe('ItemCategoryDropdown', () => {
                             frequency: 2,
                             id: '5',
                             values: [],
-                            translated: { name : 'Armchairs & Stools' },
+                            name : 'Armchairs & Stools',
                             selected: false
                         },
                         {
                             frequency: 2,
                             id: '6',
                             values: [],
-                            translated: { name : 'Sofas' },
+                            name : 'Sofas',
                             selected: false
                         }
                     ],
-                    translated: { name : 'Living Room' },
+                    name : 'Living Room',
                     selected: false
                 },
                 {
@@ -170,18 +170,18 @@ describe('ItemCategoryDropdown', () => {
                             frequency: 2,
                             id: '8',
                             values: [],
-                            translated: { name : 'Something' },
+                            name : 'Something',
                             selected: false
                         },
                         {
                             frequency: 2,
                             id: '9',
                             values: [],
-                            translated: { name : 'Something else' },
+                            name : 'Something else',
                             selected: false
                         }
                     ],
-                    translated: { name : 'Not Living Room' },
+                    name : 'Not Living Room',
                     selected: false
                 }
             ]

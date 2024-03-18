@@ -24,7 +24,13 @@ class ApiResponse extends Json10Response implements Arrayable
     {
         return [
             'result' => (new ApiResult($this->result))->toArray(),
-            'request' => array_merge((array)$this->request, ['order' => (array)$this->request->getOrder()])
+            'request' => [
+                'query' => $this->request->getQuery(),
+                'first' => $this->request->getFirst(),
+                'count' => $this->request->getCount(),
+                'serviceId' => $this->request->getServiceId(),
+                'usergroup' => $this->request->getUsergroup()
+            ]
         ];
     }
 }

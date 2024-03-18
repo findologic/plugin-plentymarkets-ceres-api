@@ -36,14 +36,14 @@ describe('ItemDropdown', () => {
                 {
                     frequency: 9,
                     id: '20',
-                    translated: { name : '22220' },
+                    name : '22220',
                     selected: false,
                     values: []
                 },
                 {
                     frequency: 1,
                     id: '21',
-                    translated: { name: '22221' },
+                    name: '22221',
                     selected: false,
                     values: []
                 }
@@ -76,14 +76,14 @@ describe('ItemDropdown', () => {
                 {
                     frequency: 9,
                     id: '20',
-                    translated: { name : '22220' },
+                    name : '22220',
                     selected: false,
                     values: []
                 },
                 {
                     frequency: 1,
                     id: '21',
-                    translated: { name : '22221' },
+                    name : '22221',
                     selected: false,
                     values: []
                 }
@@ -118,14 +118,14 @@ describe('ItemDropdown', () => {
                 {
                     frequency: 9,
                     id: '20',
-                    translated: { name: '22220' },
+                    name: '22220',
                     selected: false,
                     values: []
                 },
                 {
                     frequency: 1,
                     id: '21',
-                    translated: { name: '22221' },
+                    name: '22221',
                     selected: false,
                     values: []
                 }

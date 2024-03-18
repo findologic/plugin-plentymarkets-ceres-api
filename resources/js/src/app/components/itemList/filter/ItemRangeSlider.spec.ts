@@ -47,14 +47,14 @@ describe('ItemRangeSlider', () => {
                 {
                     frequency: 9,
                     id: '20',
-                    translated: { name : '59 - 99' },
+                    name : '59 - 99',
                     selected: false,
                     values: []
                 },
                 {
                     frequency: 1,
                     id: '21',
-                    translated: { name :  '119 - 149' },
+                    name :  '119 - 149',
                     selected: false,
                     values: []
                 }
@@ -115,14 +115,14 @@ describe('ItemRangeSlider', () => {
                 {
                     frequency: 9,
                     id: '20',
-                    translated: { name : '59 - 99' },
+                    name : '59 - 99',
                     selected: false,
                     values: []
                 },
                 {
                     frequency: 1,
                     id: '21',
-                    translated: { name : '119 - 149' },
+                    name : '119 - 149',
                     selected: false,
                     values: []
                 }

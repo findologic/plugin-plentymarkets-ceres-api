@@ -188,7 +188,7 @@ abstract class Filter extends BaseFilter
             foreach ($levels as $level) {
                 if (!$foundValue = $currentValue->searchValue($level)) {
                     $foundValue = pluginApp(CategoryFilterValue::class, [null, $item]);
-                    $foundValue->setTranslated(pluginApp(TranslatedName::class, [$level]));
+                    $foundValue->setName($level);
                     $foundValue->setSelected($item->isSelected());
                     $foundValue->setFrequency($item->getFrequency());
 

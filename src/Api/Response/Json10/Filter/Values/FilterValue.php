@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Findologic\Api\Response\Json10\Filter\Values;
 
-use Findologic\Api\Response\Json10\Filter\TranslatedName;
 use Findologic\Api\Response\Result\Filter as ResultFilter;
 use Findologic\Api\Response\Result\FilterValue as ResultFilterValue;
 
 class FilterValue
 {
-    public TranslatedName $translated;
-
     public ?string $id;
 
     public ?int $frequency;
@@ -20,11 +17,13 @@ class FilterValue
 
     public ?float $weight;
 
+    public ?string $name;
+
     public function __construct(
         ?ResultFilter $filter,
         ResultFilterValue $filterValue
     ) {
-        $this->translated = pluginApp(TranslatedName::class, [$filterValue->getName()]);
+        $this->name = $filterValue->getName();
         $this->frequency = $filterValue->getFrequency();
         $this->selected = $filterValue->isSelected();
         $this->weight = $filterValue->getWeight();
@@ -34,11 +33,6 @@ class FilterValue
     public function getId(): ?string
     {
         return $this->id;
-    }
-
-    public function getTranslated(): TranslatedName
-    {
-        return $this->translated;
     }
 
     public function getFrequency(): ?int
@@ -81,6 +75,13 @@ class FilterValue
     public function setWeight($weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
 
         return $this;
     }

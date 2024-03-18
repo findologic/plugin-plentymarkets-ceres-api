@@ -93,7 +93,7 @@ export default defineComponent({
         return Number.MAX_SAFE_INTEGER;
       }
 
-      const maxValue = facet.values[facet.values?.length - 1].translated.name.split(' - ')[1];
+      const maxValue = facet.values[facet.values?.length - 1].name.split(' - ')[1];
 
       return maxValue ? parseFloat(maxValue) : Number.MAX_SAFE_INTEGER;
     };

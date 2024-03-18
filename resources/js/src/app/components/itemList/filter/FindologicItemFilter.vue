@@ -78,7 +78,7 @@
           :for="'option-' + value.id"
           class="form-check-label"
           rel="nofollow"
-          v-text="value.translated.name"
+          v-text="value.name"
         />
         <div
           v-if="value.frequency"
@@ -167,13 +167,13 @@ export default defineComponent({
     const isLoading = computed(() => store.itemList?.isLoading || false);
 
     const updateFacet = (facetValue: FacetValue): void => {
-      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.translated.name);
+      UrlBuilder.updateSelectedFilters(props.facet, props.facet.id, facetValue.name);
     };
 
     const getSubCategoryValue = (parentCategory: FacetValue, subCategory: Facet): FacetValue => {
       return {
         id: subCategory.id,
-        name: parentCategory.translated.name + '_' + subCategory.translated.name
+        name: parentCategory.name + '_' + subCategory.name
       } as FacetValue;
     };
 

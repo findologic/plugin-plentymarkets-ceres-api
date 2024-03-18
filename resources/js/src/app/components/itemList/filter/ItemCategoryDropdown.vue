@@ -38,7 +38,7 @@
             :for="'option-' + category.id"
             :class="{'form-check-label': categoryIsSelected}"
             rel="nofollow"
-            v-text="category.translated.name"
+            v-text="category.name"
           />
           <div
             v-if="!isCategorySelected(category) && category.frequency"
@@ -67,7 +67,7 @@
                 :for="'option-' + subcategory.id"
                 :class="{'form-check-label': isCategorySelected(subcategory)}"
                 rel="nofollow"
-                v-text="subcategory.translated.name"
+                v-text="subcategory.name"
               />
               <div
                 v-if="!isCategorySelected(subcategory) && subcategory.frequency"
@@ -135,7 +135,7 @@ export default defineComponent({
     const comCategories = computed((): FacetValue[] | undefined  => {
       if (
           typeof props.currentCategory !== 'undefined' &&
-          props.facet.values?.[0].translated.name === props.currentCategory[0].name
+          props.facet.values?.[0].name === props.currentCategory[0].name
       ) {
         return props.facet.values?.[0].values;
       }
@@ -144,12 +144,12 @@ export default defineComponent({
     });
 
     const getSubCategoryName = (parentCategory: FacetValue, subCategory: FacetValue): string => {
-      return getParentCategoryName(parentCategory) + '_' + subCategory.translated.name;
+      return getParentCategoryName(parentCategory) + '_' + subCategory.name;
     };
 
     const getParentCategoryName = (category: FacetValue): string | undefined => {
-      if (typeof props.currentCategory === 'undefined' || props.currentCategory[0].name === category.translated.name) {
-        return category.translated.name;
+      if (typeof props.currentCategory === 'undefined' || props.currentCategory[0].name === category.name) {
+        return category.name;
       }
     };
 
@@ -173,7 +173,7 @@ export default defineComponent({
       }
 
       return typeof splittedSelectedCategories?.find(
-          categoryName => categoryName.trim() === category.translated.name) !== 'undefined';
+          categoryName => categoryName.trim() === category.name) !== 'undefined';
     };
 
     onMounted(() => {

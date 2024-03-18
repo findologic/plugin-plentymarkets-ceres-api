@@ -11,14 +11,14 @@
         :checked="value.selected"
         class="form-check-input hidden-xs-up"
         type="checkbox"
-        @change="selected(value.translated.name)"
-        @click="selected(value.translated.name)"
+        @change="selected(value.name)"
+        @click="selected(value.name)"
       >
       <label
         :for="'option-' + value.id"
         class="form-check-label"
         rel="nofollow"
-        v-text="value.translated.name"
+        v-text="value.name"
       />
       <div
         v-if="value.frequency"
@@ -44,7 +44,7 @@
           class="fl-dropdown-item"
           :class="{'form-check-label': !value.selected}"
           rel="nofollow"
-          @click="selected(value.translated.name)"
+          @click="selected(value.name)"
         >
           <input
             :id="'option-' + value.id"
@@ -57,7 +57,7 @@
             :for="'option-' + value.id"
             :class="{'form-check-label': value.selected}"
             rel="nofollow"
-            v-text="value.translated.name"
+            v-text="value.name"
           />
           <div
             v-if="value.frequency"

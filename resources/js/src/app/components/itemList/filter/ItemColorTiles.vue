@@ -9,17 +9,17 @@
         <label
           class="fl-color-tile-label"
           rel="nofollow"
-          @click="tileClicked(colorValue.translated.name)"
+          @click="tileClicked(colorValue.name)"
         >
           <div
             class="fl-color-tile-background"
             :style="{backgroundColor: colorValue.colorHexCode}"
-            :title="colorValue.translated.name"
+            :title="colorValue.name"
           >
             <img
               v-if="(!colorValue.media || !colorValue.media.url) && !colorValue.colorHexCode"
               class="fl-color-tile-image"
-              :alt="colorValue.translated.name"
+              :alt="colorValue.name"
               :src="fallbackImage"
             >
             <img
