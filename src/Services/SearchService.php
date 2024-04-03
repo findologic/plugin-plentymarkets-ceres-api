@@ -3,27 +3,27 @@
 namespace Findologic\Services;
 
 use Exception;
-use Findologic\Api\Request\Request;
-use Findologic\Api\Request\RequestBuilder;
-use Findologic\Api\Response\Response;
-use Findologic\Api\Response\ResponseParser;
-use Findologic\Api\Client;
-use Findologic\Constants\Plugin;
-use Findologic\Exception\AliveException;
-use Findologic\Services\Search\ParametersHandler;
-use Ceres\Helper\ExternalSearch;
-use Ceres\Helper\ExternalSearchOptions;
 use IO\Helper\Utils;
-use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
+use Findologic\Api\Client;
+use Findologic\Traits\Loggable;
+use Ceres\Helper\ExternalSearch;
+use Findologic\Constants\Plugin;
+use IO\Services\CategoryService;
+use Findologic\Api\Request\Request;
+use Plenty\Plugin\ConfigRepository;
+use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Api\Response\Response;
+use Ceres\Helper\ExternalSearchOptions;
+use Findologic\Exception\AliveException;
+use Plenty\Log\Contracts\LoggerContract;
+use Findologic\Api\Request\RequestBuilder;
+use Findologic\Api\Response\ResponseParser;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Services\Search\ParametersHandler;
+use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
 use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
-use Plenty\Plugin\ConfigRepository;
-use Plenty\Plugin\Http\Request as HttpRequest;
-use Plenty\Plugin\Log\Loggable;
-use Plenty\Plugin\Log\LoggerFactory;
-use Plenty\Log\Contracts\LoggerContract;
-use IO\Services\CategoryService;
-use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
+use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
 
 /**
  * Class SearchService
@@ -297,9 +297,11 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
-
+        $this->getLogger(__METHOD__)->debug('log.debuglog', ['url' => $apiRequest->getUrl()]);
+        
         $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
-
+        $this->getLogger(__METHOD__)->debug('log.debuglog', ['results' => $this->results]);
+        $this->getLogger(__METHOD__)->error(json_encode($this->results), []);
         return $this->results;
     }
 
@@ -596,7 +598,7 @@ class SearchService implements SearchServiceInterface
         $i = 0;
         do {
             $responseData = $this->client->call($request);
-
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['$responseData' => json_decode($responseData)]);
             $error = $this->validateResponse($responseData);
             if (!$error) {
                 return $responseData;

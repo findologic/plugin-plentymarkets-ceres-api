@@ -40,49 +40,34 @@ class ResponseParser
         /** @var Response $response */
         $response = $this->createResponseObject();
 
-        if (!is_string($responseData) || $responseData === '') {
-            $msg = sprintf(
-                'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
-                SearchService::MAX_RETRIES
-            );
-            $this->logger->error($msg, ['response' => $responseData]);
+        // if (!is_string($responseData) || $responseData === '') {
+        //     $msg = sprintf(
+        //         'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
+        //         SearchService::MAX_RETRIES
+        //     );
+        //     $this->logger->error($msg, ['response' => $responseData]);
 
-            return $response;
-        }
+        //     return $response;
+        // }
+
 
         try {
-            $data = $this->loadXml($responseData);
-            $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data));
-            $response->setData(Response::DATA_SERVERS, $this->parseServers($data));
-            $response->setData(Response::DATA_QUERY, $this->parseQuery($data));
-            $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data));
-            $response->setData(Response::DATA_RESULTS, $this->parseResults($data));
-            $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data));
-            $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->filters));
-            $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->filters));
+            $data = json_decode($responseData);
+            $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data->result));
+            // $response->setData(Response::DATA_SERVERS, $this->parseServers($data->result));
+            $response->setData(Response::DATA_QUERY, $this->parseQuery($data->request));
+            $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data->result));
+            $response->setData(Response::DATA_RESULTS, $this->parseResults($data->request));
+            $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data->result));
+            // $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->filters));
+            // $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->filters));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
         } catch (Exception $e) {
-            $this->logger->error('Parsing XML failed', ['xmlString' => $responseData]);
+            $this->logger->error('Parsing JSON failed', ['jsonString' => $responseData]);
             $this->logger->logException($e);
         }
 
         return $response;
-    }
-
-    /**
-     * @param string $xmlString
-     * @return SimpleXMLElement
-     * @throws Exception
-     */
-    public function loadXml($xmlString = '')
-    {
-        $parsedXml = simplexml_load_string($xmlString);
-
-        if (!$parsedXml) {
-            throw new Exception('Error while parsing XML');
-        }
-
-        return $parsedXml;
     }
 
     public function createResponseObject(): Response
@@ -90,127 +75,103 @@ class ResponseParser
         return pluginApp(Response::class);
     }
 
+    // /**
+    //  * @param SimpleXMLElement $data
+    //  * @return array
+    //  */
+    // protected function parseServers(SimpleXMLElement $data)
+    // {
+    //     $servers = [];
+
+    //     if (!empty($data->servers)) {
+    //         $servers['frontend'] = $data->servers->frontend->__toString();
+    //         $servers['backend'] = $data->servers->backend->__toString();
+    //     }
+
+    //     return $servers;
+    // }
+
     /**
-     * @param SimpleXMLElement $data
+     * @param object $data
      * @return array
      */
-    protected function parseServers(SimpleXMLElement $data)
-    {
-        $servers = [];
-
-        if (!empty($data->servers)) {
-            $servers['frontend'] = $data->servers->frontend->__toString();
-            $servers['backend'] = $data->servers->backend->__toString();
-        }
-
-        return $servers;
-    }
-
-    /**
-     * @param SimpleXMLElement $data
-     * @return array
-     */
-    protected function parseQuery(SimpleXMLElement $data)
+    protected function parseQuery(object $data)
     {
         $query = [];
 
         if (!empty($data->query)) {
-            $query['query'] = $data->query->queryString->__toString();
-            $query['searchedWordCount'] = $data->query->searchWordCount->__toString();
-            $query['foundWordCount'] = $data->query->foundWordCount->__toString();
+            $query['query'] = $data->query;
+            $query['searchedWordCount'] = $data->searchWordCount;
+            $query['foundWordCount'] = $data->foundWordCount;
 
-            $query['first'] = $data->query->limit['first']->__toString();
-            $query['count'] = $data->query->limit['count']->__toString();
+            $query['first'] = $data->first;
+            $query['count'] = $data->count;
         }
 
         return $query;
     }
 
     /**
-     * @param SimpleXMLElement $data
+     * @param object $data
      * @return string|null
      */
-    protected function parseLandingPage(SimpleXMLElement $data)
+    protected function parseLandingPage(object $data)
     {
-        if (!isset($data->landingPage)
-            || empty($data->landingPage->attributes())
-            || !isset($data->landingPage->attributes()->link)
-        ) {
-            return null;
-        }
-
-        return $data->landingPage->attributes()->link->__toString();
+        return $data->metadata->landingPage ?: null;
     }
 
     /**
-     * @param SimpleXMLElement $data
+     * @param object $data
      * @return array
      */
-    protected function parsePromotion(SimpleXMLElement $data)
+    protected function parsePromotion(object $data)
     {
         $promotion = [];
 
-        if (isset($data->promotion) && !empty($data->promotion->attributes())) {
-            $promotion['image'] = $data->promotion->attributes()->image->__toString();
-            $promotion['link'] = $data->promotion->attributes()->link->__toString();
+        if (isset($data->metadata->promotion)) {
+            $promotion['image'] = $data->metadata->promotion->imageUrl;
+            $promotion['link'] = $data->metadata->promotion->url;
         }
 
         return $promotion;
     }
 
     /**
-     * @param SimpleXMLElement $data
+     * @param object $data
      * @return array
      */
-    protected function parseResults(SimpleXMLElement $data)
+    protected function parseResults(object $data)
     {
         $results = [];
 
-        if (!empty($data->results)) {
-            $results['count'] = $data->results->count->__toString();
+        if (isset($data->metadata->totalResults)) {
+            $results['count'] = $data->metadata->totalResults;
         }
 
         return $results;
     }
 
     /**
-     * @param SimpleXMLElement $data
+     * @param object $data
      * @return array
      */
-    protected function parseProducts(SimpleXMLElement $data)
+    protected function parseProducts(object $data)
     {
-        $products = [];
-
-        if (!empty($data->products)) {
-            foreach ($data->products->product as $product) {
-                $productData = [
-                    'id' => $product['id']->__toString(),
-                    'relevance' => $product['relevance']->__toString(),
-                ];
-
-                foreach ($product->properties->property as $property) {
-                    $productData['properties'][$property['name']->__toString()] = $property->__toString();
-                }
-
-                $products[] = $productData;
-            }
-        }
-
-        return $products;
+        return $data->items ?: [];
     }
 
-    protected function parseQueryInfoMessage(HttpRequest $request, SimpleXMLElement $data): array
+    protected function parseQueryInfoMessage(HttpRequest $request, object $data): array
     {
-        if (empty($data->query)) {
+        if (empty($data->request->query)) {
             return [];
         }
 
-        $originalQuery = isset($data->query->originalQuery) ? $data->query->originalQuery->__toString() : null;
-        $didYouMeanQuery = isset($data->query->didYouMeanQuery) ? $data->query->didYouMeanQuery->__toString() : null;
-        $currentQuery = isset($data->query->queryString) ? $data->query->queryString->__toString() : null;
-        $queryStringType = isset($data->query->queryString->attributes()->type)
-            ? $data->query->queryString->attributes()->type->__toString()
-            : null;
+        $originalQuery = $data->request->query ?: null;
+        $didYouMeanQuery = $data->result->variant->didYouMeanQuery ?: null;
+        $currentQuery = $data->result->metadata->effectiveQuery ?: null;
+        // $queryStringType = isset($data->query->queryString->attributes()->type)
+        //     ? $data->query->queryString->attributes()->type->__toString()
+        //     : null;
 
         $requestParams = (array) $request->all();
 
@@ -218,7 +179,7 @@ class ResponseParser
             'originalQuery' => $originalQuery,
             'didYouMeanQuery' => $didYouMeanQuery,
             'currentQuery' => $currentQuery,
-            'queryStringType' => $queryStringType,
+            'queryStringType' => null,
             'selectedCategoryName' => $this->getSelectedCategoryName($requestParams),
             'selectedVendorName' => $this->getSelectedVendorName($requestParams),
             'shoppingGuide' => $this->getShoppingGuide($requestParams)
