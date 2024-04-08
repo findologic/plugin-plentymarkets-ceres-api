@@ -6,6 +6,7 @@ use Exception;
 use Findologic\Api\Response\Parser\FiltersParser;
 use Findologic\Constants\Plugin;
 use Findologic\Services\SearchService;
+use Findologic\Traits\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
 use SimpleXMLElement;
@@ -17,6 +18,7 @@ use Plenty\Plugin\Http\Request as HttpRequest;
  */
 class ResponseParser
 {
+    use Loggable;
     /**
      * @var FiltersParser
      */
@@ -53,14 +55,16 @@ class ResponseParser
 
         try {
             $data = json_decode($responseData);
+            $this->getLogger(__METHOD__)->error(json_encode($data->result->filters), []);
             $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data->result));
             // $response->setData(Response::DATA_SERVERS, $this->parseServers($data->result));
             $response->setData(Response::DATA_QUERY, $this->parseQuery($data->request));
             $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data->result));
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data->request));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data->result));
-            // $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->filters));
-            // $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->filters));
+            
+            $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->result->filters));
+            $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->result->filters));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
         } catch (Exception $e) {
             $this->logger->error('Parsing JSON failed', ['jsonString' => $responseData]);
@@ -168,10 +172,18 @@ class ResponseParser
 
         $originalQuery = $data->request->query ?: null;
         $didYouMeanQuery = $data->result->variant->didYouMeanQuery ?: null;
+        $improvedQuery = $data->result->variant->improvedQuery ?: null;
+        $correctedQuery = $data->result->variant->correctedQuery ?: null;
         $currentQuery = $data->result->metadata->effectiveQuery ?: null;
-        // $queryStringType = isset($data->query->queryString->attributes()->type)
-        //     ? $data->query->queryString->attributes()->type->__toString()
-        //     : null;
+
+        $queryStringType = null;
+
+        if($improvedQuery){
+            $queryStringType = 'improved';
+        }
+        else if($correctedQuery){
+            $queryStringType = 'corrected';
+        }
 
         $requestParams = (array) $request->all();
 
@@ -179,7 +191,7 @@ class ResponseParser
             'originalQuery' => $originalQuery,
             'didYouMeanQuery' => $didYouMeanQuery,
             'currentQuery' => $currentQuery,
-            'queryStringType' => null,
+            'queryStringType' => $queryStringType,
             'selectedCategoryName' => $this->getSelectedCategoryName($requestParams),
             'selectedVendorName' => $this->getSelectedVendorName($requestParams),
             'shoppingGuide' => $this->getShoppingGuide($requestParams)

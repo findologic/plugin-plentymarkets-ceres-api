@@ -301,7 +301,7 @@ class SearchService implements SearchServiceInterface
         
         $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
         $this->getLogger(__METHOD__)->debug('log.debuglog', ['results' => $this->results]);
-        $this->getLogger(__METHOD__)->error(json_encode($this->results), []);
+        // $this->getLogger(__METHOD__)->error(json_encode($this->results), []);
         return $this->results;
     }
 
