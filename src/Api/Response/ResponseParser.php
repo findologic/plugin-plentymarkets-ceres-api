@@ -54,23 +54,26 @@ class ResponseParser
 
 
         try {
-            $data = json_decode($responseData);
-            $this->getLogger(__METHOD__)->error(json_encode($data->result->filters), []);
-            $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data->result));
-            // $response->setData(Response::DATA_SERVERS, $this->parseServers($data->result));
-            $response->setData(Response::DATA_QUERY, $this->parseQuery($data->request));
-            $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data->result));
-            $response->setData(Response::DATA_RESULTS, $this->parseResults($data->request));
-            $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data->result));
-            
+            $data = json_decode($responseData, true);
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filters' => $data['result']['filters']]);
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filt2' => $this->filtersParser->parse($data['result']['filters'])]);
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filt3' => $this->filtersParser->parseForWidgets($data['result']['filters'])]);
+
+            $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data['result']));
+            $response->setData(Response::DATA_SERVERS, []);
+            $response->setData(Response::DATA_QUERY, $this->parseQuery($data['request']));
+            $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data['result']));
+            $response->setData(Response::DATA_RESULTS, $this->parseResults($data['request']));
+            $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data['result']));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->result->filters));
             $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->result->filters));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
+            
         } catch (Exception $e) {
             $this->logger->error('Parsing JSON failed', ['jsonString' => $responseData]);
             $this->logger->logException($e);
         }
-
+        $this->getLogger(__METHOD__)->debug('log.debuglog', ['response' => json_encode($response)]);
         return $response;
     }
 
@@ -79,110 +82,96 @@ class ResponseParser
         return pluginApp(Response::class);
     }
 
-    // /**
-    //  * @param SimpleXMLElement $data
-    //  * @return array
-    //  */
-    // protected function parseServers(SimpleXMLElement $data)
-    // {
-    //     $servers = [];
-
-    //     if (!empty($data->servers)) {
-    //         $servers['frontend'] = $data->servers->frontend->__toString();
-    //         $servers['backend'] = $data->servers->backend->__toString();
-    //     }
-
-    //     return $servers;
-    // }
-
     /**
-     * @param object $data
+     * @param array $data
      * @return array
      */
-    protected function parseQuery(object $data)
+    protected function parseQuery(array $data)
     {
         $query = [];
 
-        if (!empty($data->query)) {
-            $query['query'] = $data->query;
-            $query['searchedWordCount'] = $data->searchWordCount;
-            $query['foundWordCount'] = $data->foundWordCount;
+        if (!empty($data['query'])) {
+            $query['query'] = $data['query'];
+            $query['searchedWordCount'] = $data['searchWordCount'];
+            $query['foundWordCount'] = $data['foundWordCount'];
 
-            $query['first'] = $data->first;
-            $query['count'] = $data->count;
+            $query['first'] = $data['first'];
+            $query['count'] = $data['count'];
         }
 
         return $query;
     }
 
     /**
-     * @param object $data
+     * @param array $data
      * @return string|null
      */
-    protected function parseLandingPage(object $data)
+    protected function parseLandingPage(array $data)
     {
-        return $data->metadata->landingPage ?: null;
+        return $data['metadata']['landingPage'] ?: null;
     }
 
     /**
-     * @param object $data
+     * @param array $data
      * @return array
      */
-    protected function parsePromotion(object $data)
+    protected function parsePromotion(array $data)
     {
         $promotion = [];
 
-        if (isset($data->metadata->promotion)) {
-            $promotion['image'] = $data->metadata->promotion->imageUrl;
-            $promotion['link'] = $data->metadata->promotion->url;
+        if (isset($data['metadata']['promotion'])) {
+            $promotion['image'] = $data['metadata']['promotion']['imageUrl'];
+            $promotion['link'] = $data['metadata']['promotion']['url'];
         }
 
         return $promotion;
     }
 
     /**
-     * @param object $data
+     * @param array $data
      * @return array
      */
-    protected function parseResults(object $data)
+    protected function parseResults(array $data)
     {
         $results = [];
 
-        if (isset($data->metadata->totalResults)) {
-            $results['count'] = $data->metadata->totalResults;
+        if (isset($data['metadata']['totalResults'])) {
+            $results['count'] = $data['metadata']['totalResults'];
         }
 
         return $results;
     }
 
     /**
-     * @param object $data
+     * @param array $data
      * @return array
      */
-    protected function parseProducts(object $data)
+    protected function parseProducts(array $data)
     {
-        return $data->items ?: [];
+        return $data['items'] ?: [];
     }
 
-    protected function parseQueryInfoMessage(HttpRequest $request, object $data): array
+    protected function parseQueryInfoMessage(HttpRequest $request, array $data): array
     {
-        if (empty($data->request->query)) {
+        if (empty($data['request']['query'])) {
             return [];
         }
 
-        $originalQuery = $data->request->query ?: null;
-        $didYouMeanQuery = $data->result->variant->didYouMeanQuery ?: null;
-        $improvedQuery = $data->result->variant->improvedQuery ?: null;
-        $correctedQuery = $data->result->variant->correctedQuery ?: null;
-        $currentQuery = $data->result->metadata->effectiveQuery ?: null;
+        $originalQuery = $data['request']['query'] ?: null;
+        $didYouMeanQuery = $data['result']['variant']['didYouMeanQuery'] ?: null;
+        $improvedQuery = $data['result']['variant']['improvedQuery'] ?: null;
+        $correctedQuery = $data['result']['variant']['correctedQuery'] ?: null;
+        $currentQuery = $data['result']['metadata']['effectiveQuery'] ?: null;
 
         $queryStringType = null;
 
         if($improvedQuery){
             $queryStringType = 'improved';
+            $currentQuery = $improvedQuery;
         }
         else if($correctedQuery){
             $queryStringType = 'corrected';
+            $currentQuery = $correctedQuery;
         }
 
         $requestParams = (array) $request->all();

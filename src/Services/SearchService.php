@@ -297,10 +297,9 @@ class SearchService implements SearchServiceInterface
             $externalSearch,
             $categoryService ? $categoryService->getCurrentCategory() : null
         );
-        $this->getLogger(__METHOD__)->debug('log.debuglog', ['url' => $apiRequest->getUrl()]);
         
         $this->results = $this->responseParser->parse($request, $this->requestWithRetries($apiRequest));
-        $this->getLogger(__METHOD__)->debug('log.debuglog', ['results' => $this->results]);
+        $this->getLogger(__METHOD__)->debug('log.debuglog', ['results' => $this->results->getData(Response::DATA_FILTERS_WIDGETS)]);
         // $this->getLogger(__METHOD__)->error(json_encode($this->results), []);
         return $this->results;
     }
@@ -598,7 +597,7 @@ class SearchService implements SearchServiceInterface
         $i = 0;
         do {
             $responseData = $this->client->call($request);
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['$responseData' => json_decode($responseData)]);
+
             $error = $this->validateResponse($responseData);
             if (!$error) {
                 return $responseData;
