@@ -42,16 +42,15 @@ class ResponseParser
         /** @var Response $response */
         $response = $this->createResponseObject();
 
-        // if (!is_string($responseData) || $responseData === '') {
-        //     $msg = sprintf(
-        //         'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
-        //         SearchService::MAX_RETRIES
-        //     );
-        //     $this->logger->error($msg, ['response' => $responseData]);
+        if (!is_string($responseData) || $responseData === '') {
+            $msg = sprintf(
+                'Still invalid response after %d retries. Using Plentymarkets SDK results without Findologic.',
+                SearchService::MAX_RETRIES
+            );
+            $this->logger->error($msg, ['response' => $responseData]);
 
-        //     return $response;
-        // }
-
+            return $response;
+        }
 
         try {
             $data = json_decode($responseData, true);
@@ -65,8 +64,8 @@ class ResponseParser
             $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data['result']));
             $response->setData(Response::DATA_RESULTS, $this->parseResults($data['request']));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data['result']));
-            $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data->result->filters));
-            $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data->result->filters));
+            $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data['result']['filters']));
+            $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data['result']['filters']));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
             
         } catch (Exception $e) {
