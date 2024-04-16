@@ -87,19 +87,14 @@ class Response
     {
         $ids = [];
 
-        // if (count($product->getVariants())) {
-        //     return $product->getVariants()[0]->getId();
-        // } else if (array_key_exists('variation_id', $product->getProperties())) {
-        //     return $product->getProperties()['variation_id'];
-        // } else {
-        //     return $product->getId();
-        // }
-        
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['$products' => $products ]);
             foreach ($products as $product) {
-                if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
-                    $ids[] = (int)$product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
+                if (isset($product['bestVariant'])) {
+                    $ids[] = (int) $product['bestVariant'];
+                } else if (count($product['variants'])) {
+                    $ids[] = (int) $product['variants'][0]['id'];
+                } else if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
+                    $ids[] = (int) $product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
                 }
             }
         }
@@ -154,7 +149,8 @@ class Response
                     'hits' => $this->getResultsCount()
                 ]
             );
-        } elseif ($dataQueryInfoMessage['currentQuery']
+        } elseif (
+            $dataQueryInfoMessage['currentQuery']
             && !empty($dataQueryInfoMessage['currentQuery'])
         ) {
             return $this->translator->trans(
