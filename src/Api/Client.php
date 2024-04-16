@@ -5,6 +5,7 @@ namespace Findologic\Api;
 use Exception;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Request\Request;
+use Findologic\Traits\Loggable;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -15,6 +16,7 @@ use Plenty\Plugin\Log\LoggerFactory;
  */
 class Client
 {
+    use Loggable;
     const DEFAULT_CONNECTION_TIME_OUT = 5;
 
     const DEFAULT_TIME_OUT = 10;
@@ -46,6 +48,7 @@ class Client
 
         try {
             $requestArray = $this->requestToArray($request);
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['$requestArray' => $requestArray ]);
             $response = $this->libraryCallContract->call(
                 'Findologic::http_library',
                 ['request' => $requestArray]
