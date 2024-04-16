@@ -98,7 +98,7 @@ class Response
                 }
             }
         }
-
+        $this->getLogger(__METHOD__)->debug('log.debuglog', ['ids' => $ids ]);
         return $ids;
     }
 

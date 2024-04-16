@@ -61,7 +61,7 @@ class ResponseParser
             $response->setData(Response::DATA_SERVERS, []);
             $response->setData(Response::DATA_QUERY, $this->parseQuery($data['request']));
             $response->setData(Response::DATA_PROMOTION, $this->parsePromotion($data['result']));
-            $response->setData(Response::DATA_RESULTS, $this->parseResults($data['request']));
+            $response->setData(Response::DATA_RESULTS, $this->parseResults($data['result']['metadata']));
             $response->setData(Response::DATA_PRODUCTS, $this->parseProducts($data['result']));
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data['result']['filters']));
             $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data['result']['filters']));
@@ -126,15 +126,15 @@ class ResponseParser
     }
 
     /**
-     * @param array $data
+     * @param array $metadata
      * @return array
      */
-    protected function parseResults(array $data): array
+    protected function parseResults(array $metadata): array
     {
         $results = [];
 
-        if (isset($data['count'])) {
-            $results['count'] = $data['count'];
+        if (isset($metadata['totalResults'])) {
+            $results['count'] = $metadata['totalResults'];
         }
 
         return $results;
