@@ -2,9 +2,9 @@
 
 namespace Findologic\Containers;
 
+use Findologic\Traits\Loggable;
 use Plenty\Plugin\Templates\Twig;
 use Findologic\Services\SearchService;
-use Findologic\Api\Response\Response;
 
 /**
  * Class SmartDidYouMeanContainer
@@ -12,6 +12,7 @@ use Findologic\Api\Response\Response;
  */
 class SmartDidYouMeanContainer
 {
+    use Loggable;
     /**
      * @param Twig $twig
      * @param SearchService $searchService
@@ -24,7 +25,7 @@ class SmartDidYouMeanContainer
         }
 
         $searchResults = $searchService->getResults();
-
+        $this->getLogger(__METHOD__)->debug('log.debuglog', ['query_info_message' => $searchResults->getQueryInfoMessage() ]);
         return $twig->render(
             'Findologic::Category.Item.Partials.SmartDidYouMean',
             [

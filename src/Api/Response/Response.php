@@ -114,7 +114,7 @@ class Response
     public function getQueryInfoMessage(): string
     {
         $dataQueryInfoMessage = $this->getData(self::DATA_QUERY_INFO_MESSAGE);
-
+        $this->getLogger(__METHOD__)->debug('log.debuglog', ['$dataQueryInfoMessage' => $dataQueryInfoMessage ]);
         if (empty($dataQueryInfoMessage)) {
             return '';
         }
