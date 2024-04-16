@@ -87,7 +87,16 @@ class Response
     {
         $ids = [];
 
+        // if (count($product->getVariants())) {
+        //     return $product->getVariants()[0]->getId();
+        // } else if (array_key_exists('variation_id', $product->getProperties())) {
+        //     return $product->getProperties()['variation_id'];
+        // } else {
+        //     return $product->getId();
+        // }
+        
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['$products' => $products ]);
             foreach ($products as $product) {
                 if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
                     $ids[] = (int)$product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
@@ -114,7 +123,7 @@ class Response
     public function getQueryInfoMessage(): string
     {
         $dataQueryInfoMessage = $this->getData(self::DATA_QUERY_INFO_MESSAGE);
-        $this->getLogger(__METHOD__)->debug('log.debuglog', ['$dataQueryInfoMessage' => $dataQueryInfoMessage ]);
+
         if (empty($dataQueryInfoMessage)) {
             return '';
         }
