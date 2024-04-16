@@ -70,7 +70,6 @@ class FiltersParser
      */
     public function parseForWidgets(array $data): array
     {
-        $this->getLogger(__METHOD__)->debug('log.debuglog', ['filt3 data' => $data ]);
         if (!$data) {
             return [];
         }

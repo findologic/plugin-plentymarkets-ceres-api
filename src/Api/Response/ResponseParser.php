@@ -54,9 +54,8 @@ class ResponseParser
 
         try {
             $data = json_decode($responseData, true);
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filters' => $data['result']['filters']]);
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filt2' => $this->filtersParser->parse($data['result']['filters'])]);
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filt3' => $this->filtersParser->parseForWidgets($data['result']['filters'])]);
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['request!' => $data['request'] ]);
+            $this->getLogger(__METHOD__)->debug('log.debuglog', ['metadata' => $data['result']['metadata'] ]);
 
             $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data['result']));
             $response->setData(Response::DATA_SERVERS, []);
@@ -72,7 +71,7 @@ class ResponseParser
             $this->logger->error('Parsing JSON failed', ['jsonString' => $responseData]);
             $this->logger->logException($e);
         }
-        $this->getLogger(__METHOD__)->debug('log.debuglog', ['response' => json_encode($response)]);
+
         return $response;
     }
 
@@ -85,7 +84,7 @@ class ResponseParser
      * @param array $data
      * @return array
      */
-    protected function parseQuery(array $data)
+    protected function parseQuery(array $data): array
     {
         $query = [];
 
@@ -105,7 +104,7 @@ class ResponseParser
      * @param array $data
      * @return string|null
      */
-    protected function parseLandingPage(array $data)
+    protected function parseLandingPage(array $data): ?string
     {
         return $data['metadata']['landingPage'] ?: null;
     }
@@ -114,7 +113,7 @@ class ResponseParser
      * @param array $data
      * @return array
      */
-    protected function parsePromotion(array $data)
+    protected function parsePromotion(array $data): array
     {
         $promotion = [];
 
@@ -130,12 +129,12 @@ class ResponseParser
      * @param array $data
      * @return array
      */
-    protected function parseResults(array $data)
+    protected function parseResults(array $data): array
     {
         $results = [];
 
-        if (isset($data['metadata']['totalResults'])) {
-            $results['count'] = $data['metadata']['totalResults'];
+        if (isset($data['count'])) {
+            $results['count'] = $data['count'];
         }
 
         return $results;
@@ -145,7 +144,7 @@ class ResponseParser
      * @param array $data
      * @return array
      */
-    protected function parseProducts(array $data)
+    protected function parseProducts(array $data): array
     {
         return $data['items'] ?: [];
     }
@@ -190,7 +189,7 @@ class ResponseParser
      * @param array $requestParams
      * @return string|null
      */
-    private function getSelectedCategoryName(array $requestParams)
+    private function getSelectedCategoryName(array $requestParams): ?string
     {
         $selectedCategory = $requestParams['attrib']['cat'][0] ?? null;
 
@@ -207,7 +206,7 @@ class ResponseParser
      * @param array $requestParams
      * @return string|null
      */
-    private function getSelectedVendorName(array $requestParams)
+    private function getSelectedVendorName(array $requestParams): ?string
     {
         return $requestParams['attrib']['vendor'][0] ?? null;
     }
@@ -216,7 +215,7 @@ class ResponseParser
      * @param array $requestParams
      * @return string|null
      */
-    private function getShoppingGuide(array $requestParams)
+    private function getShoppingGuide(array $requestParams): ?string
     {
         return $requestParams['attrib']['wizard'][0] ?? null;
     }
