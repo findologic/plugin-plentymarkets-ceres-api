@@ -3,7 +3,6 @@
 namespace Findologic\Api\Response;
 
 use Findologic\Constants\Plugin;
-use Findologic\Traits\Loggable;
 use Plenty\Plugin\Translation\Translator;
 
 /**
@@ -12,7 +11,6 @@ use Plenty\Plugin\Translation\Translator;
  */
 class Response
 {
-    use Loggable;
     const DATA_SERVERS = 'servers';
     const DATA_QUERY = 'query';
     const DATA_LANDING_PAGE = 'landing_page';
@@ -98,7 +96,7 @@ class Response
                 }
             }
         }
-        $this->getLogger(__METHOD__)->debug('log.debuglog', ['ids' => $ids ]);
+
         return $ids;
     }
 
