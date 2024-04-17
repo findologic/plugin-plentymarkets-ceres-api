@@ -119,7 +119,7 @@ class FiltersParser
             $filterItem['items'] = [];
             $filterItem['name'] = $data['value'];
             $filterItem['position'] = $index;
-            $filterItem['count'] = $data['frequency'];
+            $filterItem['count'] = (string) $data['frequency'];
             $filterItem['id'] = ++$this->valueId;
             $filterItem['selected'] = false;
 
