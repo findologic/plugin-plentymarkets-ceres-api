@@ -118,7 +118,7 @@ class FiltersParser
         if (!empty($data)) {
             $filterItem['items'] = [];
             $filterItem['name'] = $data['value'];
-            $filterItem['position'] = $index;
+            $filterItem['position'] = "item";
             $filterItem['count'] = (string) $data['frequency'];
             $filterItem['id'] = ++$this->valueId;
             $filterItem['selected'] = false;
@@ -129,7 +129,6 @@ class FiltersParser
             }
 
             if ($filterType === Plugin::FILTER_TYPE_RANGE_SLIDER) {
-                $filterItem['position'] = 'item';
                 $filterItem['name'] = $data['value']['min']. "-" . $data['value']['max'];
             }
 
@@ -182,7 +181,7 @@ class FiltersParser
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'values' => [],
-            'itemCount' => count($filter['values']),
+            'itemCount' => (string) count($filter['values']),
             'noAvailableFiltersText' => $noAvailableFiltersText
         ];
 
