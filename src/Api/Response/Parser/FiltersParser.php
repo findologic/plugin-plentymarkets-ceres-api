@@ -128,6 +128,11 @@ class FiltersParser
                 $filterItem['priceMax'] = $data['parameters']['max'];
             }
 
+            if ($filterType === Plugin::FILTER_TYPE_RANGE_SLIDER) {
+                $filterItem['position'] = 'item';
+                $filterItem['name'] = $data['value']['min']. "-" . $data['value']['max'];
+            }
+
             if ($data['selected']) {
                 $filterItem['selected'] = true;
             }
@@ -193,8 +198,8 @@ class FiltersParser
 
         if ($filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
             $filterData['unit'] = $filter['unit'];
-            $filterData['minValue'] = (float)$filter['totalRange']['totalRange']['min'];
-            $filterData['maxValue'] = (float)$filter['totalRange']['totalRange']['max'];
+            $filterData['minValue'] = (float)$filter['totalRange']['min'];
+            $filterData['maxValue'] = (float)$filter['totalRange']['max'];
             $filterData['step'] = $filter['stepSize'] ?: (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0.01');
             $filterData['useNoUISliderCSS'] = (bool) $this->configRepository->get('Findologic.load_no_ui_slider_styles_enabled', '1');
         }
