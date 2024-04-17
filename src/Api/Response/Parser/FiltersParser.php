@@ -181,7 +181,7 @@ class FiltersParser
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'values' => [],
-            'itemCount' => (string) count($filter['values']),
+            'itemCount' => (string) $filter['pinnedFilterValueCount'],
             'noAvailableFiltersText' => $noAvailableFiltersText
         ];
 
@@ -196,7 +196,6 @@ class FiltersParser
         }
 
         if ($filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
-            $filterData['itemCount'] = '0';
             $filterData['unit'] = $filter['unit'];
             $filterData['minValue'] = (float)$filter['totalRange']['min'];
             $filterData['maxValue'] = (float)$filter['totalRange']['max'];
