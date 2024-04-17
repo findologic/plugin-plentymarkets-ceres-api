@@ -181,7 +181,7 @@ class FiltersParser
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'values' => [],
-            'itemCount' => (string) count($filter['values']),
+            'itemCount' => "0",
             'noAvailableFiltersText' => $noAvailableFiltersText
         ];
 
