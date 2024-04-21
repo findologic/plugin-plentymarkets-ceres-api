@@ -54,7 +54,6 @@ class ResponseParser
 
         try {
             $data = json_decode($responseData, true);
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filters' => $data['result']['filters'] ]);
 
             $response->setData(Response::DATA_LANDING_PAGE, $this->parseLandingPage($data['result']));
             $response->setData(Response::DATA_SERVERS, []);
@@ -65,8 +64,6 @@ class ResponseParser
             $response->setData(Response::DATA_FILTERS, $this->filtersParser->parse($data['result']['filters']));
             $response->setData(Response::DATA_FILTERS_WIDGETS, $this->filtersParser->parseForWidgets($data['result']['filters']));
             $response->setData(Response::DATA_QUERY_INFO_MESSAGE, $this->parseQueryInfoMessage($request, $data));
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['filters' => $response->getData(Response::DATA_FILTERS) ]);
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['widget filters' => $response->getData(Response::DATA_FILTERS_WIDGETS) ]);
             
         } catch (Exception $e) {
             $this->logger->error('Parsing JSON failed', ['jsonString' => $responseData]);

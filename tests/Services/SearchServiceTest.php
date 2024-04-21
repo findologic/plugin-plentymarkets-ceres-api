@@ -1406,7 +1406,7 @@ class SearchServiceTest extends TestCase
             ->willReturn(new Request());
         $this->client->expects($this->once())
             ->method('call')
-            ->willReturn($this->getMockResponse('someResultsWithFilters.xml'));
+            ->willReturn($this->getMockResponse('someResultsWithFilters.json'));
 
         $searchService = $this->getSearchServiceMock();
         $searchService->doNavigation($requestMock, $externalSearchServiceMock);
@@ -1435,7 +1435,7 @@ class SearchServiceTest extends TestCase
             'error_host' => '127.0.0.1'
         ];
         $nonStringErrorResponse = false;
-        $validResponse = $this->getMockResponse('someResultsWithFilters.xml');
+        $validResponse = $this->getMockResponse('someResultsWithFilters.json');
 
         $this->client->expects($this->exactly(3))
             ->method('call')

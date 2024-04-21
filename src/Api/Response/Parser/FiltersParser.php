@@ -56,7 +56,7 @@ class FiltersParser
             }
         }
 
-        if ($filters['other']) {
+        if (array_key_exists('other', $filters)) {
             foreach ($filters['other'] as $filter) {
                 $mapped[] = $this->parseFilter($filter);
             }
@@ -119,7 +119,7 @@ class FiltersParser
             $filterItem['items'] = [];
             $filterItem['name'] = $data['value'];
             $filterItem['position'] = "item";
-            $filterItem['count'] = (string) $data['frequency'];
+            $filterItem['count'] = array_key_exists('frequency', $data) ? (string) $data['frequency'] : '';
             $filterItem['id'] = ++$this->valueId;
             $filterItem['selected'] = false;
 
@@ -129,10 +129,10 @@ class FiltersParser
             }
 
             if ($filterType === Plugin::FILTER_TYPE_RANGE_SLIDER) {
-                $filterItem['name'] = $data['value']['min']. "-" . $data['value']['max'];
+                $filterItem['name'] = $data['value']['min'] . " - " . $data['value']['max'];
             }
 
-            if ($data['selected']) {
+            if (array_key_exists('selected', $data)) {
                 $filterItem['selected'] = true;
             }
 
@@ -170,22 +170,22 @@ class FiltersParser
      */
     protected function parseFilter(array $filter, $isMainFilter = false): array
     {
-        $noAvailableFiltersText = $filter['noAvailableFiltersText'] ?: '';
+        $noAvailableFiltersText = $filter['noAvailableFiltersText'] ?? '';
 
         $filterName = $filter['name'];
         $filterData = [
             'id' => $filterName,
-            'name' => $filter['displayName'],
+            'name' => $filter['displayName'] ?? '',
             'select' => $filter['selectMode'],
             'type' => '',
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'values' => [],
-            'itemCount' => (string) $filter['pinnedFilterValueCount'],
+            'itemCount' => array_key_exists('pinnedFilterValueCount', $filter) ? (string) $filter['pinnedFilterValueCount'] : 0,
             'noAvailableFiltersText' => $noAvailableFiltersText
         ];
 
-        $filterData['cssClass'] = $filter['cssClass'] ?: '';
+        $filterData['cssClass'] = $filter['cssClass'] ?? '';
 
         if ($filter['type']) {
             $filterData['findologicFilterType'] = $filter['type'];
@@ -197,9 +197,9 @@ class FiltersParser
 
         if ($filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
             $filterData['unit'] = $filter['unit'];
-            $filterData['minValue'] = (float)$filter['totalRange']['min'];
-            $filterData['maxValue'] = (float)$filter['totalRange']['max'];
-            $filterData['step'] = $filter['stepSize'] ?: (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0.01');
+            $filterData['minValue'] = $filter['totalRange']['min'];
+            $filterData['maxValue'] = $filter['totalRange']['max'];
+            $filterData['step'] = (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0.01');
             $filterData['useNoUISliderCSS'] = (bool) $this->configRepository->get('Findologic.load_no_ui_slider_styles_enabled', '1');
         }
 
