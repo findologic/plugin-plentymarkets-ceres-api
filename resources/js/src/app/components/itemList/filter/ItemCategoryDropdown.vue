@@ -124,7 +124,7 @@ export default defineComponent({
       if (typeof props.currentCategory !== 'undefined' && isParentCategorySelected()) {
         return false;
       }
-
+      console.log(UrlBuilder.getSelectedFilters());
       return typeof UrlBuilder.getSelectedFilters().find(element => element.id === props.facet.id) !== 'undefined';
     });
 
