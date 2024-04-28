@@ -133,7 +133,7 @@ class FiltersParser
             }
 
             if (array_key_exists('selected', $data)) {
-                $filterItem['selected'] = true;
+                $filterItem['selected'] = $data['selected'];
             }
 
             if ($filterType === Plugin::FILTER_TYPE_IMAGE) {

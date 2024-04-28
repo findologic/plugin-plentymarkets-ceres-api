@@ -171,8 +171,7 @@ export default defineComponent({
 
         break;
       }
-      console.log(typeof splittedSelectedCategories?.find(
-          categoryName => categoryName.trim() === category.name) !== 'undefined');
+
       return typeof splittedSelectedCategories?.find(
           categoryName => categoryName.trim() === category.name) !== 'undefined';
     };
@@ -181,7 +180,6 @@ export default defineComponent({
       dropdownLabel.value = buildDropdownLabel() as string;
       pleaseSelectText.value = TranslationService.translate('Findologic::Template.pleaseSelect');
       categoryIsSelected.value = isSelected.value;
-      console.log(categoryIsSelected.value);
       categories.value = comCategories.value;
     });
 
