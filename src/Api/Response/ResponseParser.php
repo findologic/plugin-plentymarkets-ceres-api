@@ -149,10 +149,6 @@ class ResponseParser
 
     protected function parseQueryInfoMessage(HttpRequest $request, array $data): array
     {
-        if (empty($data['request']['query'])) {
-            return [];
-        }
-
         $originalQuery = $data['request']['query'] ?: null;
         $didYouMeanQuery = $data['result']['variant']['didYouMeanQuery'] ?: null;
         $improvedQuery = $data['result']['variant']['improvedQuery'] ?: null;
