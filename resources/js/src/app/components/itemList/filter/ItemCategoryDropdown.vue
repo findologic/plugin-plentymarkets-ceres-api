@@ -171,7 +171,8 @@ export default defineComponent({
 
         break;
       }
-
+      console.log(typeof splittedSelectedCategories?.find(
+          categoryName => categoryName.trim() === category.name) !== 'undefined');
       return typeof splittedSelectedCategories?.find(
           categoryName => categoryName.trim() === category.name) !== 'undefined';
     };
