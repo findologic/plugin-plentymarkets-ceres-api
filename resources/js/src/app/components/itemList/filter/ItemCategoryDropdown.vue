@@ -124,7 +124,7 @@ export default defineComponent({
       if (typeof props.currentCategory !== 'undefined' && isParentCategorySelected()) {
         return false;
       }
-      console.log(typeof UrlBuilder.getSelectedFilters().find(element => element.id === props.facet.id) !== 'undefined');
+
       return typeof UrlBuilder.getSelectedFilters().find(element => element.id === props.facet.id) !== 'undefined';
     });
 
@@ -180,6 +180,7 @@ export default defineComponent({
       dropdownLabel.value = buildDropdownLabel() as string;
       pleaseSelectText.value = TranslationService.translate('Findologic::Template.pleaseSelect');
       categoryIsSelected.value = isSelected.value;
+      console.log(categoryIsSelected.value);
       categories.value = comCategories.value;
     });
 
