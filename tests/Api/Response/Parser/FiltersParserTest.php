@@ -54,14 +54,16 @@ class FiltersParserTest extends TestCase
      * @param string $response
      * @param array $expectedResult
      */
-    public function testParse($response, array $expectedResult)
+    public function testParse($response, array $expectedResults)
     {
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 
         $results = $filtersParserMock->parse(json_decode($response, 1));
-        $this->assertEquals($expectedResult, $results);
-        
+        if (!$response)
+            $this->assertEmpty($results);
+
+        $this->assertEquals($expectedResults, $results);
     }
 
     /**
@@ -213,7 +215,15 @@ class FiltersParserTest extends TestCase
                             "displayName": "Preis",
                             "selectMode": "single",
                             "type": "text",
-                            "values": []
+                            "values": [
+                                {
+                                    "items" : [],
+                                    "value" : "",
+                                    "position" : "item",
+                                    "count" : "",
+                                    "selected" : false
+                                }
+                            ]
                         },
                         {
                             "name": "color",
@@ -436,7 +446,7 @@ class FiltersParserTest extends TestCase
                                 'name' => 'lila',
                                 'position' => 'item',
                                 'count' => '',
-                                'id' => 14,
+                                'id' => 15,
                                 'hexValue' => '#BA55D3',
                                 'selected' => false,
                             ],
@@ -445,7 +455,7 @@ class FiltersParserTest extends TestCase
                                 'name' => 'rot',
                                 'position' => 'item',
                                 'count' => '',
-                                'id' => 15,
+                                'id' => 16,
                                 'hexValue' => '#FF0000',
                                 'selected' => false,
                             ],
@@ -454,7 +464,7 @@ class FiltersParserTest extends TestCase
                                 'name' => 'schwarz',
                                 'position' => 'item',
                                 'count' => '',
-                                'id' => 16,
+                                'id' => 17,
                                 'hexValue' => '#000000',
                                 'selected' => false,
                             ],
@@ -463,7 +473,7 @@ class FiltersParserTest extends TestCase
                                 'name' => 'weiß',
                                 'position' => 'item',
                                 'count' => '',
-                                'id' => 17,
+                                'id' => 18,
                                 'hexValue' => '#FFFFFF',
                                 'selected' => false
                             ]
@@ -670,6 +680,7 @@ class FiltersParserTest extends TestCase
                                 'position' => 'item',
                                 'count' => '21',
                                 'selected' => false,
+                                "imageUrl" => "/vendor/a_amp_c_design.jpg",
                                 'id' => 3
                             ],
                             [
