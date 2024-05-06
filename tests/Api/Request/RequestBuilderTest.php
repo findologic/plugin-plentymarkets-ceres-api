@@ -94,7 +94,7 @@ class RequestBuilderTest extends TestCase
     {
         return [
             'Build alive request' => [
-                'https://service.findologic.com/ps/xml_2.1/alivetest.php',
+                'https://service.findologic.com/ps/json_1.0/alivetest.php',
                 [
                     'shopkey' => 'TESTSHOPKEY'
                 ]
@@ -126,7 +126,7 @@ class RequestBuilderTest extends TestCase
         return [
             'Build - No user ip provided' => [
                 false,
-                'https://service.findologic.com/ps/xml_2.1/index.php',
+                'https://service.findologic.com/ps/json_1.0/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -138,7 +138,7 @@ class RequestBuilderTest extends TestCase
             ],
             'Category page request' => [
                 '127.0.0.1',
-                'https://service.findologic.com/ps/xml_2.1/selector.php',
+                'https://service.findologic.com/ps/json_1.0/selector.php',
                 true,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -151,7 +151,7 @@ class RequestBuilderTest extends TestCase
             ],
             'Search page request' => [
                 '127.0.0.1',
-                'https://service.findologic.com/ps/xml_2.1/index.php',
+                'https://service.findologic.com/ps/json_1.0/index.php',
                 false,
                 [
                     'outputAdapter' => Plugin::API_OUTPUT_ADAPTER,
@@ -235,7 +235,7 @@ class RequestBuilderTest extends TestCase
             'No domain is configured' => [
                 '',
                 '',
-                'https://service.findologic.com/ps/xml_2.1/index.php'
+                'https://service.findologic.com/ps/json_1.0/index.php'
             ]
         ];
     }

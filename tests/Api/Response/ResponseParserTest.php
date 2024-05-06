@@ -95,10 +95,10 @@ class ResponseParserTest extends TestCase
                     'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
                 'errorContext' => ['response' => ''],
             ],
-            'Invalid XML response' => [
-                'response' => 'invalid-xml',
-                'errorMessage' => 'Parsing XML failed',
-                'errorContext' => ['xmlString' => 'invalid-xml'],
+            'Invalid JSON response' => [
+                'response' => 'invalid-json',
+                'errorMessage' => 'Parsing JSON failed',
+                'errorContext' => ['jsonString' => 'invalid-json'],
             ],
         ];
     }
