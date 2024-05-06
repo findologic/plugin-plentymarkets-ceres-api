@@ -88,8 +88,6 @@ class ResponseParser
 
         if (!empty($data['query'])) {
             $query['query'] = $data['query'];
-            $query['searchedWordCount'] = $data['searchWordCount'];
-            $query['foundWordCount'] = $data['foundWordCount'];
 
             $query['first'] = $data['first'];
             $query['count'] = $data['count'];
@@ -104,7 +102,7 @@ class ResponseParser
      */
     protected function parseLandingPage(array $data): ?string
     {
-        return $data['metadata']['landingPage'] ?: null;
+        return $data['metadata']['landingpage'] ?: null;
     }
 
     /**
@@ -149,10 +147,8 @@ class ResponseParser
 
     protected function parseQueryInfoMessage(HttpRequest $request, array $data): array
     {
-        $originalQuery = $data['request']['query'] ?: null;
-        $didYouMeanQuery = $data['result']['variant']['didYouMeanQuery'] ?: null;
-        $improvedQuery = $data['result']['variant']['improvedQuery'] ?: null;
-        $correctedQuery = $data['result']['variant']['correctedQuery'] ?: null;
+        @list('didYouMeanQuery' => $didYouMeanQuery, 'improvedQuery' => $improvedQuery, 'correctedQuery' => $correctedQuery) = $data['result']['variant'];
+        
         $currentQuery = $data['result']['metadata']['effectiveQuery'] ?: null;
 
         $queryStringType = null;
@@ -160,16 +156,18 @@ class ResponseParser
         if($improvedQuery){
             $queryStringType = 'improved';
             $currentQuery = $improvedQuery;
+            $originalQuery = $data['request']['query'];
         }
         else if($correctedQuery){
             $queryStringType = 'corrected';
             $currentQuery = $correctedQuery;
+            $originalQuery = $data['request']['query'];
         }
 
         $requestParams = (array) $request->all();
 
         return [
-            'originalQuery' => $originalQuery,
+            'originalQuery' => @$originalQuery,
             'didYouMeanQuery' => $didYouMeanQuery,
             'currentQuery' => $currentQuery,
             'queryStringType' => $queryStringType,

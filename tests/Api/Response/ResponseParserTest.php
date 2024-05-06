@@ -2,14 +2,14 @@
 
 namespace Findologic\Tests\Api\Response;
 
-use Findologic\Api\Response\Parser\FiltersParser;
-use Findologic\Api\Response\Response;
-use Findologic\Api\Response\ResponseParser;
+use PHPUnit\Framework\TestCase;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Api\Response\Response;
 use Plenty\Log\Contracts\LoggerContract;
-use PHPUnit\Framework\TestCase;
+use Findologic\Api\Response\ResponseParser;
 use PHPUnit\Framework\MockObject\MockObject;
+use Findologic\Api\Response\Parser\FiltersParser;
 
 /**
  * Class ResponseParserTest
@@ -162,22 +162,37 @@ class ResponseParserTest extends TestCase
         return [
             'No Smart Did-You-Mean data provided' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -190,23 +205,38 @@ class ResponseParserTest extends TestCase
             ],
             'Did-You-Mean query present' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                        <didYouMeanQuery>TestDidYouMeanQuery</didYouMeanQuery>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym",
+                            "didYouMeanQuery": "TestDidYouMeanQuery"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => 'TestDidYouMeanQuery',
@@ -219,23 +249,38 @@ class ResponseParserTest extends TestCase
             ],
             'Improved query present' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <originalQuery>OriginalTest</originalQuery>
-                        <queryString type="improved">Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "OriginalTest",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym",
+                            "improvedQuery": "Test"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => 'OriginalTest',
                     'didYouMeanQuery' => null,
@@ -248,23 +293,38 @@ class ResponseParserTest extends TestCase
             ],
             'Corrected query present' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <originalQuery>OriginalTest</originalQuery>
-                        <queryString type="corrected">Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "OriginalTest",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym",
+                            "correctedQuery": "Test"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => 'OriginalTest',
                     'didYouMeanQuery' => null,
@@ -283,22 +343,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -317,22 +392,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -351,22 +441,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <results><count>0</count></results>
-                        <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -385,22 +490,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <results><count>0</count></results>
-                        <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -422,22 +542,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <results><count>0</count></results>
-                        <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
