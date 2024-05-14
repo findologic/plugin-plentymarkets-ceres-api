@@ -2,27 +2,27 @@
 
 namespace Findologic\Middlewares;
 
+use IO\Helper\Utils;
+use IO\Helper\RouteConfig;
+use Plenty\Plugin\Http\Request;
+use Plenty\Plugin\Log\Loggable;
 use Ceres\Helper\ExternalSearch;
-use Ceres\Helper\ExternalSearchOptions;
 use Findologic\Constants\Plugin;
-use Findologic\Contexts\FindologicCategoryItemContext;
-use Findologic\Contexts\FindologicItemSearchContext;
-use Findologic\Validators\PluginConfigurationValidator;
-use IO\Helper\ComponentContainer;
 use IO\Helper\ResourceContainer;
 use IO\Helper\TemplateContainer;
-use IO\Helper\Utils;
 use IO\Services\CategoryService;
-use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Http\Response;
-use Plenty\Plugin\Log\Loggable;
-use Findologic\Components\PluginConfig;
-use Findologic\Services\SearchService;
-use IO\Extensions\Constants\ShopUrls;
-use IO\Helper\RouteConfig;
+use IO\Helper\ComponentContainer;
 use Plenty\Plugin\Events\Dispatcher;
+use IO\Extensions\Constants\ShopUrls;
+use Findologic\Services\SearchService;
+use Ceres\Helper\ExternalSearchOptions;
+use Findologic\Components\PluginConfig;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Middleware as PlentyMiddleware;
+use Findologic\Contexts\FindologicItemSearchContext;
+use Findologic\Contexts\FindologicCategoryItemContext;
+use Findologic\Validators\PluginConfigurationValidator;
 
 /**
  * Class Middleware

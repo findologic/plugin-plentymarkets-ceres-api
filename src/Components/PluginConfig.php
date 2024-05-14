@@ -2,9 +2,9 @@
 
 namespace Findologic\Components;
 
-use IO\Services\SessionStorageService;
-use Plenty\Plugin\ConfigRepository;
 use Findologic\Constants\Plugin;
+use Plenty\Plugin\ConfigRepository;
+use IO\Services\SessionStorageService;
 
 /**
  * Class PluginConfig

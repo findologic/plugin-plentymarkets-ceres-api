@@ -2,10 +2,7 @@
 
 namespace Findologic\Api\Response\Parser;
 
-use Findologic\Traits\Loggable;
-use SimpleXMLElement;
 use Findologic\Constants\Plugin;
-use Findologic\Api\Services\Image;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 
@@ -15,7 +12,6 @@ use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
  */
 class FiltersParser
 {
-    use Loggable;
     /**
      * @var int
      */

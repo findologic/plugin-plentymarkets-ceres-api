@@ -2,9 +2,9 @@
 
 namespace Findologic\Services;
 
+use Plenty\Plugin\Http\Request;
 use Ceres\Helper\ExternalSearch;
 use Ceres\Helper\ExternalSearchOptions;
-use Plenty\Plugin\Http\Request;
 
 /**
  * Interface SearchServiceInterface

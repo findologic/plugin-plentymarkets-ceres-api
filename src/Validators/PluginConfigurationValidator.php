@@ -2,10 +2,10 @@
 
 namespace Findologic\Validators;
 
-use Findologic\Constants\Plugin;
-use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Application;
 use Plenty\Plugin\Log\Loggable;
+use Findologic\Constants\Plugin;
+use Plenty\Log\Contracts\LoggerContract;
 
 class PluginConfigurationValidator implements ValidatorInterface
 {

@@ -5,7 +5,6 @@ namespace Findologic\Services;
 use Exception;
 use IO\Helper\Utils;
 use Findologic\Api\Client;
-use Findologic\Traits\Loggable;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
 use IO\Services\CategoryService;
@@ -22,7 +21,6 @@ use Plenty\Plugin\Http\Request as HttpRequest;
 use Findologic\Services\Search\ParametersHandler;
 use Plenty\Modules\Webshop\ItemSearch\Services\ItemSearchService;
 use Plenty\Modules\Webshop\Contracts\UrlBuilderRepositoryContract;
-use Plenty\Modules\Webshop\ItemSearch\Helpers\ResultFieldTemplate;
 use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
 
 /**
@@ -31,7 +29,6 @@ use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
  */
 class SearchService implements SearchServiceInterface
 {
-    use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
     const MAX_RETRIES = 2;

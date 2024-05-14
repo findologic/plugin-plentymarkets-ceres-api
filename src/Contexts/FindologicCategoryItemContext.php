@@ -2,10 +2,10 @@
 
 namespace Findologic\Contexts;
 
-use Ceres\Contexts\CategoryItemContext;
+use IO\Helper\ContextInterface;
 use Findologic\Api\Response\Response;
 use Findologic\Services\SearchService;
-use IO\Helper\ContextInterface;
+use Ceres\Contexts\CategoryItemContext;
 
 class FindologicCategoryItemContext extends CategoryItemContext implements ContextInterface
 {

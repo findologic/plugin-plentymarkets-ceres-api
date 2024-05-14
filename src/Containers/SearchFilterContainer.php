@@ -3,10 +3,10 @@
 namespace Findologic\Containers;
 
 use Findologic\Constants\Plugin;
-use Findologic\Services\SearchService;
-use Findologic\Api\Response\Response;
-use Plenty\Modules\Category\Models\Category;
 use Plenty\Plugin\Templates\Twig;
+use Findologic\Api\Response\Response;
+use Findologic\Services\SearchService;
+use Plenty\Modules\Category\Models\Category;
 
 /**
  * Class SearchFilterContainer

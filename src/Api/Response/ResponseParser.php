@@ -3,14 +3,13 @@
 namespace Findologic\Api\Response;
 
 use Exception;
-use Findologic\Api\Response\Parser\FiltersParser;
-use Findologic\Constants\Plugin;
-use Findologic\Services\SearchService;
-use Findologic\Traits\Loggable;
-use Plenty\Log\Contracts\LoggerContract;
-use Plenty\Plugin\Log\LoggerFactory;
 use SimpleXMLElement;
+use Findologic\Constants\Plugin;
+use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Services\SearchService;
+use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Api\Response\Parser\FiltersParser;
 
 /**
  * Class ResponseParser
@@ -18,7 +17,6 @@ use Plenty\Plugin\Http\Request as HttpRequest;
  */
 class ResponseParser
 {
-    use Loggable;
     /**
      * @var FiltersParser
      */
