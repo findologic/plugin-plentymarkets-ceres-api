@@ -48,7 +48,7 @@ class Client
 
         try {
             $requestArray = $this->requestToArray($request);
-            $this->getLogger(__METHOD__)->debug('log.debuglog', ['$requestArray' => $requestArray ]);
+
             $response = $this->libraryCallContract->call(
                 'Findologic::http_library',
                 ['request' => $requestArray]
