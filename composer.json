@@ -5,7 +5,7 @@
   "require": {
     "php": "^8.0",
     "ext-simplexml": "*",
-    "guzzlehttp/guzzle": "6.3.*",
+    "findologic/http_request2": "2.4",
     "squizlabs/php_codesniffer": "^3.6"
   },
   "require-dev": {

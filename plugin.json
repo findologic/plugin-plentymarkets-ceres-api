@@ -52,7 +52,7 @@
     "php": ">=7.3 <8.1"
   },
   "dependencies": {
-    "guzzlehttp/guzzle": "6.3.*"
+    "findologic/http_request2": "2.4.0"
   },
   "containers": [
     {

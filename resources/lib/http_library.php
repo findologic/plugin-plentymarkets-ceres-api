@@ -1,15 +1,15 @@
 <?php
 
+use Findologic\Constants\Plugin;
+
 /** @var \Findologic\Api\Request\Request $request */
 $request = SdkRestApi::getParam('request');
 
-$client = new \GuzzleHttp\Client([
-    'timeout' => $request['timeout'],
-    'connect_timeout' => $request['connect_timeout'],
-]);
+$httpRequest = new \HTTP_Request2($request['url'], 'GET');
+$httpRequest->setAdapter('curl');
+$httpRequest->setConfig('connect_timeout', $request['connect_timeout']);
+$httpRequest->setConfig('timeout', $request['timeout']);
 
-$res = $client->get(
-    $request['url']
-);
+$response = $httpRequest->send();
 
-return $res->getBody();
+return $response->getBody();
