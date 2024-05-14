@@ -2,17 +2,17 @@
 
 namespace Findologic\Api\Request;
 
-use Findologic\Api\Client;
-use Findologic\Helpers\Tags;
 use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
-use Plenty\Plugin\Log\LoggerFactory;
-use Findologic\Components\PluginConfig;
-use Plenty\Log\Contracts\LoggerContract;
+use Findologic\Api\Client;
+use Findologic\Helpers\Tags;
 use Findologic\Services\PluginInfoService;
-use IO\Services\WebstoreConfigurationService;
-use Plenty\Plugin\Http\Request as HttpRequest;
+use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\System\Models\WebstoreConfiguration;
+use Plenty\Plugin\Log\LoggerFactory;
+use Plenty\Plugin\Http\Request as HttpRequest;
+use Findologic\Components\PluginConfig;
+use IO\Services\WebstoreConfigurationService;
 
 /**
  * Class RequestBuilder

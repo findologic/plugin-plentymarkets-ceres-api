@@ -5,9 +5,10 @@ namespace Findologic\Api;
 use Exception;
 use Findologic\Constants\Plugin;
 use Findologic\Api\Request\Request;
-use Plenty\Plugin\Log\LoggerFactory;
-use Plenty\Log\Contracts\LoggerContract;
+use Findologic\Traits\Loggable;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
+use Plenty\Log\Contracts\LoggerContract;
+use Plenty\Plugin\Log\LoggerFactory;
 
 /**
  * Class Client
@@ -15,6 +16,7 @@ use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
  */
 class Client
 {
+    use Loggable;
     const DEFAULT_CONNECTION_TIME_OUT = 5;
 
     const DEFAULT_TIME_OUT = 10;

@@ -2,11 +2,11 @@
 
 namespace Findologic\Services;
 
-use Plenty\Plugin\CachingRepository;
 use IO\Services\TemplateConfigService;
-use Plenty\Modules\Plugin\Models\Plugin;
 use Plenty\Modules\Plugin\Contracts\PluginRepositoryContract;
+use Plenty\Modules\Plugin\Models\Plugin;
 use Plenty\Modules\Plugin\PluginSet\Contracts\PluginSetRepositoryContract;
+use Plenty\Plugin\CachingRepository;
 
 class PluginInfoService
 {

@@ -3,13 +3,13 @@
 namespace Findologic\Api\Request;
 
 use Exception;
-use Findologic\Helpers\Tags;
-use Ceres\Helper\ExternalSearch;
 use Findologic\Constants\Plugin;
-use IO\Services\CategoryService;
-use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Helpers\Tags;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
+use Plenty\Plugin\Log\LoggerFactory;
+use IO\Services\CategoryService;
+use Ceres\Helper\ExternalSearch;
 use Plenty\Plugin\Http\Request as HttpRequest;
 
 class ParametersBuilder

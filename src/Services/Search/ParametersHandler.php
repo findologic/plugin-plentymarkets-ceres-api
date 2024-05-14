@@ -2,12 +2,12 @@
 
 namespace Findologic\Services\Search;
 
-use IO\Helper\RouteConfig;
 use Ceres\Config\CeresConfig;
 use Ceres\Helper\SearchOptions;
 use Findologic\Constants\Plugin;
 use IO\Extensions\Constants\ShopUrls;
 use Ceres\Helper\ExternalSearchOptions;
+use IO\Helper\RouteConfig;
 use Plenty\Plugin\Translation\Translator;
 use Plenty\Plugin\Http\Request as HttpRequest;
 
