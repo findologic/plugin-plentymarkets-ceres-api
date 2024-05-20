@@ -154,12 +154,12 @@ class ResponseParser
         $queryStringType = null;
 
         if($improvedQuery){
-            $queryStringType = 'improved';
+            $queryStringType = Response::IMPROVED_QUERY;
             $currentQuery = $improvedQuery;
             $originalQuery = $data['request']['query'];
         }
         else if($correctedQuery){
-            $queryStringType = 'corrected';
+            $queryStringType = Response::CORRECTED_QUERY;
             $currentQuery = $correctedQuery;
             $originalQuery = $data['request']['query'];
         }

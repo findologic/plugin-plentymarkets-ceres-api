@@ -1323,7 +1323,7 @@ class SearchServiceTest extends TestCase
             ->willReturn(new Request());
         $this->client->expects($this->once())
             ->method('call')
-            ->willReturn($this->getMockResponse('noResults.xml'));
+            ->willReturn($this->getMockResponse('noResults.json'));
 
         $searchService = $this->getSearchServiceMock();
         $searchService->doSearch($requestMock, $externalSearchServiceMock);
@@ -1359,7 +1359,7 @@ class SearchServiceTest extends TestCase
             ->willReturn(new Request());
         $this->client->expects($this->once())
             ->method('call')
-            ->willReturn($this->getMockResponse('noResults.xml'));
+            ->willReturn($this->getMockResponse('noResults.json'));
 
         $searchService = $this->getSearchServiceMock();
         $searchService->doSearch($requestMock, $externalSearchServiceMock);

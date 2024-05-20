@@ -46,13 +46,13 @@ class FiltersParser
 
         $mapped = [];
 
-        if ($filters['main']) {
+        if (@$filters['main']) {
             foreach ($filters['main'] as $filter) {
                 $mapped[] = $this->parseFilter($filter, true);
             }
         }
 
-        if (array_key_exists('other', $filters)) {
+        if (@$filters['other']) {
             foreach ($filters['other'] as $filter) {
                 $mapped[] = $this->parseFilter($filter);
             }
@@ -115,7 +115,7 @@ class FiltersParser
             $filterItem['items'] = [];
             $filterItem['name'] = $data['value'];
             $filterItem['position'] = "item";
-            $filterItem['count'] = array_key_exists('frequency', $data) ? (string) $data['frequency'] : '';
+            $filterItem['count'] = (string) @$data['frequency'] ?? '';
             $filterItem['id'] = ++$this->valueId;
             $filterItem['selected'] = false;
 
@@ -128,7 +128,7 @@ class FiltersParser
                 $filterItem['name'] = $data['value']['min'] . " - " . $data['value']['max'];
             }
 
-            if (array_key_exists('selected', $data)) {
+            if (@$data['selected']) {
                 $filterItem['selected'] = $data['selected'];
             }
 
@@ -177,7 +177,7 @@ class FiltersParser
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'values' => [],
-            'itemCount' => array_key_exists('pinnedFilterValueCount', $filter) ? (string) $filter['pinnedFilterValueCount'] : 0,
+            'itemCount' => (string) @$filter['pinnedFilterValueCount'] ?: 0,
             'noAvailableFiltersText' => $noAvailableFiltersText
         ];
 
