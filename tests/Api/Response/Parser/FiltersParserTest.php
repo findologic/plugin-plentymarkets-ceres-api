@@ -272,7 +272,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -281,14 +281,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => false,
@@ -298,14 +298,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -326,7 +326,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '10',
                                 'selected' => false,
                                 'id' => 6
@@ -334,7 +334,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'HUNDE design',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '19',
                                 'selected' => false,
                                 'id' => 7
@@ -342,7 +342,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'A & C Design',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '21',
                                 'selected' => false,
                                 'imageUrl' => '/vendor/a_amp_c_design.jpg',
@@ -351,7 +351,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'H Manufacturer',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '25',
                                 'selected' => false,
                                 'id' => 9,
@@ -378,7 +378,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '59 - 139',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 10
@@ -386,7 +386,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '146.37 - 250',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 11
@@ -394,7 +394,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '269 - 730',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 12
@@ -402,7 +402,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '740 - 2300',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 13
@@ -423,7 +423,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 14
@@ -444,7 +444,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'lila',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'id' => 15,
                                 'hexValue' => '#BA55D3',
@@ -453,7 +453,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'rot',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '',
                                 'id' => 16,
                                 'hexValue' => '#FF0000',
@@ -462,7 +462,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'schwarz',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '',
                                 'id' => 17,
                                 'hexValue' => '#000000',
@@ -471,7 +471,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'weiß',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '',
                                 'id' => 18,
                                 'hexValue' => '#FFFFFF',
@@ -517,7 +517,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -559,7 +559,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -601,7 +601,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -661,7 +661,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '10',
                                 'selected' => false,
                                 'id' => 1
@@ -669,7 +669,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'HUNDE design',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '19',
                                 'selected' => true,
                                 'id' => 2
@@ -677,7 +677,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'A & C Design',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '21',
                                 'selected' => false,
                                 "imageUrl" => "/vendor/a_amp_c_design.jpg",
@@ -686,7 +686,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'H Manufacturer',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '25',
                                 'selected' => false,
                                 'id' => 4,
@@ -729,7 +729,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -772,7 +772,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -840,7 +840,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -849,14 +849,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => true,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => true,
@@ -866,14 +866,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -941,7 +941,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -950,14 +950,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => true,
@@ -967,14 +967,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -1041,7 +1041,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -1050,14 +1050,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => false,
@@ -1067,14 +1067,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -1116,7 +1116,7 @@ class FiltersParserTest extends TestCase
                         'values' => [
                             [
                                 'name' => 'Sofas',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'id' => 1,
                                 'selected' => true,
