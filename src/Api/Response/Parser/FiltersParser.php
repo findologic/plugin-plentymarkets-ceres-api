@@ -114,7 +114,7 @@ class FiltersParser
         if (!empty($data)) {
             $filterItem['items'] = [];
             $filterItem['name'] = $data['value'];
-            $filterItem['position'] = "item";
+            $filterItem['position'] = $index;
             $filterItem['count'] = (string) @$data['frequency'] ?? '';
             $filterItem['id'] = ++$this->valueId;
             $filterItem['selected'] = false;
