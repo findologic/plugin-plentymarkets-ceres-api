@@ -1,5 +1,10 @@
 # Release Notes for Findologic
 
+## 6.0.0 (2024-05-22)
+
+### Changed
+- [PLENTY-472] Migrate the response format to JSON and allow search for variants.
+
 ## 5.1.3 (2024-02-16)
 
 ### Fixed

@@ -1,5 +1,10 @@
 # Release Notes für Findologic
 
+## 6.0.0 (2024-05-22)
+
+### Geändert
+- [PLENTY-472] Ausgabeformat wurde auf JSON geändert und die Suche nach Varianten ermöglicht.
+
 ## 5.1.3 (2024-02-16)
 
 ### Behoben
