@@ -4,7 +4,6 @@ namespace Findologic\Containers;
 
 use Plenty\Plugin\Templates\Twig;
 use Findologic\Services\SearchService;
-use Findologic\Api\Response\Response;
 
 /**
  * Class SmartDidYouMeanContainer

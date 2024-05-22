@@ -87,8 +87,12 @@ class Response
 
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
             foreach ($products as $product) {
-                if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
-                    $ids[] = (int)$product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
+                if (isset($product['bestVariant'])) {
+                    $ids[] = (int) $product['bestVariant'];
+                } else if (count($product['variants'])) {
+                    $ids[] = (int) $product['variants'][0]['id'];
+                } else if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
+                    $ids[] = (int) $product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
                 }
             }
         }
@@ -101,6 +105,7 @@ class Response
      */
     public function getResultsCount(): int
     {
+
         if (!isset($this->data[self::DATA_RESULTS]['count'])) {
             return 0;
         }
@@ -142,7 +147,8 @@ class Response
                     'hits' => $this->getResultsCount()
                 ]
             );
-        } elseif ($dataQueryInfoMessage['currentQuery']
+        } elseif (
+            $dataQueryInfoMessage['currentQuery']
             && !empty($dataQueryInfoMessage['currentQuery'])
         ) {
             return $this->translator->trans(

@@ -1,0 +1,820 @@
+{
+    "request": {
+        "query": "",
+        "first": 0,
+        "count": 24,
+        "serviceId": "4F6ED677804616CC2D7C903179796F0B",
+        "usergroup": null,
+        "order": {
+            "field": "salesfrequency",
+            "relevanceBased": true,
+            "direction": "DESC"
+        }
+    },
+    "result": {
+        "metadata": {
+            "landingpage": null,
+            "promotion": null,
+            "searchConcept": null,
+            "effectiveQuery": "",
+            "totalResults": 128311,
+            "currencySymbol": "EUR"
+        },
+        "items": [
+            {
+                "id": "103357629",
+                "score": 15.85103,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103357629",
+                "name": "BLUM MOVENTO Kupplungsteil Seitenverstellung links; Kunststoff \/ Stahl",
+                "ordernumbers": [
+                    "103357629"
+                ],
+                "summary": "",
+                "price": 1.59,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_MOVENTO F\u00fchrungssysteme_MOVENTO Zubeh\u00f6r",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_MOVENTO F\u00fchrungssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_MOVENTO F\u00fchrungssysteme_MOVENTO Zubeh\u00f6r_MOVENTO Kupplungsteil",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/715\/DV005-ppic_BLUM_Kupplung_MOVENTO_T517601_LSeitenverst_270.jpg",
+                "highlightedName": "BLUM MOVENTO Kupplungsteil Seitenverstellung links; Kunststoff \/ Stahl"
+            },
+            {
+                "id": "103357630",
+                "score": 15.84886,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103357630",
+                "name": "BLUM MOVENTO Kupplungsteil Seitenverstellung rechts; Kunststoff \/ Stahl",
+                "ordernumbers": [
+                    "103357630"
+                ],
+                "summary": "",
+                "price": 1.59,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_MOVENTO F\u00fchrungssysteme_MOVENTO Zubeh\u00f6r",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_MOVENTO F\u00fchrungssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_MOVENTO F\u00fchrungssysteme_MOVENTO Zubeh\u00f6r_MOVENTO Kupplungsteil",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/716\/DV005-ppic_BLUM_Kupplung_MOVENTO_T517601_RSeitenverst_270.jpg",
+                "highlightedName": "BLUM MOVENTO Kupplungsteil Seitenverstellung rechts; Kunststoff \/ Stahl"
+            },
+            {
+                "id": "103311519",
+                "score": 15.52434,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103311519",
+                "name": "BLUM CLIP Exzenter Kreuzmontageplatte, Stahl, Schrauben, Distanz 0 mm",
+                "ordernumbers": [
+                    "103311519"
+                ],
+                "summary": "",
+                "price": 0.56,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten_Montageplatten mit Exzenter-H\u00f6henverstellung",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten_Montageplatten mit Exzenter-H\u00f6henverstellung_Exzenter- Kreuzmontageplatte 37\/32"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/890\/DV005-ppic_BLUM_EXZENTERMONTAGEPLATTEN_173H7100_0MM_270.jpg",
+                "highlightedName": "BLUM CLIP Exzenter Kreuzmontageplatte, Stahl, Schrauben, Distanz 0 mm"
+            },
+            {
+                "id": "103323368",
+                "score": 15.33525,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103323368",
+                "name": "CAMAR Oberteilgleiter Unico Einschrauben Kunststoff schwarz",
+                "ordernumbers": [
+                    "103323368"
+                ],
+                "summary": "",
+                "price": 0.7,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe_Camar Unico\/Unicomatic_Oberteilgleiter Unico\/Unicomatic",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe_Camar Unico\/Unicomatic",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/179\/323\/DV005-ppic_Oberteilgleiter_Unico_ohne_Rand_Schrauben_schwarz_270.jpg",
+                "highlightedName": "CAMAR Oberteilgleiter Unico Einschrauben Kunststoff schwarz"
+            },
+            {
+                "id": "103311514",
+                "score": 15.18473,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103311514",
+                "name": "BLUM CLIP top BLUMOTION M\u00f6bel Scharnier 110\u00b0, gerade mit Feder, INSERTA",
+                "ordernumbers": [
+                    "103311514"
+                ],
+                "summary": "",
+                "price": 4.09,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung_Standardanwendung",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung_Standardanwendung_110\u00b0 - Scharnier_Eckanschlag",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung_Standardanwendung_110\u00b0 - Scharnier",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/903\/DV005-ppic_BLUM_CLIP_top_BLUMO110Grad_Eckb_INS_71B3590_270.jpg",
+                "highlightedName": "BLUM CLIP top BLUMOTION M\u00f6bel Scharnier 110\u00b0, gerade mit Feder, INSERTA"
+            },
+            {
+                "id": "103307101",
+                "score": 14.76424,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103307101",
+                "name": "BLUM CLIP top BLUMOTION M\u00f6bel Scharnier 110\u00b0, gerade mit Feder, Schrauben",
+                "ordernumbers": [
+                    "103307101"
+                ],
+                "summary": "",
+                "price": 3.36,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung_Standardanwendung",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung_Standardanwendung_110\u00b0 - Scharnier_Eckanschlag",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top\/BLUMOTION - Scharniere mit oder ohne integrierte D\u00e4mpfung_Standardanwendung_110\u00b0 - Scharnier",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/920\/DV005-ppic_BLUM_CLIP_top_BLUMO_110Grad_Eckb_Schr_71B3550_270.jpg",
+                "highlightedName": "BLUM CLIP top BLUMOTION M\u00f6bel Scharnier 110\u00b0, gerade mit Feder, Schrauben"
+            },
+            {
+                "id": "102249590",
+                "score": 14.68943,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/102249590",
+                "name": "Ausgleichsh\u00fclse von 8 auf 8,5 mm, verzinkt mit Schlitz und Rand",
+                "ordernumbers": [
+                    "102249590"
+                ],
+                "summary": "",
+                "price": 93.77,
+                "attributes": {
+                    "cat": [
+                        "Baubeschl\u00e4ge_Sichtbeschl\u00e4ge-Zubeh\u00f6r",
+                        "Baubeschl\u00e4ge_Sichtbeschl\u00e4ge-Zubeh\u00f6r_Dr\u00fcckerzubeh\u00f6r_Ausgleichsh\u00fclsen",
+                        "Baubeschl\u00e4ge_Sichtbeschl\u00e4ge-Zubeh\u00f6r_Dr\u00fcckerzubeh\u00f6r_Ausgleichsh\u00fclsen_Ausgleichsh\u00fclse",
+                        "Baubeschl\u00e4ge_Sichtbeschl\u00e4ge-Zubeh\u00f6r_Dr\u00fcckerzubeh\u00f6r",
+                        "Baubeschl\u00e4ge"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/170\/263\/DV005-ppic_ausgleichshuele_lang_offen_rand_270.jpg",
+                "highlightedName": "Ausgleichsh\u00fclse von 8 auf 8,5 mm, verzinkt mit Schlitz und Rand"
+            },
+            {
+                "id": "111717561",
+                "score": 14.64502,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/111717561",
+                "name": "SOLIDO Einstemmschloss 340 WC, DM 50, Nuss 8,5, verzinkt",
+                "ordernumbers": [
+                    "111717561"
+                ],
+                "summary": "",
+                "price": 19.08,
+                "attributes": {
+                    "cat": [
+                        "Baufertigteile_T\u00fcren und Zargen_Zubeh\u00f6r und Beschl\u00e4ge",
+                        "Baufertigteile_T\u00fcren und Zargen_Zubeh\u00f6r und Beschl\u00e4ge_Solido Einstemmschl\u00f6sser",
+                        "Baufertigteile",
+                        "Baufertigteile_T\u00fcren und Zargen"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/136\/984\/DV005-ppic_111717561_Solido_Einstemmschloss_WC_270.jpg",
+                "highlightedName": "SOLIDO Einstemmschloss 340 WC, DM 50, Nuss 8,5, verzinkt"
+            },
+            {
+                "id": "103357109",
+                "score": 14.59553,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103357109",
+                "name": "BLUM TANDEM Kupplungsteil links, Kunststoff \/ Zink",
+                "ordernumbers": [
+                    "103357109"
+                ],
+                "summary": "",
+                "price": 0.86,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_Zubeh\u00f6r BLUM F\u00fchrungssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_Zubeh\u00f6r BLUM F\u00fchrungssysteme_TANDEM Kupplungsteil",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/713\/DV005-ppic_BLUM_TANDEM___KUPPLUNG_LINKS_T511700_270.jpg",
+                "highlightedName": "BLUM TANDEM Kupplungsteil links, Kunststoff \/ Zink"
+            },
+            {
+                "id": "103357110",
+                "score": 14.58331,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103357110",
+                "name": "BLUM TANDEM Kupplungsteil rechts, Kunststoff \/ Zink",
+                "ordernumbers": [
+                    "103357110"
+                ],
+                "summary": "",
+                "price": 0.86,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_Zubeh\u00f6r BLUM F\u00fchrungssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung_Zubeh\u00f6r BLUM F\u00fchrungssysteme_TANDEM Kupplungsteil",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_BLUM Unterbodenf\u00fchrung"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/714\/DV005-ppic_BLUM_TANDEM___KUPPLUNG_RECHTS_270.jpg",
+                "highlightedName": "BLUM TANDEM Kupplungsteil rechts, Kunststoff \/ Zink"
+            },
+            {
+                "id": "103378204",
+                "score": 14.57375,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103378204",
+                "name": "Profilabdeckung Ultraflex YX01 zu Aluprofile YT, 3000 mm, opal",
+                "ordernumbers": [
+                    "103378204"
+                ],
+                "summary": "",
+                "price": 21.15,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_Profile f\u00fcr LED-B\u00e4nder_Aluminiumprofile_Aluminiumprofile YT_Profilabdeckung Ultraflex YX01",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_Profile f\u00fcr LED-B\u00e4nder_Aluminiumprofile",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_Profile f\u00fcr LED-B\u00e4nder_Aluminiumprofile_Aluminiumprofile YT",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_Profile f\u00fcr LED-B\u00e4nder",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/134\/948\/DV005-ppic_Abdeckung_zu_YT01_YT02_YT04_270.jpg",
+                "highlightedName": "Profilabdeckung Ultraflex YX01 zu Aluprofile YT, 3000 mm, opal"
+            },
+            {
+                "id": "103311455",
+                "score": 14.42606,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103311455",
+                "name": "BLUM CLIP Kreuzmontageplatte, Zink, Schrauben, Distanz 0 mm",
+                "ordernumbers": [
+                    "103311455"
+                ],
+                "summary": "",
+                "price": 77.87,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten_Montageplatten ohne Exzenter-H\u00f6henverstellung_Kreuzmontageplatte - Montage mit Spanplattenschrauben 37\/32",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten_Montageplatten ohne Exzenter-H\u00f6henverstellung",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/111\/DV005-ppic_BLUM_CLIP_KREUZPLATTEN_175H7100___0_MM_ZN7_270.jpg",
+                "highlightedName": "BLUM CLIP Kreuzmontageplatte, Zink, Schrauben, Distanz 0 mm"
+            },
+            {
+                "id": "103323370",
+                "score": 14.30453,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103323370",
+                "name": "CAMAR Sockelverstellfu\u00df Unico 70 x 100 mm Kunststoff schwarz",
+                "ordernumbers": [
+                    "103323370"
+                ],
+                "summary": "",
+                "price": 0.95,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe_Camar Unico\/Unicomatic_Sockelverstellfu\u00df Unico \u00f8 70 mm",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe_Camar Unico\/Unicomatic",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/269\/651\/DV005-ppic_Camar_Unico_Sockelverstellfuss_01_270.jpg",
+                "highlightedName": "CAMAR Sockelverstellfu\u00df Unico 70 x 100 mm Kunststoff schwarz"
+            },
+            {
+                "id": "103372701",
+                "score": 14.28565,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103372701",
+                "name": "LED-Netzger\u00e4t NG37, 12 V\/DC, 2 Anschl\u00fcsse + 6-fach Verteiler, Leistung 15 W",
+                "ordernumbers": [
+                    "103372701"
+                ],
+                "summary": "",
+                "price": 24.55,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_LED-Netzger\u00e4te, Halogen-Trafos und Zubeh\u00f6r",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_LED-Netzger\u00e4te, Halogen-Trafos und Zubeh\u00f6r_LED-Zubeh\u00f6r 12 V\/DC_LED-Netzger\u00e4te 12 V\/DC_LED-Netzger\u00e4te 12 V\/DC",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_LED-Netzger\u00e4te, Halogen-Trafos und Zubeh\u00f6r_LED-Zubeh\u00f6r 12 V\/DC",
+                        "M\u00f6belbeschl\u00e4ge_Licht Design und Technik_LED-Netzger\u00e4te, Halogen-Trafos und Zubeh\u00f6r_LED-Zubeh\u00f6r 12 V\/DC_LED-Netzger\u00e4te 12 V\/DC"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/134\/248\/DV005-ppic_Netzgeraet_NG37_270.jpg",
+                "highlightedName": "LED-Netzger\u00e4t NG37, 12 V\/DC, 2 Anschl\u00fcsse + 6-fach Verteiler, Leistung 15 W"
+            },
+            {
+                "id": "101192483",
+                "score": 14.26978,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/101192483",
+                "name": "SCHULLER Ersatzklingenbox mit 18 mm Abbrechklingen ( 10 St\u00fcck )",
+                "ordernumbers": [
+                    "101192483"
+                ],
+                "summary": "",
+                "price": 1.29,
+                "attributes": {
+                    "cat": [
+                        "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz_Handwerkzeuge_Senken - Schneiden",
+                        "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz_Handwerkzeuge_Senken - Schneiden_Messer_18 mm",
+                        "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz_Handwerkzeuge_Senken - Schneiden_Messer_18 mm_Ersatzklinge",
+                        "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz",
+                        "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz_Handwerkzeuge_Senken - Schneiden_Messer_18 mm_Ersatzklinge_Abbrechklingen-Box 18 mm 10 St\u00fcck",
+                        "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz_Handwerkzeuge_Senken - Schneiden_Messer",
+                        "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz_Handwerkzeuge"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/135\/201\/DV005-ppic_Abbrechklinge_18mm_101192483_270.jpg",
+                "highlightedName": "SCHULLER Ersatzklingenbox mit 18 mm Abbrechklingen ( 10 St\u00fcck )"
+            },
+            {
+                "id": "103323783",
+                "score": 14.26339,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103323783",
+                "name": "BLUM TIP-ON f\u00fcr T\u00fcren 956A1006 Langversion mit Puffer, seidenwei\u00df",
+                "ordernumbers": [
+                    "103323783"
+                ],
+                "summary": "",
+                "price": 4.1,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_TIP-ON f\u00fcr T\u00fcren_TIP-ON f\u00fcr T\u00fcren 956",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_TIP-ON f\u00fcr T\u00fcren",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_TIP-ON f\u00fcr T\u00fcren_TIP-ON f\u00fcr T\u00fcren 956_TIP-ON 956A Langversion mit Puffer"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/DV005-ppic_BLUM_TIP_ON_Scharniere_Puffer_weiss_270.jpg",
+                "highlightedName": "BLUM TIP-ON f\u00fcr T\u00fcren 956A1006 Langversion mit Puffer, seidenwei\u00df"
+            },
+            {
+                "id": "103312467",
+                "score": 14.24895,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103312467",
+                "name": "Systemschraube Senkkopf 6,3x13 mm,TX 20, Stahl vernickelt",
+                "ordernumbers": [
+                    "103312467"
+                ],
+                "summary": "",
+                "price": 10.35,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Zubeh\u00f6r Scharniere_Systemschraube Senkkopf",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Zubeh\u00f6r Scharniere",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/180\/148\/DV005-ppic_Euroschrauben_Torx_Blum.01_270.jpg",
+                "highlightedName": "Systemschraube Senkkopf 6,3x13 mm,TX 20, Stahl vernickelt"
+            },
+            {
+                "id": "110613301",
+                "score": 14.1718,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/110613301",
+                "name": "FISCHER FIS AB 300 T Injektionsm\u00f6rtel 300ml mit Bewertung f\u00fcr Beton und Mauer",
+                "ordernumbers": [
+                    "110613301"
+                ],
+                "summary": "",
+                "price": 22,
+                "attributes": {
+                    "cat": [
+                        "Chemisch-Technische-Produkte_Injektionsklebstoffe_Injektionssysteme",
+                        "Chemisch-Technische-Produkte_Injektionsklebstoffe_Injektionssysteme_Fischer FIS Injektionsm\u00f6rtel_Fischer FIS AB",
+                        "Chemisch-Technische-Produkte_Injektionsklebstoffe_Injektionssysteme_Fischer FIS Injektionsm\u00f6rtel",
+                        "Chemisch-Technische-Produkte_Injektionsklebstoffe_Injektionssysteme_Fischer FIS Injektionsm\u00f6rtel_Fischer FIS AB_Fischer FIS AB 300 T Injektionsm\u00f6rtel",
+                        "Chemisch-Technische-Produkte",
+                        "Chemisch-Technische-Produkte_Injektionsklebstoffe"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/168\/176\/DV005-ppic_Fischer_Injektionsmoertel_FIS_AB_300_T_270.jpg",
+                "highlightedName": "FISCHER FIS AB 300 T Injektionsm\u00f6rtel 300ml mit Bewertung f\u00fcr Beton und Mauer"
+            },
+            {
+                "id": "103357419",
+                "score": 14.11062,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103357419",
+                "name": "BLUM MOVENTO BLUMOTION S 760H Unterbodenf\u00fchrung, NL 350, TK 40kg; 760H3500S",
+                "ordernumbers": [
+                    "103357419"
+                ],
+                "summary": "",
+                "price": 28.04,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_F\u00fchrungssystem MOVENTO 760H\/766H mit BLUMOTION S",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/268\/319\/DV005-ppic_Blum_Movento_760H3500S_02929806_103357419_270.jpg",
+                "highlightedName": "BLUM MOVENTO BLUMOTION S 760H Unterbodenf\u00fchrung, NL 350, TK 40kg; 760H3500S"
+            },
+            {
+                "id": "103357425",
+                "score": 14.08631,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103357425",
+                "name": "BLUM MOVENTO BLUMOTION S 760H Unterbodenf\u00fchrung, NL 450, TK 40kg; 760H4500S",
+                "ordernumbers": [
+                    "103357425"
+                ],
+                "summary": "",
+                "price": 28.68,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_F\u00fchrungssystem MOVENTO 760H\/766H mit BLUMOTION S",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/268\/319\/DV005-ppic_Blum_Movento_760H4500S_04215867_103357425_270.jpg",
+                "highlightedName": "BLUM MOVENTO BLUMOTION S 760H Unterbodenf\u00fchrung, NL 450, TK 40kg; 760H4500S"
+            },
+            {
+                "id": "102253744",
+                "score": 14.06701,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/102253744",
+                "name": "MARCHESI Dr\u00fcckergarnitur GEHRUNG - auf Rosette BB, 38 - 45, Edelstahl matt",
+                "ordernumbers": [
+                    "102253744"
+                ],
+                "summary": "",
+                "price": 26.58,
+                "attributes": {
+                    "cat": [
+                        "Baubeschl\u00e4ge_Dr\u00fccker_Dr\u00fccker Wohnbau_Dr\u00fccker Wohnbau Edelstahl_Wohnbau Edelstahl Marchesi_GEHRUNG",
+                        "Baubeschl\u00e4ge_Dr\u00fccker_Dr\u00fccker Wohnbau_Dr\u00fccker Wohnbau Edelstahl",
+                        "Baubeschl\u00e4ge_Dr\u00fccker_Dr\u00fccker Wohnbau",
+                        "Baubeschl\u00e4ge_Dr\u00fccker",
+                        "Baubeschl\u00e4ge",
+                        "Baubeschl\u00e4ge_Dr\u00fccker_Dr\u00fccker Wohnbau_Dr\u00fccker Wohnbau Edelstahl_Wohnbau Edelstahl Marchesi_GEHRUNG_Dr\u00fcckergarnitur GEHRUNG matt",
+                        "Baubeschl\u00e4ge_Dr\u00fccker_Dr\u00fccker Wohnbau_Dr\u00fccker Wohnbau Edelstahl_Wohnbau Edelstahl Marchesi"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/103\/286\/DV005-ppic_Marchesi_Gehrung_270.jpg",
+                "highlightedName": "MARCHESI Dr\u00fcckergarnitur GEHRUNG - auf Rosette BB, 38 - 45, Edelstahl matt"
+            },
+            {
+                "id": "103323369",
+                "score": 14.04216,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103323369",
+                "name": "CAMAR Sockelverstellfu\u00df Unico 70 x 80 mm Kunststoff schwarz",
+                "ordernumbers": [
+                    "103323369"
+                ],
+                "summary": "",
+                "price": 0.91,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe_Camar Unico\/Unicomatic_Sockelverstellfu\u00df Unico \u00f8 70 mm",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe_Camar Unico\/Unicomatic",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau",
+                        "M\u00f6belbeschl\u00e4ge_M\u00f6belunterbau_Sockelbeschl\u00e4ge_Sockelf\u00fc\u00dfe"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/103\/102\/DV005-ppic_Sockelverstellfuss_Unico_270.jpg",
+                "highlightedName": "CAMAR Sockelverstellfu\u00df Unico 70 x 80 mm Kunststoff schwarz"
+            },
+            {
+                "id": "103311486",
+                "score": 13.99519,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103311486",
+                "name": "BLUM CLIP Exzenter Kreuzmontageplatte, Stahl, Schrauben, Distanz 3 mm",
+                "ordernumbers": [
+                    "103311486"
+                ],
+                "summary": "",
+                "price": 0.64,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten_Montageplatten mit Exzenter-H\u00f6henverstellung",
+                        "M\u00f6belbeschl\u00e4ge_Scharniere_Topfscharniere BLUM_CLIP top Montageplatten_Montageplatten mit Exzenter-H\u00f6henverstellung_Exzenter- Kreuzmontageplatte 37\/32"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/175\/892\/DV005-ppic_BLUM_EXZENTERMONTAGEPLATTEN_173H7130_3MM_270.jpg",
+                "highlightedName": "BLUM CLIP Exzenter Kreuzmontageplatte, Stahl, Schrauben, Distanz 3 mm"
+            },
+            {
+                "id": "103357422",
+                "score": 13.99519,
+                "url": "https:\/\/sfq3.schachermayer.com\/cat\/de-AT\/product\/detail\/103357422",
+                "name": "BLUM MOVENTO BLUMOTION S 760H Unterbodenf\u00fchrung, NL 400, TK 40kg; 760H4000S",
+                "ordernumbers": [
+                    "103357422"
+                ],
+                "summary": "",
+                "price": 28.36,
+                "attributes": {
+                    "cat": [
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend_F\u00fchrungssystem MOVENTO 760H\/766H mit BLUMOTION S",
+                        "M\u00f6belbeschl\u00e4ge",
+                        "M\u00f6belbeschl\u00e4ge_Auszugssysteme_F\u00fchrungssysteme f\u00fcr Ausz\u00fcge und Schubk\u00e4sten_Unterbodenf\u00fchrung - verdecktliegend"
+                    ]
+                },
+                "matchingOrdernumber": "",
+                "properties": {},
+                "productPlacement": null,
+                "pushRules": [],
+                "imageUrl": "https:\/\/sfq3.schachermayer.com\/cdn\/derivates\/5\/268\/319\/DV005-ppic_Blum_Movento_760H4000S_04084545_103357422_270.jpg",
+                "highlightedName": "BLUM MOVENTO BLUMOTION S 760H Unterbodenf\u00fchrung, NL 400, TK 40kg; 760H4000S"
+            }
+        ],
+        "variant": {
+            "name": "sdym"
+        },
+        "filters": {
+            "main": [
+                {
+                    "name": "cat",
+                    "displayName": "Kategorie",
+                    "selectMode": "multiple",
+                    "combinationOperation": "and",
+                    "values": [
+                        {
+                            "value": "Befestigungstechnik",
+                            "weight": 0.44357848167419434,
+                            "frequency": 28458,
+                            "selected": false,
+                            "displayName": "Befestigungstechnik"
+                        },
+                        {
+                            "value": "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz",
+                            "weight": 0.43358713388442993,
+                            "frequency": 27817,
+                            "selected": false,
+                            "displayName": "Werkzeuge - Elektrowerkzeuge - Arbeitsschutz"
+                        },
+                        {
+                            "value": "Baubeschl\u00e4ge",
+                            "weight": 0.29941314458847046,
+                            "frequency": 19209,
+                            "selected": false,
+                            "displayName": "Baubeschl\u00e4ge"
+                        },
+                        {
+                            "value": "Baufertigteile",
+                            "weight": 0.28513532876968384,
+                            "frequency": 18293,
+                            "selected": false,
+                            "displayName": "Baufertigteile"
+                        },
+                        {
+                            "value": "M\u00f6belbeschl\u00e4ge",
+                            "weight": 0.2629704475402832,
+                            "frequency": 16871,
+                            "selected": false,
+                            "displayName": "M\u00f6belbeschl\u00e4ge"
+                        },
+                        {
+                            "value": "K\u00fcchen- & Haushaltsger\u00e4te",
+                            "weight": 0.06089890003204346,
+                            "frequency": 3907,
+                            "selected": false,
+                            "displayName": "K\u00fcchen- & Haushaltsger\u00e4te"
+                        },
+                        {
+                            "value": "Sp\u00fclen, Armaturen - Sanit\u00e4r & Wellness",
+                            "weight": 0.05709564685821533,
+                            "frequency": 3663,
+                            "selected": false,
+                            "displayName": "Sp\u00fclen, Armaturen - Sanit\u00e4r & Wellness"
+                        },
+                        {
+                            "value": "Lagertechnik und Betriebsausstattung",
+                            "weight": 0.04644966125488281,
+                            "frequency": 2980,
+                            "selected": false,
+                            "displayName": "Lagertechnik und Betriebsausstattung"
+                        },
+                        {
+                            "value": "Chemisch-Technische-Produkte",
+                            "weight": 0.035086631774902344,
+                            "frequency": 2251,
+                            "selected": false,
+                            "displayName": "Chemisch-Technische-Produkte"
+                        },
+                        {
+                            "value": "Holzbearbeitungsmaschinen",
+                            "weight": 0.028228282928466797,
+                            "frequency": 1811,
+                            "selected": false,
+                            "displayName": "Holzbearbeitungsmaschinen"
+                        },
+                        {
+                            "value": "Metallbearbeitungsmaschinen",
+                            "weight": 0.027480125427246094,
+                            "frequency": 1763,
+                            "selected": false,
+                            "displayName": "Metallbearbeitungsmaschinen"
+                        },
+                        {
+                            "value": "Metalle",
+                            "weight": 0.010381042957305908,
+                            "frequency": 666,
+                            "selected": false,
+                            "displayName": "Metalle"
+                        },
+                        {
+                            "value": "SB-Selbstbedienungsprogramm",
+                            "weight": 0.009679615497589111,
+                            "frequency": 621,
+                            "selected": false,
+                            "displayName": "SB-Selbstbedienungsprogramm"
+                        }
+                    ],
+                    "type": "select",
+                    "pinnedFilterValueCount": 6
+                }
+            ],
+            "other": [
+                {
+                    "name": "price",
+                    "displayName": "Preis",
+                    "selectMode": "multiple",
+                    "combinationOperation": "and",
+                    "values": [
+                        {
+                            "value": "0,00 EUR - 18,84 EUR",
+                            "weight": 0.5000038743019104,
+                            "frequency": 32078,
+                            "selected": false
+                        },
+                        {
+                            "value": "18,85 EUR - 68,50 EUR",
+                            "weight": 0.5000818371772766,
+                            "frequency": 32083,
+                            "selected": false
+                        },
+                        {
+                            "value": "68,55 EUR - 246,12 EUR",
+                            "weight": 0.5000506639480591,
+                            "frequency": 32081,
+                            "selected": false
+                        },
+                        {
+                            "value": "246,24 EUR - 176.101,00 EUR",
+                            "weight": 0.4998636245727539,
+                            "frequency": 32069,
+                            "selected": false
+                        }
+                    ],
+                    "type": "select",
+                    "pinnedFilterValueCount": 0
+                }
+            ]
+        }
+    }
+}

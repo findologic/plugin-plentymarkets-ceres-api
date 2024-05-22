@@ -2,9 +2,7 @@
 
 namespace Findologic\Api\Response\Parser;
 
-use SimpleXMLElement;
 use Findologic\Constants\Plugin;
-use Findologic\Api\Services\Image;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Plugin\Libs\Contracts\LibraryCallContract;
 
@@ -38,37 +36,37 @@ class FiltersParser
     }
 
     /**
-     * @param SimpleXMLElement|null $data
+     * @param array|null $data
      */
-    public function parse($data): array
+    public function parse(?array $filters): array
     {
-        if (!$data instanceof SimpleXMLElement) {
+        if (!$filters) {
             return [];
         }
 
-        $filters = [];
+        $mapped = [];
 
-        if ($data->main->filter) {
-            foreach ($data->main->filter as $filter) {
-                $filters[] = $this->parseFilter($filter, true);
+        if (@$filters['main']) {
+            foreach ($filters['main'] as $filter) {
+                $mapped[] = $this->parseFilter($filter, true);
             }
         }
 
-        if ($data->other->filter) {
-            foreach ($data->other->filter as $filter) {
-                $filters[] = $this->parseFilter($filter);
+        if (@$filters['other']) {
+            foreach ($filters['other'] as $filter) {
+                $mapped[] = $this->parseFilter($filter);
             }
         }
 
-        return $filters;
+        return $mapped;
     }
 
     /**
-     * @param SimpleXMLElement|null $data
+     * @param array|null $data
      */
-    public function parseForWidgets($data): array
+    public function parseForWidgets(array $data): array
     {
-        if (!$data instanceof SimpleXMLElement) {
+        if (!$data) {
             return [];
         }
 
@@ -107,45 +105,49 @@ class FiltersParser
     /**
      * @param string $filterType
      * @param array $filterItem
-     * @param \SimpleXMLElement $data
+     * @param array $data
      * @param int $index
      * @return void
      */
-    public function parseFilterItem($filterType, &$filterItem, $data, $index)
+    public function parseFilterItem($filterType, &$filterItem, array $data, $index)
     {
         if (!empty($data)) {
             $filterItem['items'] = [];
-            $filterItem['name'] = $data->name->__toString();
+            $filterItem['name'] = $data['value'];
             $filterItem['position'] = $index;
-            $filterItem['count'] = $data->frequency->__toString();
+            $filterItem['count'] = (string) @$data['frequency'] ?? '';
             $filterItem['id'] = ++$this->valueId;
             $filterItem['selected'] = false;
 
             if ($filterType === 'price') {
-                $filterItem['priceMin'] = $data->parameters->min;
-                $filterItem['priceMax'] = $data->parameters->max;
+                $filterItem['priceMin'] = $data['parameters']['min'];
+                $filterItem['priceMax'] = $data['parameters']['max'];
             }
 
-            if (isset($data->attributes()->selected) && $data->attributes()->selected->__toString() === '1') {
-                $filterItem['selected'] = true;
+            if ($filterType === Plugin::FILTER_TYPE_RANGE_SLIDER) {
+                $filterItem['name'] = $data['value']['min'] . " - " . $data['value']['max'];
+            }
+
+            if (@$data['selected']) {
+                $filterItem['selected'] = $data['selected'];
             }
 
             if ($filterType === Plugin::FILTER_TYPE_IMAGE) {
-                if (isset($data->image) && $data->image->__toString() !== '' && $data->image->__toString()[0] !== '/') {
-                    $filterItem['imageUrl'] = $data->image->__toString();
+                if (isset($data['image'])) {
+                    $filterItem['imageUrl'] = $data['image'];
                 }
             }
 
             if ($filterType === Plugin::FILTER_TYPE_COLOR) {
-                if (isset($data->image) && $data->image->__toString() !== '') {
-                    $filterItem['colorImageUrl'] = $data->image->__toString();
+                if (isset($data['image'])) {
+                    $filterItem['colorImageUrl'] = $data['image'];
                 }
 
-                $filterItem['hexValue'] = $data->color->__toString();
+                $filterItem['hexValue'] = $data['color'];
             }
 
-            if (!empty($data->items)) {
-                foreach ($data->items->item as $key => $item) {
+            if (!empty($data['values'])) {
+                foreach ($data['values'] as $key => $item) {
                     $newItem = [];
                     $this->parseFilterItem($filterType, $newItem, $item, $key);
                     if ($newItem['selected']) {
@@ -158,31 +160,31 @@ class FiltersParser
     }
 
     /**
-     * @param \SimpleXMLElement $filter
+     * @param array $filter
      * @param bool $isMainFilter
      * @return array
      */
-    protected function parseFilter($filter, $isMainFilter = false)
+    protected function parseFilter(array $filter, $isMainFilter = false): array
     {
-        $noAvailableFiltersText = $filter->noAvailableFiltersText ? $filter->noAvailableFiltersText->__toString() : '';
+        $noAvailableFiltersText = $filter['noAvailableFiltersText'] ?? '';
 
-        $filterName = $filter->name->__toString();
+        $filterName = $filter['name'];
         $filterData = [
             'id' => $filterName,
-            'name' => $filter->display->__toString(),
-            'select' => $filter->select->__toString(),
+            'name' => $filter['displayName'] ?? '',
+            'select' => $filter['selectMode'],
             'type' => '',
             'findologicFilterType' => '',
             'isMain' => $isMainFilter,
             'values' => [],
-            'itemCount' => $filter->itemCount ? $filter->itemCount->__toString() : 0,
+            'itemCount' => (string) @$filter['pinnedFilterValueCount'] ?: 0,
             'noAvailableFiltersText' => $noAvailableFiltersText
         ];
 
-        $filterData['cssClass'] = $filter->cssClass ? $filter->cssClass->__toString() : '';
+        $filterData['cssClass'] = $filter['cssClass'] ?? '';
 
-        if ($filter->type) {
-            $filterData['findologicFilterType'] = $filter->type->__toString();
+        if ($filter['type']) {
+            $filterData['findologicFilterType'] = $filter['type'];
         }
 
         if ($filterName === 'price' && $filterData['findologicFilterType'] !== Plugin::FILTER_TYPE_RANGE_SLIDER) {
@@ -190,14 +192,14 @@ class FiltersParser
         }
 
         if ($filterData['findologicFilterType'] === Plugin::FILTER_TYPE_RANGE_SLIDER) {
-            $filterData['unit'] = $filter->attributes->unit->__toString();
-            $filterData['minValue'] = (float)$filter->attributes->totalRange->min;
-            $filterData['maxValue'] = (float)$filter->attributes->totalRange->max;
+            $filterData['unit'] = $filter['unit'];
+            $filterData['minValue'] = $filter['totalRange']['min'];
+            $filterData['maxValue'] = $filter['totalRange']['max'];
             $filterData['step'] = (float) $this->configRepository->get('Findologic.price_range_filter_step_size', '0.01');
             $filterData['useNoUISliderCSS'] = (bool) $this->configRepository->get('Findologic.load_no_ui_slider_styles_enabled', '1');
         }
 
-        foreach ($filter->items->item as $key => $item) {
+        foreach ($filter['values'] as $key => $item) {
             $filterItem = [];
             $this->parseFilterItem($filterData['findologicFilterType'], $filterItem, $item, $key);
             if (!empty($filterItem)) {

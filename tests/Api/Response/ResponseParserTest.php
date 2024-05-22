@@ -2,14 +2,14 @@
 
 namespace Findologic\Tests\Api\Response;
 
-use Findologic\Api\Response\Parser\FiltersParser;
-use Findologic\Api\Response\Response;
-use Findologic\Api\Response\ResponseParser;
+use PHPUnit\Framework\TestCase;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Log\LoggerFactory;
+use Findologic\Api\Response\Response;
 use Plenty\Log\Contracts\LoggerContract;
-use PHPUnit\Framework\TestCase;
+use Findologic\Api\Response\ResponseParser;
 use PHPUnit\Framework\MockObject\MockObject;
+use Findologic\Api\Response\Parser\FiltersParser;
 
 /**
  * Class ResponseParserTest
@@ -95,10 +95,10 @@ class ResponseParserTest extends TestCase
                     'Still invalid response after 2 retries. Using Plentymarkets SDK results without Findologic.',
                 'errorContext' => ['response' => ''],
             ],
-            'Invalid XML response' => [
-                'response' => 'invalid-xml',
-                'errorMessage' => 'Parsing XML failed',
-                'errorContext' => ['xmlString' => 'invalid-xml'],
+            'Invalid JSON response' => [
+                'response' => 'invalid-json',
+                'errorMessage' => 'Parsing JSON failed',
+                'errorContext' => ['jsonString' => 'invalid-json'],
             ],
         ];
     }
@@ -162,22 +162,37 @@ class ResponseParserTest extends TestCase
         return [
             'No Smart Did-You-Mean data provided' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -190,23 +205,38 @@ class ResponseParserTest extends TestCase
             ],
             'Did-You-Mean query present' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                        <didYouMeanQuery>TestDidYouMeanQuery</didYouMeanQuery>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym",
+                            "didYouMeanQuery": "TestDidYouMeanQuery"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => 'TestDidYouMeanQuery',
@@ -219,23 +249,38 @@ class ResponseParserTest extends TestCase
             ],
             'Improved query present' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <originalQuery>OriginalTest</originalQuery>
-                        <queryString type="improved">Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "OriginalTest",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym",
+                            "improvedQuery": "Test"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => 'OriginalTest',
                     'didYouMeanQuery' => null,
@@ -248,23 +293,38 @@ class ResponseParserTest extends TestCase
             ],
             'Corrected query present' => [
                 [],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <originalQuery>OriginalTest</originalQuery>
-                        <queryString type="corrected">Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "OriginalTest",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym",
+                            "correctedQuery": "Test"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => 'OriginalTest',
                     'didYouMeanQuery' => null,
@@ -283,22 +343,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -317,22 +392,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                <searchResult>
-                    <servers>
-                        <frontend>frontend.findologic.com</frontend>
-                        <backend>backend.findologic.com</backend>
-                    </servers>
-                    <query>
-                        <limit first="0" count="10"/>
-                        <queryString>Test</queryString>
-                        <searchedWordCount>1</searchedWordCount>
-                        <foundWordCount>1</foundWordCount>
-                    </query>
-                    <results><count>0</count></results>
-                    <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -351,22 +441,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <results><count>0</count></results>
-                        <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -385,22 +490,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <results><count>0</count></results>
-                        <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -422,22 +542,37 @@ class ResponseParserTest extends TestCase
                         ]
                     ]
                 ],
-                '<?xml version="1.0"?>
-                    <searchResult>
-                        <servers>
-                            <frontend>frontend.findologic.com</frontend>
-                            <backend>backend.findologic.com</backend>
-                        </servers>
-                        <query>
-                            <limit first="0" count="10"/>
-                            <queryString>Test</queryString>
-                            <searchedWordCount>1</searchedWordCount>
-                            <foundWordCount>1</foundWordCount>
-                        </query>
-                        <results><count>0</count></results>
-                        <products/>
-                    <filters/>
-                </searchResult>',
+                '{
+                    "request": {
+                        "query": "Test",
+                        "first": 0,
+                        "count": 25,
+                        "usergroup": null,
+                        "order": {
+                            "field": "salesfrequency",
+                            "relevanceBased": true,
+                            "direction": "DESC"
+                        }
+                    },
+                    "result": {
+                        "metadata": {
+                            "landingpage": null,
+                            "promotion": null,
+                            "searchConcept": null,
+                            "effectiveQuery": "Test",
+                            "totalResults": 0,
+                            "currencySymbol": "\u20ac"
+                        },
+                        "items": [],
+                        "variant": {
+                            "name": "sdym"
+                        },
+                        "filters": {
+                            "main": [],
+                            "other": []
+                        }
+                    }
+                }',
                 [
                     'originalQuery' => null,
                     'didYouMeanQuery' => null,
@@ -472,164 +607,175 @@ class ResponseParserTest extends TestCase
      */
     protected function getResponse()
     {
-        return '<?xml version="1.0"?>
-<searchResult>
-    <servers>
-        <frontend>frontend.findologic.com</frontend>
-        <backend>backend.findologic.com</backend>
-    </servers>
-    <query>
-        <limit first="0" count="10"/>
-        <queryString>Test</queryString>
-        <searchedWordCount>1</searchedWordCount>
-        <foundWordCount>1</foundWordCount>
-    </query>
-    <landingPage link="http://www.example.com/imprint"/>
-    <promotion image="http://www.example.com/special-offer.jpg" link="http://www.example.com/special-offer"/>
-    <results>
-        <count>3</count>
-    </results>
-    <products>
-        <product id="17" relevance="5.5451774597168" direct="0"/>
-        <product id="18" relevance="5.5451774597168" direct="0"/>
-        <product id="19" relevance="5.5451774597168" direct="0"/>
-    </products>
-    <filters>
-        <main>
-            <filter>
-                <name>cat</name>
-                <select>multiple</select>
-                <items>
-                    <item>
-                        <name>Untergruppe</name>
-                        <weight>0.863121</weight>
-                        <frequency>5</frequency>
-                        <image>http://www.example.com/images/Untergruppe.jpg</image>
-                        <items>
-                            <item>
-                                <name>Unteruntergruppe</name>
-                                <weight>0.985228</weight>
-                                <frequency>4</frequency>
-                                <items>
-                                    <item>
-                                        <name>Unteruntergruppe 1</name>
-                                        <weight>0.985228</weight>
-                                        <frequency>4</frequency>
-                                        <items>
-                                            <item>
-                                                <name>Unteruntergruppe 2</name>
-                                                <weight>0.985228</weight>
-                                                <frequency>4</frequency>
-                                            </item>
-                                        </items>
-                                    </item>
-                                </items>
-                            </item>
-                        </items>
-                    </item>
-                </items>
-            </filter>
-            <filter>
-                <name>vendor</name>
-                <select>multiple</select>
-                <items>
-                    <item>
-                        <name>Exclusive Leather</name>
-                        <weight>0.68965518474579</weight>
-                        <frequency>10</frequency>
-                    </item>
-                    <item>
-                        <name>HUNDE design</name>
-                        <weight>0.68965518474579</weight>
-                        <frequency>19</frequency>
-                    </item>
-                </items>
-            </filter>
-            <filter>
-                <name>price</name>
-                <display>Preis</display>
-                <select>single</select>
-                <type>range-slider</type>
-                <attributes>
-                    <selectedRange>
-                        <min>59</min>
-                        <max>2300</max>
-                    </selectedRange>
-                    <totalRange>
-                        <min>59</min>
-                        <max>2300</max>
-                    </totalRange>
-                    <stepSize>0.1</stepSize>
-                    <unit>€</unit>
-                </attributes>
-                <items>
-                    <item>
-                        <name>59 - 139</name>
-                        <weight>0.5517241358757</weight>
-                        <parameters>
-                            <min>59</min>
-                            <max>139</max>
-                        </parameters>
-                    </item>
-                    <item>
-                        <name>146.37 - 250</name>
-                        <weight>0.5517241358757</weight>
-                        <parameters>
-                            <min>146.37</min>
-                            <max>250</max>
-                        </parameters>
-                    </item>
-                    <item>
-                        <name>269 - 730</name>
-                        <weight>0.5517241358757</weight>
-                        <parameters>
-                            <min>269</min>
-                            <max>730</max>
-                        </parameters>
-                    </item>
-                    <item>
-                        <name>740 - 2300</name>
-                        <weight>0.34482759237289</weight>
-                        <parameters>
-                            <min>740</min>
-                            <max>2300</max>
-                        </parameters>
-                    </item>
-                </items>
-            </filter>
-        </main>
-        <other>
-            <filter>
-                <name>Farbe</name>
-                <display>Farbe</display>
-                <select>multiselect</select>
-                <selectedItems>0</selectedItems>
-                <type>color</type>
-                <items>
-                    <item>
-                        <name>lila</name>
-                        <weight>0.068965516984463</weight>
-                        <color>#BA55D3</color>
-                    </item>
-                    <item>
-                        <name>rot</name>
-                        <weight>0.068965516984463</weight>
-                        <color>#FF0000</color>
-                    </item>
-                    <item>
-                        <name>schwarz</name>
-                        <weight>0.068965516984463</weight>
-                        <color>#000000</color>
-                    </item>
-                    <item>
-                        <name>weiß</name>
-                        <weight>0.068965516984463</weight>
-                        <color>#FFFFFF</color>
-                    </item>
-                </items>
-            </filter>
-        </other>
-    </filters>
-</searchResult>';
+        return '{
+            "request": {
+                "query": "Test",
+                "first": 0,
+                "count": 10
+            },
+            "result": {
+                "metadata": {
+                    "landingpage": "http://www.example.com/imprint",
+                    "searchConcept": null,
+                    "effectiveQuery": "Test",
+                    "totalResults": 3,
+                    "currencySymbol": "\u20ac",
+                    "promotion": {
+                        "imageUrl": "http://www.example.com/special-offer.jpg",
+                        "url": "http://www.example.com/special-offer"
+                    }
+                },
+                "items": [
+                    {
+                        "id": "17",
+                        "score": "5.5451774597168",
+                        "_direct": "0"
+                    },
+                    {
+                        "id": "18",
+                        "score": "5.5451774597168",
+                        "_direct": "0"
+                    },
+                    {
+                        "id": "19",
+                        "score": "5.5451774597168",
+                        "_direct": "0"
+                    }
+                ],
+                "variant": {
+                    "name": "sdym"
+                },
+                "filters": {
+                    "main": [
+                        {
+                            "name": "cat",
+                            "selectMode": "multiple",
+                            "values": [
+                                {
+                                    "value": "Untergruppe",
+                                    "weight": "0.863121",
+                                    "frequency": "5",
+                                    "image": "http://www.example.com/images/Untergruppe.jpg",
+                                    "values": [
+                                        {
+                                            "value": "Unteruntergruppe",
+                                            "weight": "0.985228",
+                                            "frequency": "4",
+                                            "values": [
+                                                {
+                                                    "value": "Unteruntergruppe 1",
+                                                    "weight": "0.985228",
+                                                    "frequency": "4",
+                                                    "values": [
+                                                        {
+                                                            "value": "Unteruntergruppe 2",
+                                                            "weight": "0.985228",
+                                                            "frequency": "4"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                },
+                                {
+                                    "value": "HUNDE design",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "19"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "price",
+                            "displayName": "Preis",
+                            "selectMode": "single",
+                            "type": "range-slider",
+                            "selectedRange": {
+                                "min": "59",
+                                "max": "2300"
+                            },
+                            "totalRange": {
+                                "min": "59",
+                                "max": "2300"
+                            },
+                            "stepSize": "0.1",
+                            "unit": "€",
+                            "values": [
+                                    {
+                                        "weight": "0.5517241358757",
+                                        "value": {
+                                            "min": "59",
+                                            "max": "139"
+                                        }
+                                    },
+                                    {
+                                        "weight": "0.5517241358757",
+                                        "value": {
+                                            "min": "146.37",
+                                            "max": "250"
+                                        }
+                                    },
+                                    {
+                                        "weight": "0.5517241358757",
+                                        "value": {
+                                            "min": "269",
+                                            "max": "730"
+                                        }
+                                    },
+                                    {
+                                        "weight": "0.34482759237289",
+                                        "value": {
+                                            "min": "740",
+                                            "max": "2300"
+                                        }
+                                    }
+                                ]
+                        }
+                    ],
+                    "other": [
+                        {
+                            "name": "Farbe",
+                            "displayName": "Farbe",
+                            "selectMode": "multiselect",
+                            "selectedItems": "0",
+                            "type": "color",
+                            "values": [
+                                    {
+                                        "value": "lila",
+                                        "weight": "0.068965516984463",
+                                        "color": "#BA55D3"
+                                    },
+                                    {
+                                        "value": "rot",
+                                        "weight": "0.068965516984463",
+                                        "color": "#FF0000"
+                                    },
+                                    {
+                                        "value": "schwarz",
+                                        "weight": "0.068965516984463",
+                                        "color": "#000000"
+                                    },
+                                    {
+                                        "value": "weiß",
+                                        "weight": "0.068965516984463",
+                                        "color": "#FFFFFF"
+                                    }
+                                ]
+                        }
+                    ]
+                }
+            }
+        }';
     }
 }

@@ -1,0 +1,32 @@
+{
+    "request": {
+        "query": "this should return no results",
+        "first": 0,
+        "count": 25,
+        "serviceId": "2913E20746E3F762ADFC4AFAFE964607",
+        "usergroup": null,
+        "order": {
+            "field": "salesfrequency",
+            "relevanceBased": true,
+            "direction": "DESC"
+        }
+    },
+    "result": {
+        "metadata": {
+            "landingpage": null,
+            "promotion": null,
+            "searchConcept": null,
+            "effectiveQuery": "this should return no results",
+            "totalResults": 0,
+            "currencySymbol": "\u20ac"
+        },
+        "items": [],
+        "variant": {
+            "name": "sdym"
+        },
+        "filters": {
+            "main": [],
+            "other": []
+        }
+    }
+}

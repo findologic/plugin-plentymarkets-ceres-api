@@ -54,13 +54,16 @@ class FiltersParserTest extends TestCase
      * @param string $response
      * @param array $expectedResult
      */
-    public function testParse($response, array $expectedResult)
+    public function testParse($response, array $expectedResults)
     {
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 
-        $results = $filtersParserMock->parse(simplexml_load_string($response));
-        $this->assertEquals($expectedResult, $results);
+        $results = $filtersParserMock->parse(json_decode($response, 1));
+        if (!$response)
+            $this->assertEmpty($results);
+
+        $this->assertEquals($expectedResults, $results);
     }
 
     /**
@@ -91,169 +94,169 @@ class FiltersParserTest extends TestCase
     {
         return [
             'Filters and filter values are set in response' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <name>cat</name>
-                            <display>Kategorie</display>
-                            <select>single</select>
-                            <type>select</type>
-                            <items>
-                                <item>
-                                    <name>Wohnzimmer</name>
-                                    <weight>0.30303025245667</weight>
-                                    <frequency>28</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Sessel &amp; Hocker</name>
-                                            <weight>0.96969699859619</weight>
-                                            <frequency>17</frequency>
-                                        </item>
-                                        <item>
-                                            <name>Sofas</name>
-                                            <weight>0.66666668653488</weight>
-                                            <frequency>11</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                                <item>
-                                    <name>Arbeitszimmer &amp; Büro</name>
-                                    <weight>0.36363637447357</weight>
-                                    <frequency>6</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Bürostühle</name>
-                                            <weight>0.36363637447357</weight>
-                                            <frequency>6</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                            </items>
-                        </filter>
-                        <filter>
-                            <name>vendor</name>
-                            <select>multiple</select>
-                            <type>image</type>
-                            <items>
-                                <item>
-                                    <name>Exclusive Leather</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>10</frequency>
-                                </item>
-                                <item>
-                                    <name>HUNDE design</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>19</frequency>
-                                </item>
-                                <item>
-                                    <name>A &amp; C Design</name>
-                                    <weight>0.72727274894714</weight>
-                                    <frequency>21</frequency>
-                                    <image>/vendor/a_amp_c_design.jpg</image>
-                                </item>
-                                <item>
-                                    <name>H Manufacturer</name>
-                                    <weight>0.52727274894714</weight>
-                                    <frequency>25</frequency>
-                                    <image>https://test.com/vendor/a_amp_c_design.jpg</image>
-                                </item>
-                            </items>
-                        </filter>
-                        <filter>
-                            <name>price</name>
-                            <display>Preis</display>
-                            <select>single</select>
-                            <type>range-slider</type>
-                            <attributes>
-                                <selectedRange>
-                                    <min>59</min>
-                                    <max>2300</max>
-                                </selectedRange>
-                                <totalRange>
-                                    <min>59</min>
-                                    <max>2300</max>
-                                </totalRange>
-                                <stepSize>0.1</stepSize>
-                                <unit>€</unit>
-                            </attributes>
-                            <items>
-                                <item>
-                                    <name>59 - 139</name>
-                                    <weight>0.5517241358757</weight>
-                                    <parameters>
-                                        <min>59</min>
-                                        <max>139</max>
-                                    </parameters>
-                                </item>
-                                <item>
-                                    <name>146.37 - 250</name>
-                                    <weight>0.5517241358757</weight>
-                                    <parameters>
-                                        <min>146.37</min>
-                                        <max>250</max>
-                                    </parameters>
-                                </item>
-                                <item>
-                                    <name>269 - 730</name>
-                                    <weight>0.5517241358757</weight>
-                                    <parameters>
-                                        <min>269</min>
-                                        <max>730</max>
-                                    </parameters>
-                                </item>
-                                <item>
-                                    <name>740 - 2300</name>
-                                    <weight>0.34482759237289</weight>
-                                    <parameters>
-                                        <min>740</min>
-                                        <max>2300</max>
-                                    </parameters>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                    <other>
-                        <filter>
-                            <name>price-text</name>
-                            <display>Preis</display>
-                            <select>single</select>
-                            <type>text</type>
-                            <items>
-                                <item>
-                                </item>
-                            </items>
-                        </filter>
-                        <filter>
-                            <name>color</name>
-                            <display>Farbe</display>
-                            <select>multiselect</select>
-                            <selectedItems>0</selectedItems>
-                            <type>color</type>
-                            <items>
-                                <item>
-                                    <name>lila</name>
-                                    <weight>0.068965516984463</weight>
-                                    <color>#BA55D3</color>
-                                </item>
-                                <item>
-                                    <name>rot</name>
-                                    <weight>0.068965516984463</weight>
-                                    <color>#FF0000</color>
-                                </item>
-                                <item>
-                                    <name>schwarz</name>
-                                    <weight>0.068965516984463</weight>
-                                    <color>#000000</color>
-                                </item>
-                                <item>
-                                    <name>weiß</name>
-                                    <weight>0.068965516984463</weight>
-                                    <color>#FFFFFF</color>
-                                </item>
-                            </items>
-                        </filter>
-                    </other>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "name": "cat",
+                            "displayName": "Kategorie",
+                            "selectMode": "single",
+                            "type": "select",
+                            "values": [
+                                {
+                                    "value": "Wohnzimmer",
+                                    "weight": "0.30303025245667",
+                                    "frequency": "28",
+                                    "values": [
+                                        {
+                                            "value": "Sessel & Hocker",
+                                            "weight": "0.96969699859619",
+                                            "frequency": "17"
+                                        },
+                                        {
+                                            "value": "Sofas",
+                                            "weight": "0.66666668653488",
+                                            "frequency": "11"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "value": "Arbeitszimmer & Büro",
+                                    "weight": "0.36363637447357",
+                                    "frequency": "6",
+                                    "values": [
+                                        {
+                                            "value": "Bürostühle",
+                                            "weight": "0.36363637447357",
+                                            "frequency": "6"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "type": "image",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                },
+                                {
+                                    "value": "HUNDE design",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "19"
+                                },
+                                {
+                                    "value": "A & C Design",
+                                    "weight": "0.72727274894714",
+                                    "frequency": "21",
+                                    "image": "/vendor/a_amp_c_design.jpg"
+                                },
+                                {
+                                    "value": "H Manufacturer",
+                                    "weight": "0.52727274894714",
+                                    "frequency": "25",
+                                    "image": "https://test.com/vendor/a_amp_c_design.jpg"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "price",
+                            "displayName": "Preis",
+                            "selectMode": "single",
+                            "type": "range-slider",
+                            "selectedRange": {
+                                "min": 59,
+                                "max": 2300
+                            },
+                            "totalRange": {
+                                "min": 59,
+                                "max": 2300
+                            },
+                            "stepSize": "0.1",
+                            "unit": "€",
+                            "values": [
+                                {
+                                    "weight": "0.5517241358757",
+                                    "value": {
+                                        "min": "59",
+                                        "max": "139"
+                                    }
+                                },
+                                {
+                                    "weight": "0.5517241358757",
+                                    "value": {
+                                        "min": "146.37",
+                                        "max": "250"
+                                    }
+                                },
+                                {
+                                    "weight": "0.5517241358757",
+                                    "value": {
+                                        "min": "269",
+                                        "max": "730"
+                                    }
+                                },
+                                {
+                                    "weight": "0.34482759237289",
+                                    "value": {
+                                        "min": "740",
+                                        "max": "2300"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "other": [
+                        {
+                            "name": "price-text",
+                            "displayName": "Preis",
+                            "selectMode": "single",
+                            "type": "text",
+                            "values": [
+                                {
+                                    "items" : [],
+                                    "value" : "",
+                                    "position" : "item",
+                                    "count" : "",
+                                    "selected" : false
+                                }
+                            ]
+                        },
+                        {
+                            "name": "color",
+                            "displayName": "Farbe",
+                            "selectMode": "multiple",
+                            "selectedItems": "0",
+                            "type": "color",
+                            "values": [
+                                {
+                                    "value": "lila",
+                                    "weight": "0.068965516984463",
+                                    "color": "#BA55D3"
+                                },
+                                {
+                                    "value": "rot",
+                                    "weight": "0.068965516984463",
+                                    "color": "#FF0000"
+                                },
+                                {
+                                    "value": "schwarz",
+                                    "weight": "0.068965516984463",
+                                    "color": "#000000"
+                                },
+                                {
+                                    "value": "weiß",
+                                    "weight": "0.068965516984463",
+                                    "color": "#FFFFFF"
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'cat',
                         'cssClass' => '',
@@ -269,7 +272,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -278,14 +281,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => false,
@@ -295,14 +298,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -323,7 +326,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '10',
                                 'selected' => false,
                                 'id' => 6
@@ -331,7 +334,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'HUNDE design',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '19',
                                 'selected' => false,
                                 'id' => 7
@@ -339,15 +342,16 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'A & C Design',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '21',
                                 'selected' => false,
+                                'imageUrl' => '/vendor/a_amp_c_design.jpg',
                                 'id' => 8
                             ],
                             [
                                 'items' => [],
                                 'name' => 'H Manufacturer',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '25',
                                 'selected' => false,
                                 'id' => 9,
@@ -368,13 +372,13 @@ class FiltersParserTest extends TestCase
                         'noAvailableFiltersText' => '',
                         'minValue' => 59,
                         'maxValue' => 2300,
-                        'step' => 0,
+                        'step' => 0.0,
                         'useNoUISliderCSS' => false,
                         'values' => [
                             [
                                 'items' => [],
                                 'name' => '59 - 139',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 10
@@ -382,7 +386,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '146.37 - 250',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 11
@@ -390,7 +394,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '269 - 730',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 12
@@ -398,7 +402,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '740 - 2300',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 13
@@ -419,7 +423,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => '',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'selected' => false,
                                 'id' => 14
@@ -429,7 +433,7 @@ class FiltersParserTest extends TestCase
                     [
                         'id' => 'color',
                         'name' => 'Farbe',
-                        'select' => 'multiselect',
+                        'select' => 'multiple',
                         'type' => '',
                         'findologicFilterType' => 'color',
                         'cssClass' => '',
@@ -440,7 +444,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'lila',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'id' => 15,
                                 'hexValue' => '#BA55D3',
@@ -449,7 +453,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'rot',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '',
                                 'id' => 16,
                                 'hexValue' => '#FF0000',
@@ -458,7 +462,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'schwarz',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '',
                                 'id' => 17,
                                 'hexValue' => '#000000',
@@ -467,7 +471,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'weiß',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '',
                                 'id' => 18,
                                 'hexValue' => '#FFFFFF',
@@ -478,25 +482,27 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'No filters are returned in response' => [
-                null, []
+                null,
+                []
             ],
             'Css class is not set in response' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <name>vendor</name>
-                            <select>multiple</select>
-                            <type>image</type>
-                            <items>
-                                <item>
-                                    <name>Exclusive Leather</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>10</frequency>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "type": "image",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'vendor',
                         'cssClass' => '',
@@ -511,7 +517,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -521,23 +527,24 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'Css class exists in response, but has no value' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <cssClass></cssClass>
-                            <name>vendor</name>
-                            <select>multiple</select>
-                            <type>image</type>
-                            <items>
-                                <item>
-                                    <name>Exclusive Leather</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>10</frequency>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "cssClass": "",
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "type": "image",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'vendor',
                         'cssClass' => '',
@@ -552,7 +559,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -562,23 +569,24 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'Css class exists in response and has a value' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <cssClass>test-css-class</cssClass>
-                            <name>vendor</name>
-                            <select>multiple</select>
-                            <type>image</type>
-                            <items>
-                                <item>
-                                    <name>Exclusive Leather</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>10</frequency>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "cssClass": "test-css-class",
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "type": "image",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'vendor',
                         'cssClass' => 'test-css-class',
@@ -593,7 +601,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -603,39 +611,42 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'Filter values are marked as selected' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <name>vendor</name>
-                            <select>multiple</select>
-                            <type>image</type>
-                            <items>
-                                <item>
-                                    <name>Exclusive Leather</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>10</frequency>
-                                </item>
-                                <item selected="1">
-                                    <name>HUNDE design</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>19</frequency>
-                                </item>
-                                <item selected="0">
-                                    <name>A &amp; C Design</name>
-                                    <weight>0.72727274894714</weight>
-                                    <frequency>21</frequency>
-                                    <image>/vendor/a_amp_c_design.jpg</image>
-                                </item>
-                                <item>
-                                    <name>H Manufacturer</name>
-                                    <weight>0.52727274894714</weight>
-                                    <frequency>25</frequency>
-                                    <image>https://test.com/vendor/a_amp_c_design.jpg</image>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "type": "image",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                },
+                                {
+                                    "value": "HUNDE design",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "19",
+                                    "selected": true
+                                },
+                                {
+                                    "value": "A & C Design",
+                                    "weight": "0.72727274894714",
+                                    "frequency": "21",
+                                    "image": "/vendor/a_amp_c_design.jpg",
+                                    "selected": false
+                                },
+                                {
+                                    "value": "H Manufacturer",
+                                    "weight": "0.52727274894714",
+                                    "frequency": "25",
+                                    "image": "https://test.com/vendor/a_amp_c_design.jpg"
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'vendor',
                         'name' => '',
@@ -650,7 +661,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '10',
                                 'selected' => false,
                                 'id' => 1
@@ -658,7 +669,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'HUNDE design',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '19',
                                 'selected' => true,
                                 'id' => 2
@@ -666,15 +677,16 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'A & C Design',
-                                'position' => 'item',
+                                'position' => 2,
                                 'count' => '21',
                                 'selected' => false,
+                                "imageUrl" => "/vendor/a_amp_c_design.jpg",
                                 'id' => 3
                             ],
                             [
                                 'items' => [],
                                 'name' => 'H Manufacturer',
-                                'position' => 'item',
+                                'position' => 3,
                                 'count' => '25',
                                 'selected' => false,
                                 'id' => 4,
@@ -685,23 +697,24 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'itemCount is not set in the response' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <cssClass>test-css-class</cssClass>
-                            <name>vendor</name>
-                            <select>multiple</select>
-                            <type>image</type>
-                            <items>
-                                <item>
-                                    <name>Exclusive Leather</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>10</frequency>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "cssClass": "test-css-class",
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "type": "image",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'vendor',
                         'cssClass' => 'test-css-class',
@@ -716,7 +729,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -726,24 +739,25 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'itemCount is set in the response' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <itemCount>42</itemCount>
-                            <cssClass>test-css-class</cssClass>
-                            <name>vendor</name>
-                            <select>multiple</select>
-                            <type>image</type>
-                            <items>
-                                <item>
-                                    <name>Exclusive Leather</name>
-                                    <weight>0.68965518474579</weight>
-                                    <frequency>10</frequency>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "pinnedFilterValueCount": 42,
+                            "cssClass": "test-css-class",
+                            "name": "vendor",
+                            "selectMode": "multiple",
+                            "type": "image",
+                            "values": [
+                                {
+                                    "value": "Exclusive Leather",
+                                    "weight": "0.68965518474579",
+                                    "frequency": "10"
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'vendor',
                         'cssClass' => 'test-css-class',
@@ -758,7 +772,7 @@ class FiltersParserTest extends TestCase
                             [
                                 'items' => [],
                                 'name' => 'Exclusive Leather',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "10",
                                 'selected' => false,
                                 'id' => 1
@@ -768,47 +782,49 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'Child category is selected' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <name>cat</name>
-                            <display>Kategorie</display>
-                            <select>single</select>
-                            <type>select</type>
-                            <items>
-                                <item>
-                                    <name>Wohnzimmer</name>
-                                    <weight>0.30303025245667</weight>
-                                    <frequency>28</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Sessel &amp; Hocker</name>
-                                            <weight>0.96969699859619</weight>
-                                            <frequency>17</frequency>
-                                        </item>
-                                        <item selected="1">
-                                            <name>Sofas</name>
-                                            <weight>0.66666668653488</weight>
-                                            <frequency>11</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                                <item>
-                                    <name>Arbeitszimmer &amp; Büro</name>
-                                    <weight>0.36363637447357</weight>
-                                    <frequency>6</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Bürostühle</name>
-                                            <weight>0.36363637447357</weight>
-                                            <frequency>6</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "name": "cat",
+                            "displayName": "Kategorie",
+                            "selectMode": "single",
+                            "type": "select",
+                            "values": [
+                                {
+                                    "value": "Wohnzimmer",
+                                    "weight": "0.30303025245667",
+                                    "frequency": "28",
+                                    "values": [
+                                        {
+                                            "value": "Sessel & Hocker",
+                                            "weight": "0.96969699859619",
+                                            "frequency": "17"
+                                        },
+                                        {
+                                            "value": "Sofas",
+                                            "weight": "0.66666668653488",
+                                            "frequency": "11",
+                                            "selected": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "value": "Arbeitszimmer & Büro",
+                                    "weight": "0.36363637447357",
+                                    "frequency": "6",
+                                    "values": [
+                                        {
+                                            "value": "Bürostühle",
+                                            "weight": "0.36363637447357",
+                                            "frequency": "6"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'cat',
                         'cssClass' => '',
@@ -824,7 +840,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -833,14 +849,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => true,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => true,
@@ -850,14 +866,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -867,47 +883,49 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'Parent category is selected' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <name>cat</name>
-                            <display>Kategorie</display>
-                            <select>single</select>
-                            <type>select</type>
-                            <items>
-                                <item selected="1">
-                                    <name>Wohnzimmer</name>
-                                    <weight>0.30303025245667</weight>
-                                    <frequency>28</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Sessel &amp; Hocker</name>
-                                            <weight>0.96969699859619</weight>
-                                            <frequency>17</frequency>
-                                        </item>
-                                        <item>
-                                            <name>Sofas</name>
-                                            <weight>0.66666668653488</weight>
-                                            <frequency>11</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                                <item>
-                                    <name>Arbeitszimmer &amp; Büro</name>
-                                    <weight>0.36363637447357</weight>
-                                    <frequency>6</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Bürostühle</name>
-                                            <weight>0.36363637447357</weight>
-                                            <frequency>6</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "name": "cat",
+                            "displayName": "Kategorie",
+                            "selectMode": "single",
+                            "type": "select",
+                            "values": [
+                                {
+                                    "value": "Wohnzimmer",
+                                    "weight": "0.30303025245667",
+                                    "frequency": "28",
+                                    "values": [
+                                        {
+                                            "value": "Sessel & Hocker",
+                                            "weight": "0.96969699859619",
+                                            "frequency": "17"
+                                        },
+                                        {
+                                            "value": "Sofas",
+                                            "weight": "0.66666668653488",
+                                            "frequency": "11"
+                                        }
+                                    ],
+                                    "selected": true
+                                },
+                                {
+                                    "value": "Arbeitszimmer & Büro",
+                                    "weight": "0.36363637447357",
+                                    "frequency": "6",
+                                    "values": [
+                                        {
+                                            "value": "Bürostühle",
+                                            "weight": "0.36363637447357",
+                                            "frequency": "6"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'cat',
                         'cssClass' => '',
@@ -923,7 +941,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -932,14 +950,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => true,
@@ -949,14 +967,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -966,47 +984,48 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'noAvailableFiltersText is not set in the response' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <name>cat</name>
-                            <display>Kategorie</display>
-                            <select>single</select>
-                            <type>select</type>
-                            <items>
-                                <item>
-                                    <name>Wohnzimmer</name>
-                                    <weight>0.30303025245667</weight>
-                                    <frequency>28</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Sessel &amp; Hocker</name>
-                                            <weight>0.96969699859619</weight>
-                                            <frequency>17</frequency>
-                                        </item>
-                                        <item>
-                                            <name>Sofas</name>
-                                            <weight>0.66666668653488</weight>
-                                            <frequency>11</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                                <item>
-                                    <name>Arbeitszimmer &amp; Büro</name>
-                                    <weight>0.36363637447357</weight>
-                                    <frequency>6</frequency>
-                                    <items>
-                                        <item>
-                                            <name>Bürostühle</name>
-                                            <weight>0.36363637447357</weight>
-                                            <frequency>6</frequency>
-                                        </item>
-                                    </items>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "name": "cat",
+                            "displayName": "Kategorie",
+                            "selectMode": "single",
+                            "type": "select",
+                            "values": [
+                                {
+                                    "value": "Wohnzimmer",
+                                    "weight": "0.30303025245667",
+                                    "frequency": "28",
+                                    "values": [
+                                        {
+                                            "value": "Sessel & Hocker",
+                                            "weight": "0.96969699859619",
+                                            "frequency": "17"
+                                        },
+                                        {
+                                            "value": "Sofas",
+                                            "weight": "0.66666668653488",
+                                            "frequency": "11"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "value": "Arbeitszimmer & Büro",
+                                    "weight": "0.36363637447357",
+                                    "frequency": "6",
+                                    "values": [
+                                        {
+                                            "value": "Bürostühle",
+                                            "weight": "0.36363637447357",
+                                            "frequency": "6"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'cat',
                         'cssClass' => '',
@@ -1022,7 +1041,7 @@ class FiltersParserTest extends TestCase
                                 'items' => [
                                     [
                                         'name' => 'Sessel & Hocker',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '17',
                                         'id' => 2,
                                         'selected' => false,
@@ -1031,14 +1050,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Sofas',
-                                        'position' => 'item',
+                                        'position' => 1,
                                         'count' => '11',
                                         'selected' => false,
                                         'id' => 3
                                     ]
                                 ],
                                 'name' => 'Wohnzimmer',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => "28",
                                 'id' => 1,
                                 'selected' => false,
@@ -1048,14 +1067,14 @@ class FiltersParserTest extends TestCase
                                     [
                                         'items' => [],
                                         'name' => 'Bürostühle',
-                                        'position' => 'item',
+                                        'position' => 0,
                                         'count' => '6',
                                         'selected' => false,
                                         'id' => 5
                                     ]
                                 ],
                                 'name' => 'Arbeitszimmer & Büro',
-                                'position' => 'item',
+                                'position' => 1,
                                 'count' => '6',
                                 'selected' => false,
                                 'id' => 4
@@ -1065,23 +1084,25 @@ class FiltersParserTest extends TestCase
                 ]
             ],
             'noAvailableFiltersText is set in the response' => [
-                '<filters>
-                    <main>
-                        <filter>
-                            <itemCount>6</itemCount>
-                            <noAvailableFiltersText>Nothing left to show</noAvailableFiltersText>
-                            <name>cat</name>
-                            <display>Kategorie</display>
-                            <select>single</select>
-                            <type>select</type>
-                            <items>
-                                <item selected="1">
-                                    <name>Sofas</name>
-                                </item>
-                            </items>
-                        </filter>
-                    </main>
-                </filters>', [
+                '{
+                    "main": [
+                        {
+                            "pinnedFilterValueCount": 6,
+                            "noAvailableFiltersText": "Nothing left to show",
+                            "name": "cat",
+                            "displayName": "Kategorie",
+                            "selectMode": "single",
+                            "type": "select",
+                            "values": [
+                                {
+                                    "value": "Sofas",
+                                    "selected": true
+                                }
+                            ]
+                        }
+                    ]
+                }',
+                [
                     [
                         'id' => 'cat',
                         'cssClass' => '',
@@ -1095,7 +1116,7 @@ class FiltersParserTest extends TestCase
                         'values' => [
                             [
                                 'name' => 'Sofas',
-                                'position' => 'item',
+                                'position' => 0,
                                 'count' => '',
                                 'id' => 1,
                                 'selected' => true,
@@ -1113,7 +1134,7 @@ class FiltersParserTest extends TestCase
      */
     public function testParseForWidgets(array $parsedFilters, array $expectedResult)
     {
-        $xml = new SimpleXMLElement('<filters/>');
+        $xml = ['filters' => []];
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock(['parse']);
         $filtersParserMock->method('parse')->willReturn($parsedFilters);
@@ -1529,62 +1550,56 @@ class FiltersParserTest extends TestCase
     public function parseRangeSliderProvider(): array
     {
         $filterData =
-            '<filters>
-                <main>
-                    <filter>
-                        <name>price</name>
-                        <display>Preis</display>
-                        <select>single</select>
-                        <type>range-slider</type>
-                        <attributes>
-                            <selectedRange>
-                                <min>59</min>
-                                <max>2300</max>
-                            </selectedRange>
-                            <totalRange>
-                                <min>59</min>
-                                <max>2300</max>
-                            </totalRange>
-                            <stepSize>0.1</stepSize>
-                            <unit>€</unit>
-                        </attributes>
-                        <items>
-                            <item>
-                                <name>59 - 139</name>
-                                <weight>0.5517241358757</weight>
-                                <parameters>
-                                    <min>59</min>
-                                    <max>139</max>
-                                </parameters>
-                            </item>
-                            <item>
-                                <name>146.37 - 250</name>
-                                <weight>0.5517241358757</weight>
-                                <parameters>
-                                    <min>146.37</min>
-                                    <max>250</max>
-                                </parameters>
-                            </item>
-                            <item>
-                                <name>269 - 730</name>
-                                <weight>0.5517241358757</weight>
-                                <parameters>
-                                    <min>269</min>
-                                    <max>730</max>
-                                </parameters>
-                            </item>
-                            <item>
-                                <name>740 - 2300</name>
-                                <weight>0.34482759237289</weight>
-                                <parameters>
-                                    <min>740</min>
-                                    <max>2300</max>
-                                </parameters>
-                            </item>
-                        </items>
-                    </filter>
-                </main>
-            </filters>';
+            '{
+                "main": [
+                    {
+                        "name": "price",
+                        "displayName": "Preis",
+                        "selectMode": "single",
+                        "type": "range-slider",
+                        "selectedRange": {
+                            "min": "59",
+                            "max": "2300"
+                        },
+                        "totalRange": {
+                            "min": 59,
+                            "max": 2300
+                        },
+                        "stepSize": "0.1",
+                        "unit": "€",
+                        "values": [
+                            {
+                                "weight": "0.5517241358757",
+                                "value": {
+                                    "min": "59",
+                                    "max": "139"
+                                }
+                            },
+                            {
+                                "weight": "0.5517241358757",
+                                "value": {
+                                    "min": "146.37",
+                                    "max": "250"
+                                }
+                            },
+                            {
+                                "weight": "0.5517241358757",
+                                "value": {
+                                    "min": "269",
+                                    "max": "730"
+                                }
+                            },
+                            {
+                                "weight": "0.34482759237289",
+                                "value": {
+                                    "min": "740",
+                                    "max": "2300"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }';
 
         return [
             '0.01' => [
@@ -1614,13 +1629,13 @@ class FiltersParserTest extends TestCase
 
         $this->configRepository->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['Findologic.price_range_filter_step_size'],['Findologic.load_no_ui_slider_styles_enabled'])
+            ->withConsecutive(['Findologic.price_range_filter_step_size'], ['Findologic.load_no_ui_slider_styles_enabled'])
             ->willReturnOnConsecutiveCalls($stepSize, true);
 
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 
-        $results = $filtersParserMock->parse(simplexml_load_string($response));
+        $results = $filtersParserMock->parse(json_decode($response, 1));
 
         $this->assertSame((float) $stepSize, $results[0]['step']);
     }
@@ -1628,62 +1643,56 @@ class FiltersParserTest extends TestCase
     public function parseRangeSliderProviderNoUI(): array
     {
         $filterData =
-            '<filters>
-                <main>
-                    <filter>
-                        <name>price</name>
-                        <display>Preis</display>
-                        <select>single</select>
-                        <type>range-slider</type>
-                        <attributes>
-                            <selectedRange>
-                                <min>59</min>
-                                <max>2300</max>
-                            </selectedRange>
-                            <totalRange>
-                                <min>59</min>
-                                <max>2300</max>
-                            </totalRange>
-                            <stepSize>0.1</stepSize>
-                            <unit>€</unit>
-                        </attributes>
-                        <items>
-                            <item>
-                                <name>59 - 139</name>
-                                <weight>0.5517241358757</weight>
-                                <parameters>
-                                    <min>59</min>
-                                    <max>139</max>
-                                </parameters>
-                            </item>
-                            <item>
-                                <name>146.37 - 250</name>
-                                <weight>0.5517241358757</weight>
-                                <parameters>
-                                    <min>146.37</min>
-                                    <max>250</max>
-                                </parameters>
-                            </item>
-                            <item>
-                                <name>269 - 730</name>
-                                <weight>0.5517241358757</weight>
-                                <parameters>
-                                    <min>269</min>
-                                    <max>730</max>
-                                </parameters>
-                            </item>
-                            <item>
-                                <name>740 - 2300</name>
-                                <weight>0.34482759237289</weight>
-                                <parameters>
-                                    <min>740</min>
-                                    <max>2300</max>
-                                </parameters>
-                            </item>
-                        </items>
-                    </filter>
-                </main>
-            </filters>';
+            '{
+                "main": [
+                    {
+                        "name": "price",
+                        "displayName": "Preis",
+                        "selectMode": "single",
+                        "type": "range-slider",
+                        "selectedRange": {
+                            "min": "59",
+                            "max": "2300"
+                        },
+                        "totalRange": {
+                            "min": 59,
+                            "max": 2300
+                        },
+                        "stepSize": "0.1",
+                        "unit": "€",
+                        "values": [
+                            {
+                                "weight": "0.5517241358757",
+                                "value": {
+                                    "min": "59",
+                                    "max": "139"
+                                }
+                            },
+                            {
+                                "weight": "0.5517241358757",
+                                "value": {
+                                    "min": "146.37",
+                                    "max": "250"
+                                }
+                            },
+                            {
+                                "weight": "0.5517241358757",
+                                "value": {
+                                    "min": "269",
+                                    "max": "730"
+                                }
+                            },
+                            {
+                                "weight": "0.34482759237289",
+                                "value": {
+                                    "min": "740",
+                                    "max": "2300"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }';
 
         return [
             'enabled' => [
@@ -1709,13 +1718,13 @@ class FiltersParserTest extends TestCase
 
         $this->configRepository->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['Findologic.price_range_filter_step_size'],['Findologic.load_no_ui_slider_styles_enabled'])
+            ->withConsecutive(['Findologic.price_range_filter_step_size'], ['Findologic.load_no_ui_slider_styles_enabled'])
             ->willReturnOnConsecutiveCalls(0.01, $enabled);
 
         /** @var FiltersParser|MockObject $filtersParserMock */
         $filtersParserMock = $this->getFiltersParserMock();
 
-        $results = $filtersParserMock->parse(simplexml_load_string($response));
+        $results = $filtersParserMock->parse(json_decode($response, 1));
 
         $this->assertSame((bool) $enabled, $results[0]['useNoUISliderCSS']);
     }
