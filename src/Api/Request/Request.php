@@ -127,7 +127,7 @@ class Request
      */
     public function setParam($key, $value)
     {
-        $this->params[$key] = htmlspecialchars($value);
+        $this->params[$key] = $value;
 
         return $this;
     }
@@ -146,7 +146,7 @@ class Request
         // Remove duplicate entries, since the plenty request may give them as duplicates. Additionally
         // check that min/max is not set, because the range-slider may have the same min and max value.
         if (is_array($value) && (!isset($value['min']) && !isset($value['max']))) {
-            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = htmlspecialchars(array_unique($value));
+            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = array_unique($value);
         } else {
             $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = htmlspecialchars($value);
         }
@@ -165,7 +165,7 @@ class Request
         }
 
         if (!in_array($param, $this->params[Plugin::API_PARAMETER_PROPERTIES])) {
-            $this->params[Plugin::API_PARAMETER_PROPERTIES][] = htmlspecialchars($param);
+            $this->params[Plugin::API_PARAMETER_PROPERTIES][] = $param;
         }
 
         return $this;
