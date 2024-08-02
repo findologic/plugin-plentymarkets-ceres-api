@@ -113,7 +113,7 @@ class FiltersParser
     {
         if (!empty($data)) {
             $filterItem['items'] = [];
-            $filterItem['name'] = htmlspecialchars($data['value']);
+            $filterItem['name'] = !is_array($data['value']) ? htmlspecialchars($data['value']) : $data['value'];
             $filterItem['position'] = $index;
             $filterItem['count'] = (string) @$data['frequency'] ?? '';
             $filterItem['id'] = ++$this->valueId;
