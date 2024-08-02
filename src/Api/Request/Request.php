@@ -148,7 +148,7 @@ class Request
         if (is_array($value) && (!isset($value['min']) && !isset($value['max']))) {
             $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = array_unique($value);
         } else {
-            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = htmlspecialchars($value);
+            $this->params[Plugin::API_PARAMETER_ATTRIBUTES][$key] = $value;
         }
 
         return $this;
