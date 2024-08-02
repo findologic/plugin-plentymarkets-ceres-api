@@ -16,11 +16,22 @@ class UrlBuilder {
 
         urlParams = urlParams.split('+').join(' ');
         while ((tokens = regex.exec(urlParams)) !== null) {
-            params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+            params[decodeURIComponent(tokens[1])] = this.sanitizeHTML(decodeURIComponent(tokens[2]));
         }
 
         return params;
     }
+
+    sanitizeHTML(str : string): string {
+        const map = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;',
+        };
+        return str.replace(/[&<>"']/g, function(m) { return map[m]; });
+      }
 
     /**
      * Findologic method for parsing url params into a parameter map from current url
@@ -53,7 +64,7 @@ class UrlBuilder {
         for (i = 0; i < sal; i++) {
             tmp = strArr[i].split('=');
             key = fixStr(tmp[0]);
-            value = (tmp.length < 2) ? '' : fixStr(tmp[1]).replace(/\+/g, ' ');
+            value = (tmp.length < 2) ? '' : this.sanitizeHTML(fixStr(tmp[1]).replace(/\+/g, ' '));
 
             while (key.charAt(0) === ' ') {
                 key = key.slice(1);

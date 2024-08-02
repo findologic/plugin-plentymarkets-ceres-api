@@ -32,6 +32,17 @@ export default class Url extends Vue {
         return {};
     }
 
+    sanitizeHTML(str : string): string {
+        const map = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;',
+        };
+        return str.replace(/[&<>"']/g, function(m) { return map[m]; });
+      }
+
     /**
      * Findologic method for parsing url params into a parameter map from current url
      * Taken from direct integration flUtils class
@@ -68,7 +79,7 @@ export default class Url extends Vue {
         for (i = 0; i < sal; i++) {
             tmp = strArr[i].split('=');
             key = fixStr(tmp[0]);
-            value = (tmp.length < 2) ? '' : fixStr(tmp[1]).replace(/\+/g, ' ');
+            value = (tmp.length < 2) ? '' : this.sanitizeHTML(fixStr(tmp[1]).replace(/\+/g, ' '));
 
             while (key.charAt(0) === ' ') {
                 key = key.slice(1);
