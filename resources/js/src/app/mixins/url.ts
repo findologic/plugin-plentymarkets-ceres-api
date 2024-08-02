@@ -36,7 +36,6 @@ export default class Url extends Vue {
         const map = {
           '&': '&amp;',
           '<': '&lt;',
-          '>': '&gt;',
           '"': '&quot;',
           "'": '&#039;',
         };

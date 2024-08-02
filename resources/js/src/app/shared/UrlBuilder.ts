@@ -26,7 +26,6 @@ class UrlBuilder {
         const map = {
           '&': '&amp;',
           '<': '&lt;',
-          '>': '&gt;',
           '"': '&quot;',
           "'": '&#039;',
         };
