@@ -24,12 +24,12 @@ class UrlBuilder {
 
     sanitizeHTML(str : string): string {
         const map = {
-          '&': '&amp;',
-          '<': '&lt;',
-          '"': '&quot;',
-          "'": '&#039;',
+            '&': '&amp;',
+            '<': '&lt;',
+            '"': '&quot;',
+            "'": '&#039;',
         };
-        return str.replace(/[&<>"']/g, function(m) { return map[m]; });
+        return str.replace(/[&<"']/g, function(m) { return map[m]; });
       }
 
     /**
