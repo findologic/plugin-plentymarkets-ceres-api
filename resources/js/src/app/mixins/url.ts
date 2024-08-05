@@ -37,7 +37,7 @@ export default class Url extends Vue {
         const map = {
             '<': '&lt;',
             '"': '&quot;',
-            "'": '&#039;',
+            '\'': '&#039;',
         };
         return str.replace(/[&<"']/g, function(m) { return map[m]; });
       }

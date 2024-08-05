@@ -27,7 +27,7 @@ class UrlBuilder {
         const map = {
             '<': '&lt;',
             '"': '&quot;',
-            "'": '&#039;',
+            '\'': '&#039;',
         };
         return str.replace(/[&<"']/g, function(m) { return map[m]; });
       }
