@@ -5,6 +5,7 @@ namespace Findologic\Api\Request;
 use Exception;
 use Findologic\Constants\Plugin;
 use Findologic\Helpers\Tags;
+use Findologic\Traits\Loggable;
 use Plenty\Log\Contracts\LoggerContract;
 use Plenty\Modules\Category\Models\Category;
 use Plenty\Plugin\Log\LoggerFactory;
@@ -14,6 +15,7 @@ use Plenty\Plugin\Http\Request as HttpRequest;
 
 class ParametersBuilder
 {
+    use Loggable;
     const SORT_MAPPING = [
         'sorting.price.avg_asc' => 'price ASC',
         'sorting.price.avg_desc' => 'price DESC',
@@ -84,6 +86,10 @@ class ParametersBuilder
         if (isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES])) {
             $attributes = $parameters[Plugin::API_PARAMETER_ATTRIBUTES];
             foreach ($attributes as $key => $value) {
+                $this->getLogger(__METHOD__)->debug('debuglog', [
+                    'key' => $key,
+                    'value' => $value
+                ]);
                 $request->setAttributeParam($key, $value);
             }
         }
