@@ -113,7 +113,7 @@ class FiltersParser
     {
         if (!empty($data)) {
             $filterItem['items'] = [];
-            $filterItem['name'] = $data['value'];
+            $filterItem['name'] = is_array($data['value']) ? $data['value'] : htmlspecialchars($data['value']);
             $filterItem['position'] = $index;
             $filterItem['count'] = (string) @$data['frequency'] ?? '';
             $filterItem['id'] = ++$this->valueId;
@@ -171,7 +171,7 @@ class FiltersParser
         $filterName = $filter['name'];
         $filterData = [
             'id' => $filterName,
-            'name' => $filter['displayName'] ?? '',
+            'name' => htmlspecialchars($filter['displayName']) ?? '',
             'select' => $filter['selectMode'],
             'type' => '',
             'findologicFilterType' => '',
