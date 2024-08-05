@@ -113,7 +113,7 @@ class FiltersParser
     {
         if (!empty($data)) {
             $filterItem['items'] = [];
-            $filterItem['name'] = is_array($data['value']) ? $data['value'] : htmlspecialchars($data['value']);
+            $filterItem['name'] = is_array($data['value']) ? $data['value'] : $this->escapeSpecialCharacters($data['value']);
             $filterItem['position'] = $index;
             $filterItem['count'] = (string) @$data['frequency'] ?? '';
             $filterItem['id'] = ++$this->valueId;
@@ -159,6 +159,14 @@ class FiltersParser
         }
     }
 
+    private function escapeSpecialCharacters(string $string): string
+    {
+        $search = array('<', '"', "'");
+        $replace = array('&lt;', '&quot;', '&#39;');
+
+        return str_replace($search, $replace, $string);
+    }
+
     /**
      * @param array $filter
      * @param bool $isMainFilter
@@ -171,7 +179,7 @@ class FiltersParser
         $filterName = $filter['name'];
         $filterData = [
             'id' => $filterName,
-            'name' => htmlspecialchars($filter['displayName']) ?? '',
+            'name' => $this->escapeSpecialCharacters($filter['displayName'] ?? ''),
             'select' => $filter['selectMode'],
             'type' => '',
             'findologicFilterType' => '',

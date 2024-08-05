@@ -33,9 +33,8 @@ export default class Url extends Vue {
     }
 
     sanitizeHTML(str : string): string {
-        console.log({mapping: "url", str});
+
         const map = {
-            '&': '&amp;',
             '<': '&lt;',
             '"': '&quot;',
             "'": '&#039;',

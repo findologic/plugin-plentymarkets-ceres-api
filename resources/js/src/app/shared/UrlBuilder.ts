@@ -23,7 +23,7 @@ class UrlBuilder {
     }
 
     sanitizeHTML(str : string): string {
-        console.log({mapping: "UrlBuilder", str});
+
         const map = {
             '<': '&lt;',
             '"': '&quot;',
