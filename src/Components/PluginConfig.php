@@ -2,7 +2,6 @@
 
 namespace Findologic\Components;
 
-use Findologic\Traits\Loggable;
 use IO\Services\SessionStorageService;
 use Plenty\Plugin\ConfigRepository;
 use Findologic\Constants\Plugin;
@@ -13,7 +12,6 @@ use Findologic\Constants\Plugin;
  */
 class PluginConfig
 {
-    use Loggable;
     const NO_LANG_KEY = 'no_lang';
 
     /**
@@ -137,17 +135,11 @@ class PluginConfig
         foreach ($configShopKeysArray as $item) {
             $item = array_map('trim', explode(':', $item));
 
-            try{
-                if (count($item) > 1) {
-                    $this->shopkeys[strtolower($item[0])] = $item[1];
-                } else {
-                    $this->shopkeys[self::NO_LANG_KEY] = $item[0];
-                }
+            if (count($item) > 1) {
+                $this->shopkeys[strtolower($item[0])] = $item[1];
+            } else {
+                $this->shopkeys[self::NO_LANG_KEY] = $item[0];
             }
-            catch(\Exception $e){
-                $this->getLogger(__METHOD__)->debug('debuglog',[]);
-            }
-
         }
     }
 

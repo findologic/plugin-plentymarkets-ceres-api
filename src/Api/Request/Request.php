@@ -3,7 +3,6 @@
 namespace Findologic\Api\Request;
 
 use Findologic\Constants\Plugin;
-use Findologic\Traits\Loggable;
 
 /**
  * Class Request
@@ -11,7 +10,6 @@ use Findologic\Traits\Loggable;
  */
 class Request
 {
-    use Loggable;
     /**
      * Request url
      *
@@ -46,15 +44,9 @@ class Request
         $url = $this->getUrl();
         $query = '';
 
-        try{
-            if (count($this->getParams()) >= 1) {
-                $query = '?' . http_build_query($this->getParams());
-            }
+        if (count($this->getParams()) >= 1) {
+            $query = '?' . http_build_query($this->getParams());
         }
-        catch(\Exception $e){
-            $this->getLogger(__METHOD__)->debug('debuglog', []);
-        }
-
 
         return $url . $query;
     }

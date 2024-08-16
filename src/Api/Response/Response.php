@@ -88,21 +88,15 @@ class Response
         $ids = [];
 
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
-            try{
-                foreach ($products as $product) {
-                    if (isset($product['bestVariant'])) {
-                        $ids[] = (int) $product['bestVariant'];
-                    } else if ($product['variants'] && count($product['variants'])) {
-                        $ids[] = (int) $product['variants'][0]['id'];
-                    } else if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
-                        $ids[] = (int) $product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
-                    }
+            foreach ($products as $product) {
+                if (isset($product['bestVariant'])) {
+                    $ids[] = (int) $product['bestVariant'];
+                } else if ($product['variants'] && count($product['variants'])) {
+                    $ids[] = (int) $product['variants'][0]['id'];
+                } else if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
+                    $ids[] = (int) $product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
                 }
             }
-            catch(\Exception $e){
-                $this->getLogger(__METHOD__)->debug('debuglog', []);
-            }
-
         }
 
         return $ids;
