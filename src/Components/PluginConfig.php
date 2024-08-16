@@ -145,7 +145,7 @@ class PluginConfig
                 }
             }
             catch(\Exception $e){
-                $this->getLogger(__METHOD__)->error('null value',[]);
+                $this->getLogger(__METHOD__)->debug('debuglog',[]);
             }
 
         }
