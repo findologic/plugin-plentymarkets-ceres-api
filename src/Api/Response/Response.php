@@ -3,6 +3,7 @@
 namespace Findologic\Api\Response;
 
 use Findologic\Constants\Plugin;
+use Findologic\Traits\Loggable;
 use Plenty\Plugin\Translation\Translator;
 
 /**
@@ -11,6 +12,7 @@ use Plenty\Plugin\Translation\Translator;
  */
 class Response
 {
+    use Loggable;
     const DATA_SERVERS = 'servers';
     const DATA_QUERY = 'query';
     const DATA_LANDING_PAGE = 'landing_page';
@@ -86,15 +88,21 @@ class Response
         $ids = [];
 
         if ($products = $this->getData(self::DATA_PRODUCTS)) {
-            foreach ($products as $product) {
-                if (isset($product['bestVariant'])) {
-                    $ids[] = (int) $product['bestVariant'];
-                } else if (count($product['variants'])) {
-                    $ids[] = (int) $product['variants'][0]['id'];
-                } else if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
-                    $ids[] = (int) $product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
+            try{
+                foreach ($products as $product) {
+                    if (isset($product['bestVariant'])) {
+                        $ids[] = (int) $product['bestVariant'];
+                    } else if (count($product['variants'])) {
+                        $ids[] = (int) $product['variants'][0]['id'];
+                    } else if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
+                        $ids[] = (int) $product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
+                    }
                 }
             }
+            catch(\Exception $e){
+                $this->getLogger(__METHOD__)->error('null value', []);
+            }
+
         }
 
         return $ids;

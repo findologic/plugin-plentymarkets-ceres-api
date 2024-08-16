@@ -3,6 +3,7 @@
 namespace Findologic\Services;
 
 use Exception;
+use Findologic\Traits\Loggable;
 use IO\Helper\Utils;
 use Findologic\Api\Client;
 use Ceres\Helper\ExternalSearch;
@@ -30,6 +31,7 @@ use Plenty\Modules\Webshop\ItemSearch\Factories\VariationSearchFactory;
  */
 class SearchService implements SearchServiceInterface
 {
+    use Loggable;
 
     const DEFAULT_ITEMS_PER_PAGE = 25;
     const MAX_RETRIES = 2;
@@ -387,9 +389,15 @@ class SearchService implements SearchServiceInterface
 
     protected function shouldRedirectToProductDetailPage(array $variationIds, HttpRequest $request): bool
     {
-        if (count($variationIds) !== 1) {
-            return false;
+        try{
+            if (count($variationIds) !== 1) {
+                return false;
+            }
         }
+        catch(\Exception $e){
+            $this->getLogger(__METHOD__)->error('null value', []);
+        }
+
 
         $parameters = $request->all();
         $attributesSet = isset($parameters[Plugin::API_PARAMETER_ATTRIBUTES]);
