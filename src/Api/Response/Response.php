@@ -89,7 +89,7 @@ class Response
             foreach ($products as $product) {
                 if (isset($product['bestVariant'])) {
                     $ids[] = (int) $product['bestVariant'];
-                } else if (count($product['variants'])) {
+                } else if ($product['variants'] && count($product['variants'])) {
                     $ids[] = (int) $product['variants'][0]['id'];
                 } else if (isset($product['properties'][Plugin::API_PROPERTY_VARIATION_ID])) {
                     $ids[] = (int) $product['properties'][Plugin::API_PROPERTY_VARIATION_ID];
