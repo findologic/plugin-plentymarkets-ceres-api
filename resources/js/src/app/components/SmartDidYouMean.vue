@@ -1,5 +1,6 @@
 <template>
   <div class="col-12">
+    <!-- eslint-disable vue/no-v-html -->
     <h1
       id="searchPageTitle"
       class="h2"
@@ -10,6 +11,7 @@
       class="smart-did-you-mean"
       v-html="smartText"
     />
+    <!--eslint-enable-->
   </div>
 </template>
 
