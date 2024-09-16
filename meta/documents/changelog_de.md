@@ -1,5 +1,13 @@
 # Release Notes für Findologic
 
+## 6.0.1 (2024-09-12)
+
+### Behoben
+- [PLENTY-491] Ein Bug wurde behoben, wobei leere Suchbegriffe abgesendet wurde obwohl ein Suchbegriff vorhanden war.
+
+### Behoben
+- [PLENTY-490] Die Sicherheit wurde verbessert (XSS), durch Filtern des URL Inputs.
+
 ## 6.0.0 (2024-05-22)
 
 ### Geändert

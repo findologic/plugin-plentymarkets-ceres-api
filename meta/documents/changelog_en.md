@@ -1,5 +1,13 @@
 # Release Notes for Findologic
 
+## 6.0.1 (2024-09-12)
+
+### Fixed
+- [PLENTY-491] Fixed a bug where empty search terms were submitted even though a search term was present.
+
+### Fixed
+- [PLENTY-490] Security was improved (XSS) by filtering the URL input.
+
 ## 6.0.0 (2024-05-22)
 
 ### Changed
