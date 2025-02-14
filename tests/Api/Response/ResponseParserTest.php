@@ -615,7 +615,10 @@ class ResponseParserTest extends TestCase
             },
             "result": {
                 "metadata": {
-                    "landingpage": "http://www.example.com/imprint",
+                    "landingpage": 
+                    {
+                        "url" : "http://www.example.com/imprint"
+                    },
                     "searchConcept": null,
                     "effectiveQuery": "Test",
                     "totalResults": 3,
