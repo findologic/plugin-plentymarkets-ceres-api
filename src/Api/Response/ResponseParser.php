@@ -102,8 +102,7 @@ class ResponseParser
      */
     protected function parseLandingPage(array $data): ?string
     {
-        $this->logger->error("Landing page debug", ['data' => $data]);
-        return $data['metadata']['landingpage'] ?: null;
+        return $data['metadata']['landingpage'] ? $data['metadata']['landingpage']['url'] : null;
     }
 
     /**
