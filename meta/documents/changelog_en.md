@@ -1,5 +1,10 @@
 # Release Notes for Findologic
 
+## 6.0.2 (2025-03-16)
+
+### Behoben
+- [FIN-15763] A bug was fixed that caused an error to be displayed when searching for Landing Pages.
+
 ## 6.0.1 (2024-09-12)
 
 ### Fixed
