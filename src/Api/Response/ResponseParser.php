@@ -102,7 +102,7 @@ class ResponseParser
      */
     protected function parseLandingPage(array $data): ?string
     {
-        return $data['metadata']['landingpage'] ?: null;
+        return $data['metadata']['landingpage'] ? $data['metadata']['landingpage']['url'] : null;
     }
 
     /**
