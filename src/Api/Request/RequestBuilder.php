@@ -97,13 +97,22 @@ class RequestBuilder
      */
     public function buildAliveRequest()
     {
-        $request = $this->createRequestObject();
-        $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT, 1);
-        $request->setUrl(
-            $this->getUrl(self::ALIVE_REQUEST_TYPE)
-        )->setParam('shopkey', $this->pluginConfig->getShopKey());
+        try {
+            $request = $this->createRequestObject();
+            $request->setConfiguration(Plugin::API_CONFIGURATION_KEY_TIME_OUT, 5);
+            $request->setUrl(
+                $this->getUrl(self::ALIVE_REQUEST_TYPE)
+            )->setParam('shopkey', $this->pluginConfig->getShopKey());
 
-        return $request;
+            return $request;
+        } catch (\Throwable $exception) {
+            $this->logger->error('AliveRequestBuildFailed', [
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+            ]);
+
+            return false;
+        }
     }
 
     /**
